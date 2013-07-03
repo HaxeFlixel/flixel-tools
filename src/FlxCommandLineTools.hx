@@ -22,11 +22,11 @@ class FlxCommandLineTools
     public static var as3ConversionScriptPath:String;
 
     public static var commandsSet:Commands;
+    public static var replacements:Map<String, String>;
 
     public static function main():Void
     {
         commandsSet = processArguments();
-
         //        Sys.println(commandsSet);
 
         if (commandsSet.help)
@@ -65,6 +65,10 @@ class FlxCommandLineTools
         else if (commandsSet.validate)
         {
             validateProject();
+        }
+        else if (commandsSet.convert)
+        {
+            convertProject();
         }
         else
         {
@@ -272,9 +276,8 @@ class FlxCommandLineTools
                 if (StringTools.endsWith(fileName, ".tpl"))
                 {
                     var text = sys.io.File.getContent(templatePath + "/" + fileName);
-
-                    text = replaceAll(text);
-                    var newFileName = replaceAll(fileName.substr(0, -4));
+                    text = projectTemplateReplacements(text);
+                    var newFileName = projectTemplateReplacements(fileName.substr(0, -4));
 
                     var o = sys.io.File.write(templatePath + "/" + newFileName, true);
                     o.writeString(text);
@@ -311,11 +314,78 @@ class FlxCommandLineTools
         return templates;
     }
 
-    function convertProject()
+    public static function convertProject()
     {
-        Sys.println(" *DONT PANIC! warning convert is only a simple conversion script");
-        Sys.println(" This script does all the find and replace for you.");
+        var convertProjectPath = Sys.getCwd() + commandsSet.fromDir;
+
+        Sys.println(" Converting :" + convertProjectPath);
+        Sys.println(" *DONT PANIC! warning convert is only a simple find and replace script");
         Sys.println(" Please visit haxeflixel.com/wiki/convert for further documentation on converting old code.");
+
+        initLegacyFlixelReplacements();
+
+
+        //backup existing project by renaming it with _bup prefix
+        var backupFolder = convertProjectPath + "_bup";
+        if(!FileSystem.exists(backupFolder))
+            FileHelper.recursiveCopy(convertProjectPath, backupFolder);
+
+//        Sys.println(convertProjectPath);
+//        Sys.println(bakupFolder);
+
+        convertProjectFolder(convertProjectPath);
+    }
+
+    public static function convertProjectFolder(projectPath:String)
+    {
+        for (fileName in FileSystem.readDirectory(projectPath))
+        {
+//            Sys.println(fileName);
+
+//
+            if (FileSystem.isDirectory(projectPath + "/" + fileName))
+            {
+//                Sys.println("File dir: " + projectPath + "/" + fileName);
+
+
+                if(fileName == "source")
+                {
+                    Sys.println("File dir: " + fileName);
+//                    Sys.println("folder: " + projectPath + "/" + fileName);
+                    convertProjectFolder(projectPath + "/" + fileName);
+                }
+
+            }
+            else
+            {
+                if (StringTools.endsWith(fileName, ".hx"))
+                {
+
+                    var filePath = projectPath + "/" + fileName;
+                    Sys.println(filePath);
+                    var sourceText = sys.io.File.getContent(filePath);
+                    var originalText = Reflect.copy(sourceText);
+
+
+                    for (fromString in replacements.keys())
+                    {
+                        var toString = replacements.get(fromString);
+                        sourceText = StringTools.replace(sourceText, fromString, toString);
+                    }
+//
+                    if(originalText != sourceText)
+                    {
+                        Sys.println( "Updated " + fileName );
+                        FileSystem.deleteFile(filePath);
+                        var o = sys.io.File.write(filePath, true);
+                        o.writeString(sourceText);
+                        o.close();
+//
+                    }
+
+                }
+            }
+        }
     }
 
     /**
@@ -381,7 +451,7 @@ class FlxCommandLineTools
             }
         }
 
-        var commandsSet = new Commands();
+        commandsSet = new Commands();
 
         var length = arguments.length;
         var index = 0;
@@ -412,7 +482,6 @@ class FlxCommandLineTools
         }
         else if (arguments[index] == "convert")
         {
-            commandsSet.convert = true;
             processConvertArgs(arguments);
         }
         else if (arguments[index] == "validate")
@@ -436,10 +505,12 @@ class FlxCommandLineTools
     private static function processConvertArgs(args:Array<String>):Void
     {
         if( args[1]!=null)
+        {
             commandsSet.fromDir = args[1];
-
-        if( args[2]!=null)
-            commandsSet.toDir = args[2];
+            commandsSet.convert = true;
+        } else {
+            Sys.println("Warning, you have not set a project Path for convert");
+        }
     }
 
     private static function processListArgs(args:Array<String>, result:Commands):Commands
@@ -504,7 +575,7 @@ class FlxCommandLineTools
         return new Path(path).dir;
     }
 
-    public static function replaceAll(source:String):String
+    public static function projectTemplateReplacements(source:String):String
     {
         source = StringTools.replace(source, "${PROJECT_NAME}", commandsSet.projectName);
         source = StringTools.replace(source, "${PROJECT_CLASS}", commandsSet.projectClass);
@@ -512,6 +583,41 @@ class FlxCommandLineTools
         source = StringTools.replace(source, "${HEIGHT}", cast(commandsSet.projectHeight));
 
         return source;
+    }
+
+    //todo
+    public static function initLegacyFlixelReplacements():Void
+    {
+        replacements = new Map<String, String>();
+
+        //org package
+        replacements.set( "org.flixel.", "flixel." );
+
+        //system
+        replacements.set( "flixel.FlxAssets", "flixel.system.FlxAssets" );
+
+        //FlxU
+        replacements.set( "FlxG.camera.", "flixel." );
+
+        //FrontEnds
+        replacements.set( "FlxG.bgColor", "FlxG.state.bgColor" );
+
+        //cameras
+        replacements.set( "FlxG.resetCameras", "FlxG.cameras.reset" );
+
+        //addons
+        replacements.set( "flixel.addons.FlxCaveGenerator", "flixel.addons.tile.FlxCaveGenerator" );
+
+        //tile
+        replacements.set( "flixel.FlxTilemap", "flixel.tile.FlxTilemap" );
+        replacements.set( "flixel.system.FlxTile", "flixel.tile.FlxTile" );
+
+        //effects
+        replacements.set( "flixel.FlxEmitter", "flixel.effects.particles.FlxEmitter" );
+
+        //text
+        replacements.set( "flixel.FlxText", "flixel.text.FlxText" );
+        replacements.set( "flixel.FlxTextField", "flixel.text.FlxTextField" );
     }
 
     /**
@@ -621,8 +727,6 @@ class Commands
 
     public var setup:Bool = false;
 
-    public var validate:Bool = false;
-
     public var create:Bool = false;
     public var createName:String;
 
@@ -638,7 +742,7 @@ class Commands
     public var projectHeight:Int = 600;
 
     public var fromDir:String = "";
-    public var toDir:Int = "";
+    public var toDir:String = "";
 
     public function new():Void
     {
