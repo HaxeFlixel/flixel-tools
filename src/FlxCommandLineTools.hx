@@ -324,15 +324,13 @@ class FlxCommandLineTools
 
         initLegacyFlixelReplacements();
 
-
         //backup existing project by renaming it with _bup prefix
         var backupFolder = convertProjectPath + "_bup";
         if(!FileSystem.exists(backupFolder))
             FileHelper.recursiveCopy(convertProjectPath, backupFolder);
 
-//        Sys.println(convertProjectPath);
-//        Sys.println(bakupFolder);
-
+        convertProjectPath += "/source";
+        // Sys.println(convertProjectPath);
         convertProjectFolder(convertProjectPath);
     }
 
@@ -340,29 +338,16 @@ class FlxCommandLineTools
     {
         for (fileName in FileSystem.readDirectory(projectPath))
         {
-//            Sys.println(fileName);
-
-//
             if (FileSystem.isDirectory(projectPath + "/" + fileName))
             {
-//                Sys.println("File dir: " + projectPath + "/" + fileName);
-
-
-                if(fileName == "source")
-                {
-                    Sys.println("File dir: " + fileName);
-//                    Sys.println("folder: " + projectPath + "/" + fileName);
-                    convertProjectFolder(projectPath + "/" + fileName);
-                }
-
+                convertProjectFolder(projectPath + "/" + fileName);
             }
             else
             {
                 if (StringTools.endsWith(fileName, ".hx"))
                 {
-
                     var filePath = projectPath + "/" + fileName;
-                    Sys.println(filePath);
+                    // Sys.println(filePath);
                     var sourceText = sys.io.File.getContent(filePath);
                     var originalText = Reflect.copy(sourceText);
 
@@ -372,17 +357,16 @@ class FlxCommandLineTools
                         var toString = replacements.get(fromString);
                         sourceText = StringTools.replace(sourceText, fromString, toString);
                     }
-//
+
                     if(originalText != sourceText)
                     {
                         Sys.println( "Updated " + fileName );
+
                         FileSystem.deleteFile(filePath);
                         var o = sys.io.File.write(filePath, true);
                         o.writeString(sourceText);
                         o.close();
-//
                     }
-
                 }
             }
         }
@@ -596,14 +580,27 @@ class FlxCommandLineTools
         //system
         replacements.set( "flixel.FlxAssets", "flixel.system.FlxAssets" );
 
+        //ui
+        replacements.set( "flixel.FlxButton", "flixel.ui.FlxButton" );
+
         //FlxU
-        replacements.set( "FlxG.camera.", "flixel." );
+
 
         //FrontEnds
         replacements.set( "FlxG.bgColor", "FlxG.state.bgColor" );
 
+        //Debugger
+        replacements.set( "FlxG.watch", "FlxG.watch.add" );
+
+
+        replacements.set( "FlxG.play", "FlxG.sound.play" );
+        replacements.set( "FlxG.playMusic", "FlxG.sound.playMusic" );
+
         //cameras
         replacements.set( "FlxG.resetCameras", "FlxG.cameras.reset" );
+        replacements.set( "FlxG.shake", "FlxG.cameras.defaultCamera.shake" );
+        replacements.set( "FlxG.flash", "FlxG.cameras.defaultCamera.flash" );
+        replacements.set( "FlxG.fade", "FlxG.cameras.defaultCamera.fade" );
 
         //addons
         replacements.set( "flixel.addons.FlxCaveGenerator", "flixel.addons.tile.FlxCaveGenerator" );
@@ -618,6 +615,16 @@ class FlxCommandLineTools
         //text
         replacements.set( "flixel.FlxText", "flixel.text.FlxText" );
         replacements.set( "flixel.FlxTextField", "flixel.text.FlxTextField" );
+
+        //FlxG
+        replacements.set( "FlxG.getLibraryName()", "FlxG.libraryName" );
+        replacements.set( "FlxG.random", "flixel.util.FlxRandom.int" ); 
+        replacements.set( "FlxG.camera.", "FlxG.cameras.defaultCamera." );  
+        
+        //FlxGroups
+        replacements.set( "flixel.FlxGroup", "flixel.group.FlxGroup" );
+        replacements.set( "flixel.FlxSpriteGroup", "flixel.group.FlxSpriteGroup" );
+        replacements.set( "flixel.FlxTypedGroup", "flixel.group.FlxTypedGroup" );
     }
 
     /**
