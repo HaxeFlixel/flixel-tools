@@ -486,7 +486,7 @@ class FlxCommandLineTools
         }
 
         var cdProject = "cd " + validateProjectPath;
-        var buildFlash = "openfl build " + projectFile + " " + target + "";
+        var buildFlash = "haxelib run openfl build " + projectFile + " " + target;
         var compileCommand = cdProject + " && " + buildFlash;
 
         Sys.println(compileCommand);
@@ -529,6 +529,9 @@ class FlxCommandLineTools
             Sys.command("sudo chmod 755 " + haxePath + "/flixel");
             Sys.command("sudo ln -s " + haxePath + "/flixel /usr/bin/flixel");
         }
+
+        Sys.println("You have now setup HaxeFlixel");
+        Sys.command("flixel");
     }
 
     private static function processArguments():Commands
