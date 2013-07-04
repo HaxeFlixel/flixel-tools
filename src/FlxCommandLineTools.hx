@@ -216,8 +216,8 @@ class FlxCommandLineTools
         if (samplesPath == "")
             samplesPath = PathHelper.getHaxelib(new Haxelib ("flixel-samples"));
 
-        if(display)
-            Sys.println("Listing samples from " + samplesPath);
+        // if(display)
+        //     Sys.println("Listing samples from " + samplesPath);
 
         var samples = new Map<String, String>();
 
