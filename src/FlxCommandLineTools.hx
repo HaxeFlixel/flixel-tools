@@ -486,8 +486,8 @@ class FlxCommandLineTools
         }
 
         var cdProject = "cd " + validateProjectPath;
-        var buildFlash = "haxelib run openfl build " + projectFile + " " + target;
-        var compileCommand = cdProject + " && " + buildFlash;
+        var buildCommand = "haxelib run openfl build " + projectFile + " " + target;
+        var compileCommand = cdProject + " && " + buildCommand;
 
         Sys.println(compileCommand);
         var compile = Sys.command(compileCommand);
