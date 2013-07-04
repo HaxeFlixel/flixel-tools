@@ -115,12 +115,17 @@ class FlxCommandLineTools
 
         Sys.println("");
 
-        Sys.println(" Create a project or sample by name");
+        Sys.println(" Create a sample by name");
         Sys.println(" Usage : " + alias + " create <name>");
 
         Sys.println("");
 
-        Sys.println(" List available samples and projects");
+        Sys.println(" Create a new project template");
+        Sys.println(" Usage : " + alias + " new -name <project_name> -class <class_name> -screen <width_value> <height_value>");
+
+        Sys.println("");
+
+        Sys.println(" List available samples and templates");
         Sys.println(" Usage : " + alias + " list");
 
         Sys.println("");
