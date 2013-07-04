@@ -1,5 +1,6 @@
 package;
 
+import haxe.Json;
 import helpers.FileHelper;
 import sys.io.FileOutput;
 import haxe.io.Bytes;
@@ -12,9 +13,10 @@ import sys.io.File;
 
 class FlxCommandLineTools
 {
-    public static var name = "HaxeFlixel";
-    public static var alias = "flixel";
-    public static var version = "0.0.1";
+    public static var name:String = "HaxeFlixel";
+    public static var alias:String = "flixel";
+    public static var version:String = "0.0.1";
+    public static var flixelVersion:String;
 
     public static var toolsPath:String;
     public static var templatesPath:String;
@@ -79,29 +81,44 @@ class FlxCommandLineTools
         }
         else
         {
-            displayInfo(true);
+            displayInfo();
         }
     }
 
-    private static function displayInfo(showHint = false):Void
+    private static function displayInfo():Void
     {
-        Sys.println(" _   _               ______ _ _          _");
-        Sys.println("| | | |              |  ___| (_)        | |");
-        Sys.println("| |_| | __ ___  _____| |_  | |___  _____| |");
-        Sys.println("|  _  |/ _` \\ \\/ / _ \\  _| | | \\ \\/ / _ \\ |");
-        Sys.println("| | | | (_| |>  <  __/ |   | | |>  <  __/ |");
-        Sys.println("\\_| |_/\\__,_/_/\\_\\___\\_|   |_|_/_/\\_\\___|_|");
-        Sys.println("Powered by the Haxe Toolkit and OpenFL");
-        Sys.println("Please visit www.haxeflixel.com for community support and resources.");
+		// Get the current flixel version
+		if (flixelVersion == null) 
+		{
+			var flixelPath:String = PathHelper.getHaxelib(new Haxelib("flixel"));
+			var jsonContent:String = File.getContent(flixelPath + "haxelib.json");
+			var jsonData:HaxelibJSON = Json.parse(jsonContent);
+			flixelVersion = jsonData.version;
+		}
+		
+        Sys.println("                 _   _               ______ _  _          _");
+        Sys.println("                | | | |              |  ___| ||_|        | |");
+        Sys.println("                | |_| | __ ___  _____| |_  | |____  _____| |");
+        Sys.println("                |  _  |/ _` \\ \\/ / _ \\  _| | || \\ \\/ / _ \\ |");
+        Sys.println("                | | | | (_| |>  <  __/ |   | || |>  <  __/ |");
+        Sys.println("                |_| |_|\\__,_/_/\\_\\___\\_|   |_||_/_/\\_\\___|_|");
+		Sys.println("");
+		Sys.println("");
+        Sys.println("                   Powered by the Haxe Toolkit and OpenFL");
+        Sys.println("     Please visit www.haxeflixel.com for community support and ressources!");
         Sys.println("");
-
-        Sys.println(name + " Command-Line Tools (" + version + ")");
-
-        if (showHint)
-        {
-            Sys.println("Use \"" + alias + " help\" for available commands");
-        }
-
+        Sys.println("                    " + name + " Command-Line Tools (" + version + ")");
+		
+		if (flixelVersion == "0.0.1") 	
+		{
+			Sys.println("                     flixel is currently not installed!");
+		}
+		else 
+		{
+			Sys.println("                    Current flixel version: " + flixelVersion);
+		}
+		
+        Sys.println("                  Use \"" + alias + " help\" for available commands");
         Sys.println("");
     }
 
@@ -909,4 +926,16 @@ class Commands
     public var toDir:String = "";
 
     public function new():Void {}
+}
+
+typedef HaxelibJSON = {
+	name:String,
+	url:String,
+	license:String,
+	tags:Array<String>,
+	description:String,
+	version:String,
+	releasenote:String,
+	contributors:Array<String>,
+	dependencies:Dynamic
 }
