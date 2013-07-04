@@ -143,20 +143,28 @@ class FlxCommandLineTools
 
     public static function downloadSamples():Void
     {
-        var numberOfSamples = numberOfSamples();  
-        Sys.println( numberOfSamples );
-
         var path = PathHelper.getHaxelib (new Haxelib ("flixel-samples"));
-        Sys.println( path );
 
-        if (PlatformHelper.hostPlatform == Platform.WINDOWS)
+        if ( path == "")
         {
-            //windows doesnt have git :(
-            // https://bitbucket.org/imp/flixel-tools/get/master.zip
-        } 
-        else 
+            if (PlatformHelper.hostPlatform == Platform.LINUX ||
+                PlatformHelper.hostPlatform == Platform.MAC)
+            {
+                Sys.command("haxelib git flixel-samples https://github.com/HaxeFlixel/flixel-samples.git");
+            } 
+            else if(PlatformHelper.hostPlatform == Platform.WINDOWS)
+            {
+                Sys.println( " Sorry windows does not have git or haxe ssl to download the zip for now." );
+                Sys.println( " Please download flixel-samples manually from:" );
+                Sys.println( " https://github.com/HaxeFlixel/flixel-samples/archive/master.zip" );
+                Sys.println( " Then run the following haxelib command:" );
+                Sys.println( " haxelib local flixel-samples flixel-samples-master.zip" );
+            }
+        }
+        else
         {
-            // Sys.command("haxelib git flixel-samples https://github.com/HaxeFlixel/flixel-samples.git");
+            Sys.println( " You already have flixel-samples installed" );
+            Sys.println( path );
         }
     }
 
@@ -873,162 +881,6 @@ class FlxCommandLineTools
         }
         return "";
     }
-
-
-
-    // private static function downloadFile (remotePath:String, localPath:String = "", followingLocation:Bool = false):Void {
-        
-    //     if (localPath == "") {
-            
-    //         localPath = Path.withoutDirectory (remotePath);
-            
-    //     }
-        
-    //     if (!followingLocation && FileSystem.exists (localPath)) {
-            
-    //         var answer = ask ("File found. Install existing file?");
-            
-    //         if (answer != No) {
-                
-    //             return;
-                
-    //         }
-            
-    //     }
-        
-    //     var out = File.write (localPath, true);
-    //     var progress = new Progress (out);
-    //     var h = new Http (remotePath);
-        
-    //     h.onError = function (e) {
-    //         progress.close();
-    //         FileSystem.deleteFile (localPath);
-    //         throw e;
-    //     };
-        
-    //     if (!followingLocation) {
-            
-    //         Lib.println ("Downloading " + localPath + "...");
-            
-    //     }
-        
-    //     h.customRequest (false, progress);
-        
-    //     if (h.responseHeaders != null && h.responseHeaders.exists ("Location")) {
-            
-    //         var location = h.responseHeaders.get ("Location");
-            
-    //         if (location != remotePath) {
-                
-    //             downloadFile (location, localPath, true);
-                
-    //         }
-            
-    //     }
-        
-    // }
-    
-    
-    // private static function extractFile (sourceZIP:String, targetPath:String, ignoreRootFolder:String = ""):Void {
-        
-    //     var extension = Path.extension (sourceZIP);
-        
-    //     if (extension != "zip") {
-            
-    //         var arguments = "xvzf";         
-                        
-    //         if (extension == "bz2" || extension == "tbz2") {
-                
-    //             arguments = "xvjf";
-                
-    //         }   
-            
-    //         if (ignoreRootFolder != "") {
-                
-    //             if (ignoreRootFolder == "*") {
-                    
-    //                 for (file in FileSystem.readDirectory (targetPath)) {
-                        
-    //                     if (FileSystem.isDirectory (targetPath + "/" + file)) {
-                            
-    //                         ignoreRootFolder = file;
-                            
-    //                     }
-                        
-    //                 }
-                    
-    //             }
-                
-    //             ProcessHelper.runCommand ("", "tar", [ arguments, sourceZIP ], false);
-    //             ProcessHelper.runCommand ("", "cp", [ "-R", ignoreRootFolder + "/*", targetPath ], false);
-    //             Sys.command ("rm", [ "-r", ignoreRootFolder ]);
-                
-    //         } else {
-                
-    //             ProcessHelper.runCommand ("", "tar", [ arguments, sourceZIP, "-C", targetPath ], false);
-                
-    //             //InstallTool.runCommand (targetPath, "tar", [ arguments, FileSystem.fullPath (sourceZIP) ]);
-                
-    //         }
-            
-    //         Sys.command ("chmod", [ "-R", "755", targetPath ]);
-            
-    //     } else {
-            
-    //         var file = File.read (sourceZIP, true);
-    //         var entries = Reader.readZip (file);
-    //         file.close ();
-        
-    //         for (entry in entries) {
-            
-    //             var fileName = entry.fileName;
-            
-    //             if (fileName.charAt (0) != "/" && fileName.charAt (0) != "\\" && fileName.split ("..").length <= 1) {
-                
-    //                 var dirs = ~/[\/\\]/g.split(fileName);
-                
-    //                 if ((ignoreRootFolder != "" && dirs.length > 1) || ignoreRootFolder == "") {
-                    
-    //                     if (ignoreRootFolder != "") {
-                        
-    //                         dirs.shift ();
-                        
-    //                     }
-                    
-    //                     var path = "";
-    //                     var file = dirs.pop();
-    //                     for( d in dirs ) {
-    //                         path += d;
-    //                         PathHelper.mkdir (targetPath + "/" + path);
-    //                         path += "/";
-    //                     }
-                    
-    //                     if( file == "" ) {
-    //                         if( path != "" ) Lib.println("  Created "+path);
-    //                         continue; // was just a directory
-    //                     }
-    //                     path += file;
-    //                     Lib.println ("  Install " + path);
-                    
-    //                     var data = Reader.unzip (entry);
-    //                     var f = File.write (targetPath + "/" + path, true);
-    //                     f.write (data);
-    //                     f.close ();
-                    
-    //                 }
-                
-    //             }
-            
-    //         }
-            
-    //     }
-        
-    //     Lib.println ("Done");
-        
-    // }
-    
-
-
 }
 
 /**
