@@ -284,7 +284,7 @@ class FlxCommandLineTools
 
         if (templates.get(name) != null)
         {
-            var destination = Sys.getCwd() + name;
+            var destination = Sys.getCwd() + commandsSet.projectName;
 
             Sys.println(" - Creating " + name);
 
@@ -913,8 +913,8 @@ class Commands
 
     public var template:Bool = false;
 
-    public var projectName:String = "HaxeFlixel";
-    public var projectClass:String = "HaxeFlixel";
+    public var projectName:String = "HaxeFlixelTemplate";
+    public var projectClass:String = "HaxeFlixelTemplate";
     public var projectWidth:Int = 700;
     public var projectHeight:Int = 600;
 
