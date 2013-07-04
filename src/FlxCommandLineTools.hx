@@ -133,6 +133,11 @@ class FlxCommandLineTools
 
         Sys.println("");
 
+        Sys.println(" Download all the HaxeFlixel samples");
+        Sys.println(" Usage : " + alias + " download samples");
+
+        Sys.println("");
+
         Sys.println(" List available samples");
         Sys.println(" Usage : " + alias + " list samples");
 
@@ -310,15 +315,15 @@ class FlxCommandLineTools
         }
         else
         {
-            // if (PlatformHelper.hostPlatform == Platform.WINDOWS)
-            // {
+            if (PlatformHelper.hostPlatform == Platform.WINDOWS)
+            {
                 var fdTemplatePath = PathHelper.getHaxelib(new Haxelib ("flixel-tools")) + "templates/flashdevelop-basic/";
                 helpers.ProcessHelper.openFile(fdTemplatePath, "FlxTemplate.fdz");
-            // } 
-            // else
-            // {
-            //     Sys.println("Sorry Flash Develop only supports WINDOWS");
-            // }
+            } 
+            else
+            {
+                Sys.println("Sorry Flash Develop only supports WINDOWS");
+            }
         }
     }
 
