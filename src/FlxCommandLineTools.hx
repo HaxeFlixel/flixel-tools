@@ -6,7 +6,6 @@ import haxe.io.Bytes;
 import haxe.io.Path;
 import project.Haxelib;
 import project.Platform;
-import helpers.PathHelper;
 import helpers.PlatformHelper;
 import sys.FileSystem;
 import sys.io.File;
@@ -17,6 +16,7 @@ class FlxCommandLineTools
     public static var alias = "flixel";
     public static var version = "0.0.1";
 
+    public static var toolsPath:String;
     public static var templatesPath:String;
     public static var legacyConversionScriptPath:String;
     public static var as3ConversionScriptPath:String;
@@ -27,7 +27,7 @@ class FlxCommandLineTools
     public static function main():Void
     {
         commandsSet = processArguments();
-        //        Sys.println(commandsSet);
+        // Sys.println(commandsSet);
 
         if (commandsSet.help)
         {
@@ -70,6 +70,10 @@ class FlxCommandLineTools
         {
             convertProject();
         }
+        else if (commandsSet.download)
+        {
+            downloadSamples();
+        }
         else
         {
             displayInfo(true);
@@ -84,6 +88,7 @@ class FlxCommandLineTools
         Sys.println("|  _  |/ _` \\ \\/ / _ \\  _| | | \\ \\/ / _ \\ |");
         Sys.println("| | | | (_| |>  <  __/ |   | | |>  <  __/ |");
         Sys.println("\\_| |_/\\__,_/_/\\_\\___\\_|   |_|_/_/\\_\\___|_|");
+        Sys.println("Powered by the Haxe Toolkit and OpenFL");
         Sys.println("Please visit www.haxeflixel.com for community support and resources.");
         Sys.println("");
 
@@ -105,30 +110,60 @@ class FlxCommandLineTools
 
         Sys.println("");
 
-        Sys.println(" List all the project templates you can create");
-        Sys.println(" Usage : " + alias + " create project <name>");
+        Sys.println(" Setup the tools to use the " + alias + " alias");
+        Sys.println(" Usage : haxelib run " + alias + "-tools setup");
 
         Sys.println("");
 
-        Sys.println(" Create project and templates you can create");
+        Sys.println(" Create a project or sample by name");
         Sys.println(" Usage : " + alias + " create <name>");
 
         Sys.println("");
 
-        Sys.println(" List all the samples you can create");
-        Sys.println(" Usage : " + alias + " create list");
+        Sys.println(" List available samples and projects");
+        Sys.println(" Usage : " + alias + " list");
 
         Sys.println("");
 
-        Sys.println(" Simple conversion tool for old HaxeFlixel projects");
-        Sys.println(" Usage : " + alias + " convert <path> [options]");
+        Sys.println(" List available samples");
+        Sys.println(" Usage : " + alias + " list samples");
 
         Sys.println("");
 
-        Sys.println(" To compile your HaxeFlixel projects use the openfl commands");
+        Sys.println(" List available templates");
+        Sys.println(" Usage : " + alias + " list templates");
+
+        Sys.println("");
+
+        Sys.println(" To compile your HaxeFlixel projects use the openfl");
         Sys.println(" Usage : openfl help");
 
         Sys.println("");
+    }
+
+    public static function downloadSamples():Void
+    {
+        var numberOfSamples = numberOfSamples();  
+        Sys.println( numberOfSamples );
+
+        var path = PathHelper.getHaxelib (new Haxelib ("flixel-samples"));
+        Sys.println( path );
+
+        if (PlatformHelper.hostPlatform == Platform.WINDOWS)
+        {
+            //windows doesnt have git :(
+            // https://bitbucket.org/imp/flixel-tools/get/master.zip
+        } 
+        else 
+        {
+            // Sys.command("haxelib git flixel-samples https://github.com/HaxeFlixel/flixel-samples.git");
+        }
+    }
+
+    public static function numberOfSamples():Int
+    {
+        var samples = scanSamples("","",false);
+        return Lambda.count(samples);
     }
 
     public static function createSample(?name:String):Void
@@ -144,10 +179,11 @@ class FlxCommandLineTools
 
         if (samples.get(name) != null)
         {
-            var destination = Sys.getCwd() + name;
-
             Sys.println(" - Creating " + name);
+
+            var destination = Sys.getCwd() + name;
             FileHelper.recursiveCopy(samples.get(name), destination);
+
             if (FileSystem.isDirectory(destination))
             {
                 Sys.println(" - Created " + name);
@@ -165,27 +201,21 @@ class FlxCommandLineTools
         }
     }
 
-    public static function validateProject()
-    {
-    //todo
-//        if( commandsSet.fromDir == null || commandsSet.toDir == null )
-//        {
-//            Sys.println(" Error did not get a from and to directory");
-//            return;
-//        }
-
-//        var projectXML
-    }
-
     public static function scanSamples(samplesPath:String = "", prefix:String = " - ", display:Bool = true):Map<String, String>
     {
+        // Sys.println("scan::" + samplesPath);
+
         if (samplesPath == "")
             samplesPath = PathHelper.getHaxelib(new Haxelib ("flixel-samples"));
+
+        if(display)
+            Sys.println("Listing samples from " + samplesPath);
 
         var samples = new Map<String, String>();
 
         for (name in FileSystem.readDirectory(samplesPath))
         {
+                // Sys.println(name);
             if (!StringTools.startsWith(name, ".") && FileSystem.isDirectory(samplesPath + "/" + name))
             {
                 if (name == "FlashOnly")
@@ -194,9 +224,13 @@ class FlxCommandLineTools
                     {
                         Sys.println(" - - (Flash Target Only)");
                     }
-                    for (o in scanSamples(samplesPath + "/FlashOnly", " - - - ", display))
+
+                    var flashOnlyPath = samplesPath + "FlashOnly/";
+                    var flashOnlySamples = scanSamples(flashOnlyPath, " - - - ", display);
+                    for (FlashOnlyName in flashOnlySamples.keys())
                     {
-                        samples.set(name, o);
+                        var key = flashOnlySamples.get(FlashOnlyName);
+                        samples.set(key, FlashOnlyName);
                     }
                 }
                 else if (name == "NonFlash")
@@ -206,9 +240,12 @@ class FlxCommandLineTools
                         Sys.println(" - - (Non Flash Targets Only)");
                     }
 
-                    for (o in scanSamples(samplesPath + "/NonFlash", " - - - ", display))
+                    var nonFlashPath = samplesPath + "NonFlash/";
+                    var nonFlashSamples = scanSamples(nonFlashPath, " - - - ", display);
+                    for (nonFlashName in nonFlashSamples.keys())
                     {
-                        samples.set(name, o);
+                        var key = nonFlashSamples.get(nonFlashName);
+                        samples.set(key, nonFlashName);
                     }
                 }
                 else
@@ -223,6 +260,7 @@ class FlxCommandLineTools
                 }
             }
         }
+
         return samples;
     }
 
@@ -294,11 +332,8 @@ class FlxCommandLineTools
         var templatesPath = PathHelper.getHaxelib(new Haxelib ("flixel-tools")) + "templates";
         var templates = new Map<String, String>();
 
-        if (display)
-        {
-            Sys.println("");
-            Sys.println(" HaxeFlixel Template Listing");
-        }
+        if(display)
+            Sys.println("Listing templates from " + templatesPath);
 
         for (name in FileSystem.readDirectory(templatesPath))
         {
@@ -310,28 +345,45 @@ class FlxCommandLineTools
                 templates.set(name, templatesPath + "/" + name);
             }
         }
-
         return templates;
     }
 
     public static function convertProject()
     {
+        if(StringTools.startsWith(commandsSet.fromDir,"./"))
+        {
+            commandsSet.fromDir = commandsSet.fromDir.substring(2);
+        }
+
+        if(StringTools.endsWith( commandsSet.fromDir,"/" ))
+        {
+            commandsSet.fromDir = commandsSet.fromDir.substring(0,commandsSet.fromDir.length-1);
+        }
+
         var convertProjectPath = Sys.getCwd() + commandsSet.fromDir;
 
-        Sys.println(" Converting :" + convertProjectPath);
-        Sys.println(" *DONT PANIC! warning convert is only a simple find and replace script");
-        Sys.println(" Please visit haxeflixel.com/wiki/convert for further documentation on converting old code.");
+        if(FileSystem.exists(convertProjectPath))
+        {            
+            Sys.println(" Converting :" + convertProjectPath);
 
-        initLegacyFlixelReplacements();
+            initLegacyFlixelReplacements();
 
-        //backup existing project by renaming it with _bup prefix
-        var backupFolder = convertProjectPath + "_bup";
-        if(!FileSystem.exists(backupFolder))
-            FileHelper.recursiveCopy(convertProjectPath, backupFolder);
+            //backup existing project by renaming it with _bup suffix
+            if(!commandsSet.noBackup)
+            {
+                var backupFolder = convertProjectPath + "_bup";
+                if(!FileSystem.exists(backupFolder))
+                    FileHelper.recursiveCopy(convertProjectPath, backupFolder);
+            }
 
-        convertProjectPath += "/source";
-        // Sys.println(convertProjectPath);
-        convertProjectFolder(convertProjectPath);
+            convertProjectPath += "/source";
+            convertProjectFolder(convertProjectPath);
+
+            Sys.println(" Warning although this command updates a lot, its not perfect.");
+            Sys.println(" Please visit haxeflixel.com/wiki/convert for further documentation on converting old code.");
+        } else {
+            Sys.println("Warning cannot find " + convertProjectPath);
+        }
     }
 
     public static function convertProjectFolder(projectPath:String)
@@ -347,7 +399,6 @@ class FlxCommandLineTools
                 if (StringTools.endsWith(fileName, ".hx"))
                 {
                     var filePath = projectPath + "/" + fileName;
-                    // Sys.println(filePath);
                     var sourceText = sys.io.File.getContent(filePath);
                     var originalText = Reflect.copy(sourceText);
 
@@ -370,6 +421,77 @@ class FlxCommandLineTools
                 }
             }
         }
+    }
+
+    public static function validateProject()
+    {
+        if(StringTools.startsWith(commandsSet.fromDir,"./"))
+        {
+            commandsSet.fromDir = commandsSet.fromDir.substring(2);
+        }
+        if(StringTools.endsWith( commandsSet.fromDir,"/" ))
+        {
+            commandsSet.fromDir = commandsSet.fromDir.substring(0,commandsSet.fromDir.length-1);
+        }
+
+        var validateProjectPath = Sys.getCwd() + commandsSet.fromDir;
+        Sys.println("Validate " + validateProjectPath);
+
+        if(FileSystem.exists(validateProjectPath))
+        {
+            var projectFile = findProjectFile(validateProjectPath);
+            if(StringTools.endsWith(projectFile,".xml"))
+            {
+                Sys.println("Found XML file " + projectFile);
+
+                compile_project("flash",validateProjectPath, projectFile);
+                compile_project("neko",validateProjectPath, projectFile);
+                compile_project("native",validateProjectPath, projectFile);
+            }
+            else 
+            {
+                Sys.println("Warning cannot find a project in " + validateProjectPath);
+            }
+        }
+        else
+        {
+            Sys.println("Warning cannot find " + validateProjectPath);
+        }
+    }
+
+    public static function compile_project(target:String, validateProjectPath:String, projectFile:String) : Dynamic
+    {
+        if(target == "native")
+        {
+            if (PlatformHelper.hostPlatform == Platform.WINDOWS)
+            {
+                target = "windows";
+            }
+            else if( PlatformHelper.hostPlatform == Platform.MAC )
+            {
+                target = "mac";
+            } 
+            else if (PlatformHelper.hostPlatform == Platform.LINUX)
+            {
+                target = "linux";
+            }
+        }
+
+        var cdProject = "cd " + validateProjectPath;
+        var buildFlash = "openfl build " + projectFile + " " + target + "";
+        var compileCommand = cdProject + " && " + buildFlash;
+
+        Sys.println(compileCommand);
+        var compile = Sys.command(compileCommand);
+
+        if( compile == 0)
+        {
+            Sys.println("compiled " + target + " without errors");
+        } else {
+            Sys.println("compiler error with " + target);
+        }
+
+        return compile;
     }
 
     /**
@@ -406,14 +528,11 @@ class FlxCommandLineTools
 
         var arguments = Sys.args();
 
-        //        Sys.println(arguments.toString());
+        // Sys.println(arguments.toString());
 
         if (arguments.length > 0)
         {
-            // When the command-line tools are called from Haxelib,
-            // the last argument is the project directory and the
-            // path to this Haxelib is the current working directory
-
+            // Last argument is the current haxelib path
             var lastArgument = "";
 
             for (i in 0...arguments.length)
@@ -428,9 +547,10 @@ class FlxCommandLineTools
             {
                 lastArgument = lastArgument.substr(0, lastArgument.length - 1);
             }
-
+            //set the current directory to the haxelib
             if (FileSystem.exists(lastArgument) && FileSystem.isDirectory(lastArgument))
             {
+                toolsPath = lastArgument;
                 Sys.setCwd(lastArgument);
             }
         }
@@ -453,7 +573,7 @@ class FlxCommandLineTools
         else if (arguments[index] == "list")
         {
             commandsSet.list = true;
-            commandsSet = processListArgs(arguments, commandsSet);
+            processListArgs(arguments);
         }
         else if (arguments[index] == "setup")
         {
@@ -462,7 +582,7 @@ class FlxCommandLineTools
         else if (arguments[index] == "new")
         {
             commandsSet.template = true;
-            commandsSet = processTemplateArgs(arguments, commandsSet);
+            processTemplateArgs(arguments);
         }
         else if (arguments[index] == "convert")
         {
@@ -473,20 +593,27 @@ class FlxCommandLineTools
             commandsSet.validate = true;
             processValidateArgs(arguments);
         }
+        else if (arguments[index] == "download")
+        {
+            commandsSet.download = true;
+        }
+
+        processAdditionalArgs(arguments);
 
         return commandsSet;
     }
 
-    private static function processValidateArgs(args:Array<String>):Void
+    private static inline function processValidateArgs(args:Array<String>):Void
     {
         if( args[1]!=null)
+        {
             commandsSet.fromDir = args[1];
-
-        if( args[2]!=null)
-            commandsSet.toDir = args[2];
+            } else {
+            Sys.println("Warning, you have not set a project Path for validate");
+        }
     }
 
-    private static function processConvertArgs(args:Array<String>):Void
+    private static inline function processConvertArgs(args:Array<String>):Void
     {
         if( args[1]!=null)
         {
@@ -497,7 +624,7 @@ class FlxCommandLineTools
         }
     }
 
-    private static function processListArgs(args:Array<String>, result:Commands):Commands
+    private static inline function processListArgs(args:Array<String>):Void
     {
         var index = 0;
         var length = args.length;
@@ -507,20 +634,18 @@ class FlxCommandLineTools
             if (args[index] == "samples")
             {
                 index++;
-                result.listSamples = true;
+                commandsSet.listSamples = true;
             }
             else if (args[index] == "templates")
             {
                 index++;
-                result.listTemplates = true;
+                commandsSet.listTemplates = true;
             }
             index++;
         }
-
-        return result;
     }
 
-    private static function processTemplateArgs(args:Array<String>, result:Commands):Commands
+    private static inline function processTemplateArgs(args:Array<String>):Void
     {
         var index = 0;
         var length = args.length;
@@ -530,28 +655,48 @@ class FlxCommandLineTools
             if (args[index] == "-name" && index + 1 < length)
             {
                 index++;
-                result.projectName = args[index];
+                commandsSet.projectName = args[index];
             }
             else if (args[index] == "-class" && index + 1 < length)
             {
                 index++;
-                result.projectClass = args[index];
+                commandsSet.projectClass = args[index];
             }
             else if (args[index] == "-screen" && index + 2 < length)
             {
                 index++;
-                result.projectWidth = cast(args[index]);
+                commandsSet.projectWidth = cast(args[index]);
                 index++;
-                result.projectHeight = cast(args[index]);
+                commandsSet.projectHeight = cast(args[index]);
             }
             else if (args[index] != null && args[index] != 'new')
             {
-                result.createName = cast(args[index]);
+                commandsSet.createName = cast(args[index]);
             }
             index++;
         }
+    }
 
-        return result;
+    private static inline function processAdditionalArgs(args:Array<String>):Void
+    {
+        var index = 0;
+        var length = args.length;
+
+        while (index < args.length)
+        {
+            if (args[index] == "-R")
+            {
+                index++;
+                commandsSet.recursive = true;
+            }
+            else if (args[index] == "-B")
+            {
+                index++;
+                commandsSet.noBackup = true;
+            }
+
+            index++;
+        }
     }
 
     private static function trimPath(path:String)
@@ -559,7 +704,7 @@ class FlxCommandLineTools
         return new Path(path).dir;
     }
 
-    public static function projectTemplateReplacements(source:String):String
+    public static inline function projectTemplateReplacements(source:String):String
     {
         source = StringTools.replace(source, "${PROJECT_NAME}", commandsSet.projectName);
         source = StringTools.replace(source, "${PROJECT_CLASS}", commandsSet.projectClass);
@@ -572,6 +717,10 @@ class FlxCommandLineTools
     //todo
     public static function initLegacyFlixelReplacements():Void
     {
+        //unable todo
+        // _btnStart.setOnOverCallback(onStartOver);
+        // _btnStart.onOver = onStartOver;
+
         replacements = new Map<String, String>();
 
         //org package
@@ -585,25 +734,16 @@ class FlxCommandLineTools
 
         //FlxU
 
-
         //FrontEnds
-        replacements.set( "FlxG.bgColor", "FlxG.state.bgColor" );
 
         //Debugger
         replacements.set( "FlxG.watch", "FlxG.watch.add" );
 
-
-        replacements.set( "FlxG.play", "FlxG.sound.play" );
-        replacements.set( "FlxG.playMusic", "FlxG.sound.playMusic" );
-
         //cameras
         replacements.set( "FlxG.resetCameras", "FlxG.cameras.reset" );
-        replacements.set( "FlxG.shake", "FlxG.cameras.defaultCamera.shake" );
-        replacements.set( "FlxG.flash", "FlxG.cameras.defaultCamera.flash" );
-        replacements.set( "FlxG.fade", "FlxG.cameras.defaultCamera.fade" );
-
-        //addons
-        replacements.set( "flixel.addons.FlxCaveGenerator", "flixel.addons.tile.FlxCaveGenerator" );
+        replacements.set( "FlxG.shake", "FlxG.camera.shake" );
+        replacements.set( "FlxG.flash", "FlxG.camera.flash" );
+        replacements.set( "FlxG.fade", "FlxG.camera.fade" );
 
         //tile
         replacements.set( "flixel.FlxTilemap", "flixel.tile.FlxTilemap" );
@@ -611,6 +751,18 @@ class FlxCommandLineTools
 
         //effects
         replacements.set( "flixel.FlxEmitter", "flixel.effects.particles.FlxEmitter" );
+        replacements.set( "flixel.FlxParticle", "flixel.effects.particles.FlxParticle" );
+        
+        //addons
+        replacements.set( "flixel.addons.FlxCaveGenerator", "flixel.addons.tile.FlxCaveGenerator" );
+        replacements.set( "flixel.addons.FlxEmitterExt", "flixel.effects.particles.FlxEmitterExt" );
+        replacements.set( "flixel.addons.FlxTrail", "flixel.effects.FlxTrail" );
+
+        //photonstorm powertools
+        replacements.set( "flixel.plugin.photonstorm.FlxSpecialFX", "flixel.effects.FlxSpecialFX" );
+        replacements.set( "flixel.plugin.photonstorm.fx.BaseFX", "flixel.effects.fx.BaseFX" );
+        replacements.set( "flixel.plugin.photonstorm.fx.GlitchFX", "flixel.effects.fx.GlitchFX" );
+        replacements.set( "flixel.plugin.photonstorm.fx.StarfieldFX", "flixel.effects.fx.StarfieldFX" );
 
         //text
         replacements.set( "flixel.FlxText", "flixel.text.FlxText" );
@@ -618,8 +770,10 @@ class FlxCommandLineTools
 
         //FlxG
         replacements.set( "FlxG.getLibraryName()", "FlxG.libraryName" );
-        replacements.set( "FlxG.random", "flixel.util.FlxRandom.int" ); 
-        replacements.set( "FlxG.camera.", "FlxG.cameras.defaultCamera." );  
+        replacements.set( "FlxG.play", "FlxG.sound.play" );
+        replacements.set( "FlxG.playMusic", "FlxG.sound.playMusic" );
+        replacements.set( "FlxG.random", "flixel.util.FlxRandom.int" );
+        replacements.set( "FlxG.bgColor", "FlxG.state.bgColor" );
         
         //FlxGroups
         replacements.set( "flixel.FlxGroup", "flixel.group.FlxGroup" );
@@ -719,6 +873,162 @@ class FlxCommandLineTools
         }
         return "";
     }
+
+
+
+    // private static function downloadFile (remotePath:String, localPath:String = "", followingLocation:Bool = false):Void {
+        
+    //     if (localPath == "") {
+            
+    //         localPath = Path.withoutDirectory (remotePath);
+            
+    //     }
+        
+    //     if (!followingLocation && FileSystem.exists (localPath)) {
+            
+    //         var answer = ask ("File found. Install existing file?");
+            
+    //         if (answer != No) {
+                
+    //             return;
+                
+    //         }
+            
+    //     }
+        
+    //     var out = File.write (localPath, true);
+    //     var progress = new Progress (out);
+    //     var h = new Http (remotePath);
+        
+    //     h.onError = function (e) {
+    //         progress.close();
+    //         FileSystem.deleteFile (localPath);
+    //         throw e;
+    //     };
+        
+    //     if (!followingLocation) {
+            
+    //         Lib.println ("Downloading " + localPath + "...");
+            
+    //     }
+        
+    //     h.customRequest (false, progress);
+        
+    //     if (h.responseHeaders != null && h.responseHeaders.exists ("Location")) {
+            
+    //         var location = h.responseHeaders.get ("Location");
+            
+    //         if (location != remotePath) {
+                
+    //             downloadFile (location, localPath, true);
+                
+    //         }
+            
+    //     }
+        
+    // }
+    
+    
+    // private static function extractFile (sourceZIP:String, targetPath:String, ignoreRootFolder:String = ""):Void {
+        
+    //     var extension = Path.extension (sourceZIP);
+        
+    //     if (extension != "zip") {
+            
+    //         var arguments = "xvzf";         
+                        
+    //         if (extension == "bz2" || extension == "tbz2") {
+                
+    //             arguments = "xvjf";
+                
+    //         }   
+            
+    //         if (ignoreRootFolder != "") {
+                
+    //             if (ignoreRootFolder == "*") {
+                    
+    //                 for (file in FileSystem.readDirectory (targetPath)) {
+                        
+    //                     if (FileSystem.isDirectory (targetPath + "/" + file)) {
+                            
+    //                         ignoreRootFolder = file;
+                            
+    //                     }
+                        
+    //                 }
+                    
+    //             }
+                
+    //             ProcessHelper.runCommand ("", "tar", [ arguments, sourceZIP ], false);
+    //             ProcessHelper.runCommand ("", "cp", [ "-R", ignoreRootFolder + "/*", targetPath ], false);
+    //             Sys.command ("rm", [ "-r", ignoreRootFolder ]);
+                
+    //         } else {
+                
+    //             ProcessHelper.runCommand ("", "tar", [ arguments, sourceZIP, "-C", targetPath ], false);
+                
+    //             //InstallTool.runCommand (targetPath, "tar", [ arguments, FileSystem.fullPath (sourceZIP) ]);
+                
+    //         }
+            
+    //         Sys.command ("chmod", [ "-R", "755", targetPath ]);
+            
+    //     } else {
+            
+    //         var file = File.read (sourceZIP, true);
+    //         var entries = Reader.readZip (file);
+    //         file.close ();
+        
+    //         for (entry in entries) {
+            
+    //             var fileName = entry.fileName;
+            
+    //             if (fileName.charAt (0) != "/" && fileName.charAt (0) != "\\" && fileName.split ("..").length <= 1) {
+                
+    //                 var dirs = ~/[\/\\]/g.split(fileName);
+                
+    //                 if ((ignoreRootFolder != "" && dirs.length > 1) || ignoreRootFolder == "") {
+                    
+    //                     if (ignoreRootFolder != "") {
+                        
+    //                         dirs.shift ();
+                        
+    //                     }
+                    
+    //                     var path = "";
+    //                     var file = dirs.pop();
+    //                     for( d in dirs ) {
+    //                         path += d;
+    //                         PathHelper.mkdir (targetPath + "/" + path);
+    //                         path += "/";
+    //                     }
+                    
+    //                     if( file == "" ) {
+    //                         if( path != "" ) Lib.println("  Created "+path);
+    //                         continue; // was just a directory
+    //                     }
+    //                     path += file;
+    //                     Lib.println ("  Install " + path);
+                    
+    //                     var data = Reader.unzip (entry);
+    //                     var f = File.write (targetPath + "/" + path, true);
+    //                     f.write (data);
+    //                     f.close ();
+                    
+    //                 }
+                
+    //             }
+            
+    //         }
+            
+    //     }
+        
+    //     Lib.println ("Done");
+        
+    // }
+    
+
+
 }
 
 /**
@@ -732,7 +1042,12 @@ class Commands
 
     public var help:Bool = false;
 
+    public var download:Bool = false;
+
     public var setup:Bool = false;
+
+    public var recursive:Bool = false;
+    public var noBackup:Bool = false;
 
     public var create:Bool = false;
     public var createName:String;
@@ -751,8 +1066,5 @@ class Commands
     public var fromDir:String = "";
     public var toDir:String = "";
 
-    public function new():Void
-    {
-
-    }
+    public function new():Void {}
 }
