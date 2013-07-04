@@ -20,9 +20,12 @@ class FlxCommandLineTools
     public static var templatesPath:String;
     public static var legacyConversionScriptPath:String;
     public static var as3ConversionScriptPath:String;
+    public static var validateProjectPath:String;
+    public static var projectFile:String;
 
     public static var commandsSet:Commands;
     public static var replacements:Map<String, String>;
+    public static var results:Map<String,Int>;
 
     public static function main():Void
     {
@@ -152,19 +155,11 @@ class FlxCommandLineTools
 
         if ( path == "")
         {
-            if (PlatformHelper.hostPlatform == Platform.LINUX ||
-                PlatformHelper.hostPlatform == Platform.MAC)
-            {
-                Sys.command("haxelib git flixel-samples https://github.com/HaxeFlixel/flixel-samples.git");
-            } 
-            else if(PlatformHelper.hostPlatform == Platform.WINDOWS)
-            {
-                Sys.println( " Sorry windows does not have git or haxe ssl to download the zip for now." );
-                Sys.println( " Please download flixel-samples manually from:" );
-                Sys.println( " https://github.com/HaxeFlixel/flixel-samples/archive/master.zip" );
-                Sys.println( " Then run the following haxelib command:" );
-                Sys.println( " haxelib local flixel-samples flixel-samples-master.zip" );
-            }
+            Sys.command("haxelib git flixel-samples https://github.com/HaxeFlixel/flixel-samples.git");
+            Sys.command("flixel list samples");
+            Sys.println("");
+            Sys.println(" Create a sample by name");
+            Sys.println(" Usage : " + alias + " create <name>");
         }
         else
         {
@@ -210,7 +205,6 @@ class FlxCommandLineTools
         else
         {
             Sys.println(" Error there is no sample with the name of " + name);
-
         }
     }
 
@@ -285,31 +279,46 @@ class FlxCommandLineTools
             name = "basic";
         }
 
-        var templates = scanTemplates("", "", false);
-
-        if (templates.get(name) != null)
+        if (name != "flashdevelop-basic") 
         {
-            var destination = Sys.getCwd() + commandsSet.projectName;
+            var templates = scanTemplates("", "", false);
 
-            Sys.println(" - Creating " + name);
-
-            FileHelper.recursiveCopy(templates.get(name), destination);
-
-            if (FileSystem.isDirectory(destination))
+            if (templates.get(name) != null)
             {
-                modifyTemplate(destination);
+                var destination = Sys.getCwd() + commandsSet.projectName;
 
-                Sys.println(" - Created " + name);
-                Sys.println(destination);
+                Sys.println(" - Creating " + name);
+
+                FileHelper.recursiveCopy(templates.get(name), destination);
+
+                if (FileSystem.isDirectory(destination))
+                {
+                    modifyTemplate(destination);
+
+                    Sys.println(" - Created " + name);
+                    Sys.println(destination);
+                }
+                else
+                {
+                    Sys.println(" There was a problem creating " + destination);
+                }
             }
             else
             {
-                Sys.println(" There was a problem creating " + destination);
+                Sys.println(" Error there is no sample with the name of " + name);
             }
         }
         else
         {
-            Sys.println(" Error there is no sample with the name of " + name);
+            // if (PlatformHelper.hostPlatform == Platform.WINDOWS)
+            // {
+                var fdTemplatePath = PathHelper.getHaxelib(new Haxelib ("flixel-tools")) + "templates/flashdevelop-basic/";
+                helpers.ProcessHelper.openFile(fdTemplatePath, "FlxTemplate.fdz");
+            // } 
+            // else
+            // {
+            //     Sys.println("Sorry Flash Develop only supports WINDOWS");
+            // }
         }
     }
 
@@ -447,19 +456,33 @@ class FlxCommandLineTools
             commandsSet.fromDir = commandsSet.fromDir.substring(0,commandsSet.fromDir.length-1);
         }
 
-        var validateProjectPath = Sys.getCwd() + commandsSet.fromDir;
+        validateProjectPath = Sys.getCwd() + commandsSet.fromDir;
         Sys.println("Validate " + validateProjectPath);
 
         if(FileSystem.exists(validateProjectPath))
         {
-            var projectFile = findProjectFile(validateProjectPath);
+            results = new Map<String,Int>();
+
+            projectFile = findProjectFile(validateProjectPath);
+
             if(StringTools.endsWith(projectFile,".xml"))
             {
                 Sys.println("Found XML file " + projectFile);
 
-                compile_project("flash",validateProjectPath, projectFile);
-                compile_project("neko",validateProjectPath, projectFile);
-                compile_project("native",validateProjectPath, projectFile);
+                compileTarget("flash");
+                compileTarget("neko");
+                compileTarget("html5");
+                compileTarget("native");
+
+                Sys.println("");
+                Sys.println("");
+                Sys.println(" Compile Results");
+
+                for (target in results.keys())
+                {
+                    var key = results.get(target);
+                    Sys.println(" Result::" + target + "::" + getResult(key));
+                }
             }
             else 
             {
@@ -472,7 +495,19 @@ class FlxCommandLineTools
         }
     }
 
-    public static function compile_project(target:String, validateProjectPath:String, projectFile:String) : Dynamic
+    public static inline function getResult(result:Int):String
+    {  
+        if(result == 0)
+        {
+            return "PASSED";
+        }
+        else
+        {
+            return "FAILED";
+        }
+    }
+
+    public static function compileTarget(target:String):Int
     {
         if(target == "native")
         {
@@ -495,14 +530,19 @@ class FlxCommandLineTools
         var compileCommand = cdProject + " && " + buildCommand;
 
         Sys.println(compileCommand);
+
         var compile = Sys.command(compileCommand);
 
         if( compile == 0)
         {
             Sys.println("compiled " + target + " without errors");
-        } else {
+        }
+        else
+        {
             Sys.println("compiler error with " + target);
         }
+
+        results.set(target,compile);
 
         return compile;
     }
@@ -624,7 +664,9 @@ class FlxCommandLineTools
         if( args[1]!=null)
         {
             commandsSet.fromDir = args[1];
-            } else {
+        } 
+        else
+        {
             Sys.println("Warning, you have not set a project Path for validate");
         }
     }
@@ -635,7 +677,9 @@ class FlxCommandLineTools
         {
             commandsSet.fromDir = args[1];
             commandsSet.convert = true;
-        } else {
+        }
+        else
+        {
             Sys.println("Warning, you have not set a project Path for convert");
         }
     }
@@ -730,71 +774,9 @@ class FlxCommandLineTools
         return source;
     }
 
-    //todo
     public static function initLegacyFlixelReplacements():Void
     {
-        //unable todo
-        // _btnStart.setOnOverCallback(onStartOver);
-        // _btnStart.onOver = onStartOver;
-
-        replacements = new Map<String, String>();
-
-        //org package
-        replacements.set( "org.flixel.", "flixel." );
-
-        //system
-        replacements.set( "flixel.FlxAssets", "flixel.system.FlxAssets" );
-
-        //ui
-        replacements.set( "flixel.FlxButton", "flixel.ui.FlxButton" );
-
-        //FlxU
-
-        //FrontEnds
-
-        //Debugger
-        replacements.set( "FlxG.watch", "FlxG.watch.add" );
-
-        //cameras
-        replacements.set( "FlxG.resetCameras", "FlxG.cameras.reset" );
-        replacements.set( "FlxG.shake", "FlxG.camera.shake" );
-        replacements.set( "FlxG.flash", "FlxG.camera.flash" );
-        replacements.set( "FlxG.fade", "FlxG.camera.fade" );
-
-        //tile
-        replacements.set( "flixel.FlxTilemap", "flixel.tile.FlxTilemap" );
-        replacements.set( "flixel.system.FlxTile", "flixel.tile.FlxTile" );
-
-        //effects
-        replacements.set( "flixel.FlxEmitter", "flixel.effects.particles.FlxEmitter" );
-        replacements.set( "flixel.FlxParticle", "flixel.effects.particles.FlxParticle" );
-        
-        //addons
-        replacements.set( "flixel.addons.FlxCaveGenerator", "flixel.addons.tile.FlxCaveGenerator" );
-        replacements.set( "flixel.addons.FlxEmitterExt", "flixel.effects.particles.FlxEmitterExt" );
-        replacements.set( "flixel.addons.FlxTrail", "flixel.effects.FlxTrail" );
-
-        //photonstorm powertools
-        replacements.set( "flixel.plugin.photonstorm.FlxSpecialFX", "flixel.effects.FlxSpecialFX" );
-        replacements.set( "flixel.plugin.photonstorm.fx.BaseFX", "flixel.effects.fx.BaseFX" );
-        replacements.set( "flixel.plugin.photonstorm.fx.GlitchFX", "flixel.effects.fx.GlitchFX" );
-        replacements.set( "flixel.plugin.photonstorm.fx.StarfieldFX", "flixel.effects.fx.StarfieldFX" );
-
-        //text
-        replacements.set( "flixel.FlxText", "flixel.text.FlxText" );
-        replacements.set( "flixel.FlxTextField", "flixel.text.FlxTextField" );
-
-        //FlxG
-        replacements.set( "FlxG.getLibraryName()", "FlxG.libraryName" );
-        replacements.set( "FlxG.play", "FlxG.sound.play" );
-        replacements.set( "FlxG.playMusic", "FlxG.sound.playMusic" );
-        replacements.set( "FlxG.random", "flixel.util.FlxRandom.int" );
-        replacements.set( "FlxG.bgColor", "FlxG.state.bgColor" );
-        
-        //FlxGroups
-        replacements.set( "flixel.FlxGroup", "flixel.group.FlxGroup" );
-        replacements.set( "flixel.FlxSpriteGroup", "flixel.group.FlxSpriteGroup" );
-        replacements.set( "flixel.FlxTypedGroup", "flixel.group.FlxTypedGroup" );
+        replacements = HaxeFlixelLegacy.findAndReplaceMap;
     }
 
     /**
