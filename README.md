@@ -1,9 +1,9 @@
 flixel-tools
 ============
 
-Command Line tools for [HaxeFlixel](https://github.com/HaxeFlixel/flixel), create samples, templates and more.
+Command line tools for [HaxeFlixel](https://github.com/HaxeFlixel/flixel) to create samples, templates and more.
 
-###Warning: This tool still in active development
+###Warning: This tool is still in active development
 
 ###Installation
 
@@ -20,15 +20,15 @@ To set the tools up initially / to be able to use the `flixel` alias in your con
 
 ```batch
 haxelib run flixel-tools setup
-
 ```
+
 To clone the [flixel-samples](https://github.com/HaxeFlixel/flixel-samples) repo (for sample creation):
 
 ```batch
 flixel download
 ```
 
-####Commands
+###Commands
 
 Create a new sample (in the current directory):
 
@@ -42,7 +42,7 @@ Create a new project from the template (in the current directory):
 flixel new -name <project_name> -class <class_name> -screen <width_value> <height_value>
 ```
 
-Install the project template for FlashDevelop:
+Install the [project template for FlashDevelop](https://github.com/HaxeFlixel/FlashDevelop-Template):
 
 
 ```batch
