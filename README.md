@@ -39,14 +39,14 @@ flixel create <name>
 Create a new project from the template (in the current directory):
 
 ```batch
-flixel new -name <project_name> -class <class_name> -screen <width_value> <height_value>
+flixel template -name <project_name> -class <class_name> -screen <width_value> <height_value>
 ```
 
 Install the [project template for FlashDevelop](https://github.com/HaxeFlixel/FlashDevelop-Template):
 
 
 ```batch
-flixel new flashdevelop-basic
+flixel template flashdevelop-basic
 ```
 
 List all available projects and samples:
