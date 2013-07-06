@@ -1,6 +1,7 @@
 flixel-tools
 ============
-
+###Related repos: [flixel](https://github.com/HaxeFlixel/flixel) | [flixel-addons](https://github.com/HaxeFlixel/flixel-addons) | [flixel-samples](https://github.com/HaxeFlixel/flixel-samples)
+______________________________________________________
 Command line tools for [HaxeFlixel](https://github.com/HaxeFlixel/flixel) to create samples, templates and more.
 
 ###Warning: This tool is still in active development
