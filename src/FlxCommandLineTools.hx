@@ -1,6 +1,7 @@
 package;
 
 import utils.PathHelper;
+import utils.CommandLine;
 import haxe.Json;
 import haxe.io.Bytes;
 import haxe.io.Path;
@@ -45,10 +46,8 @@ class FlxCommandLineTools
         // Get the current flixel version
         if (flixelVersion == null) 
         {
-            var flixelPath:String = PathHelper.getHaxelib(new Haxelib("flixel"));
-            var jsonContent:String = File.getContent(flixelPath + "haxelib.json");
-            var jsonData:HaxelibJSON = Json.parse(jsonContent);
-            flixelVersion = jsonData.version;
+            var flixelHaxelib:HaxelibJSON = CommandLine.getHaxelibJsonData("flixel");
+            flixelVersion = flixelHaxelib.version;
         }
 		
         Sys.println("                 _   _               ______ _  _          _");
@@ -60,7 +59,7 @@ class FlxCommandLineTools
         Sys.println("");
         Sys.println("");
         Sys.println("                   Powered by the Haxe Toolkit and OpenFL");
-        Sys.println("     Please visit www.haxeflixel.com for community support and ressources!");
+        Sys.println("     Please visit www.haxeflixel.com for community support and resources!");
         Sys.println("");
         Sys.println("                    " + name + " Command-Line Tools (" + version + ")");
 		
@@ -70,10 +69,10 @@ class FlxCommandLineTools
         }
         else 
         {
-            Sys.println("                    Current flixel version: " + flixelVersion);
+            Sys.println("                   Installed flixel version: " + flixelVersion);
         }
 		
-        Sys.println("                  Use \"" + alias + " help\" for available commands");
+        Sys.println("                   Use \"" + alias + " help\" for available commands");
         Sys.println("");
     }
 
@@ -302,7 +301,7 @@ class FlxCommandLineTools
     static public function scanTemplates(TemplatePath:String = "", Prefix:String = " - ", Display:Bool = true):Map<String, String>
     {
         TemplatePath = PathHelper.getHaxelib(new Haxelib ("flixel-tools")) + "templates";
-        var templates:Map<String, String> = new Map<String, String>();
+        var templates = new Map<String, String>();
 		
         if (Display)
         {
@@ -372,11 +371,11 @@ class FlxCommandLineTools
             if (!commandsSet.noBackup)
             {
                 var backupFolder = convertProjectPath + "_backup";
-				
+
                 if(!FileSystem.exists(backupFolder))
                 {
-					FileHelper.recursiveCopy(convertProjectPath, backupFolder);
-				}
+                    FileHelper.recursiveCopy(convertProjectPath, backupFolder);
+                }
             }
 			
             convertProjectPath += "/source";
@@ -418,6 +417,8 @@ class FlxCommandLineTools
                     {
                         var toString:String = replacements.get(fromString);
                         sourceText = StringTools.replace(sourceText, fromString, toString);
+                        //todo
+                        // warnings.push(scanFileForWarnings (filePath));
                     }
 					
                     if (originalText != sourceText)
@@ -772,11 +773,11 @@ class FlxCommandLineTools
 		
         var projects:Map<String, SampleProject> = listAllSamples(Location, false);
 		
-        var results:Array<BuildResult> = new Array<BuildResult>();
+        var results = new Array<BuildResult>();
 		
-        var flashOnly:Array<SampleProject> = new Array<SampleProject>();
-        var nonFlash:Array<SampleProject> = new Array<SampleProject>();
-        var allTargets:Array<SampleProject> = new Array<SampleProject>();
+        var flashOnly = new Array<SampleProject>();
+        var nonFlash = new Array<SampleProject>();
+        var allTargets = new Array<SampleProject>();
 		
         Sys.println(" " + Lambda.count(projects) + " samples available to compile.");
 		
@@ -878,7 +879,7 @@ class FlxCommandLineTools
             Sys.println(" Scan for samples in::" + SamplesPath);
         }
 		
-        var samples:Map<String, SampleProject> = new Map<String, SampleProject>();
+        var samples = new Map<String, SampleProject>();
 		
         for (name in FileSystem.readDirectory(SamplesPath))
         {
@@ -1090,9 +1091,9 @@ class FlxCommandLineTools
 		
         var projects:Map<String, SampleProject> = scanProjectXML(SamplePath, false);
 		
-        var flashOnly:Array<SampleProject> = new Array<SampleProject>();
-        var nonFlash:Array<SampleProject> = new Array<SampleProject>();
-        var allTargets:Array<SampleProject> = new Array<SampleProject>();
+        var flashOnly = new Array<SampleProject>();
+        var nonFlash = new Array<SampleProject>();
+        var allTargets = new Array<SampleProject>();
 		
         if (Display)
         {
@@ -1195,7 +1196,24 @@ class FlxCommandLineTools
     //         {
     //             var str = fin.readLine();
     //             Sys.println("line " + (++lineNum) + ": " + str);
-    //             scanLinesForWarnings(str);
+    //             var warnings = HaxeFlixelLegacyWarnings.warningList;
+    //             
+    //             for ( warning in warnings.keys() )
+    //             {
+    //                 var fix = warnings.get(warning);
+    //                 var search = new EReg("\\b" + warning + "\\b", "");
+    //                 var match = search.match(str);
+    //                 
+    //                 if(match)
+    //                 {
+    //                     Sys.println ("-------");
+    //                     Sys.println (match);
+    //                     Sys.println ("Line::"+lineNum);
+    //                     Sys.println ("filePath::"+filePath);
+    //                     Sys.println ("-------");
+    //                 }
+    //             }
+    //             
     //         }
     //     }
     //     catch( ex:haxe.io.Eof ) 
@@ -1204,28 +1222,6 @@ class FlxCommandLineTools
     //     }
 
     //     fin.close();
-    // }
-
-    // public function scanStringForWarnings(Haystack:String):WarningResult
-    // {
-    //     var warnings = HaxeFlixelLegacyWarnings.warningList;
-	//
-    //     for (warning in warnings.keys())
-    //     {
-    //         var needle = warnings.get(warning);
-    //         var r : EReg = ~/needle/;
-    //         var match = r.match(Haystack);
-
-    //         var result =
-    //             private var oldCode:String;
-    //             private var newCode:String;
-    //             private var lineNumber:String;
-    //             private var filePath:String;
-    //             private var fileName:String;
-    //         }
-
-    //         return result;
-    //     }
     // }
 }
 
