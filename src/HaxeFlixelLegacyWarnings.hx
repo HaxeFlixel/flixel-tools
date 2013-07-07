@@ -1,7 +1,7 @@
-package ;
+package;
 
 /**
- *  Listing for warnings for code to be updated manually for old HaxeFlixel Projects
+ * Listing for warnings for code to be updated manually for old HaxeFlixel Projects
  */
 class HaxeFlixelLegacyWarnings 
 {
@@ -10,18 +10,18 @@ class HaxeFlixelLegacyWarnings
      * Key being the String to search for
      * Value being the String info about the solution
      */
-	public static var warningList(get, null):Map<String,String>;
+	static public var warningList(get, never):Map<String,String>;
 
-	public static function get_warningList():Map<String,String>
+	static public function get_warningList():Map<String,String>
 	{
         var warningList = new Map<String, String>();
-
+		
         //Eg;
         // _btnStart.setOnOverCallback(onStartOver);
         // _btnStart.onOver = onStartOver;
-        warningList.set( ".onOver", ".setOnOverCallback(foo);" );
+		
+        warningList.set(".onOver", ".setOnOverCallback(foo);");
         
         return warningList;
     }
-
 }

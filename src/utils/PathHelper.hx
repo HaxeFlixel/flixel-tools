@@ -1,525 +1,444 @@
 package utils;
 
-
 import project.Haxelib;
 import project.NDLL;
 import project.Platform;
 import sys.io.Process;
 import sys.FileSystem;
-
 import helpers.FileHelper;
 import helpers.LogHelper;
 import helpers.PlatformHelper;
 
+class PathHelper 
+{
+	static public function combine(FirstPath:String, SecondPath:String):String 
+	{
+		if (FirstPath == null || FirstPath == "") 
+		{
+			return SecondPath;
+		} 
+		else if (SecondPath != null && SecondPath != "") 
+		{
+			if (PlatformHelper.hostPlatform == Platform.WINDOWS) 
+			{
+				if (SecondPath.indexOf (":") == 1) 
+				{
+					return SecondPath;
+				}
+			} 
+			else 
+			{
+				if (SecondPath.substr (0, 1) == "/") 
+				{
+					return SecondPath;
+				}
+			}
+			
+			var firstSlash:Bool = (FirstPath.substr (-1) == "/" || FirstPath.substr (-1) == "\\");
+			var secondSlash:Bool = (SecondPath.substr (0, 1) == "/" || SecondPath.substr (0, 1) == "\\");
+			
+			if (firstSlash && secondSlash) 
+			{
+				return FirstPath + SecondPath.substr (1);
+			} 
+			else if (!firstSlash && !secondSlash) 
+			{
+				return FirstPath + "/" + SecondPath;
+				
+			} 
+			else 
+			{
+				return FirstPath + SecondPath;
+			}
+		} 
+		else 
+		{
+			return FirstPath;
+		}
+	}
 
-class PathHelper {
-	
-	
-	public static function combine (firstPath:String, secondPath:String):String {
-		
-		if (firstPath == null || firstPath == "") {
+	static public function escape(EscapePath:String):String 
+	{
+		if (PlatformHelper.hostPlatform != Platform.WINDOWS) 
+		{
+			EscapePath = StringTools.replace(EscapePath, " ", "\\ ");
 			
-			return secondPath;
-			
-		} else if (secondPath != null && secondPath != "") {
-			
-			if (PlatformHelper.hostPlatform == Platform.WINDOWS) {
-				
-				if (secondPath.indexOf (":") == 1) {
-					
-					return secondPath;
-					
-				}
-				
-			} else {
-				
-				if (secondPath.substr (0, 1) == "/") {
-					
-					return secondPath;
-					
-				}
-				
-			}
-			
-			var firstSlash = (firstPath.substr (-1) == "/" || firstPath.substr (-1) == "\\");
-			var secondSlash = (secondPath.substr (0, 1) == "/" || secondPath.substr (0, 1) == "\\");
-			
-			if (firstSlash && secondSlash) {
-				
-				return firstPath + secondPath.substr (1);
-				
-			} else if (!firstSlash && !secondSlash) {
-				
-				return firstPath + "/" + secondPath;
-				
-			} else {
-				
-				return firstPath + secondPath;
-				
-			}
-			
-		} else {
-			
-			return firstPath;
-			
+			return expand(EscapePath);
 		}
 		
+		return expand(EscapePath);
 	}
 	
-	
-	public static function escape (path:String):String {
-		
-		if (PlatformHelper.hostPlatform != Platform.WINDOWS) {
-			
-			path = StringTools.replace (path, " ", "\\ ");
-			
-			return expand (path);
-			
+	static public function expand(ExpandPath:String):String 
+	{
+		if (ExpandPath == null) 
+		{
+			ExpandPath = "";
 		}
 		
-		return expand (path);
-		
-	}
-	
-	
-	public static function expand (path:String):String {
-		
-		if (path == null) {
-			
-			path = "";
-			
-		}
-		
-		if (PlatformHelper.hostPlatform != Platform.WINDOWS) {
-			
-			if (StringTools.startsWith (path, "~/")) {
-				
-				path = Sys.getEnv ("HOME") + "/" + path.substr (2);
-				
+		if (PlatformHelper.hostPlatform != Platform.WINDOWS) 
+		{
+			if (StringTools.startsWith(ExpandPath, "~/")) 
+			{
+				ExpandPath = Sys.getEnv("HOME") + "/" + ExpandPath.substr(2);
 			}
-			
 		}
 		
-		return path;
-		
+		return ExpandPath;
 	}
 	
-	
-	public static function findTemplate (templatePaths:Array <String>, path:String, warnIfNotFound:Bool = true):String {
+	static public function findTemplate(TemplatePaths:Array<String>, TemplatePath:String, WarnIfNotFound:Bool = true):String 
+	{
+		var matches:Array<String> = findTemplates(TemplatePaths, TemplatePath, WarnIfNotFound);
 		
-		var matches = findTemplates (templatePaths, path, warnIfNotFound);
-		
-		if (matches.length > 0) {
-			
+		if (matches.length > 0) 
+		{
 			return matches[matches.length - 1];
-			
 		}
 		
 		return null;
-		
 	}
 	
-	
-	public static function findTemplates (templatePaths:Array <String>, path:String, warnIfNotFound:Bool = true):Array <String> {
-		
+	static public function findTemplates(TemplatePaths:Array<String>, TemplatePath:String, WarnIfNotFound:Bool = true):Array <String> 
+	{
 		var matches = [];
 		
-		for (templatePath in templatePaths) {
-			
+		for (templatePath in TemplatePaths) 
+		{
 			//Sys.println ("
 			
-			var targetPath = combine (templatePath, path);
+			var targetPath:String = combine(templatePath, TemplatePath);
 			
-			if (FileSystem.exists (targetPath)) {
-				
-				matches.push (targetPath);
-				
+			if (FileSystem.exists(targetPath)) 
+			{
+				matches.push(targetPath);
 			}
-			
 		}
 		
-		if (matches.length == 0 && warnIfNotFound) {
-			
-			LogHelper.warn ("Could not find template file: " + path);
-			
+		if (matches.length == 0 && WarnIfNotFound) 
+		{
+			LogHelper.warn ("Could not find template file: " + TemplatePath);
 		}
 		
 		return matches;
-		
 	}
 	
 
-	public static function getHaxelib (haxelib:Haxelib, validate:Bool = false):String {
+	static public function getHaxelib(Library:Haxelib, Validate:Bool = false):String 
+	{
+		var name:String = Library.name;
 		
-		var name = haxelib.name;
-		
-		if (haxelib.version != "") {
-			
-			name += ":" + haxelib.version;
-			
+		if (Library.version != "") 
+		{
+			name += ":" + Library.version;
 		}
 		
-		if (name == "nme") {
+		if (name == "nme") 
+		{
+			var nmePath:String = Sys.getEnv("NMEPATH");
 			
-			var nmePath = Sys.getEnv ("NMEPATH");
-			
-			if (nmePath != null && nmePath != "") {
-				
+			if (nmePath != null && nmePath != "") 
+			{
 				return nmePath;
-				
 			}
-			
 		}
 		
-		var proc = new Process (combine (Sys.getEnv ("HAXEPATH"), "haxelib"), [ "path", name ]);
-		var result = "";
-
-		try {
-			//hack seems to be needed because of latest haxelib?
-			var previous = "";
-
-			while (true) {
+		var proc:Process = new Process(combine(Sys.getEnv("HAXEPATH"), "haxelib"), ["path", name]);
+		var result:String = "";
+		
+		try 
+		{
+			// hack seems to be needed because of latest haxelib?
+			var previous:String = "";
+			
+			while (true) 
+			{
+				var line:String = proc.stdout.readLine();
 				
-				var line = proc.stdout.readLine ();
-
-				if ( line == "-D " + name)
+				if (line == "-D " + name)
 				{
 					result = previous;
 					break;
 				}
-
+				
 				previous = line;				
 			}
 			
-		} catch (e:Dynamic) { };
+		} 
+		catch (e:Dynamic) { };
 		
 		proc.close();
 		
-		if (validate) {
-			
-			if (result == "") {
-				
-				LogHelper.error ("Could not find haxelib \"" + haxelib.name + "\", does it need to be installed?");
-				
-			} else if (result != null && result.indexOf ("is not installed") > -1) {
-				
-				LogHelper.error (result);
-				
+		if (Validate) 
+		{
+			if (result == "")
+			{
+				LogHelper.error("Could not find haxelib \"" + Library.name + "\", does it need to be installed?");
+			} 
+			else if (result != null && result.indexOf ("is not installed") > -1) 
+			{
+				LogHelper.error(result);
 			}
-			
 		}
 		
 		return result;
-		
 	}
 	
 	
-	public static function getLibraryPath (ndll:NDLL, directoryName:String, namePrefix:String = "", nameSuffix:String = ".ndll", allowDebug:Bool = false):String {
+	static public function getLibraryPath(Ndll:NDLL, DirectoryName:String, NamePrefix:String = "", NameSuffix:String = ".ndll", AllowDebug:Bool = false):String {
 		
-		var usingDebug = false;
-		var path = "";
+		var usingDebug:Bool = false;
+		var path:String = "";
 		
-		if (allowDebug) {
-			
-			path = searchForLibrary (ndll, directoryName, namePrefix + ndll.name + "-debug" + nameSuffix);
-			usingDebug = FileSystem.exists (path);
-			
+		if (AllowDebug) 
+		{
+			path = searchForLibrary(Ndll, DirectoryName, NamePrefix + Ndll.name + "-debug" + NameSuffix);
+			usingDebug = FileSystem.exists(path);
 		}
 		
-		if (!usingDebug) {
-			
-			path = searchForLibrary (ndll, directoryName, namePrefix + ndll.name + nameSuffix);
-			
+		if (!usingDebug) 
+		{
+			path = searchForLibrary(Ndll, DirectoryName, NamePrefix + Ndll.name + NameSuffix);
 		}
 		
 		return path;
-		
 	}
 	
-	
-	public static function getTemporaryFile (extension:String = ""):String {
+	static public function getTemporaryFile(Extension:String = ""):String 
+	{
+		var path:String = "";
 		
-		var path = "";
-		
-		if (PlatformHelper.hostPlatform == Platform.WINDOWS) {
-			
-			path = Sys.getEnv ("TEMP");
-			
-		} else {
-			
+		if (PlatformHelper.hostPlatform == Platform.WINDOWS) 
+		{
+			path = Sys.getEnv ("TEMP");	
+		} 
+		else 
+		{
 			path = Sys.getEnv ("TMPDIR");
-			
 		}
 		
-		path += "/temp_" + Math.round (0xFFFFFF * Math.random ()) + extension;
+		path += "/temp_" + Math.round (0xFFFFFF * Math.random()) + Extension;
 		
-		if (FileSystem.exists (path)) {
-			
-			return getTemporaryFile (extension);
-			
+		if (FileSystem.exists(path)) 
+		{
+			return getTemporaryFile(Extension);
 		}
 		
 		return path;
-		
 	}
 	
-	
-	public static function isAbsolute (path:String):Bool {
-		
-		if (StringTools.startsWith (path, "/") || StringTools.startsWith (path, "\\")) {
-			
+	static public function isAbsolute(PathToCheck:String):Bool 
+	{
+		if (StringTools.startsWith(PathToCheck, "/") || StringTools.startsWith(PathToCheck, "\\")) 
+		{
 			return true;
-			
 		}
 		
 		return false;
-		
 	}
 	
-	
-	public static function isRelative (path:String):Bool {
-		
-		return !isAbsolute (path);
-		
+	static public function isRelative(PathToCheck:String):Bool 
+	{
+		return !isAbsolute(PathToCheck);
 	}
 	
-	
-	public static function mkdir (directory:String):Void {
+	static public function mkdir(Directory:String):Void 
+	{
+		Directory = StringTools.replace(Directory, "\\", "/");
+		var total:String = "";
 		
-		directory = StringTools.replace (directory, "\\", "/");
-		var total = "";
-		
-		if (directory.substr (0, 1) == "/") {
-			
+		if (Directory.substr (0, 1) == "/") 
+		{
 			total = "/";
-			
 		}
 		
-		var parts = directory.split("/");
-		var oldPath = "";
+		var parts:Array<String> = Directory.split("/");
+		var oldPath:String = "";
 		
-		if (parts.length > 0 && parts[0].indexOf (":") > -1) {
-			
+		if (parts.length > 0 && parts[0].indexOf (":") > -1) 
+		{
 			oldPath = Sys.getCwd ();
-			Sys.setCwd (parts[0] + "\\");
+			Sys.setCwd(parts[0] + "\\");
 			parts.shift ();
-			
 		}
 		
-		for (part in parts) {
-			
-			if (part != "." && part != "") {
-				
-				if (total != "") {
-					
+		for (part in parts) 
+		{
+			if (part != "." && part != "")
+			{
+				if (total != "") 
+				{
 					total += "/";
-					
 				}
 				
 				total += part;
 				
-				if (!FileSystem.exists (total)) {
-					
-					LogHelper.info ("", " - Creating directory: " + total);
-					
-					FileSystem.createDirectory (total);
-					
+				if (!FileSystem.exists(total)) 
+				{
+					LogHelper.info("", " - Creating directory: " + total);
+					FileSystem.createDirectory(total);
 				}
-				
 			}
-			
 		}
 		
-		if (oldPath != "") {
-			
-			Sys.setCwd (oldPath);
-			
+		if (oldPath != "") 
+		{
+			Sys.setCwd(oldPath);
 		}
-		
 	}
 	
-	
-	public static function relocatePath (path:String, targetDirectory:String):String {
-		
+	static public function relocatePath(PathToRelocate:String, TargetDirectory:String):String 
+	{
 		// this should be improved for target directories that are outside the current working path
-		
-		if (isAbsolute (path) || targetDirectory == "") {
+		if (isAbsolute(PathToRelocate) || TargetDirectory == "") 
+		{
+			return PathToRelocate;	
+		} 
+		else if (isAbsolute(TargetDirectory)) 
+		{
+			return FileSystem.fullPath(PathToRelocate);	
+		} 
+		else 
+		{
+			TargetDirectory = StringTools.replace(TargetDirectory, "\\", "/");
 			
-			return path;
+			var splitTarget:Array<String> = TargetDirectory.split("/");
+			var directories:Int = 0;
 			
-		} else if (isAbsolute (targetDirectory)) {
-			
-			return FileSystem.fullPath (path);
-			
-		} else {
-			
-			targetDirectory = StringTools.replace (targetDirectory, "\\", "/");
-			var splitTarget = targetDirectory.split ("/");
-			var directories = 0;
-			
-			while (splitTarget.length > 0) {
-				
-				switch (splitTarget.shift ()) {
-					
+			while (splitTarget.length > 0) 
+			{
+				switch (splitTarget.shift ()) 
+				{
 					case ".":
-						
 						// ignore
-					
 					case "..":
-						
 						directories--;
-						
 					default:
-						
 						directories++;
-						
 				}
-				
 			}
 			
-			var adjust = "";
+			var adjust:String = "";
 			
-			for (i in 0...directories) {
-				
+			for (i in 0...directories) 
+			{
 				adjust += "../";
-				
 			}
 			
-			return adjust + path;
-			
+			return adjust + PathToRelocate;
 		}
-		
 	}
 	
-	
-	public static function relocatePaths (paths:Array <String>, targetDirectory:String):Array <String> {
+	static public function relocatePaths(Paths:Array <String>, TargetDirectory:String):Array <String> 
+	{
+		var relocatedPaths:Array<String> = Paths.copy();
 		
-		var relocatedPaths = paths.copy ();
-		
-		for (i in 0...paths.length) {
-			
-			relocatedPaths[i] = relocatePath (paths[i], targetDirectory);
-			
+		for (i in 0...Paths.length) 
+		{
+			relocatedPaths[i] = relocatePath(Paths[i], TargetDirectory);
 		}
 		
 		return relocatedPaths;
-		
 	}
 	
-	
-	public static function removeDirectory (directory:String):Void {
-		
-		if (FileSystem.exists (directory)) {
+	static public function removeDirectory(Directory:String):Void 
+	{
+		if (FileSystem.exists(Directory)) 
+		{
+			var files:Array<String>;
 			
-			var files;
-			
-			try {
-				
-				files = FileSystem.readDirectory (directory);
-				
-			} catch (e:Dynamic) {
-				
+			try 
+			{
+				files = FileSystem.readDirectory(Directory);
+			} 
+			catch (e:Dynamic) 
+			{
 				return;
-				
 			}
 			
-			for (file in FileSystem.readDirectory (directory)) {
+			for (file in FileSystem.readDirectory(Directory)) 
+			{
+				var path:String = Directory + "/" + file;
 				
-				var path = directory + "/" + file;
-				
-				if (FileSystem.isDirectory (path)) {
-					
-					removeDirectory (path);
-					
-				} else {
-					
-					try {
-						
-						FileSystem.deleteFile (path);
-						
-					} catch (e:Dynamic) {}
-					
+				if (FileSystem.isDirectory(path)) 
+				{
+					removeDirectory(path);
+				} 
+				else 
+				{
+					try 
+					{
+						FileSystem.deleteFile(path);
+					} 
+					catch (e:Dynamic) {}
 				}
-				
 			}
 			
-			LogHelper.info ("", " - Removing directory: " + directory);
+			LogHelper.info("", " - Removing directory: " + Directory);
 			
-			try {
-				
-				FileSystem.deleteDirectory (directory);
-				
-			} catch (e:Dynamic) {}
-			
+			try 
+			{
+				FileSystem.deleteDirectory(Directory);
+			} 
+			catch (e:Dynamic) {}
 		}
-		
 	}
 	
-	
-	public static function safeFileName (name:String):String {
+	static public function safeFileName(Name:String):String 
+	{
+		var safeName = StringTools.replace(Name, " ", "");
 		
-		var safeName = StringTools.replace (name, " ", "");
 		return safeName;
-		
 	}
-	
-	
-	private static function searchForLibrary (ndll:NDLL, directoryName:String, filename:String):String {
-		
-		if (ndll.path != null && ndll.path != "") {
-			
-			return ndll.path;
-			
-		} else if (ndll.haxelib == null) {
-			
-			if (ndll.extensionPath != null && ndll.extensionPath != "") {
-				
-				return combine (ndll.extensionPath, "ndll/" + directoryName + "/" + filename);
-				
-			} else {
-				
-				return filename;
-				
+
+	static private function searchForLibrary(Ndll:NDLL, DirectoryName:String, Filename:String):String 
+	{
+		if (Ndll.path != null && Ndll.path != "") 
+		{
+			return Ndll.path;
+		} 
+		else if (Ndll.haxelib == null) 
+		{
+			if (Ndll.extensionPath != null && Ndll.extensionPath != "") 
+			{
+				return combine(Ndll.extensionPath, "ndll/" + DirectoryName + "/" + Filename);
+			} 
+			else 
+			{
+				return Filename;
 			}
-			
-		} else if (ndll.haxelib.name == "hxcpp") {
-			
-			return combine (getHaxelib (ndll.haxelib), "bin/" + directoryName + "/" + filename);
-			
-		} else if (ndll.haxelib.name == "nme") {
-			
-			var path = combine (getHaxelib (ndll.haxelib), "ndll/" + directoryName + "/" + filename);
+		} 
+		else if (Ndll.haxelib.name == "hxcpp") 
+		{
+			return combine(getHaxelib(Ndll.haxelib), "bin/" + DirectoryName + "/" + Filename);
+		} 
+		else if (Ndll.haxelib.name == "nme") 
+		{
+			var path:String = combine(getHaxelib(Ndll.haxelib), "ndll/" + DirectoryName + "/" + Filename);
 			
 			//if (!FileSystem.exists (path)) {
 				
-				//path = combine (getHaxelib (new Haxelib ("nmedev")), "ndll/" + directoryName + "/" + filename);
+				//path = combine(getHaxelib(new Haxelib("nmedev")), "ndll/" + DirectoryName + "/" + Filename);
 				
 			//}
 			
 			return path;
-			
-		} else {
-			
-			return combine (getHaxelib (ndll.haxelib), "ndll/" + directoryName + "/" + filename);
-			
+		} 
+		else 
+		{
+			return combine(getHaxelib(Ndll.haxelib), "ndll/" + DirectoryName + "/" + Filename);
 		}
-		
 	}
 	
-	
-	public static function tryFullPath (path:String):String {
-		
-		try {
-			
-			return FileSystem.fullPath (path);
-			
-		} catch (e:Dynamic) {
-			
-			return expand (path);
-			
+	static public function tryFullPath(FullPath:String):String 
+	{
+		try 
+		{
+			return FileSystem.fullPath(FullPath);
+		} 
+		catch (e:Dynamic) 
+		{
+			return expand(FullPath);
 		}
-		
 	}
-	
-
 }

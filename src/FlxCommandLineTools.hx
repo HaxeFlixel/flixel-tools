@@ -1,18 +1,6 @@
 package;
 
-/**
-*   Flixel Tools
-*   Command Line utitity to create flixel samples, project templates
-*   Ability to batch compile the samples for validation
-*   Basic find and replace tool for old HaxeFlixel code
-*
-*   @author Chris Decoster aka impaler
-*   @author Joshua Granick for methods used from openfl-tools
-*   @thanks to HaxeFlixel contributors & Gama11 for cleanups :)
-*
-*/
 import utils.PathHelper;
-
 import haxe.Json;
 import haxe.io.Bytes;
 import haxe.io.Path;
@@ -23,35 +11,46 @@ import helpers.PlatformHelper;
 import sys.io.FileOutput;
 import sys.FileSystem;
 import sys.io.File;
-import utils.CommandLine;
 
+/**
+ * Flixel-Tools
+ * Command line utility to create flixel samples, project templates and more.
+ * Ability to batch compile the samples for validation
+ * Basic find and replace tool for old HaxeFlixel code
+ *
+ * @author Chris Decoster aka impaler
+ * @author Joshua Granick for methods used from openfl-tools
+ * @thanks to HaxeFlixel contributors & Gama11 for cleanups :)
+ */
 class FlxCommandLineTools
 {
-    public static var name = "HaxeFlixel";
-    public static var alias = "flixel";
-    public static var version = "0.0.1";
-    public static var flixelVersion:String;
+    inline static public var name = "HaxeFlixel";
+    inline static public var alias = "flixel";
+	inline static public var version = "0.0.1";
+	
+    static public var flixelVersion:String;
 
     // Parsed commands to execute
-    public static var commandsSet:Commands;
+    static public var commandsSet:Commands;
 
     // Build Results
-    public static var PASSED:String = "PASSED";
-    public static var FAILED:String = "FAILED";
+    inline static public var PASSED:String = "PASSED";
+    inline static public var FAILED:String = "FAILED";
 
     /**
      * Echo some information about HaxeFlixel to the command line
-     * @return
      */
-    private static function displayInfo():Void
+    static private function displayInfo():Void
     {
         // Get the current flixel version
         if (flixelVersion == null) 
         {
-            var flixelHaxelib:HaxelibJSON = CommandLine.getHaxelibJsonData("flixel");
-            flixelVersion = flixelHaxelib.version;
+            var flixelPath:String = PathHelper.getHaxelib(new Haxelib("flixel"));
+            var jsonContent:String = File.getContent(flixelPath + "haxelib.json");
+            var jsonData:HaxelibJSON = Json.parse(jsonContent);
+            flixelVersion = jsonData.version;
         }
-
+		
         Sys.println("                 _   _               ______ _  _          _");
         Sys.println("                | | | |              |  ___| ||_|        | |");
         Sys.println("                | |_| | __ ___  _____| |_  | |____  _____| |");
@@ -64,26 +63,26 @@ class FlxCommandLineTools
         Sys.println("     Please visit www.haxeflixel.com for community support and ressources!");
         Sys.println("");
         Sys.println("                    " + name + " Command-Line Tools (" + version + ")");
-
+		
         if (flixelVersion == "0.0.1")   
         {
             Sys.println("                     flixel is currently not installed!");
         }
         else 
         {
-            Sys.println("                   Installed flixel version: " + flixelVersion);
+            Sys.println("                    Current flixel version: " + flixelVersion);
         }
-
-        Sys.println("                   Use \"" + alias + " help\" for available commands");
+		
+        Sys.println("                  Use \"" + alias + " help\" for available commands");
         Sys.println("");
     }
 
-    public static function main():Void
+    static public function main():Void
     {
         // Parse the arguments
         commandsSet = processArguments();
         // Sys.println(commandsSet);
-
+		
         // Choose the argument method
         if (commandsSet.help)
         {
@@ -138,75 +137,74 @@ class FlxCommandLineTools
 
     /**
      * Display a listing of available commands
-     * @return
      */
-    private static function displayHelp():Void
+    static private function displayHelp():Void
     {
         Sys.println("");
-
+		
         Sys.println(name + " Command-Line Tools (" + version + ")");
-
+		
         Sys.println("");
-
+		
         Sys.println(" Setup the tools to use the " + alias + " alias");
         Sys.println(" Usage : haxelib run " + alias + "-tools setup");
-
+		
         Sys.println("");
-
+		
         Sys.println(" Create a sample by name");
         Sys.println(" Usage : " + alias + " create <name>");
-
+		
         Sys.println("");
-
+		
         Sys.println(" Create a project template");
         Sys.println(" Usage : " + alias + " template -name <project_name> -class <class_name> -screen <width_value> <height_value>");
-
+		
         Sys.println("");
-
+		
         Sys.println(" List available samples and templates");
         Sys.println(" Usage : " + alias + " list");
-
+		
         Sys.println("");
-
+		
         Sys.println(" Download all the HaxeFlixel samples");
         Sys.println(" Usage : " + alias + " download samples");
-
+		
         Sys.println("");
-
+		
         Sys.println(" List available samples");
         Sys.println(" Usage : " + alias + " list samples");
-
+		
         Sys.println("");
-
+		
         Sys.println(" List available templates");
         Sys.println(" Usage : " + alias + " list templates");
-
+		
         Sys.println("");
-
+		
         Sys.println(" To compile your HaxeFlixel projects use the openfl");
         Sys.println(" Usage : openfl help");
-
+		
         Sys.println("");
     }
 
     /**
      * Create a template by name
-     * @param  ?name the name to create the template
-     * @return
+	 * 
+     * @param 	Name 	The name to create the template
      */
-    public static function createTemplate(?name:String):Void
+    static public function createTemplate(?Name:String):Void
     {
-        if (name == null)
+        if (Name == null)
         {
             Sys.println(" Creating default template");
-            name = "basic";
+            Name = "basic";
         }
         
-        if (name == "flashdevelop-basic") 
+        if (Name == "flashdevelop-basic") 
         {
             if (PlatformHelper.hostPlatform == Platform.WINDOWS)
             {
-                var fdTemplatePath = PathHelper.getHaxelib(new Haxelib ("flixel-tools")) + "templates/flashdevelop-basic/";
+                var fdTemplatePath:String = PathHelper.getHaxelib(new Haxelib ("flixel-tools")) + "templates/flashdevelop-basic/";
                 helpers.ProcessHelper.openFile(fdTemplatePath, "FlxTemplate.fdz");
             } 
             else
@@ -217,20 +215,20 @@ class FlxCommandLineTools
         else
         {
             var templates = scanTemplates("", "", false);
-
-            if (templates.get(name) != null)
+			
+            if (templates.get(Name) != null)
             {
-                var destination = Sys.getCwd() + commandsSet.projectName;
-
-                Sys.println(" - Creating " + name);
-
-                FileHelper.recursiveCopy(templates.get(name), destination);
-
+                var destination:String = Sys.getCwd() + commandsSet.projectName;
+				
+                Sys.println(" - Creating " + Name);
+				
+                FileHelper.recursiveCopy(templates.get(Name), destination);
+				
                 if (FileSystem.isDirectory(destination))
                 {
                     modifyTemplate(destination);
-
-                    Sys.println(" - Created " + name);
+					
+                    Sys.println(" - Created " + Name);
                     Sys.println(destination);
                 }
                 else
@@ -240,38 +238,38 @@ class FlxCommandLineTools
             }
             else
             {
-                Sys.println(" Error there is no sample with the name of " + name);
+                Sys.println(" Error there is no sample with the name of " + Name);
             }
         }
     }
 
     /**
      * Recursivley alter the template files
-     * @param  templatePath to modify
-     * @return
+	 * 
+     * @param 	TemplatePath 	Temaplte path to modify
      */
-    private static function modifyTemplate(templatePath:String):Void
+    static private function modifyTemplate(TemplatePath:String):Void
     {
-        for (fileName in FileSystem.readDirectory(templatePath))
+        for (fileName in FileSystem.readDirectory(TemplatePath))
         {
-            if (FileSystem.isDirectory(templatePath + "/" + fileName))
+            if (FileSystem.isDirectory(TemplatePath + "/" + fileName))
             {
-                Sys.println("File dir: " + templatePath + "/" + fileName);
-                modifyTemplate(templatePath + "/" + fileName);
+                Sys.println("File dir: " + TemplatePath + "/" + fileName);
+                modifyTemplate(TemplatePath + "/" + fileName);
             }
             else
             {
                 if (StringTools.endsWith(fileName, ".tpl"))
                 {
-                    var text = sys.io.File.getContent(templatePath + "/" + fileName);
+                    var text:String = sys.io.File.getContent(TemplatePath + "/" + fileName);
                     text = projectTemplateReplacements(text);
-                    var newFileName = projectTemplateReplacements(fileName.substr(0, -4));
-
-                    var o = sys.io.File.write(templatePath + "/" + newFileName, true);
+                    var newFileName:String = projectTemplateReplacements(fileName.substr(0, -4));
+					
+                    var o:FileOutput = sys.io.File.write(TemplatePath + "/" + newFileName, true);
                     o.writeString(text);
                     o.close();
-
-                    FileSystem.deleteFile(templatePath + "/" + fileName);
+					
+                    FileSystem.deleteFile(TemplatePath + "/" + fileName);
                 }
             }
         }
@@ -279,56 +277,62 @@ class FlxCommandLineTools
 
     /**
      * Process the template based on preset find and replacements from commandsSet
-     * @param  source text from template file
-     * @return  the altered text for the template file
+	 * 
+     * @param  	Source 	Text from template file
+     * @return  The altered text for the template file
      */
-    public static inline function projectTemplateReplacements(source:String):String
+    inline static public function projectTemplateReplacements(Source:String):String
     {
-        source = StringTools.replace(source, "${PROJECT_NAME}", commandsSet.projectName);
-        source = StringTools.replace(source, "${PROJECT_CLASS}", commandsSet.projectClass);
-        source = StringTools.replace(source, "${WIDTH}", cast(commandsSet.projectWidth));
-        source = StringTools.replace(source, "${HEIGHT}", cast(commandsSet.projectHeight));
-
-        return source;
+        Source = StringTools.replace(Source, "${PROJECT_NAME}", commandsSet.projectName);
+        Source = StringTools.replace(Source, "${PROJECT_CLASS}", commandsSet.projectClass);
+        Source = StringTools.replace(Source, "${WIDTH}", cast(commandsSet.projectWidth));
+        Source = StringTools.replace(Source, "${HEIGHT}", cast(commandsSet.projectHeight));
+		
+        return Source;
     }
 
     /**
      * Scan the templates Directory for listing them in the command line
-     * @param  templatesPath the path to scan
-     * @param  prefix the prefix to use while listing each template
-     * @param  display whether to echo each template
-     * @return  a Map containing the name of the template as the key and the template path as the value
+	 * 
+     * @param	TemplatePath 	The path to scan
+     * @param	Prefix 			The prefix to use while listing each template
+     * @param	Display 		Whether to echo each template
+     * @return	A Map containing the name of the template as the key and the template path as the value
      */
-    public static function scanTemplates(templatesPath:String = "", prefix:String = " - ", display:Bool = true):Map<String, String>
+    static public function scanTemplates(TemplatePath:String = "", Prefix:String = " - ", Display:Bool = true):Map<String, String>
     {
-        var templatesPath = PathHelper.getHaxelib(new Haxelib ("flixel-tools")) + "templates";
-        var templates = new Map<String, String>();
-
-        if(display)
-            Sys.println(" Listing templates from " + templatesPath);
-
-        for (name in FileSystem.readDirectory(templatesPath))
+        TemplatePath = PathHelper.getHaxelib(new Haxelib ("flixel-tools")) + "templates";
+        var templates:Map<String, String> = new Map<String, String>();
+		
+        if (Display)
         {
-            if (!StringTools.startsWith(name, ".") && FileSystem.isDirectory(templatesPath + "/" + name))
+			Sys.println(" Listing templates from " + TemplatePath);
+		}
+		
+        for (name in FileSystem.readDirectory(TemplatePath))
+        {
+            if (!StringTools.startsWith(name, ".") && FileSystem.isDirectory(TemplatePath + "/" + name))
             {
-                if (display)
-                    Sys.println(prefix + name);
-
-                templates.set(name, templatesPath + "/" + name);
+                if (Display)
+                {
+					Sys.println(Prefix + name);
+				}
+				
+                templates.set(name, TemplatePath + "/" + name);
             }
         }
+		
         return templates;
     }
 
     /**
      * Download the HaxeFlixel Samples from github using haxelib
-     * @return
      */
-    public static function downloadSamples():Void
+    static public function downloadSamples():Void
     {
-        var path = PathHelper.getHaxelib (new Haxelib ("flixel-samples"));
-
-        if ( path == "")
+        var path:String = PathHelper.getHaxelib(new Haxelib("flixel-samples"));
+		
+        if (path == "")
         {
             Sys.command("haxelib git flixel-samples https://github.com/HaxeFlixel/flixel-samples.git");
             Sys.command("flixel list samples");
@@ -339,86 +343,89 @@ class FlxCommandLineTools
         else
         {
             Sys.println( " You already have flixel-samples installed" );
-            Sys.println( path );
+            Sys.println(path);
         }
     }
 
     /**
      * Convert an old HaxeFlixel project
-     * @return
      */
-    public static function convertProject()
+    static public function convertProject()
     {
-        if(StringTools.startsWith(commandsSet.fromDir,"./"))
+        if (StringTools.startsWith(commandsSet.fromDir,"./"))
         {
             commandsSet.fromDir = commandsSet.fromDir.substring(2);
         }
-
-        if(StringTools.endsWith( commandsSet.fromDir,"/" ))
+		
+        if (StringTools.endsWith( commandsSet.fromDir,"/" ))
         {
             commandsSet.fromDir = commandsSet.fromDir.substring(0,commandsSet.fromDir.length-1);
         }
-
+		
         var convertProjectPath = Sys.getCwd() + commandsSet.fromDir;
-
-        if(FileSystem.exists(convertProjectPath))
+		
+        if (FileSystem.exists(convertProjectPath))
         {            
             Sys.println(" Converting :" + convertProjectPath);
-
-            //backup existing project by renaming it with _bup suffix
-            if(!commandsSet.noBackup)
+			
+            // Backup existing project by renaming it with _backup suffix
+            if (!commandsSet.noBackup)
             {
-                var backupFolder = convertProjectPath + "_bup";
+                var backupFolder = convertProjectPath + "_backup";
+				
                 if(!FileSystem.exists(backupFolder))
-                    FileHelper.recursiveCopy(convertProjectPath, backupFolder);
+                {
+					FileHelper.recursiveCopy(convertProjectPath, backupFolder);
+				}
             }
-
+			
             convertProjectPath += "/source";
             convertProjectFolder(convertProjectPath);
-
+			
             Sys.println(" Warning although this command updates a lot, its not perfect.");
             Sys.println(" Please visit haxeflixel.com/wiki/convert for further documentation on converting old code.");
-        } else {
+        } 
+		else 
+		{
             Sys.println("Warning cannot find " + convertProjectPath);
         }
     }
 
     /**
      * Recursively use find and replace on *.hx files inside a project directory
-     * @param  projectPath to recursivley scan
-     * @return
+	 * 
+     * @param  	ProjectPath 	Path to scan recursivley 
      */
-    public static function convertProjectFolder(projectPath:String)
+    static public function convertProjectFolder(ProjectPath:String)
     {
-        for (fileName in FileSystem.readDirectory(projectPath))
+        for (fileName in FileSystem.readDirectory(ProjectPath))
         {
-            if (FileSystem.isDirectory(projectPath + "/" + fileName))
+            if (FileSystem.isDirectory(ProjectPath + "/" + fileName))
             {
-                convertProjectFolder(projectPath + "/" + fileName);
+                convertProjectFolder(ProjectPath + "/" + fileName);
             }
             else
             {
                 if (StringTools.endsWith(fileName, ".hx"))
                 {
-                    var filePath = projectPath + "/" + fileName;
-                    var sourceText = sys.io.File.getContent(filePath);
-                    var originalText = Reflect.copy(sourceText);
-
-                    var replacements = HaxeFlixelLegacyFindAndReplace.findAndReplaceMap;
-
+                    var filePath:String = ProjectPath + "/" + fileName;
+                    var sourceText:String = sys.io.File.getContent(filePath);
+                    var originalText:String = Reflect.copy(sourceText);
+					
+                    var replacements:Map<String, String> = HaxeFlixelLegacyFindAndReplace.findAndReplaceMap;
+					
                     for (fromString in replacements.keys())
                     {
-                        var toString = replacements.get(fromString);
+                        var toString:String = replacements.get(fromString);
                         sourceText = StringTools.replace(sourceText, fromString, toString);
-                        // warnings.push(scanFileForWarnings (filePath));
                     }
-
-                    if(originalText != sourceText)
+					
+                    if (originalText != sourceText)
                     {
                         Sys.println( "Updated " + fileName );
-
+						
                         FileSystem.deleteFile(filePath);
-                        var o = sys.io.File.write(filePath, true);
+                        var o:FileOutput = sys.io.File.write(filePath, true);
                         o.writeString(sourceText);
                         o.close();
                     }
@@ -429,92 +436,89 @@ class FlxCommandLineTools
 
     /**
      * Validate an openfl project by compiling it and checking the result
-     * @return
      */
-    public static function validateProject()
+    static public function validateProject()
     {
-        if(commandsSet.recursive)
+        if (commandsSet.recursive)
         {
             compileAllSamples();
         }
         else 
         {
-            if(StringTools.startsWith(commandsSet.fromDir,"./"))
+            if (StringTools.startsWith(commandsSet.fromDir,"./"))
             {
                 commandsSet.fromDir = commandsSet.fromDir.substring(2);
             }
-
-            if(StringTools.endsWith( commandsSet.fromDir,"/" ))
+			
+            if (StringTools.endsWith(commandsSet.fromDir,"/" ))
             {
-                commandsSet.fromDir = commandsSet.fromDir.substring(0,commandsSet.fromDir.length-1);
+                commandsSet.fromDir = commandsSet.fromDir.substring(0, commandsSet.fromDir.length - 1);
             }
-
+			
             //todo
             // var validateProjectPath = Sys.getCwd() + commandsSet.fromDir;
             // Sys.println("Validate " + validateProjectPath);
-
+			
             // buildProject();
         }
     }
 
     /**
      * Build an openfl target
-     * @param  target the openfl target to build
-     * @param  project the project object to build from
-     * @param  display echo progress on the command line
-     * @return BuildResult the result of the compilation
+	 * 
+     * @param 	Target 		The openfl target to build
+     * @param 	Project 	The project object to build from
+     * @param  	Display 	Echo progress on the command line
+     * @return	BuildResult the result of the compilation
      */
-    public static function buildProject(target:String, project:SampleProject, display:Bool = false):BuildResult
+    static public function buildProject(Target:String, Project:SampleProject, Display:Bool = false):BuildResult
     {
-        if(target == "native")
+        if (Target == "native")
         {
             if (PlatformHelper.hostPlatform == Platform.WINDOWS)
             {
-                target = "windows";
+                Target = "windows";
             }
-            else if( PlatformHelper.hostPlatform == Platform.MAC )
+            else if (PlatformHelper.hostPlatform == Platform.MAC)
             {
-                target = "mac";
+                Target = "mac";
             } 
             else if (PlatformHelper.hostPlatform == Platform.LINUX)
             {
-                target = "linux";
+                Target = "linux";
             }
         }
-
-        var buildCommand = "haxelib run openfl build " + project.PROJECTXMLPATH + " " + target;
-
-        if(display)
+		
+        var buildCommand:String = "haxelib run openfl build " + Project.PROJECTXMLPATH + " " + Target;
+		
+        if (Display)
         {
             Sys.println("");
-            Sys.println(" Compile " + target + ":: " + buildCommand);
+            Sys.println(" Compile " + Target + ":: " + buildCommand);
         }
-
-        var compile = Sys.command(buildCommand);
-
-        if(display)
+		
+        var compile:Int = Sys.command(buildCommand);
+		
+        if (Display)
         {
             Sys.println("");
-            Sys.println(" " + target + "::" + getResult(compile));
+            Sys.println(" " + Target + "::" + getResult(compile));
         }
-
-        var project:BuildResult = 
-        { 
-            result : getResult(compile),
-            project : project,
-        };
+		
+        var project:BuildResult = { result : getResult(compile), project : Project };
         
         return project;
     }
 
     /**
      * Return a friendly result string based on an Int value
-     * @param  result
-     * @return string PASSED or FAILED
+	 * 
+     * @param	 Result
+     * @return	 string PASSED or FAILED
      */
-    public static inline function getResult(result:Int):String
+    inline static public function getResult(Result:Int):String
     {  
-        if(result == 0)
+        if (Result == 0)
         {
             return PASSED;
         }
@@ -527,18 +531,18 @@ class FlxCommandLineTools
     /**
      * Copy the simple bash or bat scripts to your system depending on the OS
      * It will enable the flixel command alias after you run setup
-     * @return
      */
-    public static function setupTools():Void
+    static public function setupTools():Void
     {
-        var haxePath = Sys.getEnv("HAXEPATH");
-
+        var haxePath:String = Sys.getEnv("HAXEPATH");
+		
         if (PlatformHelper.hostPlatform == Platform.WINDOWS)
         {
             if (haxePath == null || haxePath == "")
             {
                 haxePath = "C:\\HaxeToolkit\\haxe\\";
             }
+			
             File.copy(PathHelper.getHaxelib(new Haxelib ("flixel-tools")) + "\\\\bin\\flixel.bat", haxePath + "\\flixel.bat");
         }
         else
@@ -547,61 +551,61 @@ class FlxCommandLineTools
             {
                 haxePath = "/usr/lib/haxe";
             }
+			
             Sys.command("sudo", [ "cp", PathHelper.getHaxelib(new Haxelib ("flixel-tools")) + "bin/flixel.sh", haxePath + "/flixel" ]);
             Sys.command("sudo chmod 755 " + haxePath + "/flixel");
             Sys.command("sudo ln -s " + haxePath + "/flixel /usr/bin/flixel");
         }
-
-        // Sys.println("What IDE do you use?");
-        // Sys.println(" 0 - Flash Develop");
-        // Sys.println(" 1 - Sublime Text");
-        
-
-        
+		
         Sys.println("You have now setup HaxeFlixel");
         Sys.command("flixel");
     }
 
     /**
      * Process the command arguments
-     * @return a Commands Class with the value of the commands to execute
+	 * 
+     * @return A Commands Class with the value of the commands to execute
      */
-    private static function processArguments():Commands
+    static private function processArguments():Commands
     {
-
-        var arguments = Sys.args();
+        var arguments:Array<String> = Sys.args();
         // Sys.println(arguments.toString());
-
+		
         if (arguments.length > 0)
         {
             // Last argument is the current haxelib path
-            var lastArgument = "";
-
+            var lastArgument:String = "";
+			
             for (i in 0...arguments.length)
             {
                 lastArgument = arguments.pop();
-                if (lastArgument.length > 0) break;
+				
+                if (lastArgument.length > 0) 
+				{
+					break;
+				}
             }
-
-            lastArgument = new Path (lastArgument).toString();
-
+			
+            lastArgument = new Path(lastArgument).toString();
+			
             if (((StringTools.endsWith(lastArgument, "/") && lastArgument != "/") || StringTools.endsWith(lastArgument, "\\")) && !StringTools.endsWith(lastArgument, ":\\"))
             {
                 lastArgument = lastArgument.substr(0, lastArgument.length - 1);
             }
-            //set the current directory to the haxelib
+			
+            // Set the current directory to the haxelib
             if (FileSystem.exists(lastArgument) && FileSystem.isDirectory(lastArgument))
             {
                 // toolsPath = lastArgument;
                 Sys.setCwd(lastArgument);
             }
         }
-
+		
         commandsSet = new Commands();
-
-        var length = arguments.length;
-        var index = 0;
-
+		
+        var length:Int = arguments.length;
+        var index:Int = 0;
+		
         if (arguments[index] == "help")
         {
             commandsSet.help = true;
@@ -609,8 +613,11 @@ class FlxCommandLineTools
         else if (arguments[index] == "create")
         {
             commandsSet.create = true;
+			
             if (arguments[index++] != null)
-                commandsSet.createName = arguments[index++];
+            {
+				commandsSet.createName = arguments[index++];
+			}
         }
         else if (arguments[index] == "list")
         {
@@ -639,17 +646,17 @@ class FlxCommandLineTools
         {
             commandsSet.download = true;
         }
-
+		
         processAdditionalArgs(arguments);
-
+		
         return commandsSet;
     }
 
-    private static inline function processValidateArgs(args:Array<String>):Void
+	inline static private function processValidateArgs(Arguments:Array<String>):Void
     {
-        if( args[1]!=null)
+        if (Arguments[1] != null)
         {
-            commandsSet.fromDir = args[1];
+            commandsSet.fromDir = Arguments[1];
         } 
         else
         {
@@ -657,11 +664,11 @@ class FlxCommandLineTools
         }
     }
 
-    private static inline function processConvertArgs(args:Array<String>):Void
+    inline static private function processConvertArgs(Arguments:Array<String>):Void
     {
-        if( args[1]!=null)
+        if (Arguments[1] != null)
         {
-            commandsSet.fromDir = args[1];
+            commandsSet.fromDir = Arguments[1];
             commandsSet.convert = true;
         }
         else
@@ -670,122 +677,124 @@ class FlxCommandLineTools
         }
     }
 
-    private static inline function processListArgs(args:Array<String>):Void
+    inline static private function processListArgs(Arguments:Array<String>):Void
     {
-        var index = 0;
-        var length = args.length;
-
-        while (index < args.length)
+        var index:Int = 0;
+        var length:Int = Arguments.length;
+		
+        while (index < Arguments.length)
         {
-            if (args[index] == "samples")
+            if (Arguments[index] == "samples")
             {
                 index++;
                 commandsSet.listSamples = true;
             }
-            else if (args[index] == "templates")
+            else if (Arguments[index] == "templates")
             {
                 index++;
                 commandsSet.listTemplates = true;
             }
+			
             index++;
         }
     }
 
-    private static inline function processTemplateArgs(args:Array<String>):Void
+    inline static private function processTemplateArgs(Arguments:Array<String>):Void
     {
-        var index = 0;
-        var length = args.length;
+        var index:Int = 0;
+        var length:Int = Arguments.length;
 
-        while (index < args.length)
+        while (index < Arguments.length)
         {
-            if (args[index] == "-name" && index + 1 < length)
+            if (Arguments[index] == "-name" && index + 1 < length)
             {
                 index++;
-                commandsSet.projectName = args[index];
+                commandsSet.projectName = Arguments[index];
             }
-            else if (args[index] == "-class" && index + 1 < length)
+            else if (Arguments[index] == "-class" && index + 1 < length)
             {
                 index++;
-                commandsSet.projectClass = args[index];
+                commandsSet.projectClass = Arguments[index];
             }
-            else if (args[index] == "-screen" && index + 2 < length)
+            else if (Arguments[index] == "-screen" && index + 2 < length)
             {
                 index++;
-                commandsSet.projectWidth = cast(args[index]);
+                commandsSet.projectWidth = cast(Arguments[index]);
                 index++;
-                commandsSet.projectHeight = cast(args[index]);
+                commandsSet.projectHeight = cast(Arguments[index]);
             }
-            else if (args[index] != null && args[index] != 'template')
+            else if (Arguments[index] != null && Arguments[index] != 'template')
             {
-                commandsSet.createName = cast(args[index]);
+                commandsSet.createName = cast(Arguments[index]);
             }
+			
             index++;
         }
     }
 
-    private static inline function processAdditionalArgs(args:Array<String>):Void
+    inline static private function processAdditionalArgs(Arguments:Array<String>):Void
     {
-        var index = 0;
-        var length = args.length;
-
-        while (index < args.length)
+        var index:Int = 0;
+        var length:Int = Arguments.length;
+		
+        while (index < Arguments.length)
         {
-            if (args[index] == "-R")
+            if (Arguments[index] == "-R")
             {
                 index++;
                 commandsSet.recursive = true;
             }
-            else if (args[index] == "-B")
+            else if (Arguments[index] == "-B")
             {
                 index++;
                 commandsSet.noBackup = true;
             }
-
+			
             index++;
         }
     }
 
     /**
      * Validate all the samples recursivley
+	 * 
      * @param  location of the samples directory to scan and validate
-     * @return
      */
-    public static function compileAllSamples(location:String = ""):Void
+    static public function compileAllSamples(Location:String = ""):Void
     {
-        if(location=="")
+        if (Location == "")
         {
             Sys.println(" Copying all samples into the current working directory.");
-
-            var samplesPath = PathHelper.getHaxelib(new Haxelib ("flixel-samples"));
-            location = Sys.getCwd() + "flixel-samples-validation/";
-            FileHelper.recursiveCopy(samplesPath, location);
+			
+            var samplesPath:String = PathHelper.getHaxelib(new Haxelib ("flixel-samples"));
+            Location = Sys.getCwd() + "flixel-samples-validation/";
+            FileHelper.recursiveCopy(samplesPath, Location);
         }
-
-        var projects = listAllSamples(location,false);
-
-        var results = new Array<BuildResult>();
-        var flashOnly = new Array<SampleProject>();
-        var nonFlash = new Array<SampleProject>();
-        var allTargets = new Array<SampleProject>();
-
+		
+        var projects:Map<String, SampleProject> = listAllSamples(Location, false);
+		
+        var results:Array<BuildResult> = new Array<BuildResult>();
+		
+        var flashOnly:Array<SampleProject> = new Array<SampleProject>();
+        var nonFlash:Array<SampleProject> = new Array<SampleProject>();
+        var allTargets:Array<SampleProject> = new Array<SampleProject>();
+		
         Sys.println(" " + Lambda.count(projects) + " samples available to compile.");
-
-        for ( project in projects.keys() )
+		
+        for (project in projects.keys())
         {
-            var projectObject = projects.get(project);
-            var sampleProject:SampleProject = projectObject;
-
-            if(sampleProject.TARGETS != null)
+            var sampleProject:SampleProject = projects.get(project);
+			
+            if (sampleProject.TARGETS != null)
             {            
-                if(sampleProject.TARGETS == "FlashOnly")
+                if (sampleProject.TARGETS == "FlashOnly")
                 {
                     flashOnly.push(sampleProject);
                 }
-                else if(sampleProject.TARGETS == "NonFlash")
+                else if (sampleProject.TARGETS == "NonFlash")
                 {
                     nonFlash.push(sampleProject);
                 }
-                else if(sampleProject.TARGETS == "All") 
+                else if (sampleProject.TARGETS == "All") 
                 {
                     allTargets.push(sampleProject); 
                 }
@@ -796,50 +805,51 @@ class FlxCommandLineTools
                 return;
             }
         }
-
+		
         Sys.println("");
         Sys.println(" - Samples for all targets");
-
-        for ( sample in allTargets )
+		
+        for (sample in allTargets)
         {
             var sampleProject:SampleProject = sample;
             Sys.println(" Building::" + sampleProject.NAME);
-
+		
             results.push(buildProject("flash", sampleProject));
             // results.push(buildProject("neko", sampleProject));
             // results.push(buildProject("native", sampleProject));
             // results.push(buildProject("html5", sampleProject));
         }
-
+		
         Sys.println("");
         Sys.println(" - Samples Flash target only");
-
-        for ( sample in flashOnly )
+		
+        for (sample in flashOnly)
         {
             var sampleProject:SampleProject = sample;
             Sys.println(" Building::" + sampleProject.NAME);
-
+			
             results.push(buildProject("flash", sampleProject));
-
+			
         }
-
+		
         Sys.println("");
         Sys.println(" - Samples for CPP target only");
-
-        for ( sample in nonFlash )
+		
+        for (sample in nonFlash)
         {
             var sampleProject:SampleProject = sample;
             Sys.println(" Building::" + sampleProject.NAME);
-
+			
             results.push(buildProject("neko", sampleProject));
             // results.push(buildProject("native", sampleproject));
         }
-
+		
         Sys.println ("");
-
-        for ( result in results )
+		
+        for (result in results)
         {
             var sampleProjectResult:BuildResult = result;
+			
             Sys.println ("-------------------------------------------------");
             Sys.println (sampleProjectResult.project.NAME);
             Sys.println (sampleProjectResult.result);
@@ -851,51 +861,55 @@ class FlxCommandLineTools
 
     /**
      * Scan a folder recursivley for openfl project files
-     * @param  samplesPath [description]
-     * @param  display     [description]
-     * @return             [description]
+	 * 
+     * @param  SamplesPath	[description]
+     * @param  Display   	[description]
+     * @return             	[description]
      */
-    public static function scanProjectXML(samplesPath:String = "", display:Bool = false):Map<String, SampleProject>
+    static public function scanProjectXML(SamplesPath:String = "", Display:Bool = false):Map<String, SampleProject>
     {
-        if(samplesPath == "")
+        if (SamplesPath == "")
         {
-            samplesPath = PathHelper.getHaxelib(new Haxelib ("flixel-samples"));
+            SamplesPath = PathHelper.getHaxelib(new Haxelib ("flixel-samples"));
         }
-
-        if(display)
+		
+        if (Display)
         {
-            Sys.println(" Scan for samples in::" + samplesPath);
+            Sys.println(" Scan for samples in::" + SamplesPath);
         }
-
-        var samples = new Map<String, SampleProject>();
-
-        for (name in FileSystem.readDirectory(samplesPath))
+		
+        var samples:Map<String, SampleProject> = new Map<String, SampleProject>();
+		
+        for (name in FileSystem.readDirectory(SamplesPath))
         {
-            var folderPath = samplesPath + "/" + name;
-
-            if(display)
-                Sys.println(" ScanningFolder::" + samplesPath);
-            
-            if ( !StringTools.startsWith(name, ".") && FileSystem.isDirectory(folderPath) )
+            var folderPath:String = SamplesPath + "/" + name;
+			
+            if (Display)
             {
-                var projectXMLPath = findProjectFile(folderPath);
-
-                if(display)
-                    Sys.println(" ProjectXMLResult::" + projectXMLPath);
-
+				Sys.println(" ScanningFolder::" + SamplesPath);
+			}
+            
+            if (!StringTools.startsWith(name, ".") && FileSystem.isDirectory(folderPath))
+            {
+                var projectXMLPath:String = findProjectFile(folderPath);
+				
+                if (Display)
+                {
+					Sys.println(" ProjectXMLResult::" + projectXMLPath);
+				}
+				
                 if (projectXMLPath == "")
                 {
-                    if(name == "FlashOnly" || name == "NonFlash")
+                    if (name == "FlashOnly" || name == "NonFlash")
                     {
-                        var subpath = folderPath;
-                        var moreSamples = scanProjectXML(subpath,display);
-
-                        for ( sample in moreSamples.keys() )
+                        var subpath:String = folderPath;
+                        var moreSamples:Map<String, SampleProject> = scanProjectXML(subpath, Display);
+						
+                        for (sample in moreSamples.keys())
                         {
-                            var projectObject = moreSamples.get(sample);
-                            var project:SampleProject = projectObject;
+                            var project:SampleProject = moreSamples.get(sample);
                             project.TARGETS = name;
-
+							
                             if (FileSystem.exists(project.PATH))
                             {
                                 samples.set(project.NAME, project);
@@ -912,86 +926,91 @@ class FlxCommandLineTools
                         PROJECTXMLPATH : projectXMLPath,
                         TARGETS : "All",
                     };
-
+					
                     if (FileSystem.exists(project.PATH))
                     {
                         samples.set(project.NAME, project);
-
-                        if(display)
-                            Sys.println(" Project::" + project);
+						
+                        if (Display)
+                        {
+							Sys.println(" Project::" + project);
+						}
                     }
                 }
             }
         }
+		
         return samples;
     }
 
     /**
-    *   Scans a path for openfl/nme project files
-    *   @author Joshua Granick a private method in openfl-tools
-    *   @return the path of the project file found
-    **/
-    private static function findProjectFile(path:String):String
+     * Scans a path for openfl/nme project files
+	 * 
+     * @author Joshua Granick a private method in openfl-tools
+     * @return The path of the project file found
+     */
+    static private function findProjectFile(ProjectPath:String):String
     {
-        if (FileSystem.exists(PathHelper.combine(path, "Project.hx")))
+        if (FileSystem.exists(PathHelper.combine(ProjectPath, "Project.hx")))
         {
-            return PathHelper.combine(path, "Project.hx");
+            return PathHelper.combine(ProjectPath, "Project.hx");
         }
-        else if (FileSystem.exists(PathHelper.combine(path, "project.nmml")))
+        else if (FileSystem.exists(PathHelper.combine(ProjectPath, "project.nmml")))
         {
-            return PathHelper.combine(path, "project.nmml");
+            return PathHelper.combine(ProjectPath, "project.nmml");
         }
-        else if (FileSystem.exists(PathHelper.combine(path, "project.xml")))
+        else if (FileSystem.exists(PathHelper.combine(ProjectPath, "project.xml")))
         {
-            return PathHelper.combine(path, "project.xml");
+            return PathHelper.combine(ProjectPath, "project.xml");
         }
         else
         {
-            var files = FileSystem.readDirectory(path);
-            var matches = new Map <String, Array <String>> ();
+            var files = FileSystem.readDirectory(ProjectPath);
+            var matches = new Map <String, Array <String>>();
             matches.set("nmml", []);
             matches.set("xml", []);
             matches.set("hx", []);
-
+			
             for (file in files)
             {
-                var path = PathHelper.combine(path, file);
-
+                var path = PathHelper.combine(ProjectPath, file);
+				
                 if (FileSystem.exists(path) && !FileSystem.isDirectory(path))
                 {
-                    var extension = Path.extension(file);
-
+                    var extension:String = Path.extension(file);
+					
                     if ((extension == "nmml" && file != "include.nmml") || (extension == "xml" && file != "include.xml") || extension == "hx")
                     {
                         matches.get(extension).push(path);
                     }
                 }
             }
-
+			
             if (matches.get("nmml").length > 0)
             {
                 return matches.get("nmml")[0];
             }
-
+			
             if (matches.get("xml").length > 0)
             {
                 return matches.get("xml")[0];
             }
-
+			
             if (matches.get("hx").length > 0)
             {
                 return matches.get("hx")[0];
             }
         }
+		
         return "";
     }
 
-   /**
+    /**
      * Create a sample by recursivly copying the folder according to a name
-     * @param  ?name the name of the sample to create
-     * @return
+	 * 
+     * @param	Name 	The name of the sample to create
      */
-    public static function createSample(?name:String):Void
+    static public function createSample(?Name:String):Void
     {
         if (name == null)
         {
@@ -999,16 +1018,16 @@ class FlxCommandLineTools
             Sys.println(" To list available templates and samples use the list command");
             Sys.println(" Usage : flixel list");
         }
-
+		
         var sample = sampleExists(name);
-
+		
         if (sample != null)
         {
             Sys.println(" - Creating " + name);
-
+			
             var destination = Sys.getCwd() + name;
             FileHelper.recursiveCopy(sample.PATH, destination);
-
+			
             if (FileSystem.isDirectory(destination))
             {
                 Sys.println(" - Created " + name);
@@ -1027,159 +1046,156 @@ class FlxCommandLineTools
     
     /**
      * Check if a Sample exists in a path recursivley
-     * @param  name name of the sample
-     * @param  path the path to scan, default scan flixel-samples haxelib
-     * @return      SampleProject object or null if none found
+	 * 
+     * @param	Name 			Name of the sample
+     * @param	ProjectPath 	The path to scan, default scan flixel-samples haxelib
+     * @return	SampleProject object or null if none found
      */
-    public static function sampleExists(name:String, path:String = ""):SampleProject 
+    static public function sampleExists(Name:String, ProjectPath:String = ""):SampleProject 
     {
         var samples = listAllSamples("", false);
-
-        for ( sample in samples.keys() )
+		
+        for (sample in samples.keys())
         {
-            var sampleObject = samples.get(sample);
-            var sampleProject:SampleProject = sampleObject;
-
-            if(sampleProject.NAME == name)
-                return sampleProject;
+            var sampleProject:SampleProject = samples.get(sample);
+			
+            if (sampleProject.NAME == Name)
+            {
+				return sampleProject;
+			}
         }
+		
         return null;
     }
 
     /**
      * List all the samples in a folder, default the flixel samples haxelib installed
-     * @param  path    the folder to recursivley scan for samples
-     * @param  display print output to the command line
-     * @return         SampleProject typedef of each sample found
+	 * 
+     * @param  	SamplePath	The folder to recursivley scan for samples
+     * @param  	Display 	Print output to the command line
+     * @return	SampleProject typedef of each sample found
      */
-    public static function listAllSamples(path:String = "", display:Bool = false):Map<String, SampleProject> 
+    static public function listAllSamples(SamplePath:String = "", Display:Bool = false):Map<String, SampleProject> 
     {
-        if(path=="")
+        if (SamplePath == "")
         {
-            path = PathHelper.getHaxelib(new Haxelib ("flixel-samples"));
-            if (display)
+            SamplePath = PathHelper.getHaxelib(new Haxelib ("flixel-samples"));
+			
+            if (Display)
             {
                 Sys.println(" Listing Samples from the current flixel-samples haxelib installed.");
-                Sys.println(" " + path);
+                Sys.println(" " + SamplePath);
             }
         }
-
-        var projects = scanProjectXML(path,false);
-
-        var flashOnly = new Array<SampleProject>();
-        var nonFlash = new Array<SampleProject>();
-        var allTargets = new Array<SampleProject>();
-
-        if(display)
-            Sys.println(" " + Lambda.count(projects) + " samples available.");
-
-        for ( project in projects.keys() )
+		
+        var projects:Map<String, SampleProject> = scanProjectXML(SamplePath, false);
+		
+        var flashOnly:Array<SampleProject> = new Array<SampleProject>();
+        var nonFlash:Array<SampleProject> = new Array<SampleProject>();
+        var allTargets:Array<SampleProject> = new Array<SampleProject>();
+		
+        if (Display)
         {
-            var projectObject = projects.get(project);
-            var sampleProject:SampleProject = projectObject;
-
-            if(sampleProject.TARGETS != null)
+			Sys.println(" " + Lambda.count(projects) + " samples available.");
+		}
+		
+        for (project in projects.keys())
+        {
+            var sampleProject:SampleProject = projects.get(project);
+			
+            if (sampleProject.TARGETS != null)
             {            
-                if(sampleProject.TARGETS == "FlashOnly")
+                if (sampleProject.TARGETS == "FlashOnly")
                 {
                     flashOnly.push(sampleProject);
                 }
-                else if(sampleProject.TARGETS == "NonFlash")
+                else if (sampleProject.TARGETS == "NonFlash")
                 {
                     nonFlash.push(sampleProject);
                 }
-                else if(sampleProject.TARGETS == "All") 
+                else if (sampleProject.TARGETS == "All") 
                 {
                     allTargets.push(sampleProject); 
                 }
             }
             else  
             {   
-                if(display)
-                    Sys.println(" Error no valid samples were found.");
+                if (Display)
+                {
+					Sys.println(" Error no valid samples were found.");
+				}
+				
                 return projects;
             }
         }
-        if(display)
+		
+        if (Display)
         {
             Sys.println("");
             Sys.println(" - Samples for all targets");
         }
-
-        for ( sample in allTargets )
+		
+        for (sample in allTargets)
         {
             var sampleProject:SampleProject = sample;
-
-            if(display)
-                Sys.println(" " + sampleProject.NAME);
+			
+            if (Display)
+            {
+				Sys.println(" " + sampleProject.NAME);
+			}
         }
-
-        if(display)
+		
+        if (Display)
         { 
             Sys.println("");
             Sys.println(" - Samples Flash target only");
         }
-
-        for ( sample in flashOnly )
+		
+        for (sample in flashOnly)
         {
             var sampleProject:SampleProject = sample;
-
-            if(display)
-                Sys.println(" " + sampleProject.NAME);
+			
+            if (Display)
+            {
+				Sys.println(" " + sampleProject.NAME);
+			}
         }
 
-        if(display)
+        if (Display)
         {
             Sys.println("");
             Sys.println(" - Samples for CPP target only");
         }
-
-        for ( sample in nonFlash )
+		
+        for (sample in nonFlash)
         {
             var sampleProject:SampleProject = sample;
-
-            if(display)
-                Sys.println(" " + sampleProject.NAME);
+			
+            if (Display)
+            {
+				Sys.println(" " + sampleProject.NAME);
+			}
         }
-
+		
         return projects;
     }
 
     //todo
-    // public static function scanFileForWarnings(filePath:String):Void 
+    // public function scanFileForWarnings(FilePath:String):Array<WarningResult> 
     // {
     //     var results = new Array<WarningResult>();
 
     //     // open and read file line by line
-    //     var fin = File.read(filePath, false);
+    //     var fin = File.read(FilePath, false);
 
     //     try
     //     {
     //         var lineNum = 0;
-    //         while( true )
+    //         while (true)
     //         {
     //             var str = fin.readLine();
-    //             lineNum++;
-    //             // Sys.println("line " + (++lineNum) + ": " + str);
-
-    //             var warnings = HaxeFlixelLegacyWarnings.warningList;
-
-    //             for ( warning in warnings.keys() )
-    //             {
-    //                 var fix = warnings.get(warning);
-    //                 var search = new EReg("\\b" + warning + "\\b", "");
-    //                 var match = search.match(str);
-                    
-    //                 if(match)
-    //                 {
-    //                     Sys.println ("-------");
-    //                     Sys.println (match);
-    //                     Sys.println ("Line::"+lineNum);
-    //                     Sys.println ("filePath::"+filePath);
-    //                     Sys.println ("-------");
-    //                 }
-    //             }
-
+    //             Sys.println("line " + (++lineNum) + ": " + str);
+    //             scanLinesForWarnings(str);
     //         }
     //     }
     //     catch( ex:haxe.io.Eof ) 
@@ -1190,11 +1206,31 @@ class FlxCommandLineTools
     //     fin.close();
     // }
 
+    // public function scanStringForWarnings(Haystack:String):WarningResult
+    // {
+    //     var warnings = HaxeFlixelLegacyWarnings.warningList;
+	//
+    //     for (warning in warnings.keys())
+    //     {
+    //         var needle = warnings.get(warning);
+    //         var r : EReg = ~/needle/;
+    //         var match = r.match(Haystack);
+
+    //         var result =
+    //             private var oldCode:String;
+    //             private var newCode:String;
+    //             private var lineNumber:String;
+    //             private var filePath:String;
+    //             private var fileName:String;
+    //         }
+
+    //         return result;
+    //     }
+    // }
 }
 
 /**
  * Object used to process the command arguments
- * 
  */
 class Commands
 {
@@ -1234,31 +1270,43 @@ class Commands
 /**
  * Object to pass the build result of a project
  */
-typedef BuildResult =
-{
-    private var result:String;
-    private var project:SampleProject;
+typedef BuildResult = {
+    var result:String;
+    var project:SampleProject;
 }
 
 /**
  * Warning Result for warning about old code that cannot be updated manually
  */
-typedef WarningResult =
-{
-    private var oldCode:String;
-    private var newCode:String;
-    private var lineNumber:String;
-    private var filePath:String;
-    private var fileName:String;
+typedef WarningResult = {
+    var oldCode:String;
+    var newCode:String;
+    var lineNumber:String;
+    var filePath:String;
+    var fileName:String;
 }
 
 /**
  * Object to pass the data of a project
  */
-typedef SampleProject =
-{
-    private var NAME:String;
-    private var PATH:String;
-    private var PROJECTXMLPATH:String;   
-    private var TARGETS:String;   
+typedef SampleProject = {
+    var NAME:String;
+    var PATH:String;
+    var PROJECTXMLPATH:String;   
+    var TARGETS:String;   
+}
+
+/**
+ * Definition of a haxelib json file
+ */
+typedef HaxelibJSON = {
+    var name:String;
+    var url:String;
+    var license:String;
+    var tags:Array<String>;
+    var description:String;
+    var version:String;
+    var releasenote:String;
+    var contributors:Array<String>;
+    var dependencies:Dynamic;
 }

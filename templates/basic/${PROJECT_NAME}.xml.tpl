@@ -55,6 +55,12 @@
 	<haxelib name="openfl" />
 	<haxelib name="flixel"/>
 	
+	<!--In case you want to use the addons-->
+	<!--<haxelib name="flixel-addons"/>-->
+	
+	<!--In case you want to use nape with flixel-->
+	<!--<haxelib name="nape"/>-->
+	<!--<haxedef name="nme" />-->
 	
 	<!--Enable experimental threading support for cpp targets-->
 	<!--<haxedef name="FLX_THREADING" />-->
