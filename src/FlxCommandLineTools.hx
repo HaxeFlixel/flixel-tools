@@ -23,6 +23,7 @@ import helpers.PlatformHelper;
 import sys.io.FileOutput;
 import sys.FileSystem;
 import sys.io.File;
+import utils.CommandLine;
 
 class FlxCommandLineTools
 {
@@ -47,10 +48,8 @@ class FlxCommandLineTools
         // Get the current flixel version
         if (flixelVersion == null) 
         {
-            var flixelPath:String = PathHelper.getHaxelib(new Haxelib("flixel"));
-            var jsonContent:String = File.getContent(flixelPath + "haxelib.json");
-            var jsonData:HaxelibJSON = Json.parse(jsonContent);
-            flixelVersion = jsonData.version;
+            var flixelHaxelib:HaxelibJSON = CommandLine.getHaxelibJsonData("flixel");
+            flixelVersion = flixelHaxelib.version;
         }
 
         Sys.println("                 _   _               ______ _  _          _");
@@ -72,10 +71,10 @@ class FlxCommandLineTools
         }
         else 
         {
-            Sys.println("                    Current flixel version: " + flixelVersion);
+            Sys.println("                   Installed flixel version: " + flixelVersion);
         }
 
-        Sys.println("                  Use \"" + alias + " help\" for available commands");
+        Sys.println("                   Use \"" + alias + " help\" for available commands");
         Sys.println("");
     }
 
@@ -411,6 +410,7 @@ class FlxCommandLineTools
                     {
                         var toString = replacements.get(fromString);
                         sourceText = StringTools.replace(sourceText, fromString, toString);
+                        // warnings.push(scanFileForWarnings (filePath));
                     }
 
                     if(originalText != sourceText)
@@ -552,6 +552,12 @@ class FlxCommandLineTools
             Sys.command("sudo ln -s " + haxePath + "/flixel /usr/bin/flixel");
         }
 
+        // Sys.println("What IDE do you use?");
+        // Sys.println(" 0 - Flash Develop");
+        // Sys.println(" 1 - Sublime Text");
+        
+
+        
         Sys.println("You have now setup HaxeFlixel");
         Sys.command("flixel");
     }
@@ -1140,7 +1146,7 @@ class FlxCommandLineTools
     }
 
     //todo
-    // public function scanFileForWarnings(filePath:String):Array<WarningResult> 
+    // public static function scanFileForWarnings(filePath:String):Void 
     // {
     //     var results = new Array<WarningResult>();
 
@@ -1153,8 +1159,27 @@ class FlxCommandLineTools
     //         while( true )
     //         {
     //             var str = fin.readLine();
-    //             Sys.println("line " + (++lineNum) + ": " + str);
-    //             scanLinesForWarnings(str);
+    //             lineNum++;
+    //             // Sys.println("line " + (++lineNum) + ": " + str);
+
+    //             var warnings = HaxeFlixelLegacyWarnings.warningList;
+
+    //             for ( warning in warnings.keys() )
+    //             {
+    //                 var fix = warnings.get(warning);
+    //                 var search = new EReg("\\b" + warning + "\\b", "");
+    //                 var match = search.match(str);
+                    
+    //                 if(match)
+    //                 {
+    //                     Sys.println ("-------");
+    //                     Sys.println (match);
+    //                     Sys.println ("Line::"+lineNum);
+    //                     Sys.println ("filePath::"+filePath);
+    //                     Sys.println ("-------");
+    //                 }
+    //             }
+
     //         }
     //     }
     //     catch( ex:haxe.io.Eof ) 
@@ -1165,26 +1190,6 @@ class FlxCommandLineTools
     //     fin.close();
     // }
 
-    // public function scanStringForWarnings(haystack:String):WarningResult
-    // {
-    //     var warnings = HaxeFlixelLegacyWarnings.warningList;
-    //     for ( warning in warnings.keys() )
-    //     {
-    //         var needle = warnings.get(warning);
-    //         var r : EReg = ~/needle/;
-    //         var match = r.match(haystack);
-
-    //         var result =
-    //             private var oldCode:String;
-    //             private var newCode:String;
-    //             private var lineNumber:String;
-    //             private var filePath:String;
-    //             private var fileName:String;
-    //         }
-
-    //         return result;
-    //     }
-    // }
 }
 
 /**
@@ -1256,19 +1261,4 @@ typedef SampleProject =
     private var PATH:String;
     private var PROJECTXMLPATH:String;   
     private var TARGETS:String;   
-}
-
-/**
- * Definition of a haxelib json file
- */
-typedef HaxelibJSON = {
-    name:String,
-    url:String,
-    license:String,
-    tags:Array<String>,
-    description:String,
-    version:String,
-    releasenote:String,
-    contributors:Array<String>,
-    dependencies:Dynamic
 }
