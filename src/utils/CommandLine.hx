@@ -1,4 +1,3 @@
-
 package utils;
 
 import project.Haxelib;
@@ -16,54 +15,60 @@ class CommandLine
 {
 	/**
      * Prompt user with a y/n/a
-     * @param  question String with the prompt to display
-     * @return          User choice in an Answer enum or null if an invalid answer given
+	 * 
+     * @param  	Question 	String with the prompt to display
+     * @return	User choice in an Answer enum or null if an invalid answer given
      */
-    public static function ask (question:String):Answer
+    static public function ask(Question:String):Answer
     {    
         while (true)
         {
-            Sys.println (question + " [y/n/a] ? ");    
-            switch (readLine ())
+            Sys.println(Question + " [y/n/a] ? ");    
+			
+            switch (readLine())
             {
-                case "n": return No;
-                case "No": return No;
-                case "y": return Yes;
-                case "Yes": return Yes;
-                case "a": return Always;
-                case "Always": return Always;
+                case "n", "No": 
+					return No;
+                case "y", "Yes": 
+					return Yes;
+                case "a", "Always": 
+					return Always;
             }
         }
+		
         return null;
     }
 
     /**
      * Shortcut to the readline of the command line
-     * @return String of the current line
+	 * 
+     * @return 	String of the current line
      */
-    public static inline function readLine()
+	inline static public function readLine()
     {
-        return Sys.stdin ().readLine ();
+        return Sys.stdin().readLine();
     }
 
     /**
      * Load and parse the date from a Haxelib json file
-     * @param  haxelibName String name of the Haxelib to load
-     * @return             Haxelib typedef or null if no Haxelib was found
+	 * 
+     * @param  	HaxelibName 	String name of the Haxelib to load
+     * @return	Haxelib typedef or null if no Haxelib was found
      */
-    public static function getHaxelibJsonData(haxelibName:String):HaxelibJSON
+    static public function getHaxelibJsonData(haxelibName:String):HaxelibJSON
     {
         var haxleibJsonPath = PathHelper.getHaxelib(new Haxelib(haxelibName));
         
-        if ( haxleibJsonPath == "" )
-        	return null;
-
+        if (haxleibJsonPath == "")
+        {
+			return null;
+		}
+		
         var jsonContent:String = File.getContent(haxleibJsonPath + "haxelib.json");
         var jsonData:HaxelibJSON = Json.parse(jsonContent);
-
+		
         return jsonData;
     }
-
 }
 
 /**
