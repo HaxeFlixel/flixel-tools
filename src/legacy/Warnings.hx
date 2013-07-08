@@ -24,6 +24,11 @@ class Warnings
 		warningList.set("FlxG.debug", "FlxG.debug has been removed");
 		warningList.set("FlxG.mobile", "FlxG.mobile has been removed");
 		
+		// FlxSpriteUtil
+		warningList.set("drawLine", "FlxSprite.drawLine() has been moved to FlxSpriteUtil.drawLine()");
+		warningList.set("drawCircle", "FlxSprite.drawCircle() has been moved to FlxSpriteUtil.drawCircle()");
+		warningList.set("fill", "FlxSprite.fill() has been moved to FlxSpriteUtil.fill()");
+		
 		return warningList;
 	}
 }

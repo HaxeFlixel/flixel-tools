@@ -174,46 +174,112 @@ class FindAndReplace
 		/**
 		 * New packages / moved classes
 		 */
-		
-		// system
-		replacements.set("flixel.FlxAssets", "flixel.system.FlxAssets");
-		
-		// ui
-		replacements.set("flixel.FlxButton", "flixel.ui.FlxButton");
-		replacements.set("flixel.plugin.pxText.PxButton", "flixel.ui.PxButton");
-		
-		// util
-		replacements.set("flixel.FlxSave", "flixel.util.FlxSave");
-		
-		// tile
-		replacements.set("flixel.FlxTilemap", "flixel.tile.FlxTilemap");
-		replacements.set("flixel.system.FlxTile", "flixel.tile.FlxTile");
-		
+		 
 		// effects
-		replacements.set("flixel.FlxEmitter", "flixel.effects.particles.FlxEmitter");
-		replacements.set("flixel.FlxParticle", "flixel.effects.particles.FlxParticle");
-		replacements.set("flixel.addons.FlxEmitterExt", "flixel.effects.particles.FlxEmitterExt");
-		replacements.set("flixel.addons.FlxTrail", "flixel.effects.FlxTrail");
-		
-		// addons
-		replacements.set("flixel.addons.FlxCaveGenerator", "flixel.addons.tile.FlxCaveGenerator");
-		
-		// photonstorm
-		replacements.set("flixel.plugin.photonstorm.FlxSpecialFX", "flixel.effects.FlxSpecialFX");
-		replacements.set("flixel.plugin.photonstorm.fx.BaseFX", "flixel.effects.fx.BaseFX");
-		replacements.set("flixel.plugin.photonstorm.fx.GlitchFX", "flixel.effects.fx.GlitchFX");
-		replacements.set("flixel.plugin.photonstorm.fx.StarfieldFX", "flixel.effects.fx.StarfieldFX");
-		
-		// text
-		replacements.set("flixel.FlxText", "flixel.text.FlxText");
-		replacements.set("flixel.FlxTextField", "flixel.text.FlxTextField");
-		replacements.set("flixel.plugin.pxText.PxBitmapFont", "flixel.text.pxText.PxBitmapFont");
-		replacements.set("flixel.plugin.pxText.PxTextAlign", "flixel.text.pxText.PxTextAlign");
+		replacements.set("import flixel.FlxEmitter", "import flixel.effects.particles.FlxEmitter");
+		replacements.set("import flixel.FlxTypedEmitter", "import flixel.effects.particles.FlxTypedEmitter");
+		replacements.set("import flixel.FlxParticle", "import flixel.effects.particles.FlxParticle");
+		replacements.set("import flixel.addons.FlxEmitterExt", "import flixel.effects.particles.FlxEmitterExt");
+		replacements.set("import flixel.addons.FlxTypedEmitterExt", "import flixel.effects.particles.FlxTypedEmitterExt");
+		replacements.set("import flixel.addons.FlxTrail", "import flixel.effects.FlxTrail");
+		replacements.set("import flixel.plugin.photonstorm.FlxSpecialFX", "import flixel.effects.FlxSpecialFX");
+		replacements.set("import flixel.plugin.photonstorm.fx.BaseFX", "import flixel.effects.fx.BaseFX");
+		replacements.set("import flixel.plugin.photonstorm.fx.GlitchFX", "import flixel.effects.fx.GlitchFX");
+		replacements.set("import flixel.plugin.photonstorm.fx.StarfieldFX", "import flixel.effects.fx.StarfieldFX");
 		
 		// groups
-		replacements.set("flixel.FlxGroup", "flixel.group.FlxGroup");
-		replacements.set("flixel.FlxSpriteGroup", "flixel.group.FlxSpriteGroup");
-		replacements.set("flixel.FlxTypedGroup", "flixel.group.FlxTypedGroup");
+		replacements.set("import flixel.FlxGroup", "import flixel.group.FlxGroup");
+		replacements.set("import flixel.addons.FlxSpriteGroup", "import flixel.group.FlxSpriteGroup");
+		replacements.set("import flixel.FlxTypedGroup", "import flixel.group.FlxTypedGroup");
+		
+		// system
+		replacements.set("import flixel.FlxAssets", "import flixel.system.FlxAssets");
+		replacements.set("import flixel.FlxSound", "import flixel.system.FlxSound");
+		
+		// text
+		replacements.set("import flixel.FlxText", "import flixel.text.FlxText");
+		replacements.set("import flixel.FlxTextField", "import flixel.text.FlxTextField");
+		replacements.set("import flixel.plugin.pxText.PxBitmapFont", "import flixel.text.pxText.PxBitmapFont");
+		replacements.set("import flixel.plugin.pxText.PxDefaultFontGenerator", "import flixel.text.pxText.PxDefaultFontGenerator");
+		replacements.set("import flixel.plugin.pxText.PxFontSymbol", "import flixel.text.pxText.PxFontSymbol");
+		replacements.set("import flixel.plugin.pxText.PxTextAlign", "import flixel.text.pxText.PxTextAlign");
+		
+		// tile
+		replacements.set("flixel.system.FlxTile", "flixel.tile.FlxTile");
+		replacements.set("flixel.FlxTileblock", "flixel.tile.FlxTileblock");
+		replacements.set("flixel.FlxTilemap", "flixel.tile.FlxTilemap");
+		replacements.set("flixel.system.FlxTilemapBuffer", "flixel.tile.FlxTilemapBuffer");
+		
+		// ui
+		replacements.set("import flixel.FlxButton", "import flixel.ui.FlxButton");
+		replacements.set("import flixel.FlxTypedButton", "import flixel.ui.FlxTypedButton");
+		replacements.set("import flixel.plugin.pxText.PxButton", "import flixel.ui.PxButton");
+		replacements.set("import flixel.addons.FlxSlider", "import flixel.ui.FlxSlider");
+		replacements.set("import flixel.plugin.photonstorm.FlxBar", "import flixel.ui.FlxBar");
+		
+		// util
+		replacements.set("import flixel.FlxSave", "import flixel.util.FlxSave");
+		replacements.set("import flixel.FlxPoint", "import flixel.util.FlxPoint");
+		replacements.set("import flixel.FlxRect", "import flixel.util.FlxRect");
+		replacements.set("import flixel.FlxTimer", "import flixel.util.FlxTimer");
+		replacements.set("import flixel.plugin.photonstorm.FlxGradient", "import flixel.util.FlxGradient");
+		replacements.set("import flixel.plugin.photonstorm.FlxVelocity", "import flixel.util.FlxVelocity");
+		replacements.set("import flixel.plugin.photonstorm.FlxCollision", "import flixel.util.FlxCollision");
+		replacements.set("import flixel.plugin.photonstorm.FlxColor", "import flixel.util.FlxColor");
+		replacements.set("import flixel.plugin.photonstorm.FlxMath", "import flixel.util.FlxMath");
+		
+		// addons
+		replacements.set("import flixel.addons.FlxCaveGenerator", "import flixel.addons.tile.FlxCaveGenerator");
+		replacements.set("import flixel.plugin.photonstorm.api.FlxKongregate", "import flixel.addons.api.FlxKongregate");
+		replacements.set("import flixel.plugin.photonstorm.FlxControl", "import flixel.addons.control.FlxControl");
+		replacements.set("import flixel.plugin.photonstorm.FlxControlHandler", "import flixel.addons.control.FlxControlHandler");
+		replacements.set("import flixel.addons.FlxBackdrop", "import flixel.addons.display.FlxBackdrop");
+		replacements.set("import flixel.plugin.photonstorm.FlxExtendedSprite", "import flixel.addons.display.FlxExtendedSprite");
+		replacements.set("import flixel.plugin.photonstorm.FlxGridOverlay", "import flixel.addons.display.FlxGridOverlay");
+		replacements.set("import flixel.plugin.photonstorm.baseTypes.MouseSpring", "import flixel.addons.display.FlxMouseSpring");
+		replacements.set("import flixel.addons.NestedSprite", "import flixel.addons.display.FlxNestedSprite");
+		replacements.set("import flixel.addons.FlxSkewedSprite", "import flixel.addons.display.FlxSkewedSprite");
+		replacements.set("import flixel.addons.FlxSpriteAniRot", "import flixel.addons.display.FlxSpriteAniRot");
+		replacements.set("import flixel.addons.BTNTilemap", "import flixel.addons.tile.FlxRayCastTilemap");
+		replacements.set("import flixel.addons.FlxTilemapExt", "import flixel.addons.tile.FlxTilemapExt");
+		replacements.set("import flixel.plugin.photonstorm.FlxButtonPlus", "import flixel.addons.ui.FlxButtonPlus");
+		replacements.set("import flixel.plugin.photonstorm.FlxDelay", "import flixel.addons.util.FlxDelay");
+		replacements.set("import flixel.plugin.photonstorm.FlxWeapon", "import flixel.addons.weapon.FlxWeapon");
+		replacements.set("import flixel.plugin.photonstorm.baseTypes.Bullet", "import flixel.addons.weapon.FlxBullet");
+		replacements.set("import flixel.plugin.photonstorm.FlxBitmapFont", "import flixel.addons.text.FlxBitmapFont");
+		replacements.set("import flixel.addons.ZoomCamera", "import flixel.addons.display.FlxZoomCamera");
+		replacements.set("import flixel.addons.OgmoLevelLoader", "import flixel.addons.editors.ogmo.FlxOgmoLoader");
+		replacements.set("import flixel.plugin.photonstorm.FlxMouseControl", "import flixel.addons.plugin.FlxMouseControl");
+		replacements.set("import flixel.addons.taskManager.AntTask", "import flixel.addons.plugin.taskManager.AntTask");
+		replacements.set("import flixel.addons.taskManager.AntTaskManager", "import flixel.addons.plugin.taskManager.AntTaskManager");
+		
+		/**
+		 * FlxSpriteUtil
+		 */
+		
+		replacements.set("FlxDisplay.alphaMask", "FlxSpriteUtil.alphaMask");
+		replacements.set("FlxDisplay.alphaMaskFlxSprite", "FlxSpriteUtil.alphaMaskFlxSprite");
+		replacements.set("FlxDisplay.screenWrap", "FlxSpriteUtil.screenWrap");
+		replacements.set("FlxDisplay.space", "FlxSpriteUtil.space");
+		replacements.set("FlxDisplay.screenCenter", "FlxSpriteUtil.screenCenter");
+		
+		/**
+		 * FlxMath (powertools)
+		 */
+		
+		replacements.set("FlxMath.atan2", "Math.atan2");
+		replacements.set("FlxMath.sinCosGenerator", "FlxAngle.sinCosGenerator");
+		replacements.set("FlxMath.getSinTable()", "FlxAngle.sinTable");
+		replacements.set("FlxMath.getCosTable()", "FlxAngle.cosTable");
+		replacements.set("FlxMath.sqrt", "Math.sqrt");
+		replacements.set("FlxMath.miniRand", "FlxRandom.int");
+		replacements.set("FlxMath.rand", "FlxRandom.intRanged");
+		replacements.set("FlxMath.randFloat", "FlxRandom.floatRanged");
+		replacements.set("FlxMath.chanceRoll", "FlxRandom.chanceRoll");
+		replacements.set("FlxMath.randomSign", "FlxRandom.sign");
+		replacements.set("FlxMath.angleLimit", "FlxAngle.angleLimit");
+		replacements.set("FlxMath.asDegrees", "FlxAngle.asDegrees");
+		replacements.set("FlxMath.asRadians", "FlxAngle.asRadians");
 		
 		return replacements;
 	}
