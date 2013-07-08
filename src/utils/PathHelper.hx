@@ -68,7 +68,7 @@ class PathHelper
 		
 		return expand(EscapePath);
 	}
-	
+
 	static public function expand(ExpandPath:String):String 
 	{
 		if (ExpandPath == null) 
@@ -86,7 +86,7 @@ class PathHelper
 		
 		return ExpandPath;
 	}
-	
+
 	static public function findTemplate(TemplatePaths:Array<String>, TemplatePath:String, WarnIfNotFound:Bool = true):String 
 	{
 		var matches:Array<String> = findTemplates(TemplatePaths, TemplatePath, WarnIfNotFound);
@@ -98,7 +98,7 @@ class PathHelper
 		
 		return null;
 	}
-	
+
 	static public function findTemplates(TemplatePaths:Array<String>, TemplatePath:String, WarnIfNotFound:Bool = true):Array <String> 
 	{
 		var matches = [];
@@ -161,7 +161,7 @@ class PathHelper
 					break;
 				}
 				
-				previous = line;				
+				previous = line;
 			}
 			
 		} 
@@ -183,8 +183,7 @@ class PathHelper
 		
 		return result;
 	}
-	
-	
+
 	static public function getLibraryPath(Ndll:NDLL, DirectoryName:String, NamePrefix:String = "", NameSuffix:String = ".ndll", AllowDebug:Bool = false):String {
 		
 		var usingDebug:Bool = false;
@@ -203,7 +202,7 @@ class PathHelper
 		
 		return path;
 	}
-	
+
 	static public function getTemporaryFile(Extension:String = ""):String 
 	{
 		var path:String = "";
@@ -226,7 +225,7 @@ class PathHelper
 		
 		return path;
 	}
-	
+
 	static public function isAbsolute(PathToCheck:String):Bool 
 	{
 		if (StringTools.startsWith(PathToCheck, "/") || StringTools.startsWith(PathToCheck, "\\")) 
@@ -236,12 +235,12 @@ class PathHelper
 		
 		return false;
 	}
-	
+
 	static public function isRelative(PathToCheck:String):Bool 
 	{
 		return !isAbsolute(PathToCheck);
 	}
-	
+
 	static public function mkdir(Directory:String):Void 
 	{
 		Directory = StringTools.replace(Directory, "\\", "/");
@@ -286,7 +285,7 @@ class PathHelper
 			Sys.setCwd(oldPath);
 		}
 	}
-	
+
 	static public function relocatePath(PathToRelocate:String, TargetDirectory:String):String 
 	{
 		// this should be improved for target directories that are outside the current working path
@@ -328,7 +327,7 @@ class PathHelper
 			return adjust + PathToRelocate;
 		}
 	}
-	
+
 	static public function relocatePaths(Paths:Array <String>, TargetDirectory:String):Array <String> 
 	{
 		var relocatedPaths:Array<String> = Paths.copy();
@@ -340,7 +339,7 @@ class PathHelper
 		
 		return relocatedPaths;
 	}
-	
+
 	static public function removeDirectory(Directory:String):Void 
 	{
 		if (FileSystem.exists(Directory)) 
@@ -383,7 +382,7 @@ class PathHelper
 			catch (e:Dynamic) {}
 		}
 	}
-	
+
 	static public function safeFileName(Name:String):String 
 	{
 		var safeName = StringTools.replace(Name, " ", "");
@@ -416,10 +415,9 @@ class PathHelper
 		{
 			var path:String = combine(getHaxelib(Ndll.haxelib), "ndll/" + DirectoryName + "/" + Filename);
 			
-			//if (!FileSystem.exists (path)) {
-				
+			//if (!FileSystem.exists (path)) 
+			//{
 				//path = combine(getHaxelib(new Haxelib("nmedev")), "ndll/" + DirectoryName + "/" + Filename);
-				
 			//}
 			
 			return path;
@@ -429,7 +427,7 @@ class PathHelper
 			return combine(getHaxelib(Ndll.haxelib), "ndll/" + DirectoryName + "/" + Filename);
 		}
 	}
-	
+
 	static public function tryFullPath(FullPath:String):String 
 	{
 		try 

@@ -5,22 +5,22 @@ package legacy;
  */
 class FindAndReplace 
 {
-    /**
-     * Simple Map containing the strings to find and replace
-     * Key being the String to search for
-     * Value being the String to replace it with
-     */
+	/**
+	 * Simple Map containing the strings to find and replace
+	 * Key being the String to search for
+	 * Value being the String to replace it with
+	 */
 	static public var findAndReplaceMap(get, never):Map<String,String>;
 
 	static public function get_findAndReplaceMap():Map<String,String>
 	{
-        var replacements = new Map<String, String>();
+		var replacements = new Map<String, String>();
 		
-        /**
+		/**
 		 * Removal of the org package
 		 */
 		
-        replacements.set("org.flixel.", "flixel.");
+		replacements.set("org.flixel.", "flixel.");
 		
 		/**
 		 * FlxU splitup
@@ -64,32 +64,32 @@ class FindAndReplace
 		 * FlxG refactor / frontEnds
 		 */
 		
-        replacements.set("FlxG.getLibraryName()", "FlxG.libraryName");
-        replacements.set("FlxG.random", "FlxRandom.float");
-        replacements.set("FlxG.DEBUGGER_STANDARD", "FlxDebugger.STANDARD");
-        replacements.set("FlxG.DEBUGGER_MICRO", "FlxDebugger.MICRO");
-        replacements.set("FlxG.DEBUGGER_BIG", "FlxDebugger.BIG");
-        replacements.set("FlxG.DEBUGGER_TOP", "FlxDebugger.TOP");
-        replacements.set("FlxG.DEBUGGER_LEFT", "FlxDebugger.LEFT");
-        replacements.set("FlxG.DEBUGGER_RIGHT", "FlxDebugger.RIGHT");
-        replacements.set("FlxG.RED", "FlxColor.RED");
-        replacements.set("FlxG.GREEN", "FlxColor.GREEN");
-        replacements.set("FlxG.BLUE", "FlxColor.BLUE");
-        replacements.set("FlxG.PINK", "FlxColor.PINK");
-        replacements.set("FlxG.WHITE", "FlxColor.WHITE");
-        replacements.set("FlxG.BLACK", "FlxColor.BLACK");
-        replacements.set("FlxG.TRANSPARENT", "FlxColor.TRANSPARENT");
-        replacements.set("FlxG.DEG", "FlxAngle.TO_DEG");
-        replacements.set("FlxG.RAD", "FlxAngle.TO_RAD");
-        replacements.set("FlxG.levels", "Reg.levels");
-        replacements.set("FlxG.level", "Reg.level");
-        replacements.set("FlxG.scores", "Reg.scores");
-        replacements.set("FlxG.score", "Reg.score");
-        replacements.set("FlxG.saves", "Reg.saves");
-        replacements.set("FlxG.save", "Reg.save");
-        replacements.set("FlxG.shuffle", "FlxArray.shuffle");
-        replacements.set("FlxG.getRandom", "FlxArray.getRandom");
-        replacements.set("FlxG.globalSeed", "FlxRandom.globalSeed");
+		replacements.set("FlxG.getLibraryName()", "FlxG.libraryName");
+		replacements.set("FlxG.random", "FlxRandom.float");
+		replacements.set("FlxG.DEBUGGER_STANDARD", "FlxDebugger.STANDARD");
+		replacements.set("FlxG.DEBUGGER_MICRO", "FlxDebugger.MICRO");
+		replacements.set("FlxG.DEBUGGER_BIG", "FlxDebugger.BIG");
+		replacements.set("FlxG.DEBUGGER_TOP", "FlxDebugger.TOP");
+		replacements.set("FlxG.DEBUGGER_LEFT", "FlxDebugger.LEFT");
+		replacements.set("FlxG.DEBUGGER_RIGHT", "FlxDebugger.RIGHT");
+		replacements.set("FlxG.RED", "FlxColor.RED");
+		replacements.set("FlxG.GREEN", "FlxColor.GREEN");
+		replacements.set("FlxG.BLUE", "FlxColor.BLUE");
+		replacements.set("FlxG.PINK", "FlxColor.PINK");
+		replacements.set("FlxG.WHITE", "FlxColor.WHITE");
+		replacements.set("FlxG.BLACK", "FlxColor.BLACK");
+		replacements.set("FlxG.TRANSPARENT", "FlxColor.TRANSPARENT");
+		replacements.set("FlxG.DEG", "FlxAngle.TO_DEG");
+		replacements.set("FlxG.RAD", "FlxAngle.TO_RAD");
+		replacements.set("FlxG.levels", "Reg.levels");
+		replacements.set("FlxG.level", "Reg.level");
+		replacements.set("FlxG.scores", "Reg.scores");
+		replacements.set("FlxG.score", "Reg.score");
+		replacements.set("FlxG.saves", "Reg.saves");
+		replacements.set("FlxG.save", "Reg.save");
+		replacements.set("FlxG.shuffle", "FlxArray.shuffle");
+		replacements.set("FlxG.getRandom", "FlxArray.getRandom");
+		replacements.set("FlxG.globalSeed", "FlxRandom.globalSeed");
 		
 		// CameraFrontEnd
 		replacements.set("FlxG.bgColor", "FlxG.cameras.bgColor");
@@ -102,11 +102,11 @@ class FindAndReplace
 		replacements.set("FlxG.removeCamera", "FlxG.cameras.remove");
 		replacements.set("FlxG.resetCameras", "FlxG.cameras.reset");
 		replacements.set("FlxG.fullscreen", "FlxG.cameras.fullscreen");
-	 
+		
 		// CameraFXFrontEnd
-        replacements.set("FlxG.shake", "FlxG.camera.shake");
-        replacements.set("FlxG.flash", "FlxG.camera.flash");
-        replacements.set("FlxG.fade", "FlxG.camera.fade");
+		replacements.set("FlxG.shake", "FlxG.camera.shake");
+		replacements.set("FlxG.flash", "FlxG.camera.flash");
+		replacements.set("FlxG.fade", "FlxG.camera.fade");
 		
 		// DebuggerFrontEnd
 		replacements.set("FlxG.visualDebug", "FlxG.debugger.visualDebug");
@@ -123,27 +123,27 @@ class FindAndReplace
 		replacements.set("FlxG.clearLog", "FlxG.log.clear");
 		
 		// WatchFrontEnd
-        replacements.set("FlxG.watch", "FlxG.watch.add");
-        replacements.set("FlxG.unwatch", "FlxG.watch.remove");
+		replacements.set("FlxG.watch", "FlxG.watch.add");
+		replacements.set("FlxG.unwatch", "FlxG.watch.remove");
 		
 		// SoundFrontEnd
 		replacements.set("FlxG.play", "FlxG.sound.play");
-        replacements.set("FlxG.playMusic", "FlxG.sound.playMusic");
-        replacements.set("FlxG.music", "FlxG.sound.music");
-        replacements.set("FlxG.sounds", "FlxG.sound.list");
-        replacements.set("FlxG.mute", "FlxG.sound.mute");
-        replacements.set("FlxG.volumeHandler", "FlxG.sound.volumeHandler");
-        replacements.set("FlxG.keyVolumeUp", "FlxG.sound.keyVolumeUp");
-        replacements.set("FlxG.keyVolumeDown", "FlxG.sound.keyVolumeDown");
-        replacements.set("FlxG.keyMute", "FlxG.sound.keyMute");
-        replacements.set("FlxG.loadSound", "FlxG.sound.load");
-        replacements.set("FlxG.addSound", "FlxG.sound.add");
-        replacements.set("FlxG.stream", "FlxG.sound.stream");
-        replacements.set("FlxG.volume", "FlxG.sound.volume");
-        replacements.set("FlxG.destroySounds", "FlxG.sound.destroySounds");
-        replacements.set("FlxG.updateSounds", "FlxG.sound.updateSounds");
-        replacements.set("FlxG.pauseSounds", "FlxG.sound.pauseSounds");
-        replacements.set("FlxG.resumeSounds", "FlxG.sound.resumeSounds");
+		replacements.set("FlxG.playMusic", "FlxG.sound.playMusic");
+		replacements.set("FlxG.music", "FlxG.sound.music");
+		replacements.set("FlxG.sounds", "FlxG.sound.list");
+		replacements.set("FlxG.mute", "FlxG.sound.mute");
+		replacements.set("FlxG.volumeHandler", "FlxG.sound.volumeHandler");
+		replacements.set("FlxG.keyVolumeUp", "FlxG.sound.keyVolumeUp");
+		replacements.set("FlxG.keyVolumeDown", "FlxG.sound.keyVolumeDown");
+		replacements.set("FlxG.keyMute", "FlxG.sound.keyMute");
+		replacements.set("FlxG.loadSound", "FlxG.sound.load");
+		replacements.set("FlxG.addSound", "FlxG.sound.add");
+		replacements.set("FlxG.stream", "FlxG.sound.stream");
+		replacements.set("FlxG.volume", "FlxG.sound.volume");
+		replacements.set("FlxG.destroySounds", "FlxG.sound.destroySounds");
+		replacements.set("FlxG.updateSounds", "FlxG.sound.updateSounds");
+		replacements.set("FlxG.pauseSounds", "FlxG.sound.pauseSounds");
+		replacements.set("FlxG.resumeSounds", "FlxG.sound.resumeSounds");
 		
 		// PluginFrontEnd
 		replacements.set("FlxG.plugins", "FlxG.plugins.list");
@@ -175,46 +175,46 @@ class FindAndReplace
 		 * New packages / moved classes
 		 */
 		
-        // system
-        replacements.set("flixel.FlxAssets", "flixel.system.FlxAssets");
+		// system
+		replacements.set("flixel.FlxAssets", "flixel.system.FlxAssets");
 		
-        // ui
-        replacements.set("flixel.FlxButton", "flixel.ui.FlxButton");
+		// ui
+		replacements.set("flixel.FlxButton", "flixel.ui.FlxButton");
 		replacements.set("flixel.plugin.pxText.PxButton", "flixel.ui.PxButton");
 		
 		// util
-        replacements.set("flixel.FlxSave", "flixel.util.FlxSave");
+		replacements.set("flixel.FlxSave", "flixel.util.FlxSave");
 		
-        // tile
-        replacements.set("flixel.FlxTilemap", "flixel.tile.FlxTilemap");
-        replacements.set("flixel.system.FlxTile", "flixel.tile.FlxTile");
+		// tile
+		replacements.set("flixel.FlxTilemap", "flixel.tile.FlxTilemap");
+		replacements.set("flixel.system.FlxTile", "flixel.tile.FlxTile");
 		
-        // effects
-        replacements.set("flixel.FlxEmitter", "flixel.effects.particles.FlxEmitter");
-        replacements.set("flixel.FlxParticle", "flixel.effects.particles.FlxParticle");
+		// effects
+		replacements.set("flixel.FlxEmitter", "flixel.effects.particles.FlxEmitter");
+		replacements.set("flixel.FlxParticle", "flixel.effects.particles.FlxParticle");
 		replacements.set("flixel.addons.FlxEmitterExt", "flixel.effects.particles.FlxEmitterExt");
-        replacements.set("flixel.addons.FlxTrail", "flixel.effects.FlxTrail");
-        
-        // addons
-        replacements.set("flixel.addons.FlxCaveGenerator", "flixel.addons.tile.FlxCaveGenerator");
+		replacements.set("flixel.addons.FlxTrail", "flixel.effects.FlxTrail");
 		
-        // photonstorm
-        replacements.set("flixel.plugin.photonstorm.FlxSpecialFX", "flixel.effects.FlxSpecialFX");
-        replacements.set("flixel.plugin.photonstorm.fx.BaseFX", "flixel.effects.fx.BaseFX");
-        replacements.set("flixel.plugin.photonstorm.fx.GlitchFX", "flixel.effects.fx.GlitchFX");
-        replacements.set("flixel.plugin.photonstorm.fx.StarfieldFX", "flixel.effects.fx.StarfieldFX");
+		// addons
+		replacements.set("flixel.addons.FlxCaveGenerator", "flixel.addons.tile.FlxCaveGenerator");
 		
-        // text
-        replacements.set("flixel.FlxText", "flixel.text.FlxText");
-        replacements.set("flixel.FlxTextField", "flixel.text.FlxTextField");
-        replacements.set("flixel.plugin.pxText.PxBitmapFont", "flixel.text.pxText.PxBitmapFont");
-        replacements.set("flixel.plugin.pxText.PxTextAlign", "flixel.text.pxText.PxTextAlign");
-        
-        // groups
-        replacements.set("flixel.FlxGroup", "flixel.group.FlxGroup");
-        replacements.set("flixel.FlxSpriteGroup", "flixel.group.FlxSpriteGroup");
-        replacements.set("flixel.FlxTypedGroup", "flixel.group.FlxTypedGroup");
+		// photonstorm
+		replacements.set("flixel.plugin.photonstorm.FlxSpecialFX", "flixel.effects.FlxSpecialFX");
+		replacements.set("flixel.plugin.photonstorm.fx.BaseFX", "flixel.effects.fx.BaseFX");
+		replacements.set("flixel.plugin.photonstorm.fx.GlitchFX", "flixel.effects.fx.GlitchFX");
+		replacements.set("flixel.plugin.photonstorm.fx.StarfieldFX", "flixel.effects.fx.StarfieldFX");
 		
-        return replacements;
+		// text
+		replacements.set("flixel.FlxText", "flixel.text.FlxText");
+		replacements.set("flixel.FlxTextField", "flixel.text.FlxTextField");
+		replacements.set("flixel.plugin.pxText.PxBitmapFont", "flixel.text.pxText.PxBitmapFont");
+		replacements.set("flixel.plugin.pxText.PxTextAlign", "flixel.text.pxText.PxTextAlign");
+		
+		// groups
+		replacements.set("flixel.FlxGroup", "flixel.group.FlxGroup");
+		replacements.set("flixel.FlxSpriteGroup", "flixel.group.FlxSpriteGroup");
+		replacements.set("flixel.FlxTypedGroup", "flixel.group.FlxTypedGroup");
+		
+		return replacements;
 	}
 }
