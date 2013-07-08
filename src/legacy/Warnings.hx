@@ -21,6 +21,8 @@ class Warnings
         // _btnStart.onOver = onStartOver;
 		
         warningList.set(".onOver", ".setOnOverCallback(foo);");
+        warningList.set("FlxG.debug", "FlxG.debug has been removed");
+        warningList.set("FlxG.mobile", "FlxG.mobile has been removed");
         
         return warningList;
     }
