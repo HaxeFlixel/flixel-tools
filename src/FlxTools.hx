@@ -12,6 +12,8 @@ import helpers.PlatformHelper;
 import sys.io.FileOutput;
 import sys.FileSystem;
 import sys.io.File;
+import legacy.Warnings;
+import legacy.FindAndReplace;
 
 /**
  * Flixel-Tools
@@ -23,7 +25,7 @@ import sys.io.File;
  * @author Joshua Granick for methods used from openfl-tools
  * @thanks to HaxeFlixel contributors & Gama11 for cleanups :)
  */
-class FlxCommandLineTools
+class FlxTools
 {
     inline static public var name = "HaxeFlixel";
     inline static public var alias = "flixel";
@@ -411,7 +413,7 @@ class FlxCommandLineTools
                     var sourceText:String = sys.io.File.getContent(filePath);
                     var originalText:String = Reflect.copy(sourceText);
                     
-                    var replacements:Map<String, String> = HaxeFlixelLegacyFindAndReplace.findAndReplaceMap;
+                    var replacements:Map<String, String> = FindAndReplace.findAndReplaceMap;
                     
                     for (fromString in replacements.keys())
                     {
@@ -1196,7 +1198,7 @@ class FlxCommandLineTools
     //         {
     //             var str = fin.readLine();
     //             Sys.println("line " + (++lineNum) + ": " + str);
-    //             var warnings = HaxeFlixelLegacyWarnings.warningList;
+    //             var warnings = Warnings.warningList;
     //             
     //             for ( warning in warnings.keys() )
     //             {

@@ -1,4 +1,4 @@
--main FlxCommandLineTools
+-main FlxTools
 -neko run.n
 -cp src
 -lib openfl-tools

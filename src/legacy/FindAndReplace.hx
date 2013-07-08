@@ -1,9 +1,9 @@
-package;
+package legacy;
 
 /**
  * Listing for Find and Replacements for old HaxeFlixel Projects
  */
-class HaxeFlixelLegacyFindAndReplace 
+class FindAndReplace 
 {
     /**
      * Simple Map containing the strings to find and replace

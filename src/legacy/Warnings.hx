@@ -1,9 +1,9 @@
-package;
+package legacy;
 
 /**
  * Listing for warnings for code to be updated manually for old HaxeFlixel Projects
  */
-class HaxeFlixelLegacyWarnings 
+class Warnings 
 {
     /**
      * Simple Map containing the strings to find and warn about
