@@ -45,10 +45,6 @@ class Main extends Sprite
 		
 		var game:FlxGame = new GameClass();
 		addChild(game);
-		
-		#if (cpp || neko)
-		Lib.current.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUP);
-		#end
 	}
 	
 	private function initialize():Void 
