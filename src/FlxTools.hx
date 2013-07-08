@@ -1248,8 +1248,8 @@ class Commands
 	public var template:Bool = false;
 	
 	public var projectName:String = "HaxeFlixelTemplate";
-	public var projectWidth:Int = 700;
-	public var projectHeight:Int = 600;
+	public var projectWidth:Int = 640;
+	public var projectHeight:Int = 480;
 	
 	public var fromDir:String = "";
 	public var toDir:String = "";
