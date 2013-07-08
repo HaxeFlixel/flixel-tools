@@ -27,9 +27,9 @@ import legacy.FindAndReplace;
  */
 class FlxTools
 {
-	inline static public var name = "HaxeFlixel";
-	inline static public var alias = "flixel";
-	inline static public var version = "0.0.1";
+	inline static public var NAME = "HaxeFlixel";
+	inline static public var ALIAS = "flixel";
+	inline static public var VERSION = "0.0.1";
 
 	static public var flixelVersion:String;
 
@@ -63,7 +63,7 @@ class FlxTools
 		Sys.println("                   Powered by the Haxe Toolkit and OpenFL");
 		Sys.println("     Please visit www.haxeflixel.com for community support and resources!");
 		Sys.println("");
-		Sys.println("                    " + name + " Command-Line Tools (" + version + ")");
+		Sys.println("                    " + NAME + " Command-Line Tools (" + VERSION + ")");
 		
 		if (flixelVersion == "0.0.1")   
 		{
@@ -74,7 +74,7 @@ class FlxTools
 			Sys.println("                   Installed flixel version: " + flixelVersion);
 		}
 		
-		Sys.println("                   Use \"" + alias + " help\" for available commands");
+		Sys.println("                   Use \"" + ALIAS + " help\" for available commands");
 		Sys.println("");
 	}
 
@@ -143,42 +143,42 @@ class FlxTools
 	{
 		Sys.println("");
 		
-		Sys.println(name + " Command-Line Tools (" + version + ")");
+		Sys.println(NAME + " Command-Line Tools (" + VERSION + ")");
 		
 		Sys.println("");
 		
-		Sys.println(" Setup the tools to use the " + alias + " alias");
-		Sys.println(" Usage : haxelib run " + alias + "-tools setup");
+		Sys.println(" Setup the tools to use the " + ALIAS + " alias");
+		Sys.println(" Usage : haxelib run " + ALIAS + "-tools setup");
 		
 		Sys.println("");
 		
 		Sys.println(" Create a sample by name");
-		Sys.println(" Usage : " + alias + " create <name>");
+		Sys.println(" Usage : " + ALIAS + " create <name>");
 		
 		Sys.println("");
 		
 		Sys.println(" Create a project template");
-		Sys.println(" Usage : " + alias + " template -name <project_name> -class <class_name> -screen <width_value> <height_value>");
+		Sys.println(" Usage : " + ALIAS + " template -name <project_name> -class <class_name> -screen <width_value> <height_value>");
 		
 		Sys.println("");
 		
 		Sys.println(" List available samples and templates");
-		Sys.println(" Usage : " + alias + " list");
+		Sys.println(" Usage : " + ALIAS + " list");
 		
 		Sys.println("");
 		
 		Sys.println(" Download all the HaxeFlixel samples");
-		Sys.println(" Usage : " + alias + " download samples");
+		Sys.println(" Usage : " + ALIAS + " download samples");
 		
 		Sys.println("");
 		
 		Sys.println(" List available samples");
-		Sys.println(" Usage : " + alias + " list samples");
+		Sys.println(" Usage : " + ALIAS + " list samples");
 		
 		Sys.println("");
 		
 		Sys.println(" List available templates");
-		Sys.println(" Usage : " + alias + " list templates");
+		Sys.println(" Usage : " + ALIAS + " list templates");
 		
 		Sys.println("");
 		
@@ -339,7 +339,7 @@ class FlxTools
 			Sys.command("flixel list samples");
 			Sys.println("");
 			Sys.println(" Create a sample by name");
-			Sys.println(" Usage : " + alias + " create <name>");
+			Sys.println(" Usage : " + ALIAS + " create <name>");
 		}
 		else
 		{
@@ -1015,25 +1015,25 @@ class FlxTools
 	 */
 	static public function createSample(?Name:String):Void
 	{
-		if (name == null)
+		if (Name == null)
 		{
 			Sys.println(" You have not provided a name to create.");
 			Sys.println(" To list available templates and samples use the list command");
 			Sys.println(" Usage : flixel list");
 		}
 		
-		var sample = sampleExists(name);
+		var sample:SampleProject = sampleExists(Name);
 		
 		if (sample != null)
 		{
-			Sys.println(" - Creating " + name);
+			Sys.println(" - Creating " + Name);
 			
-			var destination = Sys.getCwd() + name;
+			var destination = Sys.getCwd() + Name;
 			FileHelper.recursiveCopy(sample.PATH, destination);
 			
 			if (FileSystem.isDirectory(destination))
 			{
-				Sys.println(" - Created " + name);
+				Sys.println(" - Created " + Name);
 				Sys.println(destination);
 			}
 			else
@@ -1043,7 +1043,7 @@ class FlxTools
 		}
 		else
 		{
-			Sys.println(" Error there is no sample with the name of " + name);
+			Sys.println(" Error there is no sample with the name of " + Name);
 		}
 	}
 
