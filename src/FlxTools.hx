@@ -158,7 +158,7 @@ class FlxTools
 		Sys.println("");
 		
 		Sys.println(" Create a project template");
-		Sys.println(" Usage : " + ALIAS + " template -name <project_name> -class <class_name> -screen <width_value> <height_value>");
+		Sys.println(" Usage : " + ALIAS + " template -name <project_name> -screen <width_value> <height_value>");
 		
 		Sys.println("");
 		
@@ -285,7 +285,6 @@ class FlxTools
 	inline static public function projectTemplateReplacements(Source:String):String
 	{
 		Source = StringTools.replace(Source, "${PROJECT_NAME}", commandsSet.projectName);
-		Source = StringTools.replace(Source, "${PROJECT_CLASS}", commandsSet.projectClass);
 		Source = StringTools.replace(Source, "${WIDTH}", cast(commandsSet.projectWidth));
 		Source = StringTools.replace(Source, "${HEIGHT}", cast(commandsSet.projectHeight));
 		
@@ -713,11 +712,6 @@ class FlxTools
 			{
 				index++;
 				commandsSet.projectName = Arguments[index];
-			}
-			else if (Arguments[index] == "-class" && index + 1 < length)
-			{
-				index++;
-				commandsSet.projectClass = Arguments[index];
 			}
 			else if (Arguments[index] == "-screen" && index + 2 < length)
 			{
@@ -1254,7 +1248,6 @@ class Commands
 	public var template:Bool = false;
 	
 	public var projectName:String = "HaxeFlixelTemplate";
-	public var projectClass:String = "HaxeFlixelTemplate";
 	public var projectWidth:Int = 700;
 	public var projectHeight:Int = 600;
 	

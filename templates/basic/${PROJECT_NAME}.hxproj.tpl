@@ -32,7 +32,7 @@
   </haxelib>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
-    <compile path="source\${PROJECT_CLASS}.hx" />
+    <compile path="source\GameClass.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>

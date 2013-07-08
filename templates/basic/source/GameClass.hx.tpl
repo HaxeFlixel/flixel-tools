@@ -3,7 +3,7 @@ package;
 import flash.Lib;
 import flixel.FlxGame;
 	
-class ${PROJECT_CLASS} extends FlxGame
+class GameClass extends FlxGame
 {	
 	public function new()
 	{
