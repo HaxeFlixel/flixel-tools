@@ -29,6 +29,9 @@ class Warnings
 		warningList.set("drawCircle", "FlxSprite.drawCircle() has been moved to FlxSpriteUtil.drawCircle()");
 		warningList.set("fill", "FlxSprite.fill() has been moved to FlxSpriteUtil.fill()");
 		
+        // <haxedef name="FLX_RECORD"/>
+        warningList.set("FlxG.vcr", 'Add the FLX_RECORD compiler Variable to your project xml <haxedef name="FLX_RECORD"/>');
+
 		return warningList;
 	}
 }

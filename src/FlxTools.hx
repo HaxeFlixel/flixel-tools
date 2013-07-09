@@ -396,45 +396,56 @@ class FlxTools
 	 * 
 	 * @param	ProjectPath		Path to scan recursivley 
 	 */
-	static public function convertProjectFolder(ProjectPath:String)
-	{
-		for (fileName in FileSystem.readDirectory(ProjectPath))
-		{
-			if (FileSystem.isDirectory(ProjectPath + "/" + fileName))
-			{
-				convertProjectFolder(ProjectPath + "/" + fileName);
-			}
-			else
-			{
-				if (StringTools.endsWith(fileName, ".hx"))
-				{
-					var filePath:String = ProjectPath + "/" + fileName;
-					var sourceText:String = sys.io.File.getContent(filePath);
-					var originalText:String = Reflect.copy(sourceText);
-					
-					var replacements:Map<String, String> = FindAndReplace.findAndReplaceMap;
-					
-					for (fromString in replacements.keys())
-					{
-						var toString:String = replacements.get(fromString);
-						sourceText = StringTools.replace(sourceText, fromString, toString);
-						//todo
-						// warnings.push(scanFileForWarnings (filePath));
-					}
-					
-					if (originalText != sourceText)
-					{
-						Sys.println( "Updated " + fileName );
-						
-						FileSystem.deleteFile(filePath);
-						var o:FileOutput = sys.io.File.write(filePath, true);
-						o.writeString(sourceText);
-						o.close();
-					}
-				}
-			}
-		}
-	}
+    static public function convertProjectFolder(ProjectPath:String)
+    {
+        for (fileName in FileSystem.readDirectory(ProjectPath))
+        {
+            if (FileSystem.isDirectory(ProjectPath + "/" + fileName))
+            {
+                convertProjectFolder(ProjectPath + "/" + fileName);
+            }
+            else
+            {
+                if (StringTools.endsWith(fileName, ".hx"))
+                {
+                    var filePath:String = ProjectPath + "/" + fileName;
+                    var sourceText:String = sys.io.File.getContent(filePath);
+                    var originalText:String = Reflect.copy(sourceText);
+                    
+                    var replacements:Map<String, FindAndReplaceObject> = FindAndReplace.init();
+
+                    for ( replacement in replacements.keys() )
+                    {
+                        var obj:FindAndReplaceObject = replacements.get(replacement);
+
+                        sourceText = StringTools.replace(sourceText, obj.find, obj.replacement);
+                        
+                        if (originalText != sourceText)
+                        {   
+                            FileSystem.deleteFile(filePath);
+                            var o:FileOutput = sys.io.File.write(filePath, true);
+                            o.writeString(sourceText);
+                            o.close();
+                        }
+                    }
+
+                    for ( replacement in replacements.keys() )
+                    {
+                        var obj:FindAndReplaceObject = replacements.get(replacement);
+
+                        sourceText = StringTools.replace(sourceText, obj.find, obj.replacement);
+
+                        if( obj.importValidate != null )
+                        {
+                            var added = CommandLine.addImportToFile(filePath,obj.importValidate);    
+                        }
+                    }
+
+                    var warnings:Array<WarningResult> = scanFileForWarnings (filePath);
+                }
+            }
+        }
+    }
 
 	/**
 	 * Validate an openfl project by compiling it and checking the result
@@ -1177,47 +1188,54 @@ class FlxTools
 		return projects;
 	}
 
-	//todo
-	//public function scanFileForWarnings(FilePath:String):Array<WarningResult> 
-	//{
-		//var results = new Array<WarningResult>();
-	//
-		// open and read file line by line
-		//var fin = File.read(FilePath, false);
-	//
-		//try
-		//{
-			//var lineNum = 0;
-			//while (true)
-			//{
-				//var str = fin.readLine();
-				//Sys.println("line " + (++lineNum) + ": " + str);
-				//var warnings = Warnings.warningList;
-				//
-				//for ( warning in warnings.keys() )
-				//{
-					//var fix = warnings.get(warning);
-					//var search = new EReg("\\b" + warning + "\\b", "");
-					//var match = search.match(str);
-					//
-					//if(match)
-					//{
-						//Sys.println ("-------");
-						//Sys.println (match);
-						//Sys.println ("Line::"+lineNum);
-						//Sys.println ("filePath::"+filePath);
-						//Sys.println ("-------");
-					//}
-				//}
-			//}
-		//}
-		//catch( ex:haxe.io.Eof ) 
-		//{
-	//
-		//}
-	//
-		//fin.close();
-	//}
+	/**
+	 * Scans a file for a string to warn about
+	 * @param  FilePath the path of the file to scan
+	 * @return          WarningResult with data for what the warning was and info
+	 */
+    static public function scanFileForWarnings(FilePath:String):Array<WarningResult> 
+    {
+        var results = new Array<WarningResult>();
+
+        // open and read file line by line
+        var fin = File.read(FilePath, false);
+
+        try
+        {
+            var lineNum = 0;
+            while (true)
+            {
+                var str = fin.readLine();
+                lineNum++;
+                // Sys.println("line " + (++lineNum) + ": " + str);
+                var warnings = Warnings.warningList;
+                
+                for ( warning in warnings.keys() )
+                {
+                    var fix = warnings.get(warning);
+                    var search = new EReg("\\b" + warning + "\\b", "");
+                    var match = search.match(str);
+                    
+                    if(match)
+                    {
+                        Sys.println (" Warning-------");
+                        Sys.println (" FilePath::"+FilePath);
+                        Sys.println (" Line::"+lineNum);
+                        Sys.println (" Note::"+fix);
+                        Sys.println (" -------");
+                    }
+                }
+            }
+        }
+        catch( ex:haxe.io.Eof ) 
+        {
+
+        }
+
+        fin.close();
+
+        return results;
+    }
 }
 
 /**

@@ -14,6 +14,43 @@ import haxe.Json;
 class CommandLine
 {
 	/**
+	* Basic Ereg match to add an import above the first in a file if none exists
+	* @param FilePath     Path to the file to add to
+	* @param ImportString The complete import string to seach for and add
+	*/
+    public static function addImportToFile(FilePath:String, ImportString:String):Bool 
+    {
+        var str:String = File.getContent(FilePath);
+        
+        if(str.indexOf(ImportString) != -1)
+            return false;
+
+        var newLine = "\n";
+        var r = ~/import+/;
+        var newString = Reflect.copy(str);
+        r.match(str);
+
+        try
+        {
+            var matchPos = r.matchedPos();
+            var beggining = str.substr(0,matchPos.pos);
+            var end = str.substr(matchPos.pos, str.length);
+            newString = beggining + ImportString + newLine + end;
+        }
+        catch (e:Dynamic){}
+
+        if(newString != str)
+        {
+            File.saveContent(FilePath,newString);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+	/**
 	 * Prompt user with a y/n/a
 	 * 
 	 * @param	Question	String with the prompt to display
