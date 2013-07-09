@@ -44,8 +44,8 @@ class FindAndReplace
         add("FlxU.roundDecimal", "FlxMath.roundDecimal");
         add("FlxU.bound", "FlxMath.bound");
         add("FlxU.srand", "FlxRandom.srand", "import flixel.util.FlxRandom;");
-        add("FlxU.shuffle", "FlxArray.shuffle");
-        add("FlxU.getRandom", "FlxArray.getRandom");
+        add("FlxU.shuffle", "FlxArrayUtil.shuffle");
+        add("FlxU.getRandom", "FlxArrayUtil.getRandom");
         add("FlxU.formatTicks", "FlxStringUtil.formatTicks");
         add("FlxU.makeColor", "FlxColor.makeFromRGBA");
         add("FlxU.makeColorFromHSB", "FlxColor.makeColorFromHSBA");
@@ -61,8 +61,8 @@ class FindAndReplace
         add("FlxU.getAngle", "FlxAngle.getAngle");
         add("FlxU.degreesToRadians", "FlxAngle.asRadians");
         add("FlxU.getDistance", "FlxMath.getDistance");
-        add("FlxU.ArrayIndexOf", "FlxArray.indexOf");
-        add("FlxU.SetArrayLength", "FlxArray.setLength");
+        add("FlxU.ArrayIndexOf", "FlxArrayUtil.indexOf");
+        add("FlxU.SetArrayLength", "FlxArrayUtil.setLength");
         add("FlxU.MIN_VALUE", "FlxMath.MIN_VALUE");
         add("FlxU.MAX_VALUE", "FlxMath.MAX_VALUE");
         
@@ -93,8 +93,8 @@ class FindAndReplace
         add("FlxG.score", "Reg.score");
         add("FlxG.saves", "Reg.saves");
         add("FlxG.save", "Reg.save");
-        add("FlxG.shuffle", "FlxArray.shuffle");
-        add("FlxG.getRandom", "FlxArray.getRandom");
+        add("FlxG.shuffle", "FlxArrayUtil.shuffle");
+        add("FlxG.getRandom", "FlxArrayUtil.getRandom");
         add("FlxG.globalSeed", "FlxRandom.globalSeed", "import flixel.util.FlxRandom;");
         
         // CameraFrontEnd
