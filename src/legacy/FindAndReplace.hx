@@ -47,10 +47,10 @@ class FindAndReplace
         add("FlxU.shuffle", "FlxArrayUtil.shuffle");
         add("FlxU.getRandom", "FlxArrayUtil.getRandom");
         add("FlxU.formatTicks", "FlxStringUtil.formatTicks");
-        add("FlxU.makeColor", "FlxColor.makeFromRGBA");
-        add("FlxU.makeColorFromHSB", "FlxColor.makeColorFromHSBA");
-        add("FlxU.getRGBA", "FlxColor.getRGBA");
-        add("FlxU.getHSB", "FlxColor.getHSBA");
+        add("FlxU.makeColor", "FlxColorUtil.makeFromRGBA");
+        add("FlxU.makeColorFromHSB", "FlxColorUtil.makeColorFromHSBA");
+        add("FlxU.getRGBA", "FlxColorUtil.getRGBA");
+        add("FlxU.getHSB", "FlxColorUtil.getHSBA");
         add("FlxU.formatTime", "FlxStringUtil.formatTime");
         add("FlxU.formatArray", "FlxStringUtil.formatArray");
         add("FlxU.formatMoney", "FlxStringUtil.formatMoney");
