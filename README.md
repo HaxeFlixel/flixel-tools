@@ -1,6 +1,6 @@
 flixel-tools
 ============
-###Related repos: [flixel](https://github.com/HaxeFlixel/flixel) | [flixel-addons](https://github.com/HaxeFlixel/flixel-addons) | [flixel-samples](https://github.com/HaxeFlixel/flixel-samples)
+###Related repos: [flixel](https://github.com/HaxeFlixel/flixel) | [flixel-addons](https://github.com/HaxeFlixel/flixel-addons) | [flixel-demos](https://github.com/HaxeFlixel/flixel-demos)
 ______________________________________________________
 Command line tools for [HaxeFlixel](https://github.com/HaxeFlixel/flixel) to create samples, templates and more.
 
@@ -23,7 +23,7 @@ To set the tools up initially / to be able to use the `flixel` alias in your con
 haxelib run flixel-tools setup
 ```
 
-To clone the [flixel-samples](https://github.com/HaxeFlixel/flixel-samples) repo (for sample creation):
+To clone the [flixel-demos](https://github.com/HaxeFlixel/flixel-demos) repo (for demo creation):
 
 ```batch
 flixel download
@@ -31,7 +31,7 @@ flixel download
 
 ###Commands
 
-Create a new sample (in the current directory):
+Create a new demo (in the current directory):
 
 ```batch
 flixel create <name>
@@ -50,16 +50,16 @@ Install the [project template for FlashDevelop](https://github.com/HaxeFlixel/Fl
 flixel template flashdevelop-basic
 ```
 
-List all available projects and samples:
+List all available projects and demos:
 
 ```batch
 flixel list
 ```
 
-List all available samples:
+List all available demos:
 
 ```batch
-flixel list samples
+flixel list demos
 ```
 
 List all available templates:
