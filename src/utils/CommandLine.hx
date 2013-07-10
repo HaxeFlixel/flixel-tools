@@ -77,6 +77,61 @@ class CommandLine
 	}
 
 	/**
+	 * As the user a question with automatic numeric references to string answers,
+	 * includes simple validation and cancel
+	 * @param  Question        String to display as the question
+	 * @param  Answers<String> Array<String> containing all the available answers
+	 * @return                 String the answer given or null if the choice was invalid
+	 */
+	static public function askQustionStrings(Question:String, Answers:Array<String>):String
+	{
+		while (true)
+		{
+			Sys.println("");
+			Sys.println(Question);    
+			Sys.println("");
+
+			for( i in 0...Answers.length )
+			{
+				Sys.println( "[" + i + "] " + Answers[i]);
+			}
+
+			Sys.println( "");
+			Sys.println( "[c] Cancel");
+			Sys.println( "");
+
+			var userResponse = readLine();
+			var validAnswer = "";
+
+			for( i in 0...Answers.length )
+			{
+				if( Answers[i] == userResponse || Std.string(i) == userResponse )
+				{
+					validAnswer = userResponse;
+				}
+				else if(userResponse == "c")
+				{
+					Sys.println("Canceled");
+					return null;
+				}
+			}
+
+			if (validAnswer != "")
+			{
+				Sys.println("Choosing option " + userResponse);
+				return userResponse;
+			}
+			else
+			{
+				Sys.println("Your choice was invlaid");
+				return null;
+			}
+		}
+		
+		return null;
+	}
+
+	/**
 	 * Shortcut to the readline of the command line
 	 * 
 	 * @return	String of the current line
