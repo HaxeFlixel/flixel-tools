@@ -31,8 +31,8 @@ class FindAndReplace
 		 * FlxU splitup
 		 */
 		
-		add("FlxU.openURL", "FlxMisc.openURL", "import flixel.util.FlxMisc;");
-		add("FlxU.getTicks", "FlxMisc.getTicks", "import flixel.util.FlxMisc;");
+		add("FlxU.openURL", "FlxMisc.openURL", "import flixel.util.FlxMisc");
+		add("FlxU.getTicks", "FlxMisc.getTicks", "import flixel.util.FlxMisc");
 		add("FlxU.compareClassNames", "FlxMisc.compareClassNames");
 		add("FlxU.abs", "Math.abs");
 		add("FlxU.floor", "Math.floor");
@@ -42,7 +42,7 @@ class FindAndReplace
 		add("FlxU.round", "Std.int");
 		add("FlxU.roundDecimal", "FlxMath.roundDecimal");
 		add("FlxU.bound", "FlxMath.bound");
-		add("FlxU.srand", "FlxRandom.srand", "import flixel.util.FlxRandom;");
+		add("FlxU.srand", "FlxRandom.srand", "import flixel.util.FlxRandom");
 		add("FlxU.shuffle", "FlxArrayUtil.shuffle");
 		add("FlxU.getRandom", "FlxArrayUtil.getRandom");
 		add("FlxU.formatTicks", "FlxStringUtil.formatTicks");
@@ -70,7 +70,7 @@ class FindAndReplace
 		 */
 		
 		add("FlxG.getLibraryName()", "FlxG.libraryName");
-		add("FlxG.random", "FlxRandom.float", "import flixel.util.FlxRandom;");
+		add("FlxG.random", "FlxRandom.float", "import flixel.util.FlxRandom");
 		add("FlxG.DEBUGGER_STANDARD", "FlxDebugger.STANDARD");
 		add("FlxG.DEBUGGER_MICRO", "FlxDebugger.MICRO");
 		add("FlxG.DEBUGGER_BIG", "FlxDebugger.BIG");
@@ -94,7 +94,7 @@ class FindAndReplace
 		add("FlxG.save", "Reg.save");
 		add("FlxG.shuffle", "FlxArrayUtil.shuffle");
 		add("FlxG.getRandom", "FlxArrayUtil.getRandom");
-		add("FlxG.globalSeed", "FlxRandom.globalSeed", "import flixel.util.FlxRandom;");
+		add("FlxG.globalSeed", "FlxRandom.globalSeed", "import flixel.util.FlxRandom");
 		
 		// CameraFrontEnd
 		add("FlxG.bgColor", "FlxG.state.bgColor");
