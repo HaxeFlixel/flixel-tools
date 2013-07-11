@@ -195,9 +195,9 @@ class FindAndReplace
         // util
         add("flixel.FlxSave", "flixel.util.FlxSave");
         add("flixel.FlxPath", "flixel.util.FlxPath");
-        add("FlxColor.makeFromRGBA", "FlxColorUtil.makeFromRGBA")
-        add("flixel.util.FlxString", "flixel.util.FlxStringUtil")
-        add("FlxString.getClassName", "FlxStringUtil.getClassName")
+        add("FlxColor.makeFromRGBA", "FlxColorUtil.makeFromRGBA");
+        add("flixel.util.FlxString", "flixel.util.FlxStringUtil");
+        add("FlxString.getClassName", "FlxStringUtil.getClassName");
         
         // tile
         add("flixel.FlxTilemap", "flixel.tile.FlxTilemap");
@@ -213,11 +213,11 @@ class FindAndReplace
         
         // addons
         add("flixel.addons.FlxCaveGenerator", "flixel.addons.tile.FlxCaveGenerator");
-        add("flixel.addons.FlxSkewedSprite", "flixel.addons.display.FlxSkewedSprite");
         add("flixel.addons.FlxTilemapExt", "flixel.addons.tile.FlxTilemapExt");
+        add("flixel.addons.FlxSkewedSprite", "flixel.addons.display.FlxSkewedSprite");
         
         // photonstorm
-        add("flixel.plugin.photonstorm.FlxSpecialFX", "flixel.effects.FlxSpecialFX");
+        add("flixel.plugin.photonstorm.FlxSpecialFX", "flixel.effects.FlxSpecialFX")
         add("flixel.plugin.photonstorm.fx.BaseFX", "flixel.effects.fx.BaseFX");
         add("flixel.plugin.photonstorm.fx.GlitchFX", "flixel.effects.fx.GlitchFX");
         add("flixel.plugin.photonstorm.fx.StarfieldFX", "flixel.effects.fx.StarfieldFX");
@@ -235,7 +235,7 @@ class FindAndReplace
         add("flixel.FlxTypedGroup", "flixel.group.FlxTypedGroup");
         
         // sounds
-        add("flixel.FlxSound", "flixel.system.FlxSound")
+        add("flixel.FlxSound", "flixel.system.FlxSound");
 
         return replacements;
     }
