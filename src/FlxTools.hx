@@ -1089,6 +1089,14 @@ class FlxTools
 		{
 			DemoPath = PathHelper.getHaxelib(new Haxelib ("flixel-demos"));
 			
+			if(DemoPath == "")
+			{
+				Sys.println(" No demos found, have you installed the haxelib flixel-demos yet?");
+				Sys.println(' Please run the "flixel download demos" command.');
+				Sys.println("");
+				return null;
+			}
+
 			if (Display)
 			{
 				Sys.println(" Listing Demos from the current flixel-demos haxelib installed.");
