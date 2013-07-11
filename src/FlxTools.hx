@@ -1025,6 +1025,8 @@ class FlxTools
 			Sys.println(" You have not provided a name to create.");
 			Sys.println(" To list available templates and demos use the list command");
 			Sys.println(" Usage : flixel list");
+
+			return;
 		}
 		
 		var demo:DemoProject = demoExists(Name);
@@ -1040,10 +1042,12 @@ class FlxTools
 			{
 				Sys.println(" - Created " + Name);
 				Sys.println(destination);
+				return;
 			}
 			else
 			{
-				Sys.println(" There was a problem creating " + destination);
+				Sys.println(" There was an unknown problem creating " + destination);
+				return;
 			}
 		}
 		else
@@ -1051,6 +1055,7 @@ class FlxTools
 			Sys.println(" Error there is no demo installed with the name of " + Name);
 			Sys.println(' Have you run the "flixel download demos" command yet?');
 			Sys.println("");
+			return;
 		}
 	}
 
@@ -1096,9 +1101,12 @@ class FlxTools
 			
 			if(DemoPath == "")
 			{
-				Sys.println(" No demos found, have you installed the haxelib flixel-demos yet?");
-				Sys.println(' Please run the "flixel download demos" command.');
-				Sys.println("");
+				if (Display)
+				{
+					Sys.println(" No demos found, have you installed the haxelib flixel-demos yet?");
+					Sys.println(' Please run the "flixel download demos" command.');
+					Sys.println("");
+				}
 				return null;
 			}
 
