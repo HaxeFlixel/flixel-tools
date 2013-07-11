@@ -18,36 +18,39 @@ class CommandLine
 	* @param FilePath     Path to the file to add to
 	* @param ImportString The complete import string to seach for and add
 	*/
-    public static function addImportToFile(FilePath:String, ImportString:String):Bool 
+    public static function addImportToFileString(FileString:String, ImportString:String):String 
     {
-        var str:String = File.getContent(FilePath);
-        
-        if(str.indexOf(ImportString) != -1)
-            return false;
+        var str:String = FileString;
+        var match = strmatch(ImportString, str);
 
-        var newLine = "\n";
-        var r = ~/import+/;
-        var newString = Reflect.copy(str);
-        r.match(str);
+        if(!match)
+        {
+	        var newLine = "\n";
+	        var r = ~/import+/;
+	        var newString = Reflect.copy(str);
+	        r.match(str);
 
-        try
-        {
-            var matchPos = r.matchedPos();
-            var beggining = str.substr(0,matchPos.pos);
-            var end = str.substr(matchPos.pos, str.length);
-            newString = beggining + ImportString + newLine + end;
-        }
-        catch (e:Dynamic){}
+	        try
+	        {
+	            var matchPos = r.matchedPos();
+	            var beggining = str.substr(0,matchPos.pos);
+	            var end = str.substr(matchPos.pos, str.length);
+	            newString = beggining + ImportString + ";" + newLine + end;
+	        }
+	        catch (e:Dynamic){}
 
-        if(newString != str)
-        {
-            File.saveContent(FilePath,newString);
-            return true;
+	        if(newString != str)
+	        {
+	            return newString;
+	        }
+	        else
+	        {
+	            return null;
+	        }
+
         }
-        else
-        {
-            return false;
-        }
+
+        return null;
     }
 
 	/**
@@ -147,9 +150,9 @@ class CommandLine
 	 * @param	HaxelibName		String name of the Haxelib to load
 	 * @return	Haxelib typedef or null if no Haxelib was found
 	 */
-	static public function getHaxelibJsonData(haxelibName:String):HaxelibJSON
+	static public function getHaxelibJsonData(HaxelibName:String):HaxelibJSON
 	{
-		var haxleibJsonPath = PathHelper.getHaxelib(new Haxelib(haxelibName));
+		var haxleibJsonPath = PathHelper.getHaxelib(new Haxelib(HaxelibName));
 		
 		if (haxleibJsonPath == "")
 		{
@@ -160,6 +163,13 @@ class CommandLine
 		var jsonData:HaxelibJSON = Json.parse(jsonContent);
 		
 		return jsonData;
+	}
+
+
+	static public function strmatch(Needle:String, Haystack:String):Bool
+	{
+		var search = new EReg("\\b" + Needle + "\\b", "");
+        return search.match(Haystack);
 	}
 }
 

@@ -350,7 +350,7 @@ class FlxTools
 	/**
 	 * Convert an old HaxeFlixel project
 	 */
-	static public function convertProject()
+	static public function convertProject():Void
 	{
 		if (StringTools.startsWith(commandsSet.fromDir,"./"))
 		{
@@ -379,11 +379,17 @@ class FlxTools
 				}
 			}
 			
-			convertProjectPath += "/source";
-			convertProjectFolder(convertProjectPath);
-			
-			Sys.println(" Warning although this command updates a lot, its not perfect.");
-			Sys.println(" Please visit haxeflixel.com/wiki/convert for further documentation on converting old code.");
+			if(FileSystem.exists(convertProjectPath))
+			{
+				convertProjectFolder(convertProjectPath, true);
+			}
+			else 
+			{
+				Sys.println(" ");
+				Sys.println(" Warning there was a problem with the path to convert.");
+				Sys.println(" " + convertProjectPath);
+				Sys.println(" ");
+			}
 		} 
 		else 
 		{
@@ -396,13 +402,23 @@ class FlxTools
 	 * 
 	 * @param	ProjectPath		Path to scan recursivley 
 	 */
-    static public function convertProjectFolder(ProjectPath:String)
+    static public function convertProjectFolder(ProjectPath:String, Display:Bool=false):Array<WarningResult>
     {
+    	var warnings:Array<WarningResult> = new Array<WarningResult>();
+
         for (fileName in FileSystem.readDirectory(ProjectPath))
         {
             if (FileSystem.isDirectory(ProjectPath + "/" + fileName))
             {
-                convertProjectFolder(ProjectPath + "/" + fileName);
+                var recursiveWarnings:Array<WarningResult> = convertProjectFolder(ProjectPath + "/" + fileName, false);
+
+                if(recursiveWarnings != null)
+                {            	
+	                for ( warning in recursiveWarnings )
+	                {
+	                	warnings.push(warning);
+	                }
+                }
             }
             else
             {
@@ -411,7 +427,6 @@ class FlxTools
                     var filePath:String = ProjectPath + "/" + fileName;
                     var sourceText:String = sys.io.File.getContent(filePath);
                     var originalText:String = Reflect.copy(sourceText);
-                    
                     var replacements:Map<String, FindAndReplaceObject> = FindAndReplace.init();
 
                     for ( replacement in replacements.keys() )
@@ -422,6 +437,19 @@ class FlxTools
                         
                         if (originalText != sourceText)
                         {   
+                            if(obj.importValidate != null && CommandLine.strmatch(obj.find, originalText))
+                            {
+                            	var newText = CommandLine.addImportToFileString(sourceText,obj.importValidate);
+
+                            	if(newText!=null)
+                            	{
+                            		Sys.println("obj.find " + obj.find);
+                            		Sys.println("added " + obj.importValidate);
+                            		Sys.println("filePath " + filePath);
+                            		sourceText = newText;
+                            	}
+                            }
+
                             FileSystem.deleteFile(filePath);
                             var o:FileOutput = sys.io.File.write(filePath, true);
                             o.writeString(sourceText);
@@ -429,28 +457,46 @@ class FlxTools
                         }
                     }
 
-                    for ( replacement in replacements.keys() )
-                    {
-                        var obj:FindAndReplaceObject = replacements.get(replacement);
+                    var warningsCurrent = scanFileForWarnings (filePath);
 
-                        sourceText = StringTools.replace(sourceText, obj.find, obj.replacement);
+					if(warningsCurrent != null)
+					{            	
+						for ( warning in warningsCurrent )
+						{
+							warnings.push(warning);
+						}
+					}
 
-                        if( obj.importValidate != null )
-                        {
-                            var added = CommandLine.addImportToFile(filePath,obj.importValidate);    
-                        }
-                    }
-
-                    var warnings:Array<WarningResult> = scanFileForWarnings (filePath);
                 }
             }
         }
+
+        if(Display)
+        {
+			Sys.println("");
+			Sys.println(warnings.length + " Warnings");
+
+        	for ( warning in warnings )
+        	{
+				Sys.println("");
+				Sys.println("--"+warning);
+				Sys.println("");
+        	}
+			
+			Sys.println("");
+        	Sys.println(" Warning although this command updates a lot, its not perfect.");
+	      	//todo wiki page
+			Sys.println(" Please visit haxeflixel.com/wiki/convert for further documentation on converting old code.");
+			Sys.println("");
+        }
+
+        return warnings;
     }
 
 	/**
 	 * Validate an openfl project by compiling it and checking the result
 	 */
-	static public function validateProject()
+	static public function validateProject():Void
 	{
 		if (commandsSet.recursive)
 		{
@@ -1239,19 +1285,20 @@ class FlxTools
                     
                     if(match)
                     {
-                        Sys.println (" Warning-------");
-                        Sys.println (" FilePath::"+FilePath);
-                        Sys.println (" Line::"+lineNum);
-                        Sys.println (" Note::"+fix);
-                        Sys.println (" -------");
+						var result:WarningResult = 
+						{ 
+							oldCode : warning,
+							newCode : fix,
+							lineNumber : Std.string(lineNum),
+							filePath : FilePath,
+						};
+
+						results.push(result);
                     }
                 }
             }
         }
-        catch( ex:haxe.io.Eof ) 
-        {
-
-        }
+        catch( ex:haxe.io.Eof ){}
 
         fin.close();
 
@@ -1312,7 +1359,6 @@ typedef WarningResult = {
 	var newCode:String;
 	var lineNumber:String;
 	var filePath:String;
-	var fileName:String;
 }
 
 /**
