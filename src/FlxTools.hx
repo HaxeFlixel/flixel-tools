@@ -1048,7 +1048,9 @@ class FlxTools
 		}
 		else
 		{
-			Sys.println(" Error there is no demo with the name of " + Name);
+			Sys.println(" Error there is no demo installed with the name of " + Name);
+			Sys.println(' Have you run the "flixel download demos" command yet?');
+			Sys.println("");
 		}
 	}
 
@@ -1062,6 +1064,9 @@ class FlxTools
 	static public function demoExists(Name:String, ProjectPath:String = ""):DemoProject 
 	{
 		var demos = listAllDemos("", false);
+
+		if(demos == null)
+			return null;
 		
 		for (demo in demos.keys())
 		{
