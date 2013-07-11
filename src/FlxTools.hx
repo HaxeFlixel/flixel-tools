@@ -17,8 +17,8 @@ import legacy.FindAndReplace;
 
 /**
  * Flixel-Tools
- * Command line utility to create flixel samples, project templates and more.
- * Ability to batch compile the samples for validation
+ * Command line utility to create flixel demos, project templates and more.
+ * Ability to batch compile the demos for validation
  * Basic find and replace tool for old HaxeFlixel code
  *
  * @author Chris Decoster aka impaler
@@ -91,7 +91,7 @@ class FlxTools
 		}
 		else if (commandsSet.create)
 		{
-			createSample(commandsSet.createName);
+			createDemo(commandsSet.createName);
 		}
 		else if (commandsSet.template)
 		{
@@ -103,15 +103,15 @@ class FlxTools
 		}
 		else if (commandsSet.list)
 		{
-			if (!commandsSet.listSamples && !commandsSet.listTemplates)
+			if (!commandsSet.listDemos && !commandsSet.listTemplates)
 			{
 				scanTemplates();
 				Sys.println("");
-				listAllSamples("",true);
+				listAllDemos("",true);
 			}
-			else if (commandsSet.listSamples)
+			else if (commandsSet.listDemos)
 			{
-				listAllSamples("",true);
+				listAllDemos("",true);
 			}
 			else if (commandsSet.listTemplates)
 			{
@@ -128,7 +128,7 @@ class FlxTools
 		}
 		else if (commandsSet.download)
 		{
-			downloadSamples();
+			downloadDemos();
 		}
 		else
 		{
@@ -152,7 +152,7 @@ class FlxTools
 		
 		Sys.println("");
 		
-		Sys.println(" Create a sample by name");
+		Sys.println(" Create a demo by name");
 		Sys.println(" Usage : " + ALIAS + " create <name>");
 		
 		Sys.println("");
@@ -162,18 +162,18 @@ class FlxTools
 		
 		Sys.println("");
 		
-		Sys.println(" List available samples and templates");
+		Sys.println(" List available demos and templates");
 		Sys.println(" Usage : " + ALIAS + " list");
 		
 		Sys.println("");
 		
-		Sys.println(" Download all the HaxeFlixel samples");
-		Sys.println(" Usage : " + ALIAS + " download samples");
+		Sys.println(" Download all the HaxeFlixel demos");
+		Sys.println(" Usage : " + ALIAS + " download demos");
 		
 		Sys.println("");
 		
-		Sys.println(" List available samples");
-		Sys.println(" Usage : " + ALIAS + " list samples");
+		Sys.println(" List available demos");
+		Sys.println(" Usage : " + ALIAS + " list demos");
 		
 		Sys.println("");
 		
@@ -239,7 +239,7 @@ class FlxTools
 			}
 			else
 			{
-				Sys.println(" Error there is no sample with the name of " + Name);
+				Sys.println(" Error there is no demo with the name of " + Name);
 			}
 		}
 	}
@@ -326,23 +326,23 @@ class FlxTools
 	}
 
 	/**
-	 * Download the HaxeFlixel Samples from github using haxelib
+	 * Download the HaxeFlixel Demos from github using haxelib
 	 */
-	static public function downloadSamples():Void
+	static public function downloadDemos():Void
 	{
-		var path:String = PathHelper.getHaxelib(new Haxelib("flixel-samples"));
+		var path:String = PathHelper.getHaxelib(new Haxelib("flixel-demos"));
 		
 		if (path == "")
 		{
-			Sys.command("haxelib git flixel-samples https://github.com/HaxeFlixel/flixel-samples.git");
-			Sys.command("flixel list samples");
+			Sys.command("haxelib git flixel-demos https://github.com/HaxeFlixel/flixel-demos.git");
+			Sys.command("flixel list demos");
 			Sys.println("");
-			Sys.println(" Create a sample by name");
+			Sys.println(" Create a demo by name");
 			Sys.println(" Usage : " + ALIAS + " create <name>");
 		}
 		else
 		{
-			Sys.println( " You already have flixel-samples installed" );
+			Sys.println( " You already have flixel-demos installed" );
 			Sys.println(path);
 		}
 	}
@@ -454,7 +454,7 @@ class FlxTools
 	{
 		if (commandsSet.recursive)
 		{
-			compileAllSamples();
+			compileAllDemos();
 		}
 		else 
 		{
@@ -484,7 +484,7 @@ class FlxTools
 	 * @param	Display		Echo progress on the command line
 	 * @return	BuildResult the result of the compilation
 	 */
-	static public function buildProject(Target:String, Project:SampleProject, Display:Bool = false):BuildResult
+	static public function buildProject(Target:String, Project:DemoProject, Display:Bool = false):BuildResult
 	{
 		if (Target == "native")
 		{
@@ -697,10 +697,10 @@ class FlxTools
 		
 		while (index < Arguments.length)
 		{
-			if (Arguments[index] == "samples")
+			if (Arguments[index] == "demos")
 			{
 				index++;
-				commandsSet.listSamples = true;
+				commandsSet.listDemos = true;
 			}
 			else if (Arguments[index] == "templates")
 			{
@@ -763,106 +763,106 @@ class FlxTools
 	}
 
 	/**
-	 * Validate all the samples recursivley
+	 * Validate all the demos recursivley
 	 *
-	 * @param	Location	Location of the samples directory to scan and validate
+	 * @param	Location	Location of the demos directory to scan and validate
 	 */
-	static public function compileAllSamples(Location:String = ""):Void
+	static public function compileAllDemos(Location:String = ""):Void
 	{
 		if (Location == "")
 		{
-			Sys.println(" Copying all samples into the current working directory.");
+			Sys.println(" Copying all demos into the current working directory.");
 			
-			var samplesPath:String = PathHelper.getHaxelib(new Haxelib ("flixel-samples"));
-			Location = Sys.getCwd() + "flixel-samples-validation/";
-			FileHelper.recursiveCopy(samplesPath, Location);
+			var demosPath:String = PathHelper.getHaxelib(new Haxelib ("flixel-demos"));
+			Location = Sys.getCwd() + "flixel-demos-validation/";
+			FileHelper.recursiveCopy(demosPath, Location);
 		}
 		
-		var projects:Map<String, SampleProject> = listAllSamples(Location, false);
+		var projects:Map<String, DemoProject> = listAllDemos(Location, false);
 		
 		var results = new Array<BuildResult>();
 		
-		var flashOnly = new Array<SampleProject>();
-		var nonFlash = new Array<SampleProject>();
-		var allTargets = new Array<SampleProject>();
+		var flashOnly = new Array<DemoProject>();
+		var nonFlash = new Array<DemoProject>();
+		var allTargets = new Array<DemoProject>();
 		
-		Sys.println(" " + Lambda.count(projects) + " samples available to compile.");
+		Sys.println(" " + Lambda.count(projects) + " demos available to compile.");
 		
 		for (project in projects.keys())
 		{
-			var sampleProject:SampleProject = projects.get(project);
+			var demoProject:DemoProject = projects.get(project);
 			
-			if (sampleProject.TARGETS != null)
+			if (demoProject.TARGETS != null)
 			{
-				if (sampleProject.TARGETS == "FlashOnly")
+				if (demoProject.TARGETS == "FlashOnly")
 				{
-					flashOnly.push(sampleProject);
+					flashOnly.push(demoProject);
 				}
-				else if (sampleProject.TARGETS == "NonFlash")
+				else if (demoProject.TARGETS == "NonFlash")
 				{
-					nonFlash.push(sampleProject);
+					nonFlash.push(demoProject);
 				}
-				else if (sampleProject.TARGETS == "All") 
+				else if (demoProject.TARGETS == "All") 
 				{
-					allTargets.push(sampleProject); 
+					allTargets.push(demoProject); 
 				}
 			}
 			else  
 			{
-				Sys.println(" Error no valid samples were found.");
+				Sys.println(" Error no valid demos were found.");
 				return;
 			}
 		}
 		
 		Sys.println("");
-		Sys.println(" - Samples for all targets");
+		Sys.println(" - Demos for all targets");
 		
-		for (sample in allTargets)
+		for (demo in allTargets)
 		{
-			var sampleProject:SampleProject = sample;
-			Sys.println(" Building::" + sampleProject.NAME);
+			var demoProject:DemoProject = demo;
+			Sys.println(" Building::" + demoProject.NAME);
 		
-			results.push(buildProject("flash", sampleProject));
-			// results.push(buildProject("neko", sampleProject));
-			// results.push(buildProject("native", sampleProject));
-			// results.push(buildProject("html5", sampleProject));
+			results.push(buildProject("flash", demoProject));
+			// results.push(buildProject("neko", demoProject));
+			// results.push(buildProject("native", demoProject));
+			// results.push(buildProject("html5", demoProject));
 		}
 		
 		Sys.println("");
-		Sys.println(" - Samples Flash target only");
+		Sys.println(" - Demos Flash target only");
 		
-		for (sample in flashOnly)
+		for (demo in flashOnly)
 		{
-			var sampleProject:SampleProject = sample;
-			Sys.println(" Building::" + sampleProject.NAME);
+			var demoProject:DemoProject = demo;
+			Sys.println(" Building::" + demoProject.NAME);
 			
-			results.push(buildProject("flash", sampleProject));
+			results.push(buildProject("flash", demoProject));
 			
 		}
 		
 		Sys.println("");
-		Sys.println(" - Samples for CPP target only");
+		Sys.println(" - Demos for CPP target only");
 		
-		for (sample in nonFlash)
+		for (demo in nonFlash)
 		{
-			var sampleProject:SampleProject = sample;
-			Sys.println(" Building::" + sampleProject.NAME);
+			var demoProject:DemoProject = demo;
+			Sys.println(" Building::" + demoProject.NAME);
 			
-			results.push(buildProject("neko", sampleProject));
-			// results.push(buildProject("native", sampleproject));
+			results.push(buildProject("neko", demoProject));
+			// results.push(buildProject("native", demoproject));
 		}
 		
 		Sys.println ("");
 		
 		for (result in results)
 		{
-			var sampleProjectResult:BuildResult = result;
+			var demoProjectResult:BuildResult = result;
 			
 			Sys.println ("-------------------------------------------------");
-			Sys.println (sampleProjectResult.project.NAME);
-			Sys.println (sampleProjectResult.result);
-			Sys.println (sampleProjectResult.project.TARGETS);
-			Sys.println (sampleProjectResult.project.PROJECTXMLPATH);
+			Sys.println (demoProjectResult.project.NAME);
+			Sys.println (demoProjectResult.result);
+			Sys.println (demoProjectResult.project.TARGETS);
+			Sys.println (demoProjectResult.project.PROJECTXMLPATH);
 			Sys.println ("-------------------------------------------------");
 		}
 	}
@@ -870,31 +870,31 @@ class FlxTools
 	/**
 	 * Scan a folder recursivley for openfl project files
 	 *
-	 * @param	SamplesPath		[description]
+	 * @param	DemosPath		[description]
 	 * @param	Display			[description]
 	 * @return					[description]
 	 */
-	static public function scanProjectXML(SamplesPath:String = "", Display:Bool = false):Map<String, SampleProject>
+	static public function scanProjectXML(DemosPath:String = "", Display:Bool = false):Map<String, DemoProject>
 	{
-		if (SamplesPath == "")
+		if (DemosPath == "")
 		{
-			SamplesPath = PathHelper.getHaxelib(new Haxelib ("flixel-samples"));
+			DemosPath = PathHelper.getHaxelib(new Haxelib ("flixel-demos"));
 		}
 		
 		if (Display)
 		{
-			Sys.println(" Scan for samples in::" + SamplesPath);
+			Sys.println(" Scan for demos in::" + DemosPath);
 		}
 		
-		var samples = new Map<String, SampleProject>();
+		var demos = new Map<String, DemoProject>();
 		
-		for (name in FileSystem.readDirectory(SamplesPath))
+		for (name in FileSystem.readDirectory(DemosPath))
 		{
-			var folderPath:String = SamplesPath + "/" + name;
+			var folderPath:String = DemosPath + "/" + name;
 			
 			if (Display)
 			{
-				Sys.println(" ScanningFolder::" + SamplesPath);
+				Sys.println(" ScanningFolder::" + DemosPath);
 			}
 			
 			if (!StringTools.startsWith(name, ".") && FileSystem.isDirectory(folderPath))
@@ -911,23 +911,23 @@ class FlxTools
 					if (name == "FlashOnly" || name == "NonFlash")
 					{
 						var subpath:String = folderPath;
-						var moreSamples:Map<String, SampleProject> = scanProjectXML(subpath, Display);
+						var moreDemos:Map<String, DemoProject> = scanProjectXML(subpath, Display);
 						
-						for (sample in moreSamples.keys())
+						for (demo in moreDemos.keys())
 						{
-							var project:SampleProject = moreSamples.get(sample);
+							var project:DemoProject = moreDemos.get(demo);
 							project.TARGETS = name;
 							
 							if (FileSystem.exists(project.PATH))
 							{
-								samples.set(project.NAME, project);
+								demos.set(project.NAME, project);
 							}
 						}
 					}
 				}
 				else
 				{
-					var project:SampleProject = 
+					var project:DemoProject = 
 					{ 
 						NAME : name,
 						PATH : folderPath,
@@ -937,7 +937,7 @@ class FlxTools
 					
 					if (FileSystem.exists(project.PATH))
 					{
-						samples.set(project.NAME, project);
+						demos.set(project.NAME, project);
 						
 						if (Display)
 						{
@@ -948,7 +948,7 @@ class FlxTools
 			}
 		}
 		
-		return samples;
+		return demos;
 	}
 	
 	/**
@@ -1014,27 +1014,27 @@ class FlxTools
 	}
 
 	/**
-	 * Create a sample by recursivly copying the folder according to a name
+	 * Create a demo by recursivly copying the folder according to a name
 	 * 
-	 * @param	Name	The name of the sample to create
+	 * @param	Name	The name of the demo to create
 	 */
-	static public function createSample(?Name:String):Void
+	static public function createDemo(?Name:String):Void
 	{
 		if (Name == null)
 		{
 			Sys.println(" You have not provided a name to create.");
-			Sys.println(" To list available templates and samples use the list command");
+			Sys.println(" To list available templates and demos use the list command");
 			Sys.println(" Usage : flixel list");
 		}
 		
-		var sample:SampleProject = sampleExists(Name);
+		var demo:DemoProject = demoExists(Name);
 		
-		if (sample != null)
+		if (demo != null)
 		{
 			Sys.println(" - Creating " + Name);
 			
 			var destination = Sys.getCwd() + Name;
-			FileHelper.recursiveCopy(sample.PATH, destination);
+			FileHelper.recursiveCopy(demo.PATH, destination);
 			
 			if (FileSystem.isDirectory(destination))
 			{
@@ -1048,28 +1048,28 @@ class FlxTools
 		}
 		else
 		{
-			Sys.println(" Error there is no sample with the name of " + Name);
+			Sys.println(" Error there is no demo with the name of " + Name);
 		}
 	}
 
 	/**
-	 * Check if a Sample exists in a path recursivley
+	 * Check if a Demo exists in a path recursivley
 	 * 
-	 * @param	Name			Name of the sample
-	 * @param	ProjectPath		The path to scan, default scan flixel-samples haxelib
-	 * @return	SampleProject object or null if none found
+	 * @param	Name			Name of the demo
+	 * @param	ProjectPath		The path to scan, default scan flixel-demos haxelib
+	 * @return	DemoProject object or null if none found
 	 */
-	static public function sampleExists(Name:String, ProjectPath:String = ""):SampleProject 
+	static public function demoExists(Name:String, ProjectPath:String = ""):DemoProject 
 	{
-		var samples = listAllSamples("", false);
+		var demos = listAllDemos("", false);
 		
-		for (sample in samples.keys())
+		for (demo in demos.keys())
 		{
-			var sampleProject:SampleProject = samples.get(sample);
+			var demoProject:DemoProject = demos.get(demo);
 			
-			if (sampleProject.NAME == Name)
+			if (demoProject.NAME == Name)
 			{
-				return sampleProject;
+				return demoProject;
 			}
 		}
 		
@@ -1077,60 +1077,60 @@ class FlxTools
 	}
 
 	/**
-	 * List all the samples in a folder, default the flixel samples haxelib installed
+	 * List all the demos in a folder, default the flixel demos haxelib installed
 	 * 
-	 * @param	SamplePath	The folder to recursivley scan for samples
+	 * @param	DemoPath	The folder to recursivley scan for demos
 	 * @param	Display		Print output to the command line
-	 * @return	SampleProject typedef of each sample found
+	 * @return	DemoProject typedef of each demo found
 	 */
-	static public function listAllSamples(SamplePath:String = "", Display:Bool = false):Map<String, SampleProject> 
+	static public function listAllDemos(DemoPath:String = "", Display:Bool = false):Map<String, DemoProject> 
 	{
-		if (SamplePath == "")
+		if (DemoPath == "")
 		{
-			SamplePath = PathHelper.getHaxelib(new Haxelib ("flixel-samples"));
+			DemoPath = PathHelper.getHaxelib(new Haxelib ("flixel-demos"));
 			
 			if (Display)
 			{
-				Sys.println(" Listing Samples from the current flixel-samples haxelib installed.");
-				Sys.println(" " + SamplePath);
+				Sys.println(" Listing Demos from the current flixel-demos haxelib installed.");
+				Sys.println(" " + DemoPath);
 			}
 		}
 		
-		var projects:Map<String, SampleProject> = scanProjectXML(SamplePath, false);
+		var projects:Map<String, DemoProject> = scanProjectXML(DemoPath, false);
 		
-		var flashOnly = new Array<SampleProject>();
-		var nonFlash = new Array<SampleProject>();
-		var allTargets = new Array<SampleProject>();
+		var flashOnly = new Array<DemoProject>();
+		var nonFlash = new Array<DemoProject>();
+		var allTargets = new Array<DemoProject>();
 		
 		if (Display)
 		{
-			Sys.println(" " + Lambda.count(projects) + " samples available.");
+			Sys.println(" " + Lambda.count(projects) + " demos available.");
 		}
 		
 		for (project in projects.keys())
 		{
-			var sampleProject:SampleProject = projects.get(project);
+			var demoProject:DemoProject = projects.get(project);
 			
-			if (sampleProject.TARGETS != null)
+			if (demoProject.TARGETS != null)
 			{
-				if (sampleProject.TARGETS == "FlashOnly")
+				if (demoProject.TARGETS == "FlashOnly")
 				{
-					flashOnly.push(sampleProject);
+					flashOnly.push(demoProject);
 				}
-				else if (sampleProject.TARGETS == "NonFlash")
+				else if (demoProject.TARGETS == "NonFlash")
 				{
-					nonFlash.push(sampleProject);
+					nonFlash.push(demoProject);
 				}
-				else if (sampleProject.TARGETS == "All") 
+				else if (demoProject.TARGETS == "All") 
 				{
-					allTargets.push(sampleProject); 
+					allTargets.push(demoProject); 
 				}
 			}
 			else  
 			{
 				if (Display)
 				{
-					Sys.println(" Error no valid samples were found.");
+					Sys.println(" Error no valid demos were found.");
 				}
 				
 				return projects;
@@ -1140,48 +1140,48 @@ class FlxTools
 		if (Display)
 		{
 			Sys.println("");
-			Sys.println(" - Samples for all targets");
+			Sys.println(" - Demos for all targets");
 		}
 		
-		for (sample in allTargets)
+		for (demo in allTargets)
 		{
-			var sampleProject:SampleProject = sample;
+			var demoProject:DemoProject = demo;
 			
 			if (Display)
 			{
-				Sys.println(" " + sampleProject.NAME);
+				Sys.println(" " + demoProject.NAME);
 			}
 		}
 		
 		if (Display)
 		{ 
 			Sys.println("");
-			Sys.println(" - Samples Flash target only");
+			Sys.println(" - Demos Flash target only");
 		}
 		
-		for (sample in flashOnly)
+		for (demo in flashOnly)
 		{
-			var sampleProject:SampleProject = sample;
+			var demoProject:DemoProject = demo;
 			
 			if (Display)
 			{
-				Sys.println(" " + sampleProject.NAME);
+				Sys.println(" " + demoProject.NAME);
 			}
 		}
 	
 		if (Display)
 		{
 			Sys.println("");
-			Sys.println(" - Samples for CPP target only");
+			Sys.println(" - Demos for CPP target only");
 		}
 		
-		for (sample in nonFlash)
+		for (demo in nonFlash)
 		{
-			var sampleProject:SampleProject = sample;
+			var demoProject:DemoProject = demo;
 			
 			if (Display)
 			{
-				Sys.println(" " + sampleProject.NAME);
+				Sys.println(" " + demoProject.NAME);
 			}
 		}
 		
@@ -1260,7 +1260,7 @@ class Commands
 	public var createName:String;
 	
 	public var list:Bool = false;
-	public var listSamples:Bool = false;
+	public var listDemos:Bool = false;
 	public var listTemplates:Bool = false;
 	
 	public var template:Bool = false;
@@ -1280,7 +1280,7 @@ class Commands
  */
 typedef BuildResult = {
 	var result:String;
-	var project:SampleProject;
+	var project:DemoProject;
 }
 
 /**
@@ -1297,7 +1297,7 @@ typedef WarningResult = {
 /**
  * Object to pass the data of a project
  */
-typedef SampleProject = {
+typedef DemoProject = {
 	var NAME:String;
 	var PATH:String;
 	var PROJECTXMLPATH:String;   

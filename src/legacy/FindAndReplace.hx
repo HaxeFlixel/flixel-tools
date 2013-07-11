@@ -217,7 +217,7 @@ class FindAndReplace
         add("flixel.addons.FlxSkewedSprite", "flixel.addons.display.FlxSkewedSprite");
         
         // photonstorm
-        add("flixel.plugin.photonstorm.FlxSpecialFX", "flixel.effects.FlxSpecialFX")
+        add("flixel.plugin.photonstorm.FlxSpecialFX", "flixel.effects.FlxSpecialFX");
         add("flixel.plugin.photonstorm.fx.BaseFX", "flixel.effects.fx.BaseFX");
         add("flixel.plugin.photonstorm.fx.GlitchFX", "flixel.effects.fx.GlitchFX");
         add("flixel.plugin.photonstorm.fx.StarfieldFX", "flixel.effects.fx.StarfieldFX");
