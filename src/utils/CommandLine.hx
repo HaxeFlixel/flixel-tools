@@ -18,46 +18,46 @@ class CommandLine
 	* @param FilePath     Path to the file to add to
 	* @param ImportString The complete import string to seach for and add
 	*/
-    public static function addImportToFileString(FileString:String, ImportString:String):String 
-    {
-        var str:String = FileString;
-        var match = strmatch(ImportString, str);
+	public static function addImportToFileString(FileString:String, ImportString:String):String 
+	{
+		var str:String = FileString;
+		var match = strmatch(ImportString, str);
 
-        if(!match)
-        {
-	        var newLine = "\n";
-	        var r = ~/import+/;
-	        var newString = Reflect.copy(str);
-	        r.match(str);
+		if(!match)
+		{
+			var newLine = "\n";
+			var r = ~/import+/;
+			var newString = Reflect.copy(str);
+			r.match(str);
 
-	        try
-	        {
-	            var matchPos = r.matchedPos();
-	            var beggining = str.substr(0,matchPos.pos);
-	            var end = str.substr(matchPos.pos, str.length);
-	            newString = beggining + ImportString + ";" + newLine + end;
-	        }
-	        catch (e:Dynamic){}
+			try
+			{
+				var matchPos = r.matchedPos();
+				var beggining = str.substr(0,matchPos.pos);
+				var end = str.substr(matchPos.pos, str.length);
+				newString = beggining + ImportString + ";" + newLine + end;
+			}
+			catch (e:Dynamic){}
 
-	        if(newString != str)
-	        {
-	            return newString;
-	        }
-	        else
-	        {
-	            return null;
-	        }
+			if(newString != str)
+			{
+				return newString;
+			}
+			else
+			{
+				return null;
+			}
 
-        }
+		}
 
-        return null;
-    }
+		return null;
+	}
 
 	/**
 	 * Prompt user with a y/n/a
 	 * 
-	 * @param	Question	String with the prompt to display
-	 * @return	User choice in an Answer enum or null if an invalid answer given
+	 * @param   Question    String with the prompt to display
+	 * @return  User choice in an Answer enum or null if an invalid answer given
 	 */
 	static public function ask(Question:String):Answer
 	{
@@ -121,12 +121,10 @@ class CommandLine
 
 			if (validAnswer != "")
 			{
-				Sys.println("Choosing option " + userResponse);
-				return userResponse;
+				return Answers[Std.parseInt(userResponse)];
 			}
 			else
 			{
-				Sys.println("Your choice was invlaid");
 				return null;
 			}
 		}
@@ -137,7 +135,7 @@ class CommandLine
 	/**
 	 * Shortcut to the readline of the command line
 	 * 
-	 * @return	String of the current line
+	 * @return  String of the current line
 	 */
 	inline static public function readLine()
 	{
@@ -147,8 +145,8 @@ class CommandLine
 	/**
 	 * Load and parse the date from a Haxelib json file
 	 * 
-	 * @param	HaxelibName		String name of the Haxelib to load
-	 * @return	Haxelib typedef or null if no Haxelib was found
+	 * @param   HaxelibName     String name of the Haxelib to load
+	 * @return  Haxelib typedef or null if no Haxelib was found
 	 */
 	static public function getHaxelibJsonData(HaxelibName:String):HaxelibJSON
 	{
@@ -169,7 +167,7 @@ class CommandLine
 	static public function strmatch(Needle:String, Haystack:String):Bool
 	{
 		var search = new EReg("\\b" + Needle + "\\b", "");
-        return search.match(Haystack);
+		return search.match(Haystack);
 	}
 }
 

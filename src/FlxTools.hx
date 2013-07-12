@@ -279,8 +279,8 @@ class FlxTools
 	/**
 	* Process the template based on preset find and replacements from commandsSet
 	* 
-	* @param	Source	Text from template file
-	* @return	The altered text for the template file
+	* @param    Source  Text from template file
+	* @return   The altered text for the template file
 	*/
 	inline static public function projectTemplateReplacements(Source:String):String
 	{
@@ -294,10 +294,10 @@ class FlxTools
 	/**
 	 * Scan the templates Directory for listing them in the command line
 	 * 
-	 * @param	TemplatePath	The path to scan
-	 * @param	Prefix			The prefix to use while listing each template
-	 * @param	Display			Whether to echo each template
-	 * @return	A Map containing the name of the template as the key and the template path as the value
+	 * @param   TemplatePath    The path to scan
+	 * @param   Prefix          The prefix to use while listing each template
+	 * @param   Display         Whether to echo each template
+	 * @return  A Map containing the name of the template as the key and the template path as the value
 	 */
 	static public function scanTemplates(TemplatePath:String = "", Prefix:String = " - ", Display:Bool = true):Map<String, String>
 	{
@@ -386,26 +386,26 @@ class FlxTools
 				Sys.println("");
 				Sys.println(warnings.length + " Warnings");
 
-	        	for ( warning in warnings )
-	        	{
+				for ( warning in warnings )
+				{
 					Sys.println("");
 					Sys.println(" File Path    :" + warning.filePath);
 					Sys.println(" Line Number  :" + warning.lineNumber);
 					Sys.println(" Issue        :" + warning.oldCode);
 					Sys.println(" Solution     :" + warning.newCode);
-	        	}
+				}
 				
 				Sys.println("");
-	        	Sys.println(" Warning although this command updates a lot, its not perfect.");
-		      	//todo wiki page
+				Sys.println(" Warning although this command updates a lot, its not perfect.");
+				//todo wiki page
 				Sys.println(" Please visit haxeflixel.com/wiki/convert for further documentation on converting old code.");
 				Sys.println("");
 
 				if(warnings.length > 0)
 				{
-			        var logFileName = "convert.log";
-			        var filePath = convertProjectPath + "/" + logFileName;
-			    	writeWarningsToFile(filePath, warnings, convertProjectPath);
+					var logFileName = "convert.log";
+					var filePath = convertProjectPath + "/" + logFileName;
+					writeWarningsToFile(filePath, warnings, convertProjectPath);
 				}
 			}
 			else 
@@ -424,18 +424,18 @@ class FlxTools
 
 	/**
 	 * Write a warning log to a file
-	 * @param  FilePath              	String to as the destination for the log file
+	 * @param  FilePath                 String to as the destination for the log file
 	 * @param  Warnings<WarningResult>  Array containing all the WarningResults
 	 * @param  ConvertProjectPath       The path that the convert command was performed on
 	 */
 	static public function writeWarningsToFile(FilePath:String, Warnings:Array<WarningResult>, ConvertProjectPath:String):Void
-    {
-    	var fileObject = File.write(FilePath, false);
+	{
+		var fileObject = File.write(FilePath, false);
 
-    	fileObject.writeString("flixel-tools convert warning log" + "\n");
-    	fileObject.writeString("Converted Path " + ConvertProjectPath + "\n\n");
+		fileObject.writeString("flixel-tools convert warning log" + "\n");
+		fileObject.writeString("Converted Path " + ConvertProjectPath + "\n\n");
 
-    	for ( warning in Warnings )
+		for ( warning in Warnings )
 		{
 			fileObject.writeString("\n");
 			fileObject.writeString("File Path    :" + warning.filePath + "\n");
@@ -444,85 +444,85 @@ class FlxTools
 			fileObject.writeString("Solution     :" + warning.newCode + "\n");
 		}
 
-	    fileObject.close();
-    }
+		fileObject.close();
+	}
 
 	/**
 	 * Recursively use find and replace on *.hx files inside a project directory
 	 * 
-	 * @param	ProjectPath		Path to scan recursivley 
+	 * @param   ProjectPath     Path to scan recursivley 
 	 */
-    static public function convertProjectFolder(ProjectPath:String, Display:Bool=false):Array<WarningResult>
-    {
-    	var warnings:Array<WarningResult> = new Array<WarningResult>();
+	static public function convertProjectFolder(ProjectPath:String, Display:Bool=false):Array<WarningResult>
+	{
+		var warnings:Array<WarningResult> = new Array<WarningResult>();
 
-        for (fileName in FileSystem.readDirectory(ProjectPath))
-        {
-            if (FileSystem.isDirectory(ProjectPath + "/" + fileName))
-            {
-                var recursiveWarnings:Array<WarningResult> = convertProjectFolder(ProjectPath + "/" + fileName, false);
+		for (fileName in FileSystem.readDirectory(ProjectPath))
+		{
+			if (FileSystem.isDirectory(ProjectPath + "/" + fileName))
+			{
+				var recursiveWarnings:Array<WarningResult> = convertProjectFolder(ProjectPath + "/" + fileName, false);
 
-                if(recursiveWarnings != null)
-                {            	
-	                for ( warning in recursiveWarnings )
-	                {
-	                	warnings.push(warning);
-	                }
-                }
-            }
-            else
-            {
-                if (StringTools.endsWith(fileName, ".hx"))
-                {
-                    var filePath:String = ProjectPath + "/" + fileName;
-                    var sourceText:String = sys.io.File.getContent(filePath);
-                    var originalText:String = Reflect.copy(sourceText);
-                    var replacements:Map<String, FindAndReplaceObject> = FindAndReplace.init();
+				if(recursiveWarnings != null)
+				{               
+					for ( warning in recursiveWarnings )
+					{
+						warnings.push(warning);
+					}
+				}
+			}
+			else
+			{
+				if (StringTools.endsWith(fileName, ".hx"))
+				{
+					var filePath:String = ProjectPath + "/" + fileName;
+					var sourceText:String = sys.io.File.getContent(filePath);
+					var originalText:String = Reflect.copy(sourceText);
+					var replacements:Map<String, FindAndReplaceObject> = FindAndReplace.init();
 
-                    for ( replacement in replacements.keys() )
-                    {
-                        var obj:FindAndReplaceObject = replacements.get(replacement);
+					for ( replacement in replacements.keys() )
+					{
+						var obj:FindAndReplaceObject = replacements.get(replacement);
 
-                        sourceText = StringTools.replace(sourceText, obj.find, obj.replacement);
-                        
-                        if (originalText != sourceText)
-                        {   
-                            if(obj.importValidate != null && CommandLine.strmatch(obj.find, originalText))
-                            {
-                            	var newText = CommandLine.addImportToFileString(sourceText,obj.importValidate);
+						sourceText = StringTools.replace(sourceText, obj.find, obj.replacement);
+						
+						if (originalText != sourceText)
+						{   
+							if(obj.importValidate != null && CommandLine.strmatch(obj.find, originalText))
+							{
+								var newText = CommandLine.addImportToFileString(sourceText,obj.importValidate);
 
-                            	if(newText!=null)
-                            	{
-                            		// Sys.println("obj.find " + obj.find);
-                            		// Sys.println("added " + obj.importValidate);
-                            		// Sys.println("filePath " + filePath);
-                            		sourceText = newText;
-                            	}
-                            }
+								if(newText!=null)
+								{
+									// Sys.println("obj.find " + obj.find);
+									// Sys.println("added " + obj.importValidate);
+									// Sys.println("filePath " + filePath);
+									sourceText = newText;
+								}
+							}
 
-                            FileSystem.deleteFile(filePath);
-                            var o:FileOutput = sys.io.File.write(filePath, true);
-                            o.writeString(sourceText);
-                            o.close();
-                        }
-                    }
+							FileSystem.deleteFile(filePath);
+							var o:FileOutput = sys.io.File.write(filePath, true);
+							o.writeString(sourceText);
+							o.close();
+						}
+					}
 
-                    var warningsCurrent = scanFileForWarnings (filePath);
+					var warningsCurrent = scanFileForWarnings (filePath);
 
 					if(warningsCurrent != null)
-					{            	
+					{               
 						for ( warning in warningsCurrent )
 						{
 							warnings.push(warning);
 						}
 					}
 
-                }
-            }
-        }
+				}
+			}
+		}
 
-        return warnings;
-    }
+		return warnings;
+	}
 
 	/**
 	 * Validate an openfl project by compiling it and checking the result
@@ -556,10 +556,10 @@ class FlxTools
 	/**
 	 * Build an openfl target
 	 * 
-	 * @param	Target		The openfl target to build
-	 * @param	Project		The project object to build from
-	 * @param	Display		Echo progress on the command line
-	 * @return	BuildResult the result of the compilation
+	 * @param   Target      The openfl target to build
+	 * @param   Project     The project object to build from
+	 * @param   Display     Echo progress on the command line
+	 * @return  BuildResult the result of the compilation
 	 */
 	static public function buildProject(Target:String, Project:DemoProject, Display:Bool = false):BuildResult
 	{
@@ -603,8 +603,8 @@ class FlxTools
 	/**
 	 * Return a friendly result string based on an Int value
 	 * 
-	 * @param	Result
-	 * @return	string PASSED or FAILED
+	 * @param   Result
+	 * @return  string PASSED or FAILED
 	 */
 	inline static public function getResult(Result:Int):String
 	{  
@@ -654,7 +654,7 @@ class FlxTools
 	/**
 	 * Process the command arguments
 	 *
-	 * @return	A Commands Class with the value of the commands to execute
+	 * @return  A Commands Class with the value of the commands to execute
 	 */
 	static private function processArguments():Commands
 	{
@@ -842,7 +842,7 @@ class FlxTools
 	/**
 	 * Validate all the demos recursivley
 	 *
-	 * @param	Location	Location of the demos directory to scan and validate
+	 * @param   Location    Location of the demos directory to scan and validate
 	 */
 	static public function compileAllDemos(Location:String = ""):Void
 	{
@@ -947,9 +947,9 @@ class FlxTools
 	/**
 	 * Scan a folder recursivley for openfl project files
 	 *
-	 * @param	DemosPath		[description]
-	 * @param	Display			[description]
-	 * @return					[description]
+	 * @param   DemosPath       [description]
+	 * @param   Display         [description]
+	 * @return                  [description]
 	 */
 	static public function scanProjectXML(DemosPath:String = "", Display:Bool = false):Map<String, DemoProject>
 	{
@@ -1031,8 +1031,8 @@ class FlxTools
 	/**
 	* Scans a path for openfl/nme project files
 	* 
-	* @author	Joshua Granick a private method in openfl-tools
-	* @return	The path of the project file found
+	* @author   Joshua Granick a private method in openfl-tools
+	* @return   The path of the project file found
 	*/
 	static private function findProjectFile(ProjectPath:String):String
 	{
@@ -1093,15 +1093,23 @@ class FlxTools
 	/**
 	 * Create a demo by recursivly copying the folder according to a name
 	 * 
-	 * @param	Name	The name of the demo to create
+	 * @param   Name    The name of the demo to create
 	 */
 	static public function createDemo(?Name:String):Void
 	{
 		if (Name == null)
 		{
-			Sys.println(" You have not provided a name to create.");
-			Sys.println(" To list available templates and demos use the list command");
-			Sys.println(" Usage : flixel list");
+			var DemosFilePath = PathHelper.getHaxelib(new Haxelib ("flixel-demos"));
+
+			if(DemosFilePath == "")
+			{
+				Sys.println(" No Demos were found");
+				Sys.println(' Have you run the "flixel download demos" command yet?');
+			} 
+			else
+			{
+				createDemoList(DemosFilePath);
+			}
 
 			return;
 		}
@@ -1136,12 +1144,73 @@ class FlxTools
 		}
 	}
 
+	static public function createDemoList(DemosFilePath:String):Void
+	{
+		if(DemosFilePath == "")
+		{
+			Sys.println(" No demos found, have you installed the haxelib flixel-demos yet?");
+			Sys.println(' Please run the "flixel download demos" command.');
+			Sys.println("");
+			return;
+		}
+
+		Sys.println(" Listing Demos from the current flixel-demos haxelib installed.");
+		Sys.println(" " + DemosFilePath);
+		
+		var projects:Map<String, DemoProject> = scanProjectXML(DemosFilePath, false);
+		var demoProjects = new Array<DemoProject>();
+		
+		Sys.println(" " + Lambda.count(projects) + " demos available.");
+		
+		for (project in projects.keys())
+		{
+			var demoProject:DemoProject = projects.get(project);
+			
+			if (demoProject.TARGETS != null)
+			{
+				demoProjects.push(demoProject);
+			}
+			else  
+			{
+				Sys.println(" Error no valid demos were found in:");
+				Sys.println(" " + DemosFilePath);
+				
+				return;
+			}
+		}
+
+		var answers = new Array<String>();
+		var question = " Please enter a number or name of the demo to create.";
+
+		for (demo in demoProjects)
+		{
+			answers.push(demo.NAME);
+		}
+
+		var answer = CommandLine.askQustionStrings(question, answers);
+
+		if(answer == null)
+		{
+			Sys.println(" Your choice was not valid.");
+			return;
+		}
+
+		if(demoExists(answer) != null)
+		{
+			createDemo(answer);
+		}
+		else
+		{
+			Sys.println(" There was an error creating " + answer );
+		}
+	}
+
 	/**
 	 * Check if a Demo exists in a path recursivley
 	 * 
-	 * @param	Name			Name of the demo
-	 * @param	ProjectPath		The path to scan, default scan flixel-demos haxelib
-	 * @return	DemoProject object or null if none found
+	 * @param   Name            Name of the demo
+	 * @param   ProjectPath     The path to scan, default scan flixel-demos haxelib
+	 * @return  DemoProject object or null if none found
 	 */
 	static public function demoExists(Name:String, ProjectPath:String = ""):DemoProject 
 	{
@@ -1166,9 +1235,9 @@ class FlxTools
 	/**
 	 * List all the demos in a folder, default the flixel demos haxelib installed
 	 * 
-	 * @param	DemoPath	The folder to recursivley scan for demos
-	 * @param	Display		Print output to the command line
-	 * @return	DemoProject typedef of each demo found
+	 * @param   DemoPath    The folder to recursivley scan for demos
+	 * @param   Display     Print output to the command line
+	 * @return  DemoProject typedef of each demo found
 	 */
 	static public function listAllDemos(DemoPath:String = "", Display:Bool = false):Map<String, DemoProject> 
 	{
@@ -1291,31 +1360,31 @@ class FlxTools
 	 * @param  FilePath the path of the file to scan
 	 * @return          WarningResult with data for what the warning was and info
 	 */
-    static public function scanFileForWarnings(FilePath:String):Array<WarningResult> 
-    {
-        var results = new Array<WarningResult>();
+	static public function scanFileForWarnings(FilePath:String):Array<WarningResult> 
+	{
+		var results = new Array<WarningResult>();
 
-        // open and read file line by line
-        var fin = File.read(FilePath, false);
+		// open and read file line by line
+		var fin = File.read(FilePath, false);
 
-        try
-        {
-            var lineNum = 0;
-            while (true)
-            {
-                var str = fin.readLine();
-                lineNum++;
-                // Sys.println("line " + (++lineNum) + ": " + str);
-                var warnings = Warnings.warningList;
-                
-                for ( warning in warnings.keys() )
-                {
-                    var fix = warnings.get(warning);
-                    var search = new EReg("\\b" + warning + "\\b", "");
-                    var match = search.match(str);
-                    
-                    if(match)
-                    {
+		try
+		{
+			var lineNum = 0;
+			while (true)
+			{
+				var str = fin.readLine();
+				lineNum++;
+				// Sys.println("line " + (++lineNum) + ": " + str);
+				var warnings = Warnings.warningList;
+				
+				for ( warning in warnings.keys() )
+				{
+					var fix = warnings.get(warning);
+					var search = new EReg("\\b" + warning + "\\b", "");
+					var match = search.match(str);
+					
+					if(match)
+					{
 						var result:WarningResult = 
 						{ 
 							oldCode : warning,
@@ -1325,16 +1394,16 @@ class FlxTools
 						};
 
 						results.push(result);
-                    }
-                }
-            }
-        }
-        catch( ex:haxe.io.Eof ){}
+					}
+				}
+			}
+		}
+		catch( ex:haxe.io.Eof ){}
 
-        fin.close();
+		fin.close();
 
-        return results;
-    }
+		return results;
+	}
 }
 
 /**
