@@ -306,7 +306,9 @@ class FlxTools
 		
 		if (Display)
 		{
-			Sys.println(" Listing templates from " + TemplatePath);
+			Sys.println("");
+			Sys.println(" Listing templates from:" );
+			Sys.println(" " + TemplatePath );
 		}
 		
 		for (name in FileSystem.readDirectory(TemplatePath))
@@ -477,12 +479,11 @@ class FlxTools
 					var filePath:String = ProjectPath + "/" + fileName;
 					var sourceText:String = sys.io.File.getContent(filePath);
 					var originalText:String = Reflect.copy(sourceText);
-					var replacements:Map<String, FindAndReplaceObject> = FindAndReplace.init();
+					var replacements:Array<FindAndReplaceObject> = FindAndReplace.init();
 
-					for ( replacement in replacements.keys() )
+					for ( replacement in replacements )
 					{
-						var obj:FindAndReplaceObject = replacements.get(replacement);
-
+						var obj:FindAndReplaceObject = replacement;
 						sourceText = StringTools.replace(sourceText, obj.find, obj.replacement);
 						
 						if (originalText != sourceText)
@@ -493,9 +494,6 @@ class FlxTools
 
 								if(newText!=null)
 								{
-									// Sys.println("obj.find " + obj.find);
-									// Sys.println("added " + obj.importValidate);
-									// Sys.println("filePath " + filePath);
 									sourceText = newText;
 								}
 							}
@@ -1251,8 +1249,9 @@ class FlxTools
 			{
 				if (Display)
 				{
+					Sys.println("");
 					Sys.println(" No demos found, have you installed the haxelib flixel-demos yet?");
-					Sys.println(' Please run the "flixel download demos" command.');
+					Sys.println(' Please run the "flixel download demos" command to check.');
 					Sys.println("");
 				}
 				return null;
@@ -1352,6 +1351,13 @@ class FlxTools
 			{
 				Sys.println(" " + demoProject.NAME);
 			}
+		}
+
+		if(Display)
+		{
+			Sys.println("");
+			Sys.println(' Use the "flixel create" command to create a demo numerically.');
+			Sys.println("");
 		}
 		
 		return projects;

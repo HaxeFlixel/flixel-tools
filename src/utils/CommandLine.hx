@@ -118,7 +118,7 @@ class CommandLine
 				}
 				else if(userResponse == "c")
 				{
-					Sys.println(" Canceled");
+					Sys.println(" Cancelled");
 					return 	null;
 				}
 			}

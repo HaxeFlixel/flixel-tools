@@ -10,16 +10,16 @@ class FindAndReplace
 	 * Key being the String to search for
 	 * Value being the String to replace it with
 	 */
-	static public var replacements:Map<String, FindAndReplaceObject>;
+	static public var replacements:Array<FindAndReplaceObject>;
 	
 	/**
 	 * Init the replacements map
 	 * 
 	 * @return The constructed map
 	 */
-	static public function init():Map<String, FindAndReplaceObject>
+	static public function init():Array<FindAndReplaceObject>
 	{
-		replacements = new Map<String, FindAndReplaceObject>();
+		replacements = new Array<FindAndReplaceObject>();
 	
 		/**
 		 * Removal of the org package
@@ -281,7 +281,7 @@ class FindAndReplace
 			importValidate: ImportValidate,
 		};
 		
-		replacements.set(Find,object);
+		replacements.push(object);
 	}
 	
 	/**
