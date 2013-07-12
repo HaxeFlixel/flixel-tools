@@ -31,7 +31,9 @@ class Warnings
 		
         // <haxedef name="FLX_RECORD"/>
         warningList.set("FlxG.vcr", 'Add the FLX_RECORD compiler Variable to your project xml <haxedef name="FLX_RECORD"/>');
-
+		
+		warningList.set("FlxGridSprite", "FlxGridSprite has been removed");
+		
 		return warningList;
 	}
 }

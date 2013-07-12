@@ -181,59 +181,95 @@ class FindAndReplace
 		add("FlxG.clearAssetsCache", "FlxG.bitmap.clearAssetsCache");
 		
 		/**
-		* New packages / moved classes
-		*/
+		 * New packages / moved classes
+		 */
 		
 		// system
 		addImport("FlxAssets", "system.FlxAssets");
+		addImport("FlxSound", "system.FlxSound");
 		
 		// ui
 		addImport("FlxButton", "ui.FlxButton");
+		
 		addImport("plugin.pxText.PxButton", "ui.PxButton");
+		addImport("plugin.photonstorm.FlxBar", "ui.FlxBar");
 		
 		// util
 		addImport("FlxSave", "util.FlxSave");
 		addImport("FlxPath", "util.FlxPath");
+		
 		addImport("util.FlxString", "util.FlxStringUtil");
+		
+		addImport("plugin.photonstorm.FlxColor", "util.FlxColorUtil");
+		addImport("plugin.photonstorm.FlxMath", "util.FlxMath");
+		addImport("plugin.photonstorm.FlxVelocity", "util.FlxVelocity");
+		addImport("plugin.photonstorm.FlxCoreUtils", "util.FlxMisc");
+		addImport("plugin.photonstorm.FlxGradient", "util.FlxGradient");
+		addImport("plugin.photonstorm.FlxCollision", "util.FlxCollision");
+		addImport("plugin.photonstorm.FlxDisplay", "util.FlxSpriteUtil");
 		
 		// tile
 		addImport("FlxTilemap", "tile.FlxTilemap");
-		addImport("system.FlxTile", "tile.FlxTile");
 		addImport("FlxTileblock", "tile.FlxTileblock");
+		
+		addImport("system.FlxTile", "tile.FlxTile");
 		
 		// effects
 		addImport("FlxEmitter", "effects.particles.FlxEmitter");
 		addImport("FlxEmitter", "effects.particles.FlxEmitter");
 		addImport("FlxParticle", "effects.particles.FlxParticle");
-		addImport("addons.FlxEmitterExt", "effects.particles.FlxEmitterExt");
+		
 		addImport("addons.FlxTrail", "effects.FlxTrail");
+		addImport("addons.FlxEmitterExt", "effects.particles.FlxEmitterExt");
 		
-		// addons
-		addImport("addons.FlxCaveGenerator", "addons.tile.FlxCaveGenerator");
-		addImport("addons.FlxTilemapExt", "addons.tile.FlxTilemapExt");
-		addImport("addons.FlxSkewedSprite", "addons.display.FlxSkewedSprite");
-		
-		// photonstorm
 		addImport("plugin.photonstorm.FlxSpecialFX", "effects.FlxSpecialFX");
 		addImport("plugin.photonstorm.fx.BaseFX", "effects.fx.BaseFX");
 		addImport("plugin.photonstorm.fx.GlitchFX", "effects.fx.GlitchFX");
 		addImport("plugin.photonstorm.fx.StarfieldFX", "effects.fx.StarfieldFX");
 		
+		// addons
+		addImport("addons.FlxCaveGenerator", "addons.tile.FlxCaveGenerator");
+		addImport("addons.FlxTilemapExt", "addons.tile.FlxTilemapExt");
+		addImport("addons.FlxSkewedSprite", "addons.display.FlxSkewedSprite");
+		addImport("addons.FlxBackdrop", "addons.display.FlxBackdrop");
+		addImport("addons.FlxSpriteAniRot", "addons.display.FlxSpriteAniRot");
+		addImport("addons.NestedSprite", "addons.display.FlxNestedSprite");
+		addImport("addons.OgmoLevelLoader", "addons.editors.ogmo.FlxOgmoLoader");
+		addImport("addons.ZoomCamera", "addons.display.FlxZoomCamera");
+		
+		addImport("addons.taskManager.AntTask", "addons.plugin.taskManger.AntTask");
+		addImport("addons.taskManager.AntTaskManager", "addons.plugin.taskManger.AntTaskManager");
+		
+		addImport("plugin.photonstorm.FlxExtendedSprite", "addons.display.FlxExtendedSprite");
+		addImport("plugin.photonstorm.baseTypes.MouseSpring", "addons.display.FlxMouseSpring");
+		addImport("plugin.photonstorm.FlxGridOverlay", "addons.display.FlxGridOverlay");
+		addImport("plugin.photonstorm.api.FlxKongregate", "addons.api.FlxKongregate");
+		addImport("plugin.photonstorm.FlxControl", "addons.control.FlxControl");
+		addImport("plugin.photonstorm.FlxControlHandler", "addons.control.FlxControlHandler");
+		addImport("plugin.photonstorm.FlxWeapon", "addons.weapon.FlxWeapon");
+		addImport("plugin.photonstorm.baseTypes.Bullet", "addons.weapon.FlxBullet");
+		addImport("plugin.photonstorm.FlxMouseControl", "addons.plugin.FlxMouseControl");
+		addImport("plugin.photonstorm.FlxButtonPlus", "addons.ui.FlxButtonPlus");
+		addImport("plugin.photonstorm.FlxDelay", "addons.util.FlxDelay");
+		addImport("plugin.photonstorm.FlxBitmapFont", "addons.text.FlxBitmapFont");
+		
+		addImport("nape.FlxPhysSprite", "addons.nape.FlxPhysSprite");
+		addImport("nape.FlxPhysState", "addons.nape.FlxPhysState");
+		
 		// text
 		addImport("FlxText", "text.FlxText");
 		addImport("FlxTextField", "text.FlxTextField");
+		
 		addImport("plugin.pxText.PxBitmapFont", "text.pxText.PxBitmapFont");
 		addImport("plugin.pxText.PxTextAlign", "text.pxText.PxTextAlign");
 		addImport("plugin.pxText.FlxBitmapTextField", "text.FlxBitmapTextField");
 		
 		// groups
 		addImport("FlxGroup", "group.FlxGroup");
-		addImport("FlxSpriteGroup", "group.FlxSpriteGroup");
 		addImport("FlxTypedGroup", "group.FlxTypedGroup");
 		
-		// sounds
-		addImport("FlxSound", "system.FlxSound");
-	
+		addImport("addons.FlxSpriteGroup", "group.FlxSpriteGroup");
+		
 		/**
 		 * FlxColor renamings
 		 */
@@ -263,6 +299,30 @@ class FindAndReplace
 		add("FlxColor.interpolateColorWithRGB", "FlxColorUtil.interpolateColorWithRGB");
 		add("FlxColor.interpolateRGB", "FlxColorUtil.interpolateRGB");
 		
+		/**
+		 * FlxGame underscore removal
+		 */
+			
+		add("FlxG._game", "FlxG.game"); 
+		
+		add("FlxG.game._state", "FlxG.game.state"); 
+		add("FlxG.game._inputContainer", "FlxG.game.inputContainer"); 
+		add("FlxG.game._mark", "FlxG.game.mark"); 
+		add("FlxG.game._elapsedMS", "FlxG.game.elapsedMS"); 
+		add("FlxG.game._step", "FlxG.game.stepMS"); 
+		add("FlxG.game._stepSeconds", "FlxG.game.stepSeconds"); 
+		add("FlxG.game._flashFramerate", "FlxG.game.flashFramerate"); 
+		add("FlxG.game._maxAccumulation", "FlxG.game.maxAccumulation"); 
+		add("FlxG.game._requestedState", "FlxG.game.requestedState"); 
+		add("FlxG.game._requestedReset", "FlxG.game.requestedReset"); 
+		add("FlxG.game._debugger", "FlxG.game.debugger"); 
+		add("FlxG.game._debuggerUp", "FlxG.game.debuggerUp"); 
+		add("FlxG.game._replay", "FlxG.game.replay"); 
+		add("FlxG.game._recording", "FlxG.game.recording"); 
+		add("FlxG.game._replayCancelKeys", "FlxG.game.replayCancelKeys"); 
+		add("FlxG.game._replayTimer", "FlxG.game.replayTimer"); 
+		add("FlxG.game._replayCallback", "FlxG.game.replayCallback"); 
+		 
 		return replacements;
 	}
 	
