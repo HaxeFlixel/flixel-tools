@@ -1180,6 +1180,7 @@ class FlxTools
 		}
 
 		var answers = new Array<String>();
+		var header = " Listing all the demos you can create.";
 		var question = " Please enter a number or name of the demo to create.";
 
 		for (demo in demoProjects)
@@ -1187,11 +1188,12 @@ class FlxTools
 			answers.push(demo.NAME);
 		}
 
-		var answer = CommandLine.askQustionStrings(question, answers);
+		var answer = CommandLine.askQustionStrings(question, header, answers);
 
 		if(answer == null)
 		{
-			Sys.println(" Your choice was not valid.");
+			Sys.println(" Your choice was not a valid demo.");
+			Sys.println("");
 			return;
 		}
 

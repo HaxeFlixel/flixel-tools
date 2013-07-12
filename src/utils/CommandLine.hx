@@ -86,22 +86,26 @@ class CommandLine
 	 * @param  Answers<String> Array<String> containing all the available answers
 	 * @return                 String the answer given or null if the choice was invalid
 	 */
-	static public function askQustionStrings(Question:String, Answers:Array<String>):String
+	static public function askQustionStrings(Question:String, Header:String, Answers:Array<String>):String
 	{
 		while (true)
 		{
 			Sys.println("");
-			Sys.println(Question);    
+			Sys.println(Header);    
 			Sys.println("");
 
 			for( i in 0...Answers.length )
 			{
-				Sys.println( "[" + i + "] " + Answers[i]);
+				Sys.println( " [" + i + "] " + Answers[i]);
 			}
 
 			Sys.println( "");
-			Sys.println( "[c] Cancel");
+			Sys.println( " [c] Cancel");
 			Sys.println( "");
+
+			Sys.println("");
+			Sys.println(Question);    
+			Sys.println("");
 
 			var userResponse = readLine();
 			var validAnswer = "";
@@ -114,8 +118,8 @@ class CommandLine
 				}
 				else if(userResponse == "c")
 				{
-					Sys.println("Canceled");
-					return null;
+					Sys.println(" Canceled");
+					return 	null;
 				}
 			}
 
