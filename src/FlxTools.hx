@@ -381,7 +381,32 @@ class FlxTools
 			
 			if(FileSystem.exists(convertProjectPath))
 			{
-				convertProjectFolder(convertProjectPath, true);
+				var warnings = convertProjectFolder(convertProjectPath, true);
+
+				Sys.println("");
+				Sys.println(warnings.length + " Warnings");
+
+	        	for ( warning in warnings )
+	        	{
+					Sys.println("");
+					Sys.println(" File Path    :" + warning.filePath);
+					Sys.println(" Line Number  :" + warning.lineNumber);
+					Sys.println(" Issue        :" + warning.oldCode);
+					Sys.println(" Solution     :" + warning.newCode);
+	        	}
+				
+				Sys.println("");
+	        	Sys.println(" Warning although this command updates a lot, its not perfect.");
+		      	//todo wiki page
+				Sys.println(" Please visit haxeflixel.com/wiki/convert for further documentation on converting old code.");
+				Sys.println("");
+
+				if(warnings.length > 0)
+				{
+			        var logFileName = "convert.log";
+			        var filePath = convertProjectPath + "/" + logFileName;
+			    	writeWarningsToFile(filePath, warnings, convertProjectPath);
+				}
 			}
 			else 
 			{
@@ -396,6 +421,31 @@ class FlxTools
 			Sys.println("Warning cannot find " + convertProjectPath);
 		}
 	}
+
+	/**
+	 * Write a warning log to a file
+	 * @param  FilePath              	String to as the destination for the log file
+	 * @param  Warnings<WarningResult>  Array containing all the WarningResults
+	 * @param  ConvertProjectPath       The path that the convert command was performed on
+	 */
+	static public function writeWarningsToFile(FilePath:String, Warnings:Array<WarningResult>, ConvertProjectPath:String):Void
+    {
+    	var fileObject = File.write(FilePath, false);
+
+    	fileObject.writeString("flixel-tools convert warning log" + "\n");
+    	fileObject.writeString("Converted Path " + ConvertProjectPath + "\n\n");
+
+    	for ( warning in Warnings )
+		{
+			fileObject.writeString("\n");
+			fileObject.writeString("File Path    :" + warning.filePath + "\n");
+			fileObject.writeString("Line Number  :" + warning.lineNumber + "\n");
+			fileObject.writeString("Issue        :" + warning.oldCode + "\n");
+			fileObject.writeString("Solution     :" + warning.newCode + "\n");
+		}
+
+	    fileObject.close();
+    }
 
 	/**
 	 * Recursively use find and replace on *.hx files inside a project directory
@@ -443,9 +493,9 @@ class FlxTools
 
                             	if(newText!=null)
                             	{
-                            		Sys.println("obj.find " + obj.find);
-                            		Sys.println("added " + obj.importValidate);
-                            		Sys.println("filePath " + filePath);
+                            		// Sys.println("obj.find " + obj.find);
+                            		// Sys.println("added " + obj.importValidate);
+                            		// Sys.println("filePath " + filePath);
                             		sourceText = newText;
                             	}
                             }
@@ -469,25 +519,6 @@ class FlxTools
 
                 }
             }
-        }
-
-        if(Display)
-        {
-			Sys.println("");
-			Sys.println(warnings.length + " Warnings");
-
-        	for ( warning in warnings )
-        	{
-				Sys.println("");
-				Sys.println("--"+warning);
-				Sys.println("");
-        	}
-			
-			Sys.println("");
-        	Sys.println(" Warning although this command updates a lot, its not perfect.");
-	      	//todo wiki page
-			Sys.println(" Please visit haxeflixel.com/wiki/convert for further documentation on converting old code.");
-			Sys.println("");
         }
 
         return warnings;
