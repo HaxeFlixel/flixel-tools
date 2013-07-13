@@ -110,12 +110,11 @@ class FindAndReplace
 		add("FlxG.removeCamera", "FlxG.cameras.remove");
 		add("FlxG.resetCameras", "FlxG.cameras.reset");
 		add("FlxG.fullscreen", "FlxG.cameras.fullscreen");
-	
+		
 		// CameraFXFrontEnd
-		add("FlxG.shake", "FlxG.camera.shake");
-		add("FlxG.flash", "FlxG.camera.flash");
-		add("FlxG.fade", "FlxG.camera.fade");
-		add("FlxG.camera.flashFramerate", "FlxG.flashFramerate");
+		add("FlxG.shake", "FlxG.cameraFX.shake");
+		add("FlxG.flash", "FlxG.cameraFX.flash");
+		add("FlxG.fade", "FlxG.cameraFX.fade");
 		
 		// DebuggerFrontEnd
 		add("FlxG.visualDebug", "FlxG.debugger.visualDebug");
