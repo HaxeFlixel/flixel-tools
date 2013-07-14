@@ -321,7 +321,14 @@ class FindAndReplace
 		add("FlxG.game._replayCancelKeys", "FlxG.game.replayCancelKeys"); 
 		add("FlxG.game._replayTimer", "FlxG.game.replayTimer"); 
 		add("FlxG.game._replayCallback", "FlxG.game.replayCallback"); 
-		 
+	 
+		/**
+		 * Misc
+		 */
+		
+		// FlxPoint.make() and FlxRect.make() renamed to set()
+		add(".make(", ".set(");
+		
 		return replacements;
 	}
 	
