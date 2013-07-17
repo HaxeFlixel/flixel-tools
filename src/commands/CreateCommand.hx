@@ -34,22 +34,27 @@ class CreateCommand extends Command
 			if (demo == null)
 			{
 				if(Std.parseInt(console.args[1]) != null)
+				{
 					demo = DemoUtils.getDemoByIndex(Std.parseInt(console.args[1]));
+
+					if(demo == null)
+					{
+						error("This Demo is not available. Please try run the 'flixel download' command.");
+					}
+				}
 			}
 		}
 		else
 		{
 			demo = promptDemoChoice(projects);
+
+			if(demo == null)
+			{
+				exit();
+			}
 		}
 
-		if(demo == null)
-		{
-			error("This Demo is not available. Please try run the 'flixel download' command.");
-		}
-		else
-		{
-			Sys.println(" Creating " + demo.NAME);
-		}
+		Sys.println(" Creating " + demo.NAME);
 
 		var	destination = Sys.getCwd() + demo.NAME;
 

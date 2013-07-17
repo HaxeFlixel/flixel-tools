@@ -1,5 +1,6 @@
 package utils;
 
+import massive.neko.cmd.Command;
 import sys.FileSystem;
 import haxe.io.Path;
 
@@ -22,7 +23,7 @@ class ProjectUtils
 	}
 
 	/**
-	 * Shortcut Create an OpenFL project by recursivly copying the folder according to a name
+	 * Shortcut Create an OpenFL project by recursively copying the folder according to a name
 	 * 
 	 * @param   Name    The name of the demo to create
 	 */
@@ -32,7 +33,7 @@ class ProjectUtils
 	}
 
 	/**
-	 * Scan a Directory recursivley for OpenFL projects
+	 * Scan a Directory recursively for OpenFL projects
 	 * @return Array<OpenFLProject> containing projects with an XML specified
 	 */
 	static public function scanOpenFLProjects(TargetDirectory:String, recursive:Bool = false, TargetFolders:Array<String> = null):Array<OpenFLProject>
@@ -41,42 +42,58 @@ class ProjectUtils
 		
 		for (name in FileSystem.readDirectory(TargetDirectory))
 		{
-			var folderPath:String = TargetDirectory + "/" + name;
-			
+			var folderPath:String = TargetDirectory + name;
+			//var folderPath:String = TargetDirectory + "/" + name;
+
 			if (!StringTools.startsWith(name, ".") && FileSystem.isDirectory(folderPath))
 			{
 				var projectXMLPath:String = scanProjectFile(folderPath);
 				
 				if (projectXMLPath == "" && recursive)
 				{
-					for ( targetFolder in TargetFolders )
-					{
-						if (name == targetFolder)
-						{
-							var subpath:String = folderPath;
-							var childProjects:Array<OpenFLProject> = scanOpenFLProjects(subpath);
-							
+					//for ( targetFolder in TargetFolders )
+					//{
+					//	if (name == targetFolder)
+					//	{
+					//		var subpath:String = folderPath;
+					//		var childProjects:Array<OpenFLProject> = scanOpenFLProjects(subpath);
+							var childProjects:Array<OpenFLProject> = scanOpenFLProjects(folderPath);
+
 							for (childProject in childProjects)
 							{
 								var project:OpenFLProject = childProject;
-								project.TARGETS = name;
+								//project.TARGETS = name;
 								
 								if (FileSystem.exists(project.PATH))
 								{
 									projects.push(project);
 								}
 							}
-						}
-					}
+						//}
+					//}
 				}
 				else
 				{
-					var project:OpenFLProject = 
+
+					var targets = "all";
+
+					if(TargetFolders != null)
+					{
+						for ( target in TargetFolders )
+						{
+							if(CommandUtils.strmatch(targets, name))
+							{
+								targets = target;
+							}
+						}
+					}
+
+					var project:OpenFLProject =
 					{ 
 						NAME : name,
 						PATH : folderPath,
 						PROJECTXMLPATH : projectXMLPath,
-						TARGETS : "All",
+						TARGETS : targets
 					};
 					
 					if (FileSystem.exists(project.PATH))
@@ -90,7 +107,7 @@ class ProjectUtils
 	}
 
 	/**
-	* Scans a path for openfl/nme project files
+	* Scans a path for OpenFL/NME project files
 	* 
 	* @author   Joshua Granick from a method in openfl-tools
 	* @return   The path of the project file found

@@ -7,11 +7,9 @@ class DownloadCommand extends Command
 {
 	override public function execute():Void
 	{
-		var templates = CommandUtils.getHaxelibPath("flixel-templates");
-
 		downloadDemos();
 
-		downloadTemplates();
+		//downloadTemplates();
 
 		exit();
 	}
@@ -25,7 +23,7 @@ class DownloadCommand extends Command
 		
 		if (path == "")
 		{
-			Sys.command("haxelib git flixel-demos https://github.com/HaxeFlixel/flixel-demos.git");
+			Sys.command("haxelib git flixel-demos " + FlxTools.FLIXEL_DEMOS_REPO);
 
 			path = CommandUtils.getHaxelibPath("flixel-demos");
 
@@ -50,7 +48,7 @@ class DownloadCommand extends Command
 		
 		if (path == "")
 		{
-			Sys.command("haxelib git flixel-demos https://github.com/HaxeFlixel/flixel-templates.git");
+			Sys.command("haxelib git flixel-templates " + FlxTools.FLIXEL_TEMPLATE_REPO);
 
 			path = CommandUtils.getHaxelibPath("flixel-templates");
 			

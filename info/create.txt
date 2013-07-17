@@ -1,5 +1,5 @@
 
-usage: create
+usage: create || c
 
 Creates a copy of Demo project, the user will be promted to choose from a list 
 if no further arguments are given.

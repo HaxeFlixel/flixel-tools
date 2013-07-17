@@ -9,7 +9,7 @@ class DemoUtils
 	/**
 	 * Check if a Demo exists from an index of all demos
 	 * @param  Name String the name of the demo to check
-	 * @return      OpenFLProject or null if it doesnt exist
+	 * @return      OpenFLProject or null if it doesn't exist
 	 */
 	static public function getDemoByIndex(Index:Int, DemoPath:String = ""):OpenFLProject
 	{
@@ -32,7 +32,7 @@ class DemoUtils
 	/**
 	 * Scan all available Demos to see if one exists by name.
 	 * @param  Name String the name of the demo to check
-	 * @return      OpenFLProject or null if it doesnt exist
+	 * @return      OpenFLProject or null if it doesn't exist
 	 */
 	static public function demoExists(Name:String):OpenFLProject
 	{
@@ -54,7 +54,7 @@ class DemoUtils
 	}
 
 	/**
-	 * Scan a folder recursivley for openfl project files
+	 * Scan a folder recursively for OpenFL project files
 	 *
 	 * @param   DemosPath       An optional path to scan, default being flixel-demos Haxelib
 	 * @param   Display         [description]
@@ -65,16 +65,15 @@ class DemoUtils
 		if (DemosPath == "")
 		{
 			DemosPath = CommandUtils.getHaxelibPath("flixel-demos");
-
+			Sys.println(DemosPath);
 			if (DemosPath == "")
 			{
 				return null;
 			}
 		}
 
-		var targets = ["FlashOnly","NonFlash"];
+		var targets = ["flash-","non-flash-"];
 		var projects:Array<OpenFLProject> = ProjectUtils.scanOpenFLProjects(DemosPath, true, targets);
-
 
 		if (Lambda.count(projects) > 0)
 		{

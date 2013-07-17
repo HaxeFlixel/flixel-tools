@@ -1,5 +1,5 @@
 
-usage: setup
+usage: setup || st
 
 Setups the HaxeFlixel command line tool, after this command the 
 'flixel' command alias will be available.

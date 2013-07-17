@@ -1,0 +1,18 @@
+language: java
+
+before_script:
+  - sudo apt-get install python-software-properties -y
+  - sudo add-apt-repository ppa:eyecreate/haxe -y
+  - sudo apt-get update
+  - sudo apt-get install haxe -y
+  - mkdir ~/haxelib
+  - haxelib setup ~/haxelib
+  - haxelib install openfl
+  - haxelib install openfl-native
+  - haxelib install openfl-tools
+  - haxelib git flixel https://github.com/HaxeFlixel/flixel.git dev
+  - haxelib git flixel-tools https://github.com/HaxeFlixel/flixel-tools.git mlib_refactor
+
+script:
+  - haxelib run flixel-tools setup -y
+  - flixel validate

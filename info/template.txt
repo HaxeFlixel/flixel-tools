@@ -1,0 +1,8 @@
+
+usage: template || t
+
+Creates a new template project in the current working directory with the specified options.
+
+Optional : template <options>
+
+    <options>         : The options available will depend on the specific template.
