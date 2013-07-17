@@ -1,6 +1,6 @@
 ![](http://www.haxeflixel.com/sites/haxeflixel.com/files/flixel-tools.png)
 ============
-###Related repos: [flixel](https://github.com/HaxeFlixel/flixel) | [flixel-addons](https://github.com/HaxeFlixel/flixel-addons) | [flixel-demos](https://github.com/HaxeFlixel/flixel-demos) | [flixel-ui](https://github.com/HaxeFlixel/flixel-ui)
+###Related:    [flixel](https://github.com/HaxeFlixel/flixel) | [flixel-addons](https://github.com/HaxeFlixel/flixel-addons) | [flixel-demos](https://github.com/HaxeFlixel/flixel-demos) | [flixel-ui](https://github.com/HaxeFlixel/flixel-ui)
 ______________________________________________________
 Command line tools for [HaxeFlixel](https://github.com/HaxeFlixel/flixel) to create samples, templates and more.
 
