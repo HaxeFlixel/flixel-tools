@@ -4,7 +4,7 @@
     "license": "MIT",
     "tags": ["game", "openfl"],
     "description": "Command-line tools for Flixel",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "releasenote": "Initial release, creates projects, samples and basic find and replace for old code.",
     "contributors": ["haxeflixel"],
     "dependencies": { "openfl-tools": "", "flixel": "" }

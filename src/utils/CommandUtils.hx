@@ -1,18 +1,35 @@
 package utils;
 
-import project.Haxelib;
-import project.Platform;
-import helpers.FileHelper;
-import helpers.PlatformHelper;
-import sys.FileSystem;
+import sys.io.Process;
 import sys.io.File;
+import massive.sys.io.FileSys;
 import haxe.Json;
 
 /**
  * Utilities for command line tools
  */
-class CommandLine
+class CommandUtils
 {
+
+	/**
+	 * Copy a directory and its contents recursivley
+	 * @param  Source      String the source directory to copy
+	 * @param  Destination String to destination to copy the directory to
+	 * @param  ?Overwrite  Overwrite the destination
+	 * @return             Bool true if the new Destination exists after operation
+	 */
+	static public function copyRecursivley(Source:String, Destination:String, ?Overwrite:Bool):Bool
+	{
+		var current = massive.sys.io.File.current.resolveDirectory("temp");
+
+		var dir1:massive.sys.io.File = current.resolvePath(Source, true);
+		var dir2:massive.sys.io.File = current.resolvePath(Destination, true);
+		
+		dir1.copyTo(dir2, Overwrite);
+
+		return FileSys.exists(Destination);
+	}
+	
 	/**
 	* Basic Ereg match to add an import above the first in a file if none exists
 	* @param FilePath     Path to the file to add to
@@ -53,13 +70,37 @@ class CommandLine
 		return null;
 	}
 
+    /**
+	 * Prompt user with a y/n/a
+	 *
+	 * @param   Question    String with the prompt to display
+	 * @return  User choice in an Answer enum or null if an invalid answer given
+	 */
+    static public function askYN(Question:String):Answer
+    {
+        while (true)
+        {
+            Sys.println(Question + " [y/n] ? ");
+
+            switch (readLine())
+            {
+                case "n", "No":
+                    return No;
+                case "y", "Yes":
+                    return Yes;
+            }
+        }
+
+        return null;
+    }
+
 	/**
 	 * Prompt user with a y/n/a
 	 * 
 	 * @param   Question    String with the prompt to display
 	 * @return  User choice in an Answer enum or null if an invalid answer given
 	 */
-	static public function ask(Question:String):Answer
+	static public function askYNA(Question:String):Answer
 	{
 		while (true)
 		{
@@ -154,7 +195,7 @@ class CommandLine
 	 */
 	static public function getHaxelibJsonData(HaxelibName:String):HaxelibJSON
 	{
-		var haxleibJsonPath = PathHelper.getHaxelib(new Haxelib(HaxelibName));
+		var haxleibJsonPath = getHaxelibPath(HaxelibName);
 		
 		if (haxleibJsonPath == "")
 		{
@@ -172,6 +213,104 @@ class CommandLine
 	{
 		var search = new EReg("\\b" + Needle + "\\b", "");
 		return search.match(Haystack);
+	}
+
+	/**
+	 * Get the path of a Haxelib on the current system
+	 * @param  Name String of the Haxelib to scan for
+	 * @return      String path of the Haxelib or "" if none found
+	 */
+	static public function getHaxelibPath(Name:String):String
+	{
+		var proc:Process = new Process(combine(Sys.getEnv("HAXEPATH"), "haxelib"), ["path", Name]);
+		var result:String = "";
+		
+		try 
+		{
+			var previous:String = "";
+			while (true) 
+			{
+				var line:String = proc.stdout.readLine();
+				if (line == "-D " + Name)
+				{
+					result = previous;
+					break;
+				}
+				previous = line;
+			}
+		} 
+		catch (e:Dynamic) { };
+		proc.close();
+
+		return result;
+	}
+
+	/**
+	 * Shortcut to join paths that is platform safe
+	 */
+	static public function combine(FirstPath:String, SecondPath:String):String 
+	{
+		if (FirstPath == null || FirstPath == "") 
+		{
+			return SecondPath;
+		} 
+		else if (SecondPath != null && SecondPath != "") 
+		{
+			if (FileSys.isWindows) 
+			{
+				if (SecondPath.indexOf (":") == 1) 
+				{
+					return SecondPath;
+				}
+			} 
+			else 
+			{
+				if (SecondPath.substr (0, 1) == "/") 
+				{
+					return SecondPath;
+				}
+			}
+			
+			var firstSlash:Bool = (FirstPath.substr (-1) == "/" || FirstPath.substr (-1) == "\\");
+			var secondSlash:Bool = (SecondPath.substr (0, 1) == "/" || SecondPath.substr (0, 1) == "\\");
+			
+			if (firstSlash && secondSlash) 
+			{
+				return FirstPath + SecondPath.substr (1);
+			} 
+			else if (!firstSlash && !secondSlash) 
+			{
+				return FirstPath + "/" + SecondPath;
+				
+			} 
+			else 
+			{
+				return FirstPath + SecondPath;
+			}
+		} 
+		else 
+		{
+			return FirstPath;
+		}
+	}
+
+	/**
+	 * Shortcut to strip a relative path
+	 * @param  Path String to strip
+	 * @return      Stripped string
+	 */
+	static public function stripPath(Path:String):String
+	{
+		if (StringTools.startsWith(Path,"./"))
+		{
+			Path = Path.substring(2);
+		}
+		
+		if (StringTools.endsWith( Path,"/" ))
+		{
+			Path = Path.substring(0,Path.length-1);
+		}
+		return Path;
 	}
 }
 
