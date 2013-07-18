@@ -1,5 +1,7 @@
 package;
 
+import utils.CommandUtils;
+import utils.CommandUtils.HaxelibJSON;
 import massive.sys.cmd.CommandLineRunner;
 import massive.haxe.util.TemplateUtil;
 
@@ -75,20 +77,9 @@ class FlxTools extends CommandLineRunner
 		run();
 	}
 
-	// override public function run():Void
-	// {
-	// 	super.run();
-
-	// 	displayInfo();
-	// }
-
 	override public function printHeader():Void
 	{
 		displayInfo();
-
-		// Sys.println("");
-		// Sys.println("" + NAME + " Command-Line Tools (" + VERSION + ")");
-		// Sys.println("");
 	}
 
 	/**
@@ -97,11 +88,11 @@ class FlxTools extends CommandLineRunner
 	static private function displayInfo():Void
 	{
 		// Get the current flixel version
-		// if (flixelVersion == null)
-		// {
-		// 	var flixelHaxelib:HaxelibJSON = CommandLine.getHaxelibJsonData("flixel");
-		// 	flixelVersion = flixelHaxelib.version;
-		// }
+		if (flixelVersion == null)
+		{
+			var flixelHaxelib:HaxelibJSON = CommandUtils.getHaxelibJsonData("flixel");
+			flixelVersion = flixelHaxelib.version;
+		}
 
 		Sys.println("");
 		Sys.println(" _   _               ______ _  _          _");
@@ -115,20 +106,19 @@ class FlxTools extends CommandLineRunner
 		Sys.println("Please visit www.haxeflixel.com for community support and resources!");
 		Sys.println("");
 		Sys.println("" + NAME + " Command-Line Tools (" + VERSION + ")");
+
+		if (flixelVersion == "0.0.1")
+		{
+			Sys.println("flixel is currently not installed!");
+		}
+		else
+		{
+			Sys.println("Installed flixel version: " + flixelVersion);
+		}
+
 		Sys.println("");
-
-		// if (flixelVersion == "0.0.1")
-		// {
-		// 	Sys.println("                     flixel is currently not installed!");
-		// }
-		// else
-		// {
-		// 	Sys.println("                   Installed flixel version: " + flixelVersion);
-		// }
 	}
-
 
 	//Required by the Compiler
 	static public function main():FlxTools { return new FlxTools(); }
-
 }
