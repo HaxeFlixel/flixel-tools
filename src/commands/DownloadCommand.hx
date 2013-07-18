@@ -24,6 +24,7 @@ class DownloadCommand extends Command
 		if (path == "")
 		{
 			Sys.command("haxelib git flixel-demos " + FlxTools.FLIXEL_DEMOS_REPO);
+			Sys.command("n");
 
 			path = CommandUtils.getHaxelibPath("flixel-demos");
 
