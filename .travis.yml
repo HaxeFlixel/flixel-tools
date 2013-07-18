@@ -10,9 +10,10 @@ before_script:
   - haxelib install openfl
   - haxelib install openfl-native
   - haxelib install openfl-tools
-  - haxelib git flixel https://github.com/HaxeFlixel/flixel.git dev
+  - haxelib install flixel
   - haxelib git flixel-tools https://github.com/HaxeFlixel/flixel-tools.git mlib_refactor
 
 script:
   - haxelib run flixel-tools download
+  - haxelib git flixel https://github.com/HaxeFlixel/flixel.git dev
   - haxelib run flixel-tools validate
