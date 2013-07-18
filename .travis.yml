@@ -14,5 +14,5 @@ before_script:
   - haxelib git flixel-tools https://github.com/HaxeFlixel/flixel-tools.git mlib_refactor
 
 script:
-  - haxelib run flixel-tools setup -y
-  - flixel validate
+  - haxelib run flixel-tools download
+  - haxelib run flixel-tools validate
