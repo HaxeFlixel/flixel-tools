@@ -32,7 +32,7 @@ class Warnings
         warningList.set("FlxGridSprite", "FlxGridSprite has been removed");
 
 		//Find and Replace conflicts with other code such as with FlxPoint.set etc
-		warningList.set(".make(", "FlxPoint.make() and FlxRect.make() renamed to set()");
+		warningList.set(".make\\(", "FlxPoint.make() and FlxRect.make() renamed to set()");
 
 		// <haxedef name="FLX_RECORD"/>
 		warningList.set("FlxG.vcr", 'Add the FLX_RECORD compiler Variable to your project xml <haxedef name="FLX_RECORD"/>');
