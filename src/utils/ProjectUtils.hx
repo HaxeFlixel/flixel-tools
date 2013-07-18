@@ -1,36 +1,19 @@
 package utils;
 
 import sys.FileSystem;
-import massive.neko.cmd.Command;
 import sys.FileSystem;
 import haxe.io.Path;
 
 class ProjectUtils
 {
 	/**
-	 * Compile an openfl project to different targets and return the results
-	 * @param  project         [description]
-	 * @param  targets<string> [description]
-	 * @return                 [description]
-	 */
-	static public function compileProject(project:OpenFLProject, targets:Array<String>):Void
-	{
-		
-	}
-
-	static public function compileTo(project:OpenFLProject, target:String):Void
-	{
-		
-	}
-
-	/**
 	 * Shortcut Create an OpenFL project by recursively copying the folder according to a name
 	 * 
 	 * @param   Name    The name of the demo to create
 	 */
-	static public function duplicateProject(project:OpenFLProject, destination:String=""):Bool
+	static public function duplicateProject(project:OpenFLProject, destination:String = ""):Bool
 	{
-		return CommandUtils.copyRecursivley(project.PATH,destination);
+		return CommandUtils.copyRecursivley(project.PATH, destination);
 	}
 
 	/**
@@ -41,13 +24,13 @@ class ProjectUtils
 	{
 		var projects = new Array<OpenFLProject>();
 
-		if(FileSystem.exists(TargetDirectory))
+		if (FileSystem.exists(TargetDirectory))
 		{
 			for (name in FileSystem.readDirectory(TargetDirectory))
 			{
 				var folderPath:String = TargetDirectory + name;
 
-				if(FileSystem.exists(folderPath))
+				if (FileSystem.exists(folderPath))
 				{
 					if (!StringTools.startsWith(name, ".") && FileSystem.isDirectory(folderPath))
 					{
@@ -71,11 +54,11 @@ class ProjectUtils
 
 							var targets = "all";
 
-							if(TargetFolders != null)
+							if (TargetFolders != null)
 							{
-								for ( target in TargetFolders )
+								for (target in TargetFolders)
 								{
-									if(CommandUtils.strmatch(targets, name))
+									if (CommandUtils.strmatch(targets, name))
 									{
 										targets = target;
 									}
@@ -125,27 +108,27 @@ class ProjectUtils
 			var matches = new Map <String, Array <String>>();
 			matches.set("xml", []);
 			matches.set("hx", []);
-			
+
 			for (file in files)
 			{
 				var path = CommandUtils.combine(ProjectPath, file);
-				
+
 				if (FileSystem.exists(path) && !FileSystem.isDirectory(path))
 				{
 					var extension:String = Path.extension(file);
-					
+
 					if ((extension == "xml" && file != "include.xml") || extension == "hx")
 					{
 						matches.get(extension).push(path);
 					}
 				}
 			}
-			
+
 			if (matches.get("xml").length > 0)
 			{
 				return matches.get("xml")[0];
 			}
-			
+
 			if (matches.get("hx").length > 0)
 			{
 				return matches.get("hx")[0];
@@ -161,6 +144,6 @@ class ProjectUtils
 typedef OpenFLProject = {
 	var NAME:String;
 	var PATH:String;
-	var PROJECTXMLPATH:String;   
-	var TARGETS:String;   
+	var PROJECTXMLPATH:String;
+	var TARGETS:String;
 }
