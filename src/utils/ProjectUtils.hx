@@ -1,5 +1,6 @@
 package utils;
 
+import sys.FileSystem;
 import massive.neko.cmd.Command;
 import sys.FileSystem;
 import haxe.io.Path;
@@ -39,70 +40,66 @@ class ProjectUtils
 	static public function scanOpenFLProjects(TargetDirectory:String, recursive:Bool = false, TargetFolders:Array<String> = null):Array<OpenFLProject>
 	{
 		var projects = new Array<OpenFLProject>();
-		
-		for (name in FileSystem.readDirectory(TargetDirectory))
-		{
-			var folderPath:String = TargetDirectory + name;
-			//var folderPath:String = TargetDirectory + "/" + name;
 
-			if (!StringTools.startsWith(name, ".") && FileSystem.isDirectory(folderPath))
+		if(FileSystem.exists(TargetDirectory))
+		{
+			for (name in FileSystem.readDirectory(TargetDirectory))
 			{
-				var projectXMLPath:String = scanProjectFile(folderPath);
-				
-				if (projectXMLPath == "" && recursive)
+				var folderPath:String = TargetDirectory + name;
+
+				if(FileSystem.exists(folderPath))
 				{
-					//for ( targetFolder in TargetFolders )
-					//{
-					//	if (name == targetFolder)
-					//	{
-					//		var subpath:String = folderPath;
-					//		var childProjects:Array<OpenFLProject> = scanOpenFLProjects(subpath);
+					if (!StringTools.startsWith(name, ".") && FileSystem.isDirectory(folderPath))
+					{
+						var projectXMLPath:String = scanProjectFile(folderPath);
+
+						if (projectXMLPath == "" && recursive)
+						{
 							var childProjects:Array<OpenFLProject> = scanOpenFLProjects(folderPath);
 
 							for (childProject in childProjects)
 							{
 								var project:OpenFLProject = childProject;
-								//project.TARGETS = name;
-								
 								if (FileSystem.exists(project.PATH))
 								{
 									projects.push(project);
 								}
 							}
-						//}
-					//}
-				}
-				else
-				{
-
-					var targets = "all";
-
-					if(TargetFolders != null)
-					{
-						for ( target in TargetFolders )
+						}
+						else
 						{
-							if(CommandUtils.strmatch(targets, name))
+
+							var targets = "all";
+
+							if(TargetFolders != null)
 							{
-								targets = target;
+								for ( target in TargetFolders )
+								{
+									if(CommandUtils.strmatch(targets, name))
+									{
+										targets = target;
+									}
+								}
+							}
+
+							var project:OpenFLProject =
+							{
+							NAME : name,
+							PATH : folderPath,
+							PROJECTXMLPATH : projectXMLPath,
+							TARGETS : targets
+							};
+
+							if (FileSystem.exists(project.PATH))
+							{
+								projects.push(project);
 							}
 						}
-					}
-
-					var project:OpenFLProject =
-					{ 
-						NAME : name,
-						PATH : folderPath,
-						PROJECTXMLPATH : projectXMLPath,
-						TARGETS : targets
-					};
-					
-					if (FileSystem.exists(project.PATH))
-					{
-						projects.push(project);
 					}
 				}
 			}
 		}
+
 		return projects;
 	}
 
