@@ -19,9 +19,17 @@ class DownloadCommand extends Command
 	 */
 	private function downloadDemos():Void
 	{
-		var path:String = CommandUtils.getHaxelibPath("flixel-demos");
-		
-		if (path == "")
+		var path = CommandUtils.getHaxelibPath("flixel-demos");
+
+		if(path != "")
+		{
+			Sys.println("");
+			Sys.println("It appears you already have flixel-demos haxelib installed.");
+			Sys.println(path);
+			Sys.println("");
+			return;
+		}
+		else if (path == "")
 		{
 			Sys.command("haxelib git flixel-demos " + FlxTools.FLIXEL_DEMOS_REPO);
 
@@ -32,11 +40,6 @@ class DownloadCommand extends Command
 				this.error(" There was a problem installing Flixel Demos");
 			}
 		}
-		else
-		{
-			Sys.println( " You already have flixel-demos installed" );
-			Sys.println(path);
-		}
 	}
 
 	/**
@@ -44,9 +47,17 @@ class DownloadCommand extends Command
 	 */
 	private function downloadTemplates():Void
 	{
-		var path:String = CommandUtils.getHaxelibPath("flixel-templates");
-		
-		if (path == "")
+		var path = CommandUtils.getHaxelibPath("flixel-templates");
+
+		if(path != "")
+		{
+			Sys.println("");
+			Sys.println("It appears you already have flixel-templates haxelib installed.");
+			Sys.println(path);
+			Sys.println("");
+			return;
+		}
+		else if (path == "")
 		{
 			Sys.command("haxelib git flixel-templates " + FlxTools.FLIXEL_TEMPLATE_REPO);
 
@@ -56,11 +67,6 @@ class DownloadCommand extends Command
 			{
 				error(" There was a problem installing Flixel Demos");
 			}
-		}
-		else
-		{
-			Sys.println( " You already have flixel-templates installed" );
-			Sys.println(path);
 		}
 	}
 }
