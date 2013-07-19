@@ -353,10 +353,13 @@ class FindAndReplace
     */
     static public function add(Find:String, Replacement:String, ?ImportValidate:String):Void
     {
+		if(ImportValidate!=null)
+			ImportValidate = "import flixel." +  ImportValidate;
+
         var object:FindAndReplaceObject = {
             find: Find,
             replacement: Replacement,
-            importValidate: "import flixel." + ImportValidate,
+            importValidate: ImportValidate,
         };
 
         replacements.push(object);

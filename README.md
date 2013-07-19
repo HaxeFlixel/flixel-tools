@@ -4,7 +4,8 @@
 ______________________________________________________
 Command line tools for [HaxeFlixel](https://github.com/HaxeFlixel/flixel) to create samples, templates and more.
 
-###Warning: This tool is still in active development
+###Warning: This tool is still in active development, feedback and ideas are welcome. Commands are subject to change
+until a stable version is released.
 
 ###Installation
 
@@ -34,46 +35,7 @@ flixel download
 Create a new demo (in the current directory):
 
 ```batch
-flixel create <name>
+flixel create <name_or_number>
 ```
 
-Create a new project from the template (in the current directory):
-
-```batch
-flixel template -name <project_name> -class <class_name> -screen <width_value> <height_value>
-```
-
-Install the [project template for FlashDevelop](https://github.com/HaxeFlixel/FlashDevelop-Template):
-
-
-```batch
-flixel template flashdevelop-basic
-```
-
-List all available projects and demos:
-
-```batch
-flixel list
-```
-
-List all available demos:
-
-```batch
-flixel list demos
-```
-
-List all available templates:
-
-```batch
-flixel list templates
-```
-
-**WIP**
-
-Update old HaxeFlixel projects (version 1.x) to the latest version:
-
-```batch
-flixel convert <project directory>
-```
-
-Automatically creates a backup.
+If no name or number is given it will list all demos and prompt you for a choice, by number or name.

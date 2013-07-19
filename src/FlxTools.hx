@@ -50,13 +50,13 @@ class FlxTools extends CommandLineRunner
 			// TemplateUtil.getTemplate("download")
 		);
 
-		mapCommand(
-			TemplateCommand,
-			"template", ["t"],
-			"Creates a project template.",
-			""
-			//TemplateUtil.getTemplate("template")
-		);
+		//mapCommand(
+		//	TemplateCommand,
+		//	"template", ["t"],
+		//	"Creates a project template.",
+		//	""
+		//	//TemplateUtil.getTemplate("template")
+		//);
 
 		mapCommand(
 			ConvertCommand,
