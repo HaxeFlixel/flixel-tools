@@ -226,18 +226,18 @@ class ConvertCommand extends Command
                             var obj:FindAndReplaceObject = replacement;
                             sourceText = StringTools.replace(sourceText, obj.find, obj.replacement);
 
+							if(obj.importValidate != null && CommandUtils.strmatch(obj.find, sourceText))
+							{
+								var newText = CommandUtils.addImportToFileString(sourceText, obj.importValidate);
+
+								if (newText != null)
+								{
+									sourceText = newText;
+								}
+							}
+
                             if (originalText != sourceText)
                             {
-                                if (obj.importValidate != null && CommandUtils.strmatch(obj.find, originalText))
-                                {
-                                    var newText = CommandUtils.addImportToFileString(sourceText, obj.importValidate);
-
-                                    if (newText != null)
-                                    {
-                                        sourceText = newText;
-                                    }
-                                }
-
                                 FileSystem.deleteFile(filePath);
                                 var o:FileOutput = sys.io.File.write(filePath, true);
                                 o.writeString(sourceText);
