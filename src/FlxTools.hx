@@ -1,5 +1,6 @@
 package;
 
+import commands.OpenFLTestCommand;
 import utils.CommandUtils;
 import utils.CommandUtils.HaxelibJSON;
 import massive.sys.cmd.CommandLineRunner;
@@ -65,7 +66,7 @@ class FlxTools extends CommandLineRunner
 
 		mapCommand(
 			TemplateCommand,
-			"template", ["t"],
+			"template", ["tm"],
 			"Creates a project template.",
 			""
 			//TemplateUtil.getTemplate("template")
@@ -85,6 +86,14 @@ class FlxTools extends CommandLineRunner
 			"Compiles a project to validate for compile errors.",
 			""
 			// TemplateUtil.getTemplate("validate")
+		);
+
+		mapCommand(
+			OpenFLTestCommand,
+			"test", ["t"],
+			"Alias for the openfl test command.",
+			""
+			//TemplateUtil.getTemplate("template")
 		);
 
 		run();

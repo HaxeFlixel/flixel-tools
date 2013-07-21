@@ -132,21 +132,8 @@ class ValidateCommand extends Command
 	 */
 	private function buildProject(Target:String, Project:OpenFLProject, Display:Bool = true):BuildResult
 	{
-		if (Target == "native")
-		{
-			if (FileSys.isWindows)
-			{
-				Target = "windows";
-			}
-			else if (FileSys.isMac)
-			{
-				Target = "mac";
-			}
-			else if (FileSys.isLinux)
-			{
-				Target = "linux";
-			}
-		}
+		if(Target == "native")
+			Target = CommandUtils.getCPP();
 
 		var buildCommand:String = "haxelib run openfl build " + "'" + Project.PATH + "'" + " " + Target;
 

@@ -142,7 +142,7 @@ class TemplateCommand extends Command
 					var projectName = getReplacementValue(template.Template.replacements, "${PROJECT_NAME}");
 					var projectFile = TargetPath + "/" + projectName + ".sublime-project";
 					var sublimeOpen = "subl " + projectFile;
-					
+
 					Sys.command("subl");
 					Sys.command(sublimeOpen);
 				}

@@ -13,6 +13,26 @@ import haxe.Json;
  */
 class CommandUtils
 {
+	/**
+	* Return the correct string for the cpp target based on the current OS
+	*/
+	static public function getCPP():String
+	{
+		var cppTarget = "";
+		if (FileSys.isWindows)
+		{
+			cppTarget = "windows";
+		}
+		else if (FileSys.isMac)
+		{
+			cppTarget = "mac";
+		}
+		else if (FileSys.isLinux)
+		{
+			cppTarget = "linux";
+		}
+		return cppTarget;
+	}
 
 	/**
 	 * Copy a directory and its contents recursively
@@ -33,21 +53,21 @@ class CommandUtils
 		return FileSys.exists(Destination);
 	}
 
-	public static function deleteRecursively( path : String ) : Void
+	static public function deleteRecursively( Path : String ) : Void
 	{
-		if( FileSys.exists( path ) )
+		if( FileSys.exists( Path ) )
 		{
-			if( FileSys.isDirectory( path ) )
+			if( FileSys.isDirectory( Path ) )
 			{
-				for( entry in FileSys.readDirectory( path ) )
+				for( entry in FileSys.readDirectory( Path ) )
 				{
-					deleteRecursively( path + "/" + entry );
+					deleteRecursively( Path + "/" + entry );
 				}
-				FileSys.deleteDirectory( path );
+				FileSys.deleteDirectory( Path );
 			}
 			else
 			{
-				FileSys.deleteFile( path );
+				FileSys.deleteFile( Path );
 			}
 		}
 	}
