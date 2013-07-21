@@ -37,9 +37,6 @@ class TemplateCommand extends Command
 			templateName = "";
 		}
 
-		Sys.println("targetPath  ::" + targetPath);
-		Sys.println("templateName::" + templateName);
-
 		processTemplate(templateName, targetPath);
 	}
 
