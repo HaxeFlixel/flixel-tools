@@ -18,7 +18,7 @@ class ValidateCommand extends Command
 	}
 
 	/**
-	 * Validate all the demos recursivley
+	 * Validate all the demos recursively
 	 *
 	 * @param   Location    Location of the demos directory to scan and validate
 	 */
@@ -32,7 +32,7 @@ class ValidateCommand extends Command
 
 			Location = Sys.getCwd() + "flixel-demos-validation/";
 
-			CommandUtils.copyRecursivley(demosPath, Location);
+			CommandUtils.copyRecursively(demosPath, Location);
 		}
 
 		var projects:Array<OpenFLProject> = DemoUtils.scanDemoProjects();

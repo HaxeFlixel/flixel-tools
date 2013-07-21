@@ -89,7 +89,7 @@ class ConvertCommand extends Command
 
                 if (!FileSystem.exists(backupFolder))
                 {
-                    var backup = CommandUtils.copyRecursivley(ConvertPath, backupFolder);
+                    var backup = CommandUtils.copyRecursively(ConvertPath, backupFolder);
                     if (backup)
                     {
                         Sys.println("Backup copied to " + backupFolder);
@@ -128,13 +128,15 @@ class ConvertCommand extends Command
 
                 if (warnings.length > 0)
                 {
-                    var logFileName = "convert.log";
-                    var filePath = ConvertPath + "/" + logFileName;
+                    var logFileName = "/convert.log";
+                    var filePath = ConvertPath + logFileName;
 
                     writeWarningsToFile(filePath, warnings, ConvertPath);
 
-                    Sys.println("Log written to " + filePath);
-                }
+                    Sys.println("");
+                    Sys.println(" " + warnings.length + " warnings were written to " + filePath);
+					Sys.println("");
+				}
             }
             else
             {
@@ -174,7 +176,7 @@ class ConvertCommand extends Command
 
     private inline function createBackup(ConvertPath:String, BackupFolder:String):Void
     {
-        var backup = CommandUtils.copyRecursivley(ConvertPath, BackupFolder);
+        var backup = CommandUtils.copyRecursively(ConvertPath, BackupFolder);
         if (backup)
         {
             Sys.println("Backup copied to " + BackupFolder);
@@ -226,7 +228,7 @@ class ConvertCommand extends Command
                             var obj:FindAndReplaceObject = replacement;
                             sourceText = StringTools.replace(sourceText, obj.find, obj.replacement);
 
-							if(obj.importValidate != null && CommandUtils.strmatch(obj.find, sourceText))
+							if(obj.importValidate != null && CommandUtils.strmatch(obj.find, originalText))
 							{
 								var newText = CommandUtils.addImportToFileString(sourceText, obj.importValidate);
 
@@ -236,14 +238,14 @@ class ConvertCommand extends Command
 								}
 							}
 
-                            if (originalText != sourceText)
-                            {
-                                FileSystem.deleteFile(filePath);
-                                var o:FileOutput = sys.io.File.write(filePath, true);
-                                o.writeString(sourceText);
-                                o.close();
-                            }
-                        }
+							if (originalText != sourceText)
+							{
+								FileSystem.deleteFile(filePath);
+								var o:FileOutput = sys.io.File.write(filePath, true);
+								o.writeString(sourceText);
+								o.close();
+							}
+						}
 
                         var warningsCurrent = scanFileForWarnings(filePath);
 

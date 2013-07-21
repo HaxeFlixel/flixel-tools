@@ -29,13 +29,13 @@ class CreateCommand extends Command
 
 		if(console.args[1] != null)
 		{
-			demo = DemoUtils.demoExists(console.args[1]);
+			demo = DemoUtils.exists(console.args[1]);
 
 			if (demo == null)
 			{
 				if(Std.parseInt(console.args[1]) != null)
 				{
-					demo = DemoUtils.getDemoByIndex(Std.parseInt(console.args[1]));
+					demo = DemoUtils.getByIndex(Std.parseInt(console.args[1]));
 
 					if(demo == null)
 					{
@@ -64,7 +64,7 @@ class CreateCommand extends Command
 		{
 			Sys.println("");
 			Sys.println(" The Demo " + demo.NAME + " has been created at:");
-			Sys.println(destination);
+			Sys.println(" " +destination);
 			Sys.println("");
 			exit();
 		}
@@ -90,7 +90,7 @@ class CreateCommand extends Command
 			answers.push(demo.NAME);
 		}
 
-		var answer = CommandUtils.askQustionStrings(question, header, answers);
+		var answer = CommandUtils.askQuestionStrings(question, header, answers);
 
 		if(answer == null)
 		{
@@ -99,7 +99,7 @@ class CreateCommand extends Command
 			return null;
 		}
 
-		var demo = DemoUtils.demoExists(answer);
+		var demo = DemoUtils.exists(answer);
 		if(demo != null)
 		{
 			return demo;
