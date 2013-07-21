@@ -1,5 +1,8 @@
 package utils;
 
+import utils.DemoUtils;
+import FlxTools;
+import sys.FileSystem;
 import sys.io.Process;
 import sys.io.File;
 import massive.sys.io.FileSys;
@@ -12,22 +15,41 @@ class CommandUtils
 {
 
 	/**
-	 * Copy a directory and its contents recursivley
+	 * Copy a directory and its contents recursively
 	 * @param  Source      String the source directory to copy
 	 * @param  Destination String to destination to copy the directory to
 	 * @param  ?Overwrite  Overwrite the destination
 	 * @return             Bool true if the new Destination exists after operation
 	 */
-	static public function copyRecursivley(Source:String, Destination:String, ?Overwrite:Bool):Bool
+	static public function copyRecursively(Source:String, Destination:String, ?Overwrite:Bool, ?filter:EReg=null, ?exclude:Bool=false):Bool
 	{
 		var current = massive.sys.io.File.current.resolveDirectory("temp");
 
 		var dir1:massive.sys.io.File = current.resolvePath(Source, true);
 		var dir2:massive.sys.io.File = current.resolvePath(Destination, true);
 		
-		dir1.copyTo(dir2, Overwrite);
+		dir1.copyTo(dir2, Overwrite, filter, exclude);
 
 		return FileSys.exists(Destination);
+	}
+
+	public static function deleteRecursively( path : String ) : Void
+	{
+		if( FileSys.exists( path ) )
+		{
+			if( FileSys.isDirectory( path ) )
+			{
+				for( entry in FileSys.readDirectory( path ) )
+				{
+					deleteRecursively( path + "/" + entry );
+				}
+				FileSys.deleteDirectory( path );
+			}
+			else
+			{
+				FileSys.deleteFile( path );
+			}
+		}
 	}
 	
 	/**
@@ -70,6 +92,24 @@ class CommandUtils
 		return null;
 	}
 
+	/**
+	 * Prompt user with a y/n/a
+	 *
+	 * @param   Question    String with the prompt to display
+	 * @return  User choice in an Answer enum or null if an invalid answer given
+	 */
+	static public function askString(Question:String):String
+	{
+		while (true)
+		{
+			Sys.println("");
+			Sys.println(Question);
+			return readLine();
+		}
+
+		return null;
+	}
+
     /**
 	 * Prompt user with a y/n/a
 	 *
@@ -80,6 +120,7 @@ class CommandUtils
     {
         while (true)
         {
+            Sys.println("");
             Sys.println(Question + " [y/n] ? ");
 
             switch (readLine())
@@ -104,16 +145,17 @@ class CommandUtils
 	{
 		while (true)
 		{
-			Sys.println(Question + " [y/n/a] ? ");    
-			
+			Sys.println("");
+			Sys.println(Question + " [y/n/a] ? ");
+
 			switch (readLine())
 			{
 				case "n", "No": 
-					return No;
+					return Answer.No;
 				case "y", "Yes": 
-					return Yes;
+					return Answer.Yes;
 				case "a", "Always": 
-					return Always;
+					return Answer.Always;
 			}
 		}
 		
@@ -127,7 +169,7 @@ class CommandUtils
 	 * @param  Answers<String> Array<String> containing all the available answers
 	 * @return                 String the answer given or null if the choice was invalid
 	 */
-	static public function askQustionStrings(Question:String, Header:String, Answers:Array<String>):String
+	static public function askQuestionStrings(Question:String, Header:String, Answers:Array<String>, cancel:Bool = true):String
 	{
 		while (true)
 		{
@@ -140,9 +182,12 @@ class CommandUtils
 				Sys.println( " [" + i + "] " + Answers[i]);
 			}
 
-			Sys.println( "");
-			Sys.println( " [c] Cancel");
-			Sys.println( "");
+			if(cancel)
+			{
+				Sys.println( "");
+				Sys.println( " [c] Cancel");
+				Sys.println( "");
+			}
 
 			Sys.println("");
 			Sys.println(Question);    
@@ -157,7 +202,7 @@ class CommandUtils
 				{
 					validAnswer = userResponse;
 				}
-				else if(userResponse == "c")
+				else if(userResponse == "c" && cancel)
 				{
 					Sys.println(" Cancelled");
 					return 	null;
@@ -166,7 +211,14 @@ class CommandUtils
 
 			if (validAnswer != "")
 			{
-				return Answers[Std.parseInt(userResponse)];
+				if (DemoUtils.exists(userResponse) != null)
+				{
+					return userResponse;
+				}
+				else
+				{
+					return Answers[Std.parseInt(userResponse)];
+				}
 			}
 			else
 			{
@@ -213,6 +265,18 @@ class CommandUtils
 	{
 		var search = new EReg("\\b" + Needle + "\\b", "");
 		return search.match(Haystack);
+	}
+
+	static public function getHaxePath():String
+	{
+		var haxePath = Sys.getEnv ("HAXEPATH");
+
+		if (haxePath == null || haxePath == "") {
+
+			haxePath = "/usr/lib/haxe";
+		}
+
+		return haxePath;
 	}
 
 	/**
@@ -312,6 +376,59 @@ class CommandUtils
 		}
 		return Path;
 	}
+
+	static public function loadToolSettings():FlxToolSettings
+	{
+		var toolPath = CommandUtils.getHaxelibPath("flixel-tools");
+		if(toolPath == "")
+		{
+			Sys.println("Error detecting your installation of haxelib flixel-tools.");
+			return null;
+		}
+
+		var settingsPath = toolPath + "settings.json";
+
+		if( FileSystem.exists(settingsPath))
+		{
+			var jsonContent:String = File.getContent(toolPath + "settings.json");
+			var settings:FlxToolSettings = Json.parse(jsonContent);
+
+			return settings;
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	static public function saveToolSettings(Settings:FlxToolSettings):Void
+	{
+		var toolPath = CommandUtils.getHaxelibPath("flixel-tools");
+		if(toolPath == "")
+		{
+			Sys.println("Error detecting path of your haxelib flixel-tools.");
+			return null;
+		}
+
+		var settingsPath = toolPath + "settings.json";
+
+		File.saveContent(settingsPath, Json.stringify(Settings));
+
+		FlxTools.settings = CommandUtils.loadToolSettings();
+	}
+
+}
+
+/**
+ * Definition for the user Settings File of the tools
+ */
+typedef FlxToolSettings = {
+	DefaultEditor:String,
+	AuthorName:String,
+	SublimeCMDOpen:Bool,
+	IDEA_flexSdkName:String,
+	IDEA_Flixel_Engine_Library:String,
+	IDEA_Flixel_Addons_Library:String,
 }
 
 /**
