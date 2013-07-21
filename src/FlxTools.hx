@@ -19,14 +19,27 @@ class FlxTools extends CommandLineRunner
 	inline static public var ALIAS = "flixel";
 	inline static public var VERSION = "0.0.2";
 
+	public static var SUBLIME_TEXT:String = "Sublime Text";
+	public static var FLASH_DEVELOP:String = "Flash Develop";
+	public static var INTELLIJ_IDEA:String = "Intellij Idea";
+	public static var IDE_NONE:String = "None";
+
 	inline static public var FLIXEL_TEMPLATE_REPO = "https://github.com/HaxeFlixel/flixel-templates.git";
 	inline static public var FLIXEL_DEMOS_REPO = "https://github.com/HaxeFlixel/flixel-demos.git";
 
 	static public var flixelVersion:String;
 
+	static public var settings:FlxToolSettings;
+
+	static public var flashDevelopSource:String;
+	static public var intellijSource:String;
+	static public var sublimeSource:String;
+
 	public function new():Void
 	{
 		super();
+
+		settings = CommandUtils.loadToolSettings();
 
 		mapCommand(
 			CreateCommand,
@@ -50,13 +63,13 @@ class FlxTools extends CommandLineRunner
 			// TemplateUtil.getTemplate("download")
 		);
 
-		//mapCommand(
-		//	TemplateCommand,
-		//	"template", ["t"],
-		//	"Creates a project template.",
-		//	""
-		//	//TemplateUtil.getTemplate("template")
-		//);
+		mapCommand(
+			TemplateCommand,
+			"template", ["t"],
+			"Creates a project template.",
+			""
+			//TemplateUtil.getTemplate("template")
+		);
 
 		mapCommand(
 			ConvertCommand,
@@ -119,6 +132,5 @@ class FlxTools extends CommandLineRunner
 		Sys.println("");
 	}
 
-	//Required by the Compiler
 	static public function main():FlxTools { return new FlxTools(); }
 }
