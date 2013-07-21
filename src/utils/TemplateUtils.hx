@@ -1,9 +1,27 @@
 package utils;
 
+import haxe.Json;
+import sys.io.File;
 import sys.FileSystem;
 
 class TemplateUtils
 {
+	static public function get(TemplateName:String = ""):TemplateProject
+	{
+		if(TemplateName == "")
+			TemplateName = 'default';
+
+		var templates = scanTemplateProjects();
+		var target:TemplateProject = null;
+
+		for (template in templates)
+		{
+			if (template.Name == TemplateName)
+				target = template;
+		}
+		return target;
+	}
+
 	/**
 	 * Scan a folder recursively for openfl project files
 	 *
@@ -23,54 +41,47 @@ class TemplateUtils
 			}
 		}
 
+		if(!FileSystem.exists(TemplatesPath))
+			return null;
+
 		var templates = new Array<TemplateProject>();
+
+		var flashDevelopSource = "flash-develop";
+		var intellijSource = "intellij-idea";
+		var sublimeSource = "sublime-text";
+		var ideData = "ide-data";
+		var ideDataPath = "";
 
 		for (name in FileSystem.readDirectory(TemplatesPath))
 		{
-			var folderPath:String = TemplatesPath + "/" + name;
+			var folderPath = TemplatesPath + name;
 
-			//.fdz
-
-			if (!StringTools.startsWith(name, ".") && FileSystem.isDirectory(folderPath))
+			if(FileSystem.exists(folderPath))
 			{
-				//var projectXMLPath:String = scanProjectFile(folderPath);
-
-				//if (projectXMLPath == "" && recursive)
-				//{
-					//for ( targetFolder in TargetFolders )
-					//{
-					//	if (name == targetFolder)
-					//	{
-					//		var subpath:String = folderPath;
-					//		var childProjects:Array<TemplateProject> = scanOpenFLProjects(subpath);
-					//
-					//		for (childProject in childProjects)
-					//		{
-					//			var template:TemplateProject = childProject;
-					//			template.TARGETS = name;
-					//
-					//			if (FileSystem.exists(template.PATH))
-					//			{
-					//				templates.push(template);
-					//			}
-					//		}
-					//	}
-					//}
-				}
-				else
+				if(FileSystem.isDirectory(folderPath) && name != '.git')
 				{
-					//var project:TemplateProject =
-					//{
-					//	NAME : name,
-					//	PATH : folderPath,
-					//	OPTIONS : options
-					//};
-					//
-					//if (FileSystem.exists(project.PATH))
-					//{
-					//	templates.push(project);
-					//}
+					if(name == ideData)
+					{
+						ideDataPath = TemplatesPath + name;
+						FlxTools.flashDevelopSource = ideDataPath + "/" + flashDevelopSource;
+						FlxTools.intellijSource = ideDataPath + "/" + intellijSource;
+						FlxTools.sublimeSource = ideDataPath + "/" + sublimeSource;
+					}
+					else
+					{
+						var file = File.getContent(TemplatesPath + name + "/template.json");
+						var FileData:TemplateFile = Json.parse(file);
+
+						var project:TemplateProject =
+						{
+							Name : name,
+							Path : TemplatesPath + name,
+							Template : FileData
+						};
+						templates.push(project);
+					}
 				}
+			}
 		}
 
 		if (Lambda.count(templates) > 0)
@@ -81,7 +92,14 @@ class TemplateUtils
 		{
 			return null;
 		}
+
 	}
+
+}
+
+typedef TemplateFile = {
+
+	var replacements:Array<TemplateReplacement>;
 
 }
 
@@ -89,7 +107,16 @@ class TemplateUtils
  * Object to pass the data of a template project
  */
 typedef TemplateProject = {
-	var NAME:String;
-	var PATH:String;
-	var OPTIONS:Array<String>;
+	var Name:String;
+	var Path:String;
+	var Template:TemplateFile;
+}
+
+/**
+* Definition of template replacement
+*/
+typedef TemplateReplacement = {
+	replacement:String,
+	pattern:String,
+	cmdOption:String,
 }
