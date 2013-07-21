@@ -389,8 +389,8 @@ class FindAndReplace
     */
     inline static public function addFunction(Find:String, Replacement:String, ?ImportValidate):Void
     {
-        Find = Find + "\\(";
-        Replacement = Replacement + "\\(";
+        //Find = Find + "(";
+        //Replacement = Replacement + "(";
 
         add(Find, Replacement, ImportValidate);
     }
