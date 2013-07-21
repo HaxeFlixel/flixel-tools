@@ -44,9 +44,6 @@ class TemplateCommand extends Command
 	{
 		for (o in Replacements)
 		{
-			Sys.println("-------------");
-			Sys.println(o);
-			Sys.println("-------------");
 			return o.replacement;
 		}
 		return null;
@@ -145,7 +142,6 @@ class TemplateCommand extends Command
 					var projectName = getReplacementValue(template.Template.replacements, "${PROJECT_NAME}");
 					var projectFile = TargetPath + "/" + projectName + ".sublime-project";
 
-					Sys.println("wow::" + projectFile);
 					Sys.command("subl " + projectFile);
 				}
 			}
