@@ -43,17 +43,14 @@ class TemplateCommand extends Command
 		processTemplate(templateName, targetPath);
 	}
 
-	private function getReplacementValue(replacements:Array<TemplateReplacement>, pattern:String):String
+	private function getReplacementValue(Replacements:Array<TemplateReplacement>, Pattern:String):String
 	{
-		for (o in replacements)
+		for (o in Replacements)
 		{
-			//if(o.pattern == pattern)
-			//{
 			Sys.println("-------------");
 			Sys.println(o);
 			Sys.println("-------------");
 			return o.replacement;
-			//}
 		}
 		return null;
 	}
@@ -160,9 +157,9 @@ class TemplateCommand extends Command
 		exit();
 	}
 
-	private function addOptionReplacement(template:TemplateProject):TemplateProject
+	private function addOptionReplacement(Template:TemplateProject):TemplateProject
 	{
-		var replacements = template.Template.replacements;
+		var replacements = Template.Template.replacements;
 
 		for (o in replacements)
 		{
@@ -171,7 +168,7 @@ class TemplateCommand extends Command
 				o.replacement = replace.replacement;
 		}
 
-		return template;
+		return Template;
 	}
 
 	private function addOptions(Pattern:String, CMDOption:String, DefaultValue:Dynamic):TemplateReplacement

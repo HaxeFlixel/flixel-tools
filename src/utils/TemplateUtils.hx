@@ -29,7 +29,7 @@ class TemplateUtils
 	 * @param   Display         [description]
 	 * @return                  Array<OpenFLProject> or null if no Demos were found
 	 */
-	static public function scanTemplateProjects(TemplatesPath:String = "", recursive:Bool = true):Array<TemplateProject>
+	static public function scanTemplateProjects(TemplatesPath:String = "", Recursive:Bool = true):Array<TemplateProject>
 	{
 		if (TemplatesPath == "")
 		{
