@@ -13,7 +13,7 @@ class ProjectUtils
 	 */
 	static public function duplicateProject(project:OpenFLProject, destination:String = ""):Bool
 	{
-		return CommandUtils.copyRecursivley(project.PATH, destination);
+		return CommandUtils.copyRecursively(project.PATH, destination);
 	}
 
 	/**
@@ -67,10 +67,10 @@ class ProjectUtils
 
 							var project:OpenFLProject =
 							{
-							NAME : name,
-							PATH : folderPath,
-							PROJECTXMLPATH : projectXMLPath,
-							TARGETS : targets
+								NAME : name,
+								PATH : folderPath,
+								PROJECTXMLPATH : projectXMLPath,
+								TARGETS : targets
 							};
 
 							if (FileSystem.exists(project.PATH))

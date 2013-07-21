@@ -11,7 +11,7 @@ class DemoUtils
 	 * @param  Name String the name of the demo to check
 	 * @return      OpenFLProject or null if it doesn't exist
 	 */
-	static public function getDemoByIndex(Index:Int, DemoPath:String = ""):OpenFLProject
+	static public function getByIndex(Index:Int, DemoPath:String = ""):OpenFLProject
 	{
 		var demos = scanDemoProjects(DemoPath);
 
@@ -34,7 +34,7 @@ class DemoUtils
 	 * @param  Name String the name of the demo to check
 	 * @return      OpenFLProject or null if it doesn't exist
 	 */
-	static public function demoExists(Name:String):OpenFLProject
+	static public function exists(Name:String):OpenFLProject
 	{
 		var demos = scanDemoProjects();
 
@@ -65,7 +65,7 @@ class DemoUtils
 		if (DemosPath == "")
 		{
 			DemosPath = CommandUtils.getHaxelibPath("flixel-demos");
-			Sys.println(DemosPath);
+
 			if (DemosPath == "")
 			{
 				return null;
