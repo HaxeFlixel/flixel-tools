@@ -1,29 +1,27 @@
 package;
 
+import commands.ConvertCommand;
+import commands.CreateCommand;
+import commands.DownloadCommand;
 import commands.OpenFLTestCommand;
+import commands.SetupCommand;
+import commands.TemplateCommand;
+import commands.ValidateCommand;
+import massive.haxe.util.TemplateUtil;
+import massive.sys.cmd.CommandLineRunner;
 import utils.CommandUtils;
 import utils.CommandUtils.HaxelibJSON;
-import massive.sys.cmd.CommandLineRunner;
-import massive.haxe.util.TemplateUtil;
-
-import commands.TemplateCommand;
-import commands.CreateCommand;
-import commands.SetupCommand;
-import commands.DownloadCommand;
-import commands.ConvertCommand;
-import commands.ValidateCommand;
 
 class FlxTools extends CommandLineRunner
 {
-
 	inline static public var NAME = "HaxeFlixel";
 	inline static public var ALIAS = "flixel";
 	inline static public var VERSION = "0.0.2";
 
-	public static var SUBLIME_TEXT:String = "Sublime Text";
-	public static var FLASH_DEVELOP:String = "Flash Develop";
-	public static var INTELLIJ_IDEA:String = "Intellij Idea";
-	public static var IDE_NONE:String = "None";
+	inline static public var SUBLIME_TEXT:String = "Sublime Text";
+	inline static public var FLASH_DEVELOP:String = "Flash Develop";
+	inline static public var INTELLIJ_IDEA:String = "Intellij Idea";
+	inline static public var IDE_NONE:String = "None";
 
 	inline static public var FLIXEL_TEMPLATE_REPO = "https://github.com/HaxeFlixel/flixel-templates.git";
 	inline static public var FLIXEL_DEMOS_REPO = "https://github.com/HaxeFlixel/flixel-demos.git";
