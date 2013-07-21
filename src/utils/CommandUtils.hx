@@ -182,6 +182,66 @@ class CommandUtils
 		return null;
 	}
 
+	static public function askQuestionDemoStrings(Question:String, Header:String, Answers:Array<String>, cancel:Bool = true):String
+	{
+		while (true)
+		{
+			Sys.println("");
+			Sys.println(Header);
+			Sys.println("");
+
+			for( i in 0...Answers.length )
+			{
+				Sys.println( " [" + i + "] " + Answers[i]);
+			}
+
+			if(cancel)
+			{
+				Sys.println( "");
+				Sys.println( " [c] Cancel");
+				Sys.println( "");
+			}
+
+			Sys.println("");
+			Sys.println(Question);
+			Sys.println("");
+
+			var userResponse = readLine();
+			var validAnswer = "";
+
+			for( i in 0...Answers.length )
+			{
+				if( Answers[i] == userResponse || Std.string(i) == userResponse )
+				{
+					validAnswer = userResponse;
+				}
+				else if(userResponse == "c" && cancel)
+				{
+					Sys.println(" Cancelled");
+					return 	null;
+				}
+			}
+
+			if (validAnswer != "")
+			{
+				if (DemoUtils.exists(userResponse) != null)
+				{
+					return userResponse;
+				}
+				else
+				{
+					return Answers[Std.parseInt(userResponse)];
+				}
+			}
+			else
+			{
+				return null;
+			}
+		}
+
+		return null;
+	}
+
 	/**
 	 * As the user a question with automatic numeric references to string answers,
 	 * includes simple validation and cancel
@@ -225,13 +285,13 @@ class CommandUtils
 				else if(userResponse == "c" && cancel)
 				{
 					Sys.println(" Cancelled");
-					return 	null;
+					return "";
 				}
 			}
 
 			if (validAnswer != "")
 			{
-				if (DemoUtils.exists(userResponse) != null)
+				if (userResponse != "")
 				{
 					return userResponse;
 				}
@@ -242,11 +302,11 @@ class CommandUtils
 			}
 			else
 			{
-				return null;
+				return "";
 			}
 		}
 		
-		return null;
+		return "";
 	}
 
 	/**

@@ -39,7 +39,7 @@ class CreateCommand extends Command
 
 					if(demo == null)
 					{
-						error("This Demo is not available. Please try run the 'flixel download' command.");
+						error("This Demo was not found, please try again.");
 					}
 				}
 			}
@@ -47,11 +47,11 @@ class CreateCommand extends Command
 		else
 		{
 			demo = promptDemoChoice(projects);
+		}
 
-			if(demo == null)
-			{
-				exit();
-			}
+		if(demo == null)
+		{
+			error("This Demo was not found, please try again.");
 		}
 
 		Sys.println(" Creating " + demo.NAME);
@@ -90,7 +90,7 @@ class CreateCommand extends Command
 			answers.push(demo.NAME);
 		}
 
-		var answer = CommandUtils.askQuestionStrings(question, header, answers);
+		var answer = CommandUtils.askQuestionDemoStrings(question, header, answers);
 
 		if(answer == null)
 		{
