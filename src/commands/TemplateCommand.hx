@@ -55,7 +55,7 @@ class TemplateCommand extends Command
 
 		if (template == null)
 		{
-			error("Error getting the template with the name of " + TemplateName);
+			error("Error getting the template with the name of " + TemplateName + " make sure you have run the 'flixel download' command.");
 		}
 		else
 		{

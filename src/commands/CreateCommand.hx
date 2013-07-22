@@ -90,7 +90,7 @@ class CreateCommand extends Command
 			answers.push(demo.NAME);
 		}
 
-		var answer = CommandUtils.askQuestionDemoStrings(question, header, answers);
+		var answer = DemoUtils.askQuestionDemoStrings(question, header, answers);
 
 		if(answer == null)
 		{

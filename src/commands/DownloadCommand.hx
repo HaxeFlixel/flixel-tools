@@ -9,7 +9,7 @@ class DownloadCommand extends Command
 	{
 		downloadDemos();
 
-		//downloadTemplates();
+		downloadTemplates();
 
 		exit();
 	}

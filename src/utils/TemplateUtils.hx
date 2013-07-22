@@ -14,6 +14,9 @@ class TemplateUtils
 		var templates = scanTemplateProjects();
 		var target:TemplateProject = null;
 
+		if(templates == null)
+			return null;
+
 		for (template in templates)
 		{
 			if (template.Name == TemplateName)

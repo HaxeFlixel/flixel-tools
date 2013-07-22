@@ -83,18 +83,18 @@ class FlxTools extends CommandLineRunner
 		mapCommand(
 			ValidateCommand,
 			"validate", ["v"],
-			"Compiles a project to validate for compile errors.",
+			"Compiles a project to validate compile errors.",
 			""
 			// TemplateUtil.getTemplate("validate")
 		);
 
-		mapCommand(
-			OpenFLTestCommand,
-			"test", ["t"],
-			"Alias for the openfl test command.",
-			""
-			//TemplateUtil.getTemplate("template")
-		);
+		//mapCommand(
+		//	OpenFLTestCommand,
+		//	"test", ["t"],
+		//	"Alias for the openfl test command.",
+		//	""
+		//	//TemplateUtil.getTemplate("template")
+		//);
 
 		run();
 	}
