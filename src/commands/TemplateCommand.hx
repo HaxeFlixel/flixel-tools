@@ -246,7 +246,10 @@ class TemplateCommand extends Command
 		options.set("-fd", FlxTools.FLASH_DEVELOP);
 		options.set("-idea", FlxTools.INTELLIJ_IDEA);
 
-		var choice = FlxTools.settings.DefaultEditor;
+		var choice = null;
+
+		if(FlxTools.settings != null)
+			choice = FlxTools.settings.DefaultEditor;
 
 		for (o in options.keys())
 		{
