@@ -122,17 +122,14 @@ class FindAndReplace
         addFunction("FlxG.removeCamera",        "FlxG.cameras.remove");
         addFunction("FlxG.resetCameras",        "FlxG.cameras.reset");
         addFunction("FlxG.fullscreen",          "FlxG.cameras.fullscreen");
-		
+		addFunction("FlxG.shake",				"FlxG.cameras.shake");
+		addFunction("FlxG.flash",				"FlxG.cameras.flash");
+		addFunction("FlxG.fade",				"FlxG.cameras.fade");
         add(        "FlxG.bgColor",             "FlxG.cameras.bgColor");
 		
         // add("FlxG.cameras", "FlxG.cameras.list");
         // Causes problems in other contexts like;
         // FlxG.cameras.list.add(camera);
-		
-        // CameraFXFrontEnd
-        addFunction("FlxG.shake",               "FlxG.cameraFX.shake");
-        addFunction("FlxG.flash",               "FlxG.cameraFX.flash");
-        addFunction("FlxG.fade",                "FlxG.cameraFX.fade");
 		
         // DebuggerFrontEnd
         addFunction("FlxG.setDebuggerLayout",   "FlxG.debugger.setLayout");
@@ -345,6 +342,15 @@ class FindAndReplace
         add("FlxG.game._replayCallback",        "FlxG.game.replayCallback");
 		
         return replacements;
+		
+		
+		/**
+		 * Merge of CameraFrontEnd and CameraFXFrontEnd
+		 */
+		
+		addFunction("FlxG.cameraFX.flash",		"FlxG.cameras.flash");
+		addFunction("FlxG.cameraFX.fade",		"FlxG.cameras.fade");
+		addFunction("FlxG.cameraFX.shake",		"FlxG.cameras.shake");
     }
 
     /**
