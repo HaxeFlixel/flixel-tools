@@ -102,6 +102,9 @@ class FindAndReplace
         add(        "FlxG.DEG",                 "FlxAngle.TO_DEG",                  "util.FlxAngle");
         add(        "FlxG.RAD",                 "FlxAngle.TO_RAD",                  "util.FlxAngle");
 		
+		add(		"FlxG.flashGfx",			"FlxSpriteUtil.flashGfx",			"util.FlxSpriteUtil");
+		add(		"FlxG.flashGfxSprite",		"FlxSpriteUtil.flashGfxSprite",		"util.FlxSpriteUtil");
+		
         add(        "FlxG.levels",              "Reg.levels");
         add(        "FlxG.level",               "Reg.level");
         add(        "FlxG.scores",              "Reg.scores");
