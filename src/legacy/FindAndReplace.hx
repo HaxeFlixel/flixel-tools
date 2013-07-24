@@ -91,6 +91,8 @@ class FindAndReplace
         addFunction("FlxG.getRandom",           "FlxArrayUtil.getRandom",           "util.FlxRandom");
         addFunction("FlxG.globalSeed",          "FlxRandom.globalSeed",             "util.FlxRandom");
 		
+        addFunction("FlxG.resetInput",          "FlxInputs.resetInputs",            "system.input.FlxInputs");
+		
         add(        "FlxG.RED",                 "FlxColor.RED",                     "util.FlxColor");
         add(        "FlxG.GREEN",               "FlxColor.GREEN",                   "util.FlxColor");
         add(        "FlxG.BLUE",                "FlxColor.BLUE",                    "util.FlxColor");
