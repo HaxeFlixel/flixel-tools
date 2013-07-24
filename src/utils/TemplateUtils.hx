@@ -1,8 +1,8 @@
 package utils;
 
+import massive.sys.io.File;
+import massive.sys.io.FileSys;
 import haxe.Json;
-import sys.io.File;
-import sys.FileSystem;
 
 class TemplateUtils
 {
@@ -44,7 +44,7 @@ class TemplateUtils
 			}
 		}
 
-		if(!FileSystem.exists(TemplatesPath))
+		if(!FileSys.exists(TemplatesPath))
 			return null;
 
 		var templates = new Array<TemplateProject>();
@@ -55,24 +55,25 @@ class TemplateUtils
 		var ideData = "ide-data";
 		var ideDataPath = "";
 
-		for (name in FileSystem.readDirectory(TemplatesPath))
+		for (name in FileSys.readDirectory(TemplatesPath))
 		{
-			var folderPath = TemplatesPath + name;
+			var folderPath = CommandUtils.combine(TemplatesPath, name);
 
-			if(FileSystem.exists(folderPath))
+			if(FileSys.exists(folderPath))
 			{
-				if(FileSystem.isDirectory(folderPath) && name != '.git')
+				if(FileSys.isDirectory(folderPath) && name != '.git')
 				{
 					if(name == ideData)
 					{
 						ideDataPath = TemplatesPath + name;
-						FlxTools.flashDevelopSource = ideDataPath + "/" + flashDevelopSource;
-						FlxTools.intellijSource = ideDataPath + "/" + intellijSource;
-						FlxTools.sublimeSource = ideDataPath + "/" + sublimeSource;
+						FlxTools.flashDevelopSource = CommandUtils.combine(ideDataPath, flashDevelopSource);
+						FlxTools.intellijSource = CommandUtils.combine(ideDataPath, intellijSource);
+						FlxTools.sublimeSource = CommandUtils.combine(ideDataPath, sublimeSource);
 					}
 					else
 					{
-						var file = File.getContent(TemplatesPath + name + "/template.json");
+						var filePath = CommandUtils.combine(TemplatesPath, name);
+						var file = sys.io.File.getContent(CommandUtils.combine( filePath, "template.json"));
 						var FileData:TemplateFile = Json.parse(file);
 
 						var project:TemplateProject =
