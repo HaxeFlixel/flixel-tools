@@ -61,10 +61,8 @@ class ProjectUtils
 	}
 
 	/**
-	* Scans a path for OpenFL project xml
-	* 
-	* @author   Joshua Granick from a method in openfl-tools
-	* @return   The path of the project file found
+	* Scans a path for OpenFL project.xml
+	*
 	*/
 	static private function scanProjectXML(ProjectPath:String):String
 	{
@@ -72,35 +70,6 @@ class ProjectUtils
 		{
 			var file = CommandUtils.combine(ProjectPath, "project.xml");
 			return file;
-		}
-		else if( FileSys.exists(ProjectPath))
-		{
-			if( FileSys.isDirectory(ProjectPath))
-			{
-				var files = FileSys.readDirectory(ProjectPath);
-				var matches = new Map <String, Array <String>>();
-				matches.set("xml", []);
-
-				for (file in files)
-				{
-					var path = CommandUtils.combine(ProjectPath, file);
-
-					if (FileSys.exists(path) && !FileSys.isDirectory(path))
-					{
-						var extension:String = Path.extension(file);
-
-						if ((extension == "xml" && file != "include.xml"))
-						{
-							matches.get(extension).push(path);
-						}
-					}
-				}
-
-				if (matches.get("xml").length > 0)
-				{
-					return matches.get("xml")[0];
-				}
-			}
 		}
 		return "";
 	}
