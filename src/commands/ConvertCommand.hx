@@ -128,8 +128,8 @@ class ConvertCommand extends Command
 
                 if (warnings.length > 0)
                 {
-                    var logFileName = "/convert.log";
-                    var filePath = ConvertPath + logFileName;
+                    var logFileName = "convert.log";
+                    var filePath = CommandUtils.combine(ConvertPath, logFileName);
 
                     writeWarningsToFile(filePath, warnings, ConvertPath);
 
@@ -202,9 +202,9 @@ class ConvertCommand extends Command
         {
             for (fileName in FileSystem.readDirectory(ProjectPath))
             {
-                if (FileSystem.isDirectory(ProjectPath + "/" + fileName) && fileName != "_backup")
+                if (FileSystem.isDirectory(CommandUtils.combine(ProjectPath, fileName)) && fileName != "_backup")
                 {
-                    var recursiveWarnings:Array<WarningResult> = convertProjectFolder(ProjectPath + "/" + fileName, false);
+                    var recursiveWarnings:Array<WarningResult> = convertProjectFolder(CommandUtils.combine(ProjectPath, fileName), false);
 
                     if (recursiveWarnings != null)
                     {
@@ -218,7 +218,7 @@ class ConvertCommand extends Command
                 {
                     if (StringTools.endsWith(fileName, ".hx"))
                     {
-                        var filePath:String = ProjectPath + "/" + fileName;
+                        var filePath:String = CommandUtils.combine(ProjectPath, fileName);
                         var sourceText:String = sys.io.File.getContent(filePath);
                         var originalText:String = Reflect.copy(sourceText);
                         var replacements:Array<FindAndReplaceObject> = FindAndReplace.init();
