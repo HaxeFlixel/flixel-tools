@@ -40,15 +40,6 @@ class TemplateCommand extends Command
 		processTemplate(templateName, targetPath);
 	}
 
-	private function getReplacementValue(Replacements:Array<TemplateReplacement>, Pattern:String):String
-	{
-		for (o in Replacements)
-		{
-			return o.replacement;
-		}
-		return null;
-	}
-
 	public function processTemplate(TemplateName:String = "", TargetPath:String = ""):Void
 	{
 		var template:TemplateProject = TemplateUtils.get(TemplateName);
@@ -150,6 +141,15 @@ class TemplateCommand extends Command
 		}
 
 		exit();
+	}
+
+	private function getReplacementValue(Replacements:Array<TemplateReplacement>, Pattern:String):String
+	{
+		for (o in Replacements)
+		{
+			return o.replacement;
+		}
+		return null;
 	}
 
 	private function addOptionReplacement(Template:TemplateProject):TemplateProject

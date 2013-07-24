@@ -2,7 +2,6 @@ package commands;
 
 import massive.sys.cmd.Command;
 import utils.ProjectUtils.OpenFLProject;
-import utils.CommandUtils;
 import utils.DemoUtils;
 
 class CreateCommand extends Command
@@ -23,6 +22,7 @@ class CreateCommand extends Command
 			Sys.println("Is your flixel-demos haxelib installed?");
 			Sys.println("Try the 'flixel download' command.");
 			Sys.println("");
+			exit();
 		}
 
 		var demo:OpenFLProject = null;

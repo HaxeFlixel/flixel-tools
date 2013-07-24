@@ -1,7 +1,6 @@
 package utils;
 
-import sys.FileSystem;
-import sys.FileSystem;
+import massive.sys.io.FileSys;
 import haxe.io.Path;
 
 class ProjectUtils
@@ -20,63 +19,38 @@ class ProjectUtils
 	 * Scan a Directory recursively for OpenFL projects
 	 * @return Array<OpenFLProject> containing projects with an XML specified
 	 */
-	static public function scanOpenFLProjects(TargetDirectory:String, recursive:Bool = false, TargetFolders:Array<String> = null):Array<OpenFLProject>
+	static public function scanOpenFLProjects(TargetDirectory:String, recursive:Bool = true, TargetFolders:Array<String> = null):Array<OpenFLProject>
 	{
 		var projects = new Array<OpenFLProject>();
 
-		if (FileSystem.exists(TargetDirectory))
+		if (FileSys.exists(TargetDirectory))
 		{
-			for (name in FileSystem.readDirectory(TargetDirectory))
+			for (name in FileSys.readDirectory(TargetDirectory))
 			{
-				var folderPath:String = TargetDirectory + name;
+				var folderPath:String = CommandUtils.combine(TargetDirectory, name);
 
-				if (FileSystem.exists(folderPath))
+				if(FileSys.isDirectory(folderPath) && !StringTools.startsWith(name, "."))
 				{
-					if (!StringTools.startsWith(name, ".") && FileSystem.isDirectory(folderPath))
+					var projectPath = scanProjectXML(folderPath);
+
+					if(projectPath != "")
 					{
-						var projectXMLPath:String = scanProjectFile(folderPath);
-
-						if (projectXMLPath == "" && recursive)
+						var project:OpenFLProject =
 						{
-							var childProjects:Array<OpenFLProject> = scanOpenFLProjects(folderPath);
+							NAME : name,
+							PATH : folderPath,
+							PROJECTXMLPATH : projectPath,
+							TARGETS : ""
+						};
+						projects.push(project);
+					}
 
-							for (childProject in childProjects)
-							{
-								var project:OpenFLProject = childProject;
-								if (FileSystem.exists(project.PATH))
-								{
-									projects.push(project);
-								}
-							}
-						}
-						else
+					var subProjects = scanOpenFLProjects(folderPath);
+					if(subProjects.length>0)
+					{
+						for (o in subProjects)
 						{
-
-							var targets = "all";
-
-							if (TargetFolders != null)
-							{
-								for (target in TargetFolders)
-								{
-									if (CommandUtils.strmatch(targets, name))
-									{
-										targets = target;
-									}
-								}
-							}
-
-							var project:OpenFLProject =
-							{
-								NAME : name,
-								PATH : folderPath,
-								PROJECTXMLPATH : projectXMLPath,
-								TARGETS : targets
-							};
-
-							if (FileSystem.exists(project.PATH))
-							{
-								projects.push(project);
-							}
+							projects.push(o);
 						}
 					}
 				}
@@ -87,51 +61,45 @@ class ProjectUtils
 	}
 
 	/**
-	* Scans a path for OpenFL/NME project files
+	* Scans a path for OpenFL project xml
 	* 
 	* @author   Joshua Granick from a method in openfl-tools
 	* @return   The path of the project file found
 	*/
-	static private function scanProjectFile(ProjectPath:String):String
+	static private function scanProjectXML(ProjectPath:String):String
 	{
-		if (FileSystem.exists(CommandUtils.combine(ProjectPath, "Project.hx")))
+		if (FileSys.exists(CommandUtils.combine(ProjectPath, "project.xml")))
 		{
-			return CommandUtils.combine(ProjectPath, "Project.hx");
+			var file = CommandUtils.combine(ProjectPath, "project.xml");
+			return file;
 		}
-		else if (FileSystem.exists(CommandUtils.combine(ProjectPath, "project.xml")))
+		else if( FileSys.exists(ProjectPath))
 		{
-			return CommandUtils.combine(ProjectPath, "project.xml");
-		}
-		else
-		{
-			var files = FileSystem.readDirectory(ProjectPath);
-			var matches = new Map <String, Array <String>>();
-			matches.set("xml", []);
-			matches.set("hx", []);
-
-			for (file in files)
+			if( FileSys.isDirectory(ProjectPath))
 			{
-				var path = CommandUtils.combine(ProjectPath, file);
+				var files = FileSys.readDirectory(ProjectPath);
+				var matches = new Map <String, Array <String>>();
+				matches.set("xml", []);
 
-				if (FileSystem.exists(path) && !FileSystem.isDirectory(path))
+				for (file in files)
 				{
-					var extension:String = Path.extension(file);
+					var path = CommandUtils.combine(ProjectPath, file);
 
-					if ((extension == "xml" && file != "include.xml") || extension == "hx")
+					if (FileSys.exists(path) && !FileSys.isDirectory(path))
 					{
-						matches.get(extension).push(path);
+						var extension:String = Path.extension(file);
+
+						if ((extension == "xml" && file != "include.xml"))
+						{
+							matches.get(extension).push(path);
+						}
 					}
 				}
-			}
 
-			if (matches.get("xml").length > 0)
-			{
-				return matches.get("xml")[0];
-			}
-
-			if (matches.get("hx").length > 0)
-			{
-				return matches.get("hx")[0];
+				if (matches.get("xml").length > 0)
+				{
+					return matches.get("xml")[0];
+				}
 			}
 		}
 		return "";
