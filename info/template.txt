@@ -1,8 +1,16 @@
 
-usage: template || t
+usage: flixel template || tpl
 
-Creates a new template project in the current working directory with the specified options.
+Creates a new HaxeFlixel template project a default project is provided as well as IDE specific project support.
 
-Optional : template <options>
+Optional : template <name> <path> <options>
 
-    <options>         : The options available will depend on the specific template.
+    <name>         		: The name for the template to generate, default template will be created when none is specified.
+
+	<path>         		: The name for the path to create the template in, default is the name of the template itself.
+
+    <options>         	: The options available will depend on the specific template's template.json.
+    					  The default template has options such as -n for project name and -w -h for width and height.
+
+advanced usage example  : flixel tpl -n Custom
+						: Creates the default template in a folder called Custom with the Project Name as Custom also.

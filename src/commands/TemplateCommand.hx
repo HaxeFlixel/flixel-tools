@@ -29,6 +29,11 @@ class TemplateCommand extends Command
 
 		ideOption = selectIDE();
 
+		if(console.getOption("-n") != null)
+		{
+			targetPath = console.getOption("-n");
+		}
+
 		//support a path as an arg without name for default
 		//flixel t ./<new_directory> <options>
 		if (StringTools.startsWith(templateName, "./"))
