@@ -23,7 +23,7 @@ class SetupCommand extends Command
 
 		var haxePath:String = Sys.getEnv("HAXEPATH");
 
-		var scriptDestination = "";
+		var flixelAliasScript = "";
 
 		if (FileSys.isWindows)
 		{
@@ -32,11 +32,15 @@ class SetupCommand extends Command
 				haxePath = "C:\\HaxeToolkit\\haxe\\";
 			}
 
-			scriptDestination = haxePath + "\\flixel.bat";
+			flixelAliasScript = haxePath + "\\flixel.bat";
 
-			if(!FileSystem.exists (scriptDestination))
+			if(FileSystem.exists (flixelAliasScript))
 			{
-				File.copy(CommandUtils.getHaxelibPath("flixel-tools") + "\\\\bin\\flixel.bat", scriptDestination);
+				File.copy(CommandUtils.getHaxelibPath("flixel-tools") + "\\\\bin\\flixel.bat", flixelAliasScript);
+			}
+			else
+			{
+				error("Could not find the flixel-tools alias script");
 			}
 		}
 		else
@@ -46,13 +50,17 @@ class SetupCommand extends Command
 				haxePath = "/usr/lib/haxe";
 			}
 
-			scriptDestination = CommandUtils.getHaxelibPath("flixel-tools") + "bin/flixel.sh";
+			flixelAliasScript = CommandUtils.getHaxelibPath("flixel-tools") + "bin/flixel.sh";
 
-			if(!FileSystem.exists (scriptDestination))
+			if(FileSystem.exists (flixelAliasScript))
 			{
-				Sys.command("sudo", [ "cp", scriptDestination, haxePath + "/flixel" ]);
+				Sys.command("sudo", [ "cp", flixelAliasScript, haxePath + "/flixel" ]);
 				Sys.command("sudo chmod 755 " + haxePath + "/flixel");
 				Sys.command("sudo ln -s " + haxePath + "/flixel /usr/bin/flixel");
+			}
+			else
+			{
+				error("Could not find the flixel-tools alias script");
 			}
 		}
 
@@ -63,8 +71,7 @@ class SetupCommand extends Command
 		{
 			if(!autoContinue)
 			{
-				var download = CommandUtils.askYN ("Would you now like this tool to download the flixel-demos and
-		flixel-templates?");
+				var download = CommandUtils.askYN ("Would you now like this tool to download the flixel-demos and flixel-templates?");
 
 				if(download == Answer.Yes)
 				{
