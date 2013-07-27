@@ -66,8 +66,7 @@ class FlxTools extends CommandLineRunner
 			TemplateCommand,
 			"template", ["tpl"],
 			"Creates a project template.",
-			""
-			//TemplateUtil.getTemplate("template")
+			TemplateUtil.getTemplate("template")
 		);
 
 		mapCommand(

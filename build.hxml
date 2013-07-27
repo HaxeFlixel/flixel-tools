@@ -5,3 +5,4 @@
 
 -resource info/create.txt@create
 -resource info/setup.txt@setup
+-resource info/template.txt@template
