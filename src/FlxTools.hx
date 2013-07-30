@@ -26,8 +26,6 @@ class FlxTools extends CommandLineRunner
 	inline static public var FLIXEL_TEMPLATE_REPO = "https://github.com/HaxeFlixel/flixel-templates.git";
 	inline static public var FLIXEL_DEMOS_REPO = "https://github.com/HaxeFlixel/flixel-demos.git";
 
-	static public var flixelVersion:String;
-
 	static public var settings:FlxToolSettings;
 
 	static public var flashDevelopSource:String;
@@ -77,13 +75,13 @@ class FlxTools extends CommandLineRunner
 			// TemplateUtil.getTemplate("convert")
 		);
 
-		mapCommand(
-			ValidateCommand,
-			"validate", ["v"],
-			"Compiles a project to validate compile errors.",
-			""
-			// TemplateUtil.getTemplate("validate")
-		);
+		//mapCommand(
+		//	ValidateCommand,
+		//	"validate", ["v"],
+		//	"Compiles a project to validate compile errors.",
+		//	""
+		//	// TemplateUtil.getTemplate("validate")
+		//);
 
 		//mapCommand(
 		//	OpenFLTestCommand,
@@ -106,13 +104,6 @@ class FlxTools extends CommandLineRunner
 	 */
 	static private function displayInfo():Void
 	{
-		// Get the current flixel version
-		if (flixelVersion == null)
-		{
-			var flixelHaxelib:HaxelibJSON = CommandUtils.getHaxelibJsonData("flixel");
-			flixelVersion = flixelHaxelib.version;
-		}
-
 		Sys.println("");
 		Sys.println(" _   _               ______ _  _          _");
 		Sys.println("| | | |              |  ___| ||_|        | |");
@@ -126,16 +117,30 @@ class FlxTools extends CommandLineRunner
 		Sys.println("");
 		Sys.println("" + NAME + " Command-Line Tools (" + VERSION + ")");
 
-		if (flixelVersion == "0.0.1")
+		if (getFlixelVersion() == null)
 		{
-			Sys.println("flixel is currently not installed!");
+			Sys.println("Flixel is not currently installed. Please run 'haxelib install flixel'");
 		}
 		else
 		{
-			Sys.println("Installed flixel version: " + flixelVersion);
+			Sys.println("Installed flixel version: " + getFlixelVersion());
 		}
 
 		Sys.println("");
+	}
+
+	static public function getFlixelVersion():String
+	{
+		var flixelHaxelib:HaxelibJSON = CommandUtils.getHaxelibJsonData("flixel");
+
+		if(flixelHaxelib != null)
+		{
+			return flixelHaxelib.version;
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 	static public function main():FlxTools { return new FlxTools(); }

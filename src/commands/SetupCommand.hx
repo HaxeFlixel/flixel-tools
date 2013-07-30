@@ -21,6 +21,9 @@ class SetupCommand extends Command
 		if(console.getOption("-y") != null)
 			autoContinue = true;
 
+		if(FlxTools.getFlixelVersion() == null)
+			error("Flixel needs to be installed first. Please run 'haxelib install flixel'");
+
 		var haxePath:String = Sys.getEnv("HAXEPATH");
 
 		var flixelAliasScript = "";
