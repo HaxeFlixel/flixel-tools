@@ -13,6 +13,8 @@ class SetupCommand extends Command
 
 	override public function execute():Void
 	{
+		setupFlixel();
+
 		if (console.args.length > 3)
 		{
 			this.error("You have given too many arguments for the create command.");
@@ -21,9 +23,65 @@ class SetupCommand extends Command
 		if(console.getOption("-y") != null)
 			autoContinue = true;
 
-		if(FlxTools.getFlixelVersion() == null)
-			error("Flixel needs to be installed first. Please run 'haxelib install flixel'");
+		setupCommandAlias();
 
+		setupFlixelLibs();
+
+		promptForSettings();
+
+		Sys.println("");
+		Sys.println("");
+		Sys.println(" You have now setup HaxeFlixel Tools");
+		Sys.println("");
+		Sys.println(" Try the 'flixel' command to test it :)");
+		Sys.println("");
+
+		exit();
+	}
+
+	private function setupFlixel():Void
+	{
+		var flixel = CommandUtils.getHaxelibPath("flixel");
+
+		if(flixel == "")
+		{
+			if(!autoContinue)
+			{
+				var answer = CommandUtils.askYN ("Would you now like this tool to install flixel for you?");
+
+				if(answer == Answer.Yes)
+				{
+					Sys.command ("haxelib install flixel");
+				}
+			}
+		}
+	}
+
+	private function setupFlixelLibs():Void
+	{
+		var templatesHaxelib = CommandUtils.getHaxelibPath("flixel-templates");
+		var demosHaxelib = CommandUtils.getHaxelibPath("flixel-demos");
+
+		if(templatesHaxelib == "" || demosHaxelib == "")
+		{
+			if(!autoContinue)
+			{
+				var download = CommandUtils.askYN ("Would you now like this tool to download the flixel-demos and flixel-templates?");
+
+				if(download == Answer.Yes)
+				{
+					Sys.command ("flixel download");
+				}
+			}
+			else
+			{
+				Sys.command ("flixel download");
+			}
+		}
+	}
+
+	private function setupCommandAlias():Void
+	{
 		var haxePath:String = Sys.getEnv("HAXEPATH");
 
 		var flixelAliasScript = "";
@@ -66,43 +124,10 @@ class SetupCommand extends Command
 				error("Could not find the flixel-tools alias script");
 			}
 		}
-
-		var templatesHaxelib = CommandUtils.getHaxelibPath("flixel-templates");
-		var demosHaxelib = CommandUtils.getHaxelibPath("flixel-demos");
-
-		if(templatesHaxelib == "" || demosHaxelib == "")
-		{
-			if(!autoContinue)
-			{
-				var download = CommandUtils.askYN ("Would you now like this tool to download the flixel-demos and flixel-templates?");
-
-				if(download == Answer.Yes)
-				{
-					Sys.command ("flixel download");
-				}
-			}
-			else
-			{
-				Sys.command ("flixel download");
-			}
-		}
-
-		promptForSettings();
-
-		Sys.println("");
-		Sys.println("");
-		Sys.println(" You have now setup HaxeFlixel Tools");
-		Sys.println("");
-		Sys.println(" Try the 'flixel' command to test it :)");
-		Sys.println("");
-		Sys.println(FlxTools.settings.DefaultEditor);
-
-		exit();
 	}
 
 	private function promptForSettings():FlxToolSettings
 	{
-
 		var IDES:Array<String> = [FlxTools.SUBLIME_TEXT, FlxTools.FLASH_DEVELOP, FlxTools.INTELLIJ_IDEA, FlxTools.IDE_NONE];
 		var IDE = FlxTools.IDE_NONE;
 		var AuthorName = "";
@@ -122,7 +147,8 @@ class SetupCommand extends Command
 
 		if(IDE == FlxTools.SUBLIME_TEXT)
 		{
-			var name = CommandUtils.askYN("Do you want to open demos/templates automatically with subl command tool?");
+			Sys.println("This tools supports Sublime's command line tool you can install from http://www.sublimetext.com/docs/2/osx_command_line.html");
+			var name = CommandUtils.askYN("Do you want to open demos/templates automatically with this subl command tool?");
 
 			if(name == Answer.Yes)
 				sublimeCMD = true;

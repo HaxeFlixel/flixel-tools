@@ -1,5 +1,6 @@
 package;
 
+import commands.SetCommand;
 import commands.ConvertCommand;
 import commands.CreateCommand;
 import commands.DownloadCommand;
@@ -90,6 +91,14 @@ class FlxTools extends CommandLineRunner
 		//	""
 		//	//TemplateUtil.getTemplate("template")
 		//);
+
+		mapCommand(
+			SetCommand,
+			"set", ["s"],
+			"Set the current version of HaxeFlixel",
+			""
+			//TemplateUtil.getTemplate("set")
+		);
 
 		run();
 	}
