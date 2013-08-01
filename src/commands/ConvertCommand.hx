@@ -7,7 +7,6 @@ import legacy.FindAndReplace.FindAndReplaceObject;
 import sys.io.FileOutput;
 import massive.sys.cmd.Command;
 import sys.io.File;
-import sys.FileSystem;
 import utils.CommandUtils;
 
 class ConvertCommand extends Command
@@ -79,7 +78,7 @@ class ConvertCommand extends Command
 
     private function convert(ConvertPath:String, MakeBackup:Bool):Void
     {
-        if (FileSystem.exists(ConvertPath))
+        if (FileSys.exists(ConvertPath))
         {
             Sys.println(" Converting :" + ConvertPath);
             Sys.println("");
@@ -88,7 +87,7 @@ class ConvertCommand extends Command
             {
                 var backupFolder = ConvertPath + "_backup";
 
-                if (!FileSystem.exists(backupFolder))
+                if (!FileSys.exists(backupFolder))
                 {
                     var backup = CommandUtils.copyRecursively(ConvertPath, backupFolder);
                     if (backup)
@@ -123,7 +122,7 @@ class ConvertCommand extends Command
                 }
             }
 
-            if (FileSystem.exists(ConvertPath))
+            if (FileSys.exists(ConvertPath))
             {
                 var warnings:Array<WarningResult> = convertProjectFolder(ConvertPath, true);
 
@@ -150,12 +149,12 @@ class ConvertCommand extends Command
 					{
 						var question = "The old HaxeFlixel data assets was detected, do you want to delete it and its contents?";
 						var warning = "\nPlease make sure you are not storing your own assets in:"+ oldAssets;
-						var answer = CommandUtils.askString(question+warning);
+						answer = CommandUtils.askYN(question+warning);
 					}
 
 					if(answer == Answer.Yes || autoContinue)
 					{
-						Sys.println(oldAssets);
+						Sys.println("Deleting old core assets:"+oldAssets);
 						CommandUtils.deleteRecursively(oldAssets);
 					}
 					else
@@ -227,11 +226,11 @@ class ConvertCommand extends Command
     {
         var warnings:Array<WarningResult> = new Array<WarningResult>();
 
-        if (FileSystem.exists(ProjectPath))
+        if (FileSys.exists(ProjectPath))
         {
-            for (fileName in FileSystem.readDirectory(ProjectPath))
+            for (fileName in FileSys.readDirectory(ProjectPath))
             {
-                if (FileSystem.isDirectory(CommandUtils.combine(ProjectPath, fileName)) && fileName != "_backup")
+                if (FileSys.isDirectory(CommandUtils.combine(ProjectPath, fileName)) && fileName != "_backup")
                 {
                     var recursiveWarnings:Array<WarningResult> = convertProjectFolder(CommandUtils.combine(ProjectPath, fileName), false);
 
@@ -269,7 +268,7 @@ class ConvertCommand extends Command
 
 							if (originalText != sourceText)
 							{
-								FileSystem.deleteFile(filePath);
+								FileSys.deleteFile(filePath);
 								var o:FileOutput = sys.io.File.write(filePath, true);
 								o.writeString(sourceText);
 								o.close();
