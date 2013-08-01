@@ -79,19 +79,19 @@ class FindAndReplace
 		
 		add(		"FlxG.getLibraryName()",	"FlxG.libraryName");
 		
-		add(		"FlxG.DEBUGGER_STANDARD",	"FlxDebugger.STANDARD",				"system.FlxDebugger");
-		add(		"FlxG.DEBUGGER_MICRO",		"FlxDebugger.MICRO",				"system.FlxDebugger");
-		add(		"FlxG.DEBUGGER_BIG",		"FlxDebugger.BIG",					"system.FlxDebugger");
-		add(		"FlxG.DEBUGGER_TOP",		"FlxDebugger.TOP",					"system.FlxDebugger");
-		add(		"FlxG.DEBUGGER_LEFT",		"FlxDebugger.LEFT",					"system.FlxDebugger");
-		add(		"FlxG.DEBUGGER_RIGHT",		"FlxDebugger.RIGHT",				"system.FlxDebugger");
+		add(		"FlxG.DEBUGGER_STANDARD",	"FlxDebugger.STANDARD",				"system.debug.FlxDebugger");
+		add(		"FlxG.DEBUGGER_MICRO",		"FlxDebugger.MICRO",				"system.debug.FlxDebugger");
+		add(		"FlxG.DEBUGGER_BIG",		"FlxDebugger.BIG",					"system.debug.FlxDebugger");
+		add(		"FlxG.DEBUGGER_TOP",		"FlxDebugger.TOP",					"system.debug.FlxDebugger");
+		add(		"FlxG.DEBUGGER_LEFT",		"FlxDebugger.LEFT",					"system.debug.FlxDebugger");
+		add(		"FlxG.DEBUGGER_RIGHT",		"FlxDebugger.RIGHT",				"system.debug.FlxDebugger");
 		
 		addFunction("FlxG.random",				"FlxRandom.float",					"util.FlxRandom");
 		addFunction("FlxG.shuffle",				"FlxArrayUtil.shuffle",				"util.FlxRandom");
 		addFunction("FlxG.getRandom",			"FlxArrayUtil.getRandom",			"util.FlxRandom");
 		addFunction("FlxG.globalSeed",			"FlxRandom.globalSeed",				"util.FlxRandom");
 		
-		addFunction("FlxG.resetInput",			"FlxInputs.resetInputs",			"system.input.FlxInputs");
+		addFunction("FlxG.resetInput",			"FlxG.inputs.reset");
 		
 		add(		"FlxG.RED",					"FlxColor.RED",						"util.FlxColor");
 		add(		"FlxG.GREEN",				"FlxColor.GREEN",					"util.FlxColor");
@@ -125,7 +125,12 @@ class FindAndReplace
 		addFunction("FlxG.resetCameras",		"FlxG.cameras.reset");
 		addFunction("FlxG.fullscreen",			"FlxG.cameras.fullscreen");
 		addFunction("FlxG.shake",				"FlxG.cameras.shake");
+		
+		// A hacky solution to avoid breaking FlxG.flashFramerate
+		addFunction("FlxG.flashFramerate",		"tempFlashFramerate");
 		addFunction("FlxG.flash",				"FlxG.cameras.flash");
+		addFunction("tempFlashFramerate",		"FlxG.flashFramerate");
+		
 		addFunction("FlxG.fade",				"FlxG.cameras.fade");
 		add(		"FlxG.bgColor",				"FlxG.cameras.bgColor");
 		
@@ -362,6 +367,26 @@ class FindAndReplace
 		add("FlxObject.PATH_YOYO",				"FlxPath.YOYO",				"util.FlxPath");
 		add("FlxObject.PATH_HORIZONTAL_ONLY",	"FlxPath.HORIZONTAL_ONLY",	"util.FlxPath");
 		add("FlxObject.PATH_VERTICAL_ONLY",		"FlxPath.VERTICAL_ONLY",	"util.FlxPath");
+		
+		/**
+		 * Input refactor
+		 */
+		
+		addImport("system.input.FlxGamepad",	"system.input.gamepad.FlxGamepad");
+	 
+		add("FLX_NO_JOYSTICK",						"FLX_NO_GAMEPAD");
+		add("FlxG.gamepadManager",					"FlxG.gamepads");
+		add("FlxG.gamepads.getGamepad",				"FlxG.gamepads.get");
+		add("FlxG.gamepads.anyGamepadPressed",		"FlxG.gamepads.anyPressed");
+		add("FlxG.gamepads.anyGamepadJustPressed",	"FlxG.gamepads.anyJustPressed");
+		add("FlxG.gamepads.anyGamepadJustReleased",	"FlxG.gamepads.anyJustReleased");
+		
+		addImport("system.input.FlxTouch",		"system.input.touch.FlxTouch");
+		
+		add("FlxG.touchManager",					"FlxG.touches");
+		add("FlxG.touches.touches",					"FlxG.touches.list");
+		add("FlxG.touches.justStartedTouches",		"FlxG.justStarted");
+		add("FlxG.touches.justReleasedTouches",		"FlxG.justReleased");
 		
 		return replacements;
 	}
