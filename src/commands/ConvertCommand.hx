@@ -1,5 +1,6 @@
 package commands;
 
+import massive.sys.io.FileSys;
 import legacy.Warnings;
 import legacy.FindAndReplace;
 import legacy.FindAndReplace.FindAndReplaceObject;
@@ -137,6 +138,32 @@ class ConvertCommand extends Command
                     Sys.println(" " + warnings.length + " warnings were written to " + filePath);
 					Sys.println("");
 				}
+
+				var oldAssets = CommandUtils.combine(ConvertPath, "assets");
+				oldAssets = CommandUtils.combine(oldAssets, "data");
+
+				if(FileSys.exists(oldAssets))
+				{
+					var answer = null;
+
+					if(!autoContinue)
+					{
+						var question = "The old HaxeFlixel data assets was detected, do you want to delete it and its contents?";
+						var warning = "\nPlease make sure you are not storing your own assets in:"+ oldAssets;
+						var answer = CommandUtils.askString(question+warning);
+					}
+
+					if(answer == Answer.Yes || autoContinue)
+					{
+						Sys.println(oldAssets);
+						CommandUtils.deleteRecursively(oldAssets);
+					}
+					else
+					{
+						Sys.println("Cancelling convert based on answer of deleting the old data directory.");
+						exit();
+					}
+				}
             }
             else
             {
@@ -151,6 +178,8 @@ class ConvertCommand extends Command
             Sys.println("Warning cannot find " + ConvertPath);
             Sys.println("");
         }
+
+		exit();
     }
 
     private inline function displayWarnings(warnings:Array<WarningResult>):Void
