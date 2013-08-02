@@ -26,6 +26,7 @@ class FlxTools extends CommandLineRunner
 
 	inline static public var FLIXEL_TEMPLATE_REPO = "https://github.com/HaxeFlixel/flixel-templates.git";
 	inline static public var FLIXEL_DEMOS_REPO = "https://github.com/HaxeFlixel/flixel-demos.git";
+	inline static public var FLIXEL_REPO = "https://github.com/HaxeFlixel/flixel.git";
 
 	static public var settings:FlxToolSettings;
 
@@ -92,13 +93,13 @@ class FlxTools extends CommandLineRunner
 		//	//TemplateUtil.getTemplate("template")
 		//);
 
-		mapCommand(
-			SetCommand,
-			"set", ["s"],
-			"Set the current version of HaxeFlixel",
-			""
-			//TemplateUtil.getTemplate("set")
-		);
+		//mapCommand(
+		//	SetCommand,
+		//	"set", ["s"],
+		//	"Set the current version of HaxeFlixel",
+		//	""
+		//	//TemplateUtil.getTemplate("set")
+		//);
 
 		run();
 	}
