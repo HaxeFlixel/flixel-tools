@@ -90,31 +90,9 @@ class TemplateCommand extends Command
 			}
 		}
 
-		var templateFileReg = new EReg("\\btemplate.json\\b", "");
+		template.Template.replacements = copyIDETemplates(template.Template.replacements, TargetPath);
 
-		if (ideOption == FlxTools.SUBLIME_TEXT)
-		{
-			template.Template.replacements.push(addOption("${PROJECT_PATH}", "", TargetPath));
-			template.Template.replacements.push(addOption("${HAXE_STD_PATH}", "", CommandUtils.getHaxePath() + "/std"));
-			template.Template.replacements.push(addOption("${FLIXEL_PATH}", "", CommandUtils.getHaxelibPath('flixel')));
-			template.Template.replacements.push(addOption("${FLIXEL_ADDONS_PATH}", "", CommandUtils.getHaxelibPath('flixel-addons')));
-
-			CommandUtils.copyRecursively(FlxTools.sublimeSource, TargetPath, templateFileReg, true);
-		}
-		else if (ideOption == FlxTools.INTELLIJ_IDEA)
-		{
-			template.Template.replacements.push(addOption("${IDEA_flexSdkName}", "", FlxTools.settings.IDEA_flexSdkName));
-			template.Template.replacements.push(addOption("${IDEA_Flixel_Engine_Library}", "", FlxTools.settings.IDEA_Flixel_Engine_Library));
-			template.Template.replacements.push(addOption("${IDEA_Flixel_Addons_Library}", "", FlxTools.settings.IDEA_Flixel_Addons_Library));
-
-			CommandUtils.copyRecursively(FlxTools.intellijSource, TargetPath, templateFileReg, true);
-		}
-		else if (ideOption == FlxTools.FLASH_DEVELOP)
-		{
-			CommandUtils.copyRecursively(FlxTools.flashDevelopSource, TargetPath, templateFileReg, true);
-		}
-
-		CommandUtils.copyRecursively(template.Path, TargetPath, templateFileReg, true);
+		CommandUtils.copyRecursively(template.Path, TargetPath, TemplateUtils.TemplateSettings, true);
 
 		modifyTemplate(TargetPath, template);
 
@@ -146,6 +124,32 @@ class TemplateCommand extends Command
 		}
 
 		exit();
+	}
+
+	private function copyIDETemplates(Replacements:Array<TemplateReplacement>, TargetPath:String):Array<TemplateReplacement>
+	{
+		if (ideOption == FlxTools.SUBLIME_TEXT)
+		{
+			Replacements.push(addOption("${PROJECT_PATH}", "", TargetPath));
+			Replacements.push(addOption("${HAXE_STD_PATH}", "", CommandUtils.getHaxePath() + "/std"));
+			Replacements.push(addOption("${FLIXEL_PATH}", "", CommandUtils.getHaxelibPath('flixel')));
+			Replacements.push(addOption("${FLIXEL_ADDONS_PATH}", "", CommandUtils.getHaxelibPath('flixel-addons')));
+
+			CommandUtils.copyRecursively(FlxTools.sublimeSource, TargetPath, TemplateUtils.TemplateSettings, true);
+		}
+		else if (ideOption == FlxTools.INTELLIJ_IDEA)
+		{
+			Replacements.push(addOption("${IDEA_flexSdkName}", "", FlxTools.settings.IDEA_flexSdkName));
+			Replacements.push(addOption("${IDEA_Flixel_Engine_Library}", "", FlxTools.settings.IDEA_Flixel_Engine_Library));
+			Replacements.push(addOption("${IDEA_Flixel_Addons_Library}", "", FlxTools.settings.IDEA_Flixel_Addons_Library));
+
+			CommandUtils.copyRecursively(FlxTools.intellijSource, TargetPath, TemplateUtils.TemplateSettings, true);
+		}
+		else if (ideOption == FlxTools.FLASH_DEVELOP)
+		{
+			CommandUtils.copyRecursively(FlxTools.flashDevelopSource, TargetPath, TemplateUtils.TemplateSettings, true);
+		}
+		return Replacements;
 	}
 
 	private function getReplacementValue(Replacements:Array<TemplateReplacement>, Pattern:String):String

@@ -6,6 +6,8 @@ import haxe.Json;
 
 class TemplateUtils
 {
+	static public var TemplateSettings:EReg = new EReg("\\btemplate.json\\b", "");
+
 	static public function get(TemplateName:String = ""):TemplateProject
 	{
 		if(TemplateName == "")
