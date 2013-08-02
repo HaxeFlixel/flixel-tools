@@ -73,6 +73,9 @@ class FindAndReplace
 		add(		"FlxU.MIN_VALUE",			"FlxMath.MIN_VALUE",				"util.FlxMath");
 		add(		"FlxU.MAX_VALUE",			"FlxMath.MAX_VALUE",				"util.FlxMath");
 		
+		// Remove FlxU imports
+		add("import flixel.FlxU;", "");
+		
 		/**
 		 * FlxG refactor / frontEnds
 		 */
@@ -222,6 +225,7 @@ class FindAndReplace
 		// util
 		addImport("FlxSave",									"util.FlxSave");
 		addImport("FlxPath",									"util.FlxPath");
+		addImport("FlxPoint",									"util.FlxPoint");
 		
 		addImport("util.FlxString",								"util.FlxStringUtil");
 		
