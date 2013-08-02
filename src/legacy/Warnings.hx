@@ -40,6 +40,8 @@ class Warnings
 		// FlxTimer refactor
 		warningList.set("new FlxTimer", "FlxTimer has been refactored and now uses internal pooling. Use FlxTimer.start() to get and start a new FlxTimer");
 		
+		warningList.set("flicker\\(", "The flickering logic has been moved from FlxObject to FlxSpriteUtil.flicker()");
+		
 		return warningList;
     }
 }
