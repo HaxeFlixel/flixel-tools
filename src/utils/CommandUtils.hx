@@ -1,6 +1,5 @@
 package utils;
 
-import utils.DemoUtils;
 import FlxTools;
 import sys.FileSystem;
 import sys.io.Process;
@@ -274,8 +273,18 @@ class CommandUtils
 		{
 			return null;
 		}
-		
-		var jsonContent:String = File.getContent(haxleibJsonPath + "haxelib.json");
+
+		var jsonContent = "";
+
+		try
+		{
+			jsonContent = File.getContent(haxleibJsonPath + "haxelib.json");
+		}
+		catch(e:Dynamic)
+		{
+			throw ("Error loading file " + haxleibJsonPath);
+		}
+
 		var jsonData:HaxelibJSON = Json.parse(jsonContent);
 		
 		return jsonData;
@@ -436,6 +445,63 @@ class CommandUtils
 		File.saveContent(settingsPath, Json.stringify(Settings));
 
 		FlxTools.settings = CommandUtils.loadToolSettings();
+	}
+
+	static public function haxelibGitCommand(Lib:String, URL:String, AutoContinue:Bool, Message:String, Branch:String = ""):Bool
+	{
+		if(Message==null)
+			Message = "Do you want to install git " + Lib + " " + URL + " " + Branch + "?";
+
+		var command = "haxelib git " + Lib + " " + URL + " " + Branch;
+
+		if(!AutoContinue)
+		{
+			var answer = CommandUtils.askYN (Message);
+
+			if(answer == Answer.No)
+			{
+				return false;
+			}
+		}
+
+		Sys.println (command);
+		Sys.command (command);
+
+		return true;
+	}
+
+	static public function haxelibCommand(Lib:String, AutoContinue:Bool, Message:String):Bool
+	{
+		var libStatus = CommandUtils.getHaxelibPath(Lib);
+
+		if(libStatus == "" )
+		{
+			if(Message==null)
+				Message = "Do you want to install " + Lib;
+
+			var command = "haxelib install " + Lib;
+
+			if(!AutoContinue)
+			{
+				var answer = CommandUtils.askYN (Message);
+
+				if(answer == Answer.No)
+				{
+					return false;
+				}
+			}
+
+			Sys.println (command);
+			Sys.command (command);
+
+			return true;
+		}
+		else
+		{
+			Sys.println("You appear to already have " + Lib + " installed.");
+
+			return false;
+		}
 	}
 
 }
