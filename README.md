@@ -39,3 +39,11 @@ flixel create <name_or_number>
 ```
 
 If no name or number is given it will list all demos and prompt you for a choice, by number or name.
+
+To create a new default game template use the following, with -n option being the name you want:
+
+```batch
+flixel template -n <name>
+```
+
+Currently this template is only compatible with the latest dev branch of flixel.
