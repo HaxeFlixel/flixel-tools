@@ -392,6 +392,13 @@ class FindAndReplace
 		add("FlxG.touches.justStartedTouches",		"FlxG.justStarted");
 		add("FlxG.touches.justReleasedTouches",		"FlxG.justReleased");
 		
+		/**
+		 * Spelling fix in FlxState
+		 */
+		
+		add(".persistantUpdate",	".persistentUpdate");
+		add(".persistantDraw",		".persistentDraw");
+		
 		return replacements;
 	}
 	
