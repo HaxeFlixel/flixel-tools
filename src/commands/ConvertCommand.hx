@@ -1,5 +1,6 @@
 package commands;
 
+import utils.FileSysUtils;
 import massive.sys.io.FileSys;
 import legacy.Warnings;
 import legacy.FindAndReplace;
@@ -247,7 +248,7 @@ class ConvertCommand extends Command
                     if (StringTools.endsWith(fileName, ".hx"))
                     {
                         var filePath:String = CommandUtils.combine(ProjectPath, fileName);
-                        var sourceText:String = sys.io.File.getContent(filePath);
+                        var sourceText:String = FileSysUtils.getContent(filePath);
                         var originalText:String = Reflect.copy(sourceText);
                         var replacements:Array<FindAndReplaceObject> = FindAndReplace.init();
 

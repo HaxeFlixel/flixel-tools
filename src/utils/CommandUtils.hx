@@ -276,14 +276,7 @@ class CommandUtils
 
 		var jsonContent = "";
 
-		try
-		{
-			jsonContent = File.getContent(haxleibJsonPath + "haxelib.json");
-		}
-		catch(e:Dynamic)
-		{
-			throw ("Error loading file " + haxleibJsonPath);
-		}
+		jsonContent = FileSysUtils.getContent(haxleibJsonPath + "haxelib.json");
 
 		var jsonData:HaxelibJSON = Json.parse(jsonContent);
 		
@@ -420,7 +413,7 @@ class CommandUtils
 
 		if( FileSystem.exists(settingsPath))
 		{
-			var jsonContent:String = File.getContent(toolPath + "settings.json");
+			var jsonContent:String = FileSysUtils.getContent(toolPath + "settings.json");
 			var settings:FlxToolSettings = Json.parse(jsonContent);
 
 			var ideData = "ide-data";

@@ -64,8 +64,9 @@ class TemplateUtils
 					if(name != 'ide-data')
 					{
 						var filePath = CommandUtils.combine(TemplatesPath, name);
-						//todo error checking
-						var file = sys.io.File.getContent(CommandUtils.combine( filePath, "template.json"));
+
+						var file = FileSysUtils.getContent(CommandUtils.combine( filePath, "template.json"));
+
 						var FileData:TemplateFile = Json.parse(file);
 
 						var project:TemplateProject =
@@ -134,7 +135,7 @@ class TemplateUtils
 			{
 				if (StringTools.endsWith(fileName, ".tpl"))
 				{
-					var text:String = sys.io.File.getContent(TemplatePath + "/" + fileName);
+					var text:String = FileSysUtils.getContent(TemplatePath + "/" + fileName);
 					text = projectTemplateReplacements(text, TemplateData);
 
 					var newFileName:String = projectTemplateReplacements(fileName.substr(0, -4), TemplateData);
