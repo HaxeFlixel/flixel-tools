@@ -32,6 +32,8 @@ class ValidateCommand extends Command
 
 			Location = Sys.getCwd() + "flixel-demos-validation/";
 
+
+
 			CommandUtils.copyRecursively(demosPath, Location);
 		}
 

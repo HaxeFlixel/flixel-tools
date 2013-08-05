@@ -1,13 +1,20 @@
 package commands;
 
+import utils.CommandUtils.Answer;
+import utils.CommandUtils;
 import massive.sys.cmd.Command;
 import utils.ProjectUtils.OpenFLProject;
 import utils.DemoUtils;
 
 class CreateCommand extends Command
 {
+	private var autoContinue:Bool = false;
+
 	override public function execute():Void
 	{
+		if (console.getOption("-y") != null)
+			autoContinue = true;
+
 		if(console.args.length > 3)
 		{
 			this.error("You have given too many arguments for the create command.");
@@ -64,8 +71,30 @@ class CreateCommand extends Command
 		{
 			Sys.println("");
 			Sys.println(" The Demo " + demo.NAME + " has been created at:");
-			Sys.println(" " +destination);
+			Sys.println(" " + destination);
 			Sys.println("");
+
+			if (FlxTools.settings.SublimeCMDOpen)
+			{
+				var answer = Answer.Yes;
+
+				if (!autoContinue)
+				{
+					answer = CommandUtils.askYN("Do you want to open it with Sublime?");
+				}
+
+				if (answer == Answer.Yes)
+				{
+					var projectFile = CommandUtils.combine(destination, demo.NAME + ".sublime-project");
+
+					Sys.println(projectFile);
+					var sublimeOpen = "subl " + projectFile;
+
+					Sys.command("subl");
+					Sys.command(sublimeOpen);
+				}
+			}
+
 			exit();
 		}
 		else

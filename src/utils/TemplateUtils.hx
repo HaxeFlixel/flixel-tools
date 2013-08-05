@@ -1,12 +1,13 @@
 package utils;
 
+import sys.io.FileOutput;
 import massive.sys.io.File;
 import massive.sys.io.FileSys;
 import haxe.Json;
 
 class TemplateUtils
 {
-	static public var TemplateSettings:EReg = new EReg("\\btemplate.json\\b", "");
+	static public var TemplateFilter:EReg = new EReg("\\btemplate.json\\b", "");
 
 	static public function get(TemplateName:String = ""):TemplateProject
 	{
@@ -50,11 +51,6 @@ class TemplateUtils
 			return null;
 
 		var templates = new Array<TemplateProject>();
-
-		var flashDevelopSource = "flash-develop";
-		var intellijSource = "intellij-idea";
-		var sublimeSource = "sublime-text";
-		var ideData = "ide-data";
 		var ideDataPath = "";
 
 		for (name in FileSys.readDirectory(TemplatesPath))
@@ -65,16 +61,10 @@ class TemplateUtils
 			{
 				if(FileSys.isDirectory(folderPath) && name != '.git')
 				{
-					if(name == ideData)
-					{
-						ideDataPath = TemplatesPath + name;
-						FlxTools.flashDevelopSource = CommandUtils.combine(ideDataPath, flashDevelopSource);
-						FlxTools.intellijSource = CommandUtils.combine(ideDataPath, intellijSource);
-						FlxTools.sublimeSource = CommandUtils.combine(ideDataPath, sublimeSource);
-					}
-					else
+					if(name != 'ide-data')
 					{
 						var filePath = CommandUtils.combine(TemplatesPath, name);
+						//todo error checking
 						var file = sys.io.File.getContent(CommandUtils.combine( filePath, "template.json"));
 						var FileData:TemplateFile = Json.parse(file);
 
@@ -99,6 +89,75 @@ class TemplateUtils
 			return null;
 		}
 
+	}
+
+	public static function getReplacementValue(Replacements:Array<TemplateReplacement>, Pattern:String):String
+	{
+		for (o in Replacements)
+		{
+			return o.replacement;
+		}
+		return null;
+	}
+
+	public static function addOption(Pattern:String, CMDOption:String, DefaultValue:Dynamic):TemplateReplacement
+	{
+		var replace:TemplateReplacement =
+		{
+		replacement : DefaultValue,
+		pattern : Pattern,
+		cmdOption : CMDOption
+		};
+
+		return replace;
+	}
+
+	static public function modifyTemplateProject(TemplatePath:String, Template:TemplateProject):Void
+	{
+		modifyTemplate(TemplatePath, Template.Template.replacements);
+	}
+
+	/**
+	 * Recursivley alter the template files
+	 *
+	 * @param   TemplatePath    Temaplte path to modify
+	 */
+	static public function modifyTemplate(TemplatePath:String, TemplateData:Array<TemplateReplacement>):Void
+	{
+		for (fileName in FileSys.readDirectory(TemplatePath))
+		{
+			if (FileSys.isDirectory(TemplatePath + "/" + fileName))
+			{
+				modifyTemplate(TemplatePath + "/" + fileName, TemplateData);
+			}
+			else
+			{
+				if (StringTools.endsWith(fileName, ".tpl"))
+				{
+					var text:String = sys.io.File.getContent(TemplatePath + "/" + fileName);
+					text = projectTemplateReplacements(text, TemplateData);
+
+					var newFileName:String = projectTemplateReplacements(fileName.substr(0, -4), TemplateData);
+
+					var o:FileOutput = sys.io.File.write(TemplatePath + "/" + newFileName, true);
+					o.writeString(text);
+					o.close();
+
+					FileSys.deleteFile(TemplatePath + "/" + fileName);
+				}
+			}
+		}
+	}
+
+	static public function projectTemplateReplacements(Source:String, Replacements:Array<TemplateReplacement>):String
+	{
+		for (replacement in Replacements)
+		{
+			if (replacement.replacement != null)
+				Source = StringTools.replace(Source, replacement.pattern, replacement.replacement);
+		}
+
+		return Source;
 	}
 
 }

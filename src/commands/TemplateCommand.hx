@@ -1,5 +1,7 @@
 package commands;
 
+import utils.TemplateUtils;
+import utils.ProjectUtils;
 import sys.io.FileOutput;
 import sys.io.File;
 import sys.FileSystem;
@@ -90,11 +92,11 @@ class TemplateCommand extends Command
 			}
 		}
 
-		template.Template.replacements = copyIDETemplates(template.Template.replacements, TargetPath);
+		template.Template.replacements = ProjectUtils.copyIDETemplateFiles(TargetPath, template.Template.replacements);
 
-		CommandUtils.copyRecursively(template.Path, TargetPath, TemplateUtils.TemplateSettings, true);
+		CommandUtils.copyRecursively(template.Path, TargetPath, TemplateUtils.TemplateFilter, true);
 
-		modifyTemplate(TargetPath, template);
+		TemplateUtils.modifyTemplateProject(TargetPath, template);
 
 		Sys.println(" Created Template at:");
 		Sys.println(" " + TargetPath);
@@ -113,7 +115,7 @@ class TemplateCommand extends Command
 
 				if (answer == Answer.Yes)
 				{
-					var projectName = getReplacementValue(template.Template.replacements, "${PROJECT_NAME}");
+					var projectName = TemplateUtils.getReplacementValue(template.Template.replacements, "${PROJECT_NAME}");
 					var projectFile = TargetPath + "/" + projectName + ".sublime-project";
 					var sublimeOpen = "subl " + projectFile;
 
@@ -124,127 +126,6 @@ class TemplateCommand extends Command
 		}
 
 		exit();
-	}
-
-	private function copyIDETemplates(Replacements:Array<TemplateReplacement>, TargetPath:String):Array<TemplateReplacement>
-	{
-		if (ideOption == FlxTools.SUBLIME_TEXT)
-		{
-			Replacements.push(addOption("${PROJECT_PATH}", "", TargetPath));
-			Replacements.push(addOption("${HAXE_STD_PATH}", "", CommandUtils.getHaxePath() + "/std"));
-			Replacements.push(addOption("${FLIXEL_PATH}", "", CommandUtils.getHaxelibPath('flixel')));
-			Replacements.push(addOption("${FLIXEL_ADDONS_PATH}", "", CommandUtils.getHaxelibPath('flixel-addons')));
-
-			CommandUtils.copyRecursively(FlxTools.sublimeSource, TargetPath, TemplateUtils.TemplateSettings, true);
-		}
-		else if (ideOption == FlxTools.INTELLIJ_IDEA)
-		{
-			Replacements.push(addOption("${IDEA_flexSdkName}", "", FlxTools.settings.IDEA_flexSdkName));
-			Replacements.push(addOption("${IDEA_Flixel_Engine_Library}", "", FlxTools.settings.IDEA_Flixel_Engine_Library));
-			Replacements.push(addOption("${IDEA_Flixel_Addons_Library}", "", FlxTools.settings.IDEA_Flixel_Addons_Library));
-
-			CommandUtils.copyRecursively(FlxTools.intellijSource, TargetPath, TemplateUtils.TemplateSettings, true);
-		}
-		else if (ideOption == FlxTools.FLASH_DEVELOP)
-		{
-			CommandUtils.copyRecursively(FlxTools.flashDevelopSource, TargetPath, TemplateUtils.TemplateSettings, true);
-		}
-		return Replacements;
-	}
-
-	private function getReplacementValue(Replacements:Array<TemplateReplacement>, Pattern:String):String
-	{
-		for (o in Replacements)
-		{
-			return o.replacement;
-		}
-		return null;
-	}
-
-	private function addOptionReplacement(Template:TemplateProject):TemplateProject
-	{
-		var replacements = Template.Template.replacements;
-
-		for (o in replacements)
-		{
-			var replace = addOptions(o.pattern, o.cmdOption, o.replacement);
-			if (replace.replacement != o.replacement)
-				o.replacement = replace.replacement;
-		}
-
-		return Template;
-	}
-
-	private function addOptions(Pattern:String, CMDOption:String, DefaultValue:Dynamic):TemplateReplacement
-	{
-		var option = console.getOption(CMDOption);
-
-		if (option != null && option != 'true' && option != 'false')
-			DefaultValue = option;
-
-		var replace:TemplateReplacement =
-		{
-			replacement : DefaultValue,
-			pattern : Pattern,
-			cmdOption : CMDOption
-		};
-
-		return replace;
-	}
-
-	private function addOption(Pattern:String, CMDOption:String, DefaultValue:Dynamic):TemplateReplacement
-	{
-		var replace:TemplateReplacement =
-		{
-			replacement : DefaultValue,
-			pattern : Pattern,
-			cmdOption : CMDOption
-		};
-
-		return replace;
-	}
-
-	/**
-	 * Recursivley alter the template files
-	 *
-	 * @param   TemplatePath    Temaplte path to modify
-	 */
-	static private function modifyTemplate(TemplatePath:String, TemplateData:TemplateProject):Void
-	{
-		for (fileName in FileSystem.readDirectory(TemplatePath))
-		{
-			if (FileSystem.isDirectory(TemplatePath + "/" + fileName))
-			{
-				modifyTemplate(TemplatePath + "/" + fileName, TemplateData);
-			}
-			else
-			{
-				if (StringTools.endsWith(fileName, ".tpl"))
-				{
-					var text:String = sys.io.File.getContent(TemplatePath + "/" + fileName);
-					text = projectTemplateReplacements(text, TemplateData.Template.replacements);
-
-					var newFileName:String = projectTemplateReplacements(fileName.substr(0, -4), TemplateData.Template.replacements);
-
-					var o:FileOutput = sys.io.File.write(TemplatePath + "/" + newFileName, true);
-					o.writeString(text);
-					o.close();
-
-					FileSystem.deleteFile(TemplatePath + "/" + fileName);
-				}
-			}
-		}
-	}
-
-	static private function projectTemplateReplacements(Source:String, Replacements:Array<TemplateReplacement>):String
-	{
-		for (replacement in Replacements)
-		{
-			if (replacement.replacement != null)
-				Source = StringTools.replace(Source, replacement.pattern, replacement.replacement);
-		}
-
-		return Source;
 	}
 
 	private function selectIDE():String
@@ -279,5 +160,36 @@ class TemplateCommand extends Command
 		{
 			return FlxTools.IDE_NONE;
 		}
+	}
+
+	private function addOptionReplacement(Template:TemplateProject):TemplateProject
+	{
+		var replacements = Template.Template.replacements;
+
+		for (o in replacements)
+		{
+			var replace = addOptions(o.pattern, o.cmdOption, o.replacement);
+			if (replace.replacement != o.replacement)
+				o.replacement = replace.replacement;
+		}
+
+		return Template;
+	}
+
+	private function addOptions(Pattern:String, CMDOption:String, DefaultValue:Dynamic):TemplateReplacement
+	{
+		var option = console.getOption(CMDOption);
+
+		if (option != null && option != 'true' && option != 'false')
+			DefaultValue = option;
+
+		var replace:TemplateReplacement =
+		{
+		replacement : DefaultValue,
+		pattern : Pattern,
+		cmdOption : CMDOption
+		};
+
+		return replace;
 	}
 }

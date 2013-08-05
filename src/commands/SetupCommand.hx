@@ -82,47 +82,62 @@ class SetupCommand extends Command
 
 	private function setupCommandAlias():Void
 	{
-		var haxePath:String = Sys.getEnv("HAXEPATH");
+		var answer = Answer.No;
 
-		var flixelAliasScript = "";
+		var message = "Do you want to setup the flixel command Alias?";
 
-		if (FileSys.isWindows)
+		if(FileSys.isLinux||FileSys.isLinux)
+			message = "Do you want to set up the command alias 'flixel' to 'haxelib run flixel-tools' with a script in your /usr/bin/ ?";
+
+		answer = CommandUtils.askYN(message);
+
+		if(autoContinue || answer == Answer.Yes)
 		{
-			if (haxePath == null || haxePath == "")
-			{
-				haxePath = "C:\\HaxeToolkit\\haxe\\";
-			}
+			var haxePath:String = Sys.getEnv("HAXEPATH");
+			var flixelAliasScript = "";
 
-			flixelAliasScript = haxePath + "\\flixel.bat";
-
-			if(FileSystem.exists (flixelAliasScript))
+			if (FileSys.isWindows)
 			{
-				File.copy(CommandUtils.getHaxelibPath("flixel-tools") + "\\\\bin\\flixel.bat", flixelAliasScript);
+				if (haxePath == null || haxePath == "")
+				{
+					haxePath = "C:\\HaxeToolkit\\haxe\\";
+				}
+
+				flixelAliasScript = haxePath + "\\flixel.bat";
+
+				if(FileSystem.exists (flixelAliasScript))
+				{
+					File.copy(CommandUtils.getHaxelibPath("flixel-tools") + "\\\\bin\\flixel.bat", flixelAliasScript);
+				}
+				else
+				{
+					error("Could not find the flixel-tools alias script");
+				}
 			}
 			else
 			{
-				error("Could not find the flixel-tools alias script");
+				if (haxePath == null || haxePath == "")
+				{
+					haxePath = "/usr/lib/haxe";
+				}
+
+				flixelAliasScript = CommandUtils.getHaxelibPath("flixel-tools") + "bin/flixel.sh";
+
+				if(FileSystem.exists (flixelAliasScript))
+				{
+					Sys.command("sudo", [ "cp", flixelAliasScript, haxePath + "/flixel" ]);
+					Sys.command("sudo chmod 755 " + haxePath + "/flixel");
+					Sys.command("sudo ln -s " + haxePath + "/flixel /usr/bin/flixel");
+				}
+				else
+				{
+					error("Could not find the flixel-tools alias script");
+				}
 			}
 		}
 		else
 		{
-			if (haxePath == null || haxePath == "")
-			{
-				haxePath = "/usr/lib/haxe";
-			}
-
-			flixelAliasScript = CommandUtils.getHaxelibPath("flixel-tools") + "bin/flixel.sh";
-
-			if(FileSystem.exists (flixelAliasScript))
-			{
-				Sys.command("sudo", [ "cp", flixelAliasScript, haxePath + "/flixel" ]);
-				Sys.command("sudo chmod 755 " + haxePath + "/flixel");
-				Sys.command("sudo ln -s " + haxePath + "/flixel /usr/bin/flixel");
-			}
-			else
-			{
-				error("Could not find the flixel-tools alias script");
-			}
+			return;
 		}
 	}
 

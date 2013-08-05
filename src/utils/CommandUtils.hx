@@ -423,6 +423,18 @@ class CommandUtils
 			var jsonContent:String = File.getContent(toolPath + "settings.json");
 			var settings:FlxToolSettings = Json.parse(jsonContent);
 
+			var ideData = "ide-data";
+			var ideDataPath = CommandUtils.getHaxelibPath("flixel-templates");
+			var ideDataPath = CommandUtils.combine(ideDataPath, ideData);
+
+			var flashDevelopSource = "flash-develop";
+			var intellijSource = "intellij-idea";
+			var sublimeSource = "sublime-text";
+
+			FlxTools.flashDevelopSource = CommandUtils.combine(ideDataPath, flashDevelopSource);
+			FlxTools.intellijSource = CommandUtils.combine(ideDataPath, intellijSource);
+			FlxTools.sublimeSource = CommandUtils.combine(ideDataPath, sublimeSource);
+
 			return settings;
 		}
 		else
