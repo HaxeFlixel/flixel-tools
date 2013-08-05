@@ -42,6 +42,8 @@ class Warnings
 		
 		warningList.set("flicker\\(", "The flickering logic has been moved from FlxObject to FlxSpriteUtil.flicker()");
 		
+		warningList.set("GlitchFX", "GlitchFX has been removed for now");
+		
 		return warningList;
     }
 }
