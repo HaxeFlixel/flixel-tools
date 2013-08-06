@@ -272,8 +272,8 @@ class FindAndReplace
 		addImport("plugin.photonstorm.baseTypes.MouseSpring",	"addons.display.FlxMouseSpring");
 		addImport("plugin.photonstorm.FlxGridOverlay",			"addons.display.FlxGridOverlay");
 		addImport("plugin.photonstorm.api.FlxKongregate",		"addons.api.FlxKongregate");
-		addImport("plugin.photonstorm.FlxControl",				"addons.control.FlxControl");
-		addImport("plugin.photonstorm.FlxControlHandler",		"addons.control.FlxControlHandler");
+		addImport("plugin.photonstorm.FlxControl",				"addons.plugin.control.FlxControl");
+		addImport("plugin.photonstorm.FlxControlHandler",		"addons.plugin.control.FlxControlHandler");
 		addImport("plugin.photonstorm.FlxWeapon",				"addons.weapon.FlxWeapon");
 		addImport("plugin.photonstorm.baseTypes.Bullet",		"addons.weapon.FlxBullet");
 		addImport("plugin.photonstorm.FlxMouseControl",			"addons.plugin.FlxMouseControl");
