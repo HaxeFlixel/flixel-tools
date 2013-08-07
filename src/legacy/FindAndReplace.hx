@@ -253,9 +253,9 @@ class FindAndReplace
 		addImport("addons.FlxTrail",							"effects.FlxTrail");
 		addImport("addons.FlxEmitterExt",						"effects.particles.FlxEmitterExt");
 		
-		addImport("plugin.photonstorm.FlxSpecialFX",			"addons.effects.FlxSpecialFX");
-		addImport("plugin.photonstorm.fx.BaseFX",				"addons.effects.fx.BaseFX");
-		addImport("plugin.photonstorm.fx.StarfieldFX",			"addons.effects.fx.StarfieldFX");
+		addImport("plugin.photonstorm.FlxSpecialFX",			"addons.plugin.effects.FlxSpecialFX");
+		addImport("plugin.photonstorm.fx.BaseFX",				"addons.plugin.effects.fx.BaseFX");
+		addImport("plugin.photonstorm.fx.StarfieldFX",			"addons.plugin.effects.fx.StarfieldFX");
 		
 		// addons
 		addImport("addons.FlxCaveGenerator",					"addons.tile.FlxCaveGenerator");
