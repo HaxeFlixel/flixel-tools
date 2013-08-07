@@ -1,5 +1,8 @@
 package utils;
 
+import utils.CommandUtils;
+import massive.sys.io.File;
+import massive.sys.util.ZipUtil;
 import utils.TemplateUtils;
 import utils.TemplateUtils.TemplateReplacement;
 import massive.sys.io.FileSys;
@@ -96,7 +99,7 @@ class ProjectUtils
 		if (ideOption == FlxTools.SUBLIME_TEXT)
 		{
 			Replacements.push(TemplateUtils.addOption("${PROJECT_PATH}", "", TargetPath));
-			Replacements.push(TemplateUtils.addOption("${HAXE_STD_PATH}", "", CommandUtils.getHaxePath() + "/std"));
+			Replacements.push(TemplateUtils.addOption("${HAXE_STD_PATH}", "", CommandUtils.combine(CommandUtils.getHaxePath(), "std")));
 			Replacements.push(TemplateUtils.addOption("${FLIXEL_PATH}", "", CommandUtils.getHaxelibPath('flixel')));
 			Replacements.push(TemplateUtils.addOption("${FLIXEL_ADDONS_PATH}", "", CommandUtils.getHaxelibPath('flixel-addons')));
 
@@ -113,6 +116,10 @@ class ProjectUtils
 		else if (ideOption == FlxTools.FLASH_DEVELOP)
 		{
 			CommandUtils.copyRecursively(FlxTools.flashDevelopSource, TargetPath, TemplateUtils.TemplateFilter, true);
+		}
+		else if (ideOption == FlxTools.FLASH_DEVELOP_FDZ)
+		{
+			//todo
 		}
 
 		return Replacements;

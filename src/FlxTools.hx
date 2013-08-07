@@ -21,6 +21,7 @@ class FlxTools extends CommandLineRunner
 
 	inline static public var SUBLIME_TEXT:String = "Sublime Text";
 	inline static public var FLASH_DEVELOP:String = "Flash Develop";
+	inline static public var FLASH_DEVELOP_FDZ:String = "Flash Develop FDZ";
 	inline static public var INTELLIJ_IDEA:String = "Intellij Idea";
 	inline static public var IDE_NONE:String = "None";
 
@@ -30,6 +31,7 @@ class FlxTools extends CommandLineRunner
 
 	static public var settings:FlxToolSettings;
 
+	static public var flashDevelopFDZSource:String;
 	static public var flashDevelopSource:String;
 	static public var intellijSource:String;
 	static public var sublimeSource:String;
@@ -39,6 +41,7 @@ class FlxTools extends CommandLineRunner
 		super();
 
 		settings = CommandUtils.loadToolSettings();
+		CommandUtils.loadIDESettings();
 
 		mapCommand(
 			CreateCommand,

@@ -400,40 +400,50 @@ class CommandUtils
 		return Path;
 	}
 
+	static public function loadIDESettings():Void
+	{
+		var ideData = "ide-data";
+		var ideDataPath = CommandUtils.getHaxelibPath("flixel-templates");
+		if(ideDataPath == "")
+		{
+			Sys.println("Error loading templates, please run 'flixel download'");
+			return;
+		}
+
+		var ideDataPath = CommandUtils.combine(ideDataPath, ideData);
+
+		var flashDevelopSource = "flash-develop";
+		var flashDevelopFDZSource = "flash-develop-fdz";
+		var intellijSource = "intellij-idea";
+		var sublimeSource = "sublime-text";
+
+		FlxTools.flashDevelopFDZSource = CommandUtils.combine(ideDataPath, flashDevelopFDZSource);
+		FlxTools.flashDevelopSource = CommandUtils.combine(ideDataPath, flashDevelopSource);
+		FlxTools.intellijSource = CommandUtils.combine(ideDataPath, intellijSource);
+		FlxTools.sublimeSource = CommandUtils.combine(ideDataPath, sublimeSource);
+	}
+
 	static public function loadToolSettings():FlxToolSettings
 	{
 		var toolPath = CommandUtils.getHaxelibPath("flixel-tools");
 		if(toolPath == "")
 		{
-			Sys.println("Error detecting your installation of haxelib flixel-tools.");
+			Sys.println("Error reading your settings, please run 'flixel setup'.");
 			return null;
 		}
 
 		var settingsPath = toolPath + "settings.json";
 
-		if( FileSystem.exists(settingsPath))
+		if( !FileSystem.exists(settingsPath))
 		{
-			var jsonContent:String = FileSysUtils.getContent(toolPath + "settings.json");
-			var settings:FlxToolSettings = Json.parse(jsonContent);
-
-			var ideData = "ide-data";
-			var ideDataPath = CommandUtils.getHaxelibPath("flixel-templates");
-			var ideDataPath = CommandUtils.combine(ideDataPath, ideData);
-
-			var flashDevelopSource = "flash-develop";
-			var intellijSource = "intellij-idea";
-			var sublimeSource = "sublime-text";
-
-			FlxTools.flashDevelopSource = CommandUtils.combine(ideDataPath, flashDevelopSource);
-			FlxTools.intellijSource = CommandUtils.combine(ideDataPath, intellijSource);
-			FlxTools.sublimeSource = CommandUtils.combine(ideDataPath, sublimeSource);
-
-			return settings;
-		}
-		else
-		{
+			Sys.println("It appears you have not run setup yet.");
 			return null;
 		}
+
+		var jsonContent:String = FileSysUtils.getContent(toolPath + "settings.json");
+		var settings:FlxToolSettings = Json.parse(jsonContent);
+
+		return settings;
 	}
 
 	static public function saveToolSettings(Settings:FlxToolSettings):Void
