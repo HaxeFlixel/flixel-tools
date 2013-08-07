@@ -1,5 +1,6 @@
 package commands;
 
+import utils.CommandUtils;
 import utils.TemplateUtils;
 import utils.ProjectUtils;
 import sys.io.FileOutput;
@@ -71,7 +72,7 @@ class TemplateCommand extends Command
 		{
 			if (!StringTools.startsWith(TargetPath, "/"))
 			{
-				TargetPath = Sys.getCwd() + CommandUtils.stripPath(TargetPath);
+				TargetPath = CommandUtils.combine(Sys.getCwd(), CommandUtils.stripPath(TargetPath));
 			}
 		}
 
@@ -92,7 +93,7 @@ class TemplateCommand extends Command
 			}
 		}
 
-		template.Template.replacements = ProjectUtils.copyIDETemplateFiles(TargetPath, template.Template.replacements);
+		template.Template.replacements = ProjectUtils.copyIDETemplateFiles(TargetPath, template.Template.replacements, ideOption);
 
 		CommandUtils.copyRecursively(template.Path, TargetPath, TemplateUtils.TemplateFilter, true);
 
@@ -134,6 +135,7 @@ class TemplateCommand extends Command
 
 		options.set("-subl", FlxTools.SUBLIME_TEXT);
 		options.set("-fd", FlxTools.FLASH_DEVELOP);
+		options.set("-fdz", FlxTools.FLASH_DEVELOP_FDZ);
 		options.set("-idea", FlxTools.INTELLIJ_IDEA);
 
 		var choice = null;
