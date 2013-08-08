@@ -128,7 +128,6 @@ class FindAndReplace
 		addFunction("FlxG.addCamera",			"FlxG.cameras.add");
 		addFunction("FlxG.removeCamera",		"FlxG.cameras.remove");
 		addFunction("FlxG.resetCameras",		"FlxG.cameras.reset");
-		addFunction("FlxG.fullscreen",			"FlxG.cameras.fullscreen");
 		addFunction("FlxG.shake",				"FlxG.cameras.shake");
 		
 		// A hacky solution to avoid breaking FlxG.flashFramerate
@@ -399,6 +398,36 @@ class FindAndReplace
 		
 		add(".persistantUpdate",	".persistentUpdate");
 		add(".persistantDraw",		".persistentDraw");
+		
+		/**
+		 * FlxMouse / FlxTouch / FlxAnalog API change
+		 */
+		
+		add(".pressed()",		".pressed");
+		add(".justPressed()",	".justPressed");
+		add(".justReleased()",	".justReleased");
+		
+		/**
+		 * Keyboard API
+		 */
+		add("FlxG.keys.enabled",		"FlxG.keyboard.enabled");
+		add("FlxG.keys.pressed",		"FlxG.keyboard.pressed");
+		add("FlxG.keys.justPressed",	"FlxG.keyboard.justPressed");
+		add("FlxG.keys.justReleased",	"FlxG.keyboard.justReleased");
+		add("FlxG.keys.update",			"FlxG.keyboard.update");
+		add("FlxG.keys.reset",			"FlxG.keyboard.reset");
+		add("FlxG.keys.record",			"FlxG.keyboard.record");
+		add("FlxG.keys.playback",		"FlxG.keyboard.playback");
+		add("FlxG.keys.getKeyCode",		"FlxG.keyboard.getKeyCode");
+		add("FlxG.keys.getIsDown",		"FlxG.keyboard.getIsDown");
+		add("FlxG.keys.destroy",		"FlxG.keyboard.destroy");
+		add("FlxG.keys.onFocus",		"FlxG.keyboard.onFocus");
+		add("FlxG.keys.onFocusLost",	"FlxG.keyboard.onFocusLost");
+		add("FlxG.keys.toString",		"FlxG.keyboard.toString");
+		
+		// No more references left to FlxG.keys, other than the getters for the individual keys
+		// - so we can safely replace all the left references with FlxG.keys.pressed
+		add("FlxG.keys.",				"FlxG.keys.pressed");
 		
 		return replacements;
 	}
