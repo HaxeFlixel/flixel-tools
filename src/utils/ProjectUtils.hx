@@ -80,10 +80,17 @@ class ProjectUtils
 	*/
 	static private function scanProjectXML(ProjectPath:String):String
 	{
-		if (FileSys.exists(CommandUtils.combine(ProjectPath, "project.xml")))
+		var targetProjectFile = CommandUtils.combine(ProjectPath, "project.xml");
+
+		if (FileSys.exists(targetProjectFile))
 		{
-			var file = CommandUtils.combine(ProjectPath, "project.xml");
-			return file;
+			return targetProjectFile;
+		}
+
+		targetProjectFile = CommandUtils.combine(ProjectPath, "Project.xml");
+		if (FileSys.exists(targetProjectFile))
+		{
+			return targetProjectFile;
 		}
 		return "";
 	}
