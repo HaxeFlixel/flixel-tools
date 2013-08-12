@@ -4,13 +4,17 @@
 ______________________________________________________
 Command line tools for [HaxeFlixel](https://github.com/HaxeFlixel/flixel) to create samples, templates and more.
 
-###Warning: This tool is still in active development, feedback and ideas are welcome. Commands are subject to change
-until a stable version is released.
+###Warning: This tool is still in active development. 
+Feedback and ideas are welcome. Commands are subject to change until a stable version is released.
 
-###Installation
+###Installation:
 
-Note: To be able to use the haxelib git command, [git](http://git-scm.com/download/) must be installed.
-Run the following set of commands to install the tools:
+- You need to make sure you have git installed, [git](http://git-scm.com/download/).
+
+- Please make sure you are also running the latest version of haxelib you can make sure with the command:
+```haxelib selfupdate```
+
+####Run the following set of commands to install the tools:
 
 To clone this repo to your haxelib directory:
 
@@ -45,5 +49,4 @@ To create a new default game template use the following, with -n option being th
 ```batch
 flixel template -n <name>
 ```
-
-Currently this template is only compatible with the latest dev branch of flixel.
+- Currently the templates created are only compatible with the latest dev branch of flixel. For flixel 2.x use the command: ```haxelib run flixel new -name <name>```
