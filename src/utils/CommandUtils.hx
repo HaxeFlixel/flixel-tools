@@ -309,7 +309,7 @@ class CommandUtils
 	 */
 	static public function getHaxelibPath(Name:String):String
 	{
-		var proc:Process = new Process(combine(Sys.getEnv("HAXEPATH"), "haxelib"), ["path", Name]);
+		var proc:Process = new Process("haxelib", ["path", Name]);
 		var result:String = "";
 		
 		try 
