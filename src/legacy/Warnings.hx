@@ -44,6 +44,8 @@ class Warnings
 		
 		warningList.set("GlitchFX", "GlitchFX has been removed for now");
 		
+		warningList.set("FlxG.fullscreen", "FlxG.fullscreen() is now a property. Use FlxG.fullscreen = true; to enable fullscreen mode.");
+		
 		return warningList;
     }
 }
