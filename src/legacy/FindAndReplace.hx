@@ -429,6 +429,14 @@ class FindAndReplace
 		// - so we can safely replace all the left references with FlxG.keys.pressed
 		add("FlxG.keys.",				"FlxG.keys.pressed");
 		
+		/**
+		 * Rename FlxPhys classes to FlxNape
+		 */
+		
+		add("FlxPhysSprite",	"FlxNapeSprite");
+		add("FlxPhysState",		"FlxNapeState");
+		add("FlxPhysVelocity",	"FlxNapeVelocity");
+		
 		return replacements;
 	}
 	
