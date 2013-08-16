@@ -357,7 +357,7 @@ class CommandUtils
 					return SecondPath;
 				}
 			}
-			
+
 			var firstSlash:Bool = (FirstPath.substr (-1) == "/" || FirstPath.substr (-1) == "\\");
 			var secondSlash:Bool = (SecondPath.substr (0, 1) == "/" || SecondPath.substr (0, 1) == "\\");
 			

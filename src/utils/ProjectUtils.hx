@@ -122,7 +122,10 @@ class ProjectUtils
 		}
 		else if (ideOption == FlxTools.FLASH_DEVELOP)
 		{
-			CommandUtils.copyRecursively(FlxTools.flashDevelopSource, TargetPath, TemplateUtils.TemplateFilter, true);
+            Replacements.push(TemplateUtils.addOption("${WIDTH}", "", FlxTools.PWIDTH));
+            Replacements.push(TemplateUtils.addOption("${HEIGHT}", "", FlxTools.PHEIGHT));
+
+            CommandUtils.copyRecursively(FlxTools.flashDevelopSource, TargetPath, TemplateUtils.TemplateFilter, true);
 		}
 		else if (ideOption == FlxTools.FLASH_DEVELOP_FDZ)
 		{

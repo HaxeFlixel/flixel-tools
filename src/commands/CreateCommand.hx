@@ -63,9 +63,8 @@ class CreateCommand extends Command
 
 		Sys.println(" Creating " + demo.NAME);
 
-		var	destination = Sys.getCwd() + demo.NAME;
-
-		var copied = utils.ProjectUtils.duplicateProject(demo,destination);
+		var	destination = CommandUtils.combine(Sys.getCwd(), demo.NAME);
+		var copied = utils.ProjectUtils.duplicateProject(demo, destination);
 
 		if(copied)
 		{
@@ -104,7 +103,7 @@ class CreateCommand extends Command
                     if (answer == Answer.Yes)
                     {
                         var projectFile = CommandUtils.combine(destination, demo.NAME + ".hxproj");
-
+                        projectFile = StringTools.replace(projectFile, "/", "\\");
                         Sys.println(projectFile);
                         var sublimeOpen = "explorer " + projectFile;
                         Sys.command(sublimeOpen);
