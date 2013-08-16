@@ -105,7 +105,7 @@ class TemplateCommand extends Command
 
 		if (ideOption == FlxTools.SUBLIME_TEXT)
 		{
-			if (FlxTools.settings.SublimeCMDOpen)
+			if (FlxTools.settings.IDEAutoOpen)
 			{
 				var answer = Answer.Yes;
 

@@ -527,7 +527,7 @@ class CommandUtils
 typedef FlxToolSettings = {
 	DefaultEditor:String,
 	AuthorName:String,
-	SublimeCMDOpen:Bool,
+	IDEAutoOpen:Bool,
 	IDEA_flexSdkName:String,
 	IDEA_Flixel_Engine_Library:String,
 	IDEA_Flixel_Addons_Library:String,

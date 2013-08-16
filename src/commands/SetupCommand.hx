@@ -146,7 +146,7 @@ class SetupCommand extends Command
 		var IDES:Array<String> = [FlxTools.SUBLIME_TEXT, FlxTools.FLASH_DEVELOP, FlxTools.INTELLIJ_IDEA, FlxTools.IDE_NONE];
 		var IDE = FlxTools.IDE_NONE;
 		var AuthorName = "";
-		var sublimeCMD = false;
+		var IDEAutoOpen = false;
 		var ideaFlexSDKName = "flex_4.6";
 		var ideaFlixelEngine = "Flixel Engine";
 		var ideaFlixelAddons = "Flixel Addons";
@@ -166,7 +166,7 @@ class SetupCommand extends Command
 			var name = CommandUtils.askYN("Do you want to open demos/templates automatically with this subl command tool?");
 
 			if(name == Answer.Yes)
-				sublimeCMD = true;
+				IDEAutoOpen = true;
 		}
 		else if ( IDE == FlxTools.INTELLIJ_IDEA)
 		{
@@ -185,13 +185,17 @@ class SetupCommand extends Command
 		else if (IDE == FlxTools.FLASH_DEVELOP)
 		{
 			//todo execute template zip?
+            var answer = CommandUtils.askYN("Do you want to automatically open FlashDevelop?");
+
+            if(answer == Answer.Yes)
+                IDEAutoOpen = true;
 		}
 
 		var settingsFile:FlxToolSettings =
 		{
 			DefaultEditor:IDE,
 			AuthorName:AuthorName,
-			SublimeCMDOpen:sublimeCMD,
+            IDEAutoOpen:IDEAutoOpen,
 			IDEA_flexSdkName:ideaFlexSDKName,
 			IDEA_Flixel_Engine_Library:ideaFlixelEngine,
 			IDEA_Flixel_Addons_Library:ideaFlixelAddons,
@@ -208,7 +212,7 @@ class SetupCommand extends Command
 
 		if(IDE == FlxTools.SUBLIME_TEXT)
 		{
-			Sys.println(" Sublime CMD Option		:" + FlxTools.settings.SublimeCMDOpen);
+			Sys.println(" Sublime CMD Option		:" + FlxTools.settings.IDEAutoOpen);
 		}
 		else if ( IDE == FlxTools.INTELLIJ_IDEA)
 		{

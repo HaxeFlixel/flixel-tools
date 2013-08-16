@@ -74,25 +74,43 @@ class CreateCommand extends Command
 			Sys.println(" " + destination);
 			Sys.println("");
 
-			if (FlxTools.settings.SublimeCMDOpen)
+			if (FlxTools.settings.IDEAutoOpen)
 			{
-				var answer = Answer.Yes;
+                var answer = Answer.Yes;
 
-				if (!autoContinue)
-				{
-					answer = CommandUtils.askYN("Do you want to open it with Sublime?");
-				}
+                if(FlxTools.settings.DefaultEditor == FlxTools.SUBLIME_TEXT)
+                {
+                    if (!autoContinue)
+                    {
+                        answer = CommandUtils.askYN("Do you want to open it with Sublime?");
+                    }
 
-				if (answer == Answer.Yes)
-				{
-					var projectFile = CommandUtils.combine(destination, demo.NAME + ".sublime-project");
+                    if (answer == Answer.Yes)
+                    {
+                        var projectFile = CommandUtils.combine(destination, demo.NAME + ".sublime-project");
 
-					Sys.println(projectFile);
-					var sublimeOpen = "subl " + projectFile;
+                        Sys.println(projectFile);
+                        var sublimeOpen = "subl " + projectFile;
+                        Sys.command(sublimeOpen);
+                    }
+                }
+                else if(FlxTools.settings.DefaultEditor == FlxTools.FLASH_DEVELOP)
+                {
+                    if (!autoContinue)
+                    {
+                        answer = CommandUtils.askYN("Do you want to open it with Flash Develop?");
+                    }
 
-					Sys.command("subl");
-					Sys.command(sublimeOpen);
-				}
+                    if (answer == Answer.Yes)
+                    {
+                        var projectFile = CommandUtils.combine(destination, demo.NAME + ".hxproj");
+
+                        Sys.println(projectFile);
+                        var sublimeOpen = "explorer " + projectFile;
+                        Sys.command(sublimeOpen);
+                    }
+                }
+
 			}
 
 			exit();
