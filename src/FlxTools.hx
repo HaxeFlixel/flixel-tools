@@ -1,5 +1,6 @@
 package;
 
+import commands.DocsCommand;
 import commands.SetCommand;
 import commands.ConvertCommand;
 import commands.CreateCommand;
@@ -79,6 +80,14 @@ class FlxTools extends CommandLineRunner
 			ConvertCommand,
 			"convert", ["cn"],
 			"Converts an old HaxeFlixel Project.",
+			""
+			// TemplateUtil.getTemplate("convert")
+		);
+
+		mapCommand(
+			DocsCommand,
+			"docs", ["d"],
+			"Run the docs webserver.",
 			""
 			// TemplateUtil.getTemplate("convert")
 		);
