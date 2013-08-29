@@ -65,8 +65,7 @@ class FlxTools extends CommandLineRunner
 			DownloadCommand,
 			"download", ["dw"],
 			"Download the Templates and Demos.",
-			""
-			// TemplateUtil.getTemplate("download")
+			TemplateUtil.getTemplate("download")
 		);
 
 		mapCommand(
@@ -80,17 +79,16 @@ class FlxTools extends CommandLineRunner
 			ConvertCommand,
 			"convert", ["cn"],
 			"Converts an old HaxeFlixel Project.",
-			""
-			// TemplateUtil.getTemplate("convert")
+			TemplateUtil.getTemplate("convert")
 		);
 
-		mapCommand(
-			DocsCommand,
-			"docs", ["d"],
-			"Run the docs webserver.",
-			""
-			// TemplateUtil.getTemplate("convert")
-		);
+		//mapCommand(
+		//	DocsCommand,
+		//	"docs", ["d"],
+		//	"Run the docs webserver.",
+		//	""
+		//	// TemplateUtil.getTemplate("convert")
+		//);
 
 		//mapCommand(
 		//	ValidateCommand,
