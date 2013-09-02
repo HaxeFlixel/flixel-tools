@@ -569,7 +569,7 @@ class CommandUtils
 
 		if (answer == Answer.Yes)
 		{
-			if(FlxTools.settings.DefaultEditor == FlxTools.FLASH_DEVELOP)
+			if(IDE == FlxTools.FLASH_DEVELOP)
 			{
 				var projectFile = CommandUtils.combine(ProjectPath, ProjectName + ".hxproj");
 				projectFile = StringTools.replace(projectFile, "/", "\\");
@@ -612,8 +612,8 @@ class CommandUtils
 				{
 					if(FileSys.isMac)
 					{
-						//FlxTools.settings.IDEA_Path
-						///Applications/Cardea-IU-130.1619.app/Contents/MacOS/idea /Users/omni/Downloads/Mode
+						var cmd = FlxTools.settings.IDEA_Path + " " + ProjectPath;
+						Sys.command(cmd);
 					}
 					else if(FileSys.isWindows)
 					{
@@ -621,7 +621,9 @@ class CommandUtils
 					}
 					else if(FileSys.isLinux)
 					{
-
+						//todo untested
+						var cmd = FlxTools.settings.IDEA_Path + " " + ProjectPath;
+						Sys.command(cmd);
 					}
 					return true;
 				}

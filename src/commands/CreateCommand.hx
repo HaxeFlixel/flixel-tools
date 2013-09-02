@@ -63,7 +63,6 @@ class CreateCommand extends Command
 
 		Sys.println(" Creating " + demo.NAME);
 
-
 		var IDEChoice = CommandUtils.resolveIDEChoice(console);
 		var	destination = CommandUtils.combine(Sys.getCwd(), demo.NAME);
 		var copied = utils.ProjectUtils.duplicateProject(demo, destination, IDEChoice);

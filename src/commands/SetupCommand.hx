@@ -191,10 +191,24 @@ class SetupCommand extends Command
 			if(answer == Answer.Yes)
 			{
 				IDEAutoOpen = true;
+			}
+		}
 
-				if(IDE == FlxTools.SUBLIME_TEXT)
+		if(IDE == FlxTools.SUBLIME_TEXT)
+		{
+			if(FileSys.isMac)
+			{
+				Sys.println("For Sublime Text to open automatically you have to make sure the 'subl' command is setup properly on your system as in http://www.sublimetext.com/docs/2/osx_command_line.html.");
+
+				var answer = Answer.No;
+
+				var sublSetupCommand = 'ln -s "/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl" ~/bin/subl';
+
+				answer = CommandUtils.askYN("Do you want to run the symlink command automatically as per official instructions http://www.sublimetext.com/docs/2/osx_command_line.html?\n\n The command that will be executed is as follows:\n '"+sublSetupCommand+"'");
+
+				if(answer == Answer.Yes)
 				{
-					Sys.println("For Sublime Text to open automatically you have to make sure the 'subl' command is setup properly on your system. You can setup it up through the official instructions here http://www.sublimetext.com/docs/2/osx_command_line.html");
+					Sys.command(sublSetupCommand);
 				}
 			}
 		}
@@ -224,10 +238,10 @@ class SetupCommand extends Command
 			Sys.println(" IDEA_flexSdkName		:" + FlxTools.settings.IDEA_flexSdkName);
 			Sys.println(" IDEA_Flixel_Addons_Library	:" + FlxTools.settings.IDEA_Flixel_Addons_Library);
 			Sys.println(" IDEA_Flixel_Engine_Library	:" + FlxTools.settings.IDEA_Flixel_Engine_Library);
-			Sys.println(" Idea application path	        :" + FlxTools.settings.IDEA_Path);
+			Sys.println(" Idea application path 		:" + FlxTools.settings.IDEA_Path);
 		}
 
-		Sys.println(" Auto open with IDE		    :" + FlxTools.settings.IDEAutoOpen);
+		Sys.println(" Auto open with IDE		:" + FlxTools.settings.IDEAutoOpen);
 		Sys.println("");
 
 		return settingsFile;

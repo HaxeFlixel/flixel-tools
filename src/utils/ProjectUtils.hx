@@ -22,8 +22,9 @@ class ProjectUtils
 		{
 			CommandUtils.copyRecursively(Project.PATH, Destination);
 
-			var replacements = copyIDETemplateFiles(Destination, null, IDE);
+			var replacements = new Array<TemplateReplacement>();
 			replacements.push(TemplateUtils.addOption("${PROJECT_NAME}", "", Project.NAME));
+			replacements = copyIDETemplateFiles(Destination, replacements, IDE);
 
 			TemplateUtils.modifyTemplate(Destination, replacements);
 		}
