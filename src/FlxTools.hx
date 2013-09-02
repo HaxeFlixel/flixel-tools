@@ -24,6 +24,7 @@ class FlxTools extends CommandLineRunner
 	inline static public var FLASH_DEVELOP:String = "Flash Develop";
 	inline static public var FLASH_DEVELOP_FDZ:String = "Flash Develop FDZ";
 	inline static public var INTELLIJ_IDEA:String = "Intellij Idea";
+	inline static public var INTELLIJ_IDEA_PATH:String = "";
 	inline static public var IDE_NONE:String = "None";
 
 	inline static public var FLIXEL_TEMPLATE_REPO = "https://github.com/HaxeFlixel/flixel-templates.git";

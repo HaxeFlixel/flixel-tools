@@ -14,7 +14,7 @@ class ProjectUtils
 	 * 
 	 * @param   Name    The name of the demo to create
 	 */
-	static public function duplicateProject(Project:OpenFLProject, Destination:String = "", IDETemplate:String = ""):Bool
+	static public function duplicateProject(Project:OpenFLProject, Destination:String = "", IDE:String = ""):Bool
 	{
 		var result = CommandUtils.copyRecursively(Project.PATH, Destination);
 
@@ -22,7 +22,7 @@ class ProjectUtils
 		{
 			CommandUtils.copyRecursively(Project.PATH, Destination);
 
-			var replacements = copyIDETemplateFiles(Destination);
+			var replacements = copyIDETemplateFiles(Destination, null, IDE);
 			replacements.push(TemplateUtils.addOption("${PROJECT_NAME}", "", Project.NAME));
 
 			TemplateUtils.modifyTemplate(Destination, replacements);
@@ -95,15 +95,21 @@ class ProjectUtils
 		return "";
 	}
 
-	static public function copyIDETemplateFiles(TargetPath:String, ?Replacements:Array<TemplateReplacement>, ideOption:String = ""):Array<TemplateReplacement>
+	static public function copyIDETemplateFiles(TargetPath:String, ?Replacements:Array<TemplateReplacement>, IDEOption:String = ""):Array<TemplateReplacement>
 	{
 		if(Replacements == null)
 			Replacements = new Array<TemplateReplacement>();
 
-		if(ideOption == "")
-			ideOption = FlxTools.settings.DefaultEditor;
+		if(IDEOption == "" && FlxTools.settings.IDEAutoOpen)
+		{
+			IDEOption = FlxTools.settings.DefaultEditor;
+		}
+		else if(IDEOption == "")
+		{
+			IDEOption = FlxTools.IDE_NONE;
+		}
 
-		if (ideOption == FlxTools.SUBLIME_TEXT)
+		if (IDEOption == FlxTools.SUBLIME_TEXT)
 		{
 			Replacements.push(TemplateUtils.addOption("${PROJECT_PATH}", "", TargetPath));
 			Replacements.push(TemplateUtils.addOption("${HAXE_STD_PATH}", "", CommandUtils.combine(CommandUtils.getHaxePath(), "std")));
@@ -112,7 +118,7 @@ class ProjectUtils
 
 			CommandUtils.copyRecursively(FlxTools.sublimeSource, TargetPath, TemplateUtils.TemplateFilter, true);
 		}
-		else if (ideOption == FlxTools.INTELLIJ_IDEA)
+		else if (IDEOption == FlxTools.INTELLIJ_IDEA)
 		{
 			Replacements.push(TemplateUtils.addOption("${IDEA_flexSdkName}", "", FlxTools.settings.IDEA_flexSdkName));
 			Replacements.push(TemplateUtils.addOption("${IDEA_Flixel_Engine_Library}", "", FlxTools.settings.IDEA_Flixel_Engine_Library));
@@ -120,14 +126,14 @@ class ProjectUtils
 
 			CommandUtils.copyRecursively(FlxTools.intellijSource, TargetPath, TemplateUtils.TemplateFilter, true);
 		}
-		else if (ideOption == FlxTools.FLASH_DEVELOP)
+		else if (IDEOption == FlxTools.FLASH_DEVELOP)
 		{
             Replacements.push(TemplateUtils.addOption("${WIDTH}", "", FlxTools.PWIDTH));
             Replacements.push(TemplateUtils.addOption("${HEIGHT}", "", FlxTools.PHEIGHT));
 
             CommandUtils.copyRecursively(FlxTools.flashDevelopSource, TargetPath, TemplateUtils.TemplateFilter, true);
 		}
-		else if (ideOption == FlxTools.FLASH_DEVELOP_FDZ)
+		else if (IDEOption == FlxTools.FLASH_DEVELOP_FDZ)
 		{
 			//todo
 		}

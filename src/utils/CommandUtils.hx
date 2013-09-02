@@ -1,5 +1,7 @@
 package utils;
 
+import massive.sys.cmd.Console;
+import haxe.ds.StringMap;
 import FlxTools;
 import sys.FileSystem;
 import sys.io.Process;
@@ -519,6 +521,119 @@ class CommandUtils
 		}
 	}
 
+	static public function resolveIDEChoice(console:Console):String
+	{
+		var IDE = "";
+
+		var options = new StringMap<String>();
+		options.set("-subl", FlxTools.SUBLIME_TEXT);
+		options.set("-fd", FlxTools.FLASH_DEVELOP);
+		options.set("-idea", FlxTools.INTELLIJ_IDEA);
+		options.set("-noide", FlxTools.IDE_NONE);
+
+		var overrideIDE = "";
+
+		for (option in options.keys())
+		{
+			var IDEName = options.get(option);
+
+			if(console.getOption(option) != null)
+			{
+				overrideIDE = IDEName;
+			}
+		}
+
+		if(FlxTools.settings.IDEAutoOpen || overrideIDE != "")
+		{
+			if (overrideIDE != "")
+			{
+				IDE = overrideIDE;
+			}
+			else
+			{
+				IDE = FlxTools.settings.DefaultEditor;
+			}
+		}
+
+		return IDE;
+	}
+
+	static public function IDEAutoOpen(ProjectPath:String, ProjectName:String, IDE:String, AutoContinue:Bool = false):Bool
+	{
+		var answer = Answer.Yes;
+
+		if (!AutoContinue)
+		{
+			answer = CommandUtils.askYN("Do you want to open it with "+IDE+"?");
+		}
+
+		if (answer == Answer.Yes)
+		{
+			if(FlxTools.settings.DefaultEditor == FlxTools.FLASH_DEVELOP)
+			{
+				var projectFile = CommandUtils.combine(ProjectPath, ProjectName + ".hxproj");
+				projectFile = StringTools.replace(projectFile, "/", "\\");
+
+				if(FileSys.exists(projectFile))
+				{
+					Sys.println(projectFile);
+					var sublimeOpen = "explorer " + projectFile;
+					Sys.command(sublimeOpen);
+
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else if(IDE == FlxTools.SUBLIME_TEXT)
+			{
+				var projectFile = CommandUtils.combine(ProjectPath, ProjectName + ".sublime-project");
+
+				if(FileSys.exists(projectFile))
+				{
+					Sys.println(projectFile);
+					var sublimeOpen = "subl " + projectFile;
+					Sys.command(sublimeOpen);
+
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else if(IDE == FlxTools.INTELLIJ_IDEA)
+			{
+				var projectFile = CommandUtils.combine(ProjectPath, ".idea");
+
+				if(FileSys.exists(projectFile))
+				{
+					if(FileSys.isMac)
+					{
+						//FlxTools.settings.IDEA_Path
+						///Applications/Cardea-IU-130.1619.app/Contents/MacOS/idea /Users/omni/Downloads/Mode
+					}
+					else if(FileSys.isWindows)
+					{
+						//C://
+					}
+					else if(FileSys.isLinux)
+					{
+
+					}
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+		}
+
+		return false;
+	}
 }
 
 /**
@@ -531,6 +646,7 @@ typedef FlxToolSettings = {
 	IDEA_flexSdkName:String,
 	IDEA_Flixel_Engine_Library:String,
 	IDEA_Flixel_Addons_Library:String,
+	IDEA_Path:String,
 }
 
 /**

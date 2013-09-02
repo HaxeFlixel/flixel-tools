@@ -63,8 +63,10 @@ class CreateCommand extends Command
 
 		Sys.println(" Creating " + demo.NAME);
 
+
+		var IDEChoice = CommandUtils.resolveIDEChoice(console);
 		var	destination = CommandUtils.combine(Sys.getCwd(), demo.NAME);
-		var copied = utils.ProjectUtils.duplicateProject(demo, destination);
+		var copied = utils.ProjectUtils.duplicateProject(demo, destination, IDEChoice);
 
 		if(copied)
 		{
@@ -75,41 +77,9 @@ class CreateCommand extends Command
 
 			if (FlxTools.settings.IDEAutoOpen)
 			{
-                var answer = Answer.Yes;
-
-                if(FlxTools.settings.DefaultEditor == FlxTools.SUBLIME_TEXT)
-                {
-                    if (!autoContinue)
-                    {
-                        answer = CommandUtils.askYN("Do you want to open it with Sublime?");
-                    }
-
-                    if (answer == Answer.Yes)
-                    {
-                        var projectFile = CommandUtils.combine(destination, demo.NAME + ".sublime-project");
-
-                        Sys.println(projectFile);
-                        var sublimeOpen = "subl " + projectFile;
-                        Sys.command(sublimeOpen);
-                    }
-                }
-                else if(FlxTools.settings.DefaultEditor == FlxTools.FLASH_DEVELOP)
-                {
-                    if (!autoContinue)
-                    {
-                        answer = CommandUtils.askYN("Do you want to open it with Flash Develop?");
-                    }
-
-                    if (answer == Answer.Yes)
-                    {
-                        var projectFile = CommandUtils.combine(destination, demo.NAME + ".hxproj");
-                        projectFile = StringTools.replace(projectFile, "/", "\\");
-                        Sys.println(projectFile);
-                        var sublimeOpen = "explorer " + projectFile;
-                        Sys.command(sublimeOpen);
-                    }
-                }
-
+                var opened = CommandUtils.IDEAutoOpen(destination, demo.NAME, IDEChoice, autoContinue);
+				if(!opened)
+					error("There was a problem opening with " + IDEChoice);
 			}
 
 			exit();

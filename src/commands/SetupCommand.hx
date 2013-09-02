@@ -86,8 +86,8 @@ class SetupCommand extends Command
 
 		var message = "Do you want to setup the flixel command Alias?";
 
-		if(FileSys.isLinux||FileSys.isLinux)
-			message = "Do you want to set up the command alias 'flixel' to 'haxelib run flixel-tools' with a script in your /usr/bin/ ?";
+		if(FileSys.isLinux||FileSys.isMac)
+			message = "Do you want to set up the command alias 'flixel' to 'haxelib run flixel-tools'?\nA simple flixel script will be added to your /usr/bin/";
 
 		answer = CommandUtils.askYN(message);
 
@@ -150,6 +150,7 @@ class SetupCommand extends Command
 		var ideaFlexSDKName = "flex_4.6";
 		var ideaFlixelEngine = "Flixel Engine";
 		var ideaFlixelAddons = "Flixel Addons";
+		var ideaPath = "/Applications/Cardea-IU-130.1619.app/Contents/MacOS/idea";
 
 		AuthorName = CommandUtils.askString("Enter the author name to use when generating templates.\n\nJust hit enter to not use an author name.");
 
@@ -160,35 +161,42 @@ class SetupCommand extends Command
 			IDE = FlxTools.IDE_NONE;
 		}
 
-		if(IDE == FlxTools.SUBLIME_TEXT)
+		if ( IDE == FlxTools.INTELLIJ_IDEA)
 		{
-			Sys.println("This tools supports Sublime's command line tool you can install from http://www.sublimetext.com/docs/2/osx_command_line.html");
-			var name = CommandUtils.askYN("Do you want to open demos/templates automatically with this subl command tool?");
-
-			if(name == Answer.Yes)
-				IDEAutoOpen = true;
-		}
-		else if ( IDE == FlxTools.INTELLIJ_IDEA)
-		{
-			var answer = CommandUtils.askString("Enter the name of your default FlexSDK");
+			var answer = CommandUtils.askString("Enter the name of your default FlexSDK, just ENTER for default of " + ideaFlexSDKName);
 			if(answer != "")
 				ideaFlexSDKName = answer;
 
-			var answer = CommandUtils.askString("Enter the name of your default Flixel Library, just ENTER for default " + ideaFlixelEngine);
+			var answer = CommandUtils.askString("Enter the name of your default Flixel Library, just ENTER for default of " + ideaFlixelEngine);
 			if(answer != "")
 				ideaFlixelEngine = answer;
 
-			var answer = CommandUtils.askString("Enter the name of your default Flixel Addons Library, just ENTER for default " + ideaFlixelAddons);
+			var answer = CommandUtils.askString("Enter the name of your default Flixel Addons Library, just ENTER for default of " + ideaFlixelAddons);
 			if(answer != "")
 				ideaFlixelAddons = answer;
-		}
-		else if (IDE == FlxTools.FLASH_DEVELOP)
-		{
-			//todo execute template zip?
-            var answer = CommandUtils.askYN("Do you want to automatically open FlashDevelop?");
 
-            if(answer == Answer.Yes)
-                IDEAutoOpen = true;
+			var answer = CommandUtils.askString("Enter the path of where you have installed Intellij Idea, default is " + ideaPath);
+			if(answer != "")
+				ideaPath = answer;
+		}
+		//else if (IDE == FlxTools.FLASH_DEVELOP)
+		//{
+			//todo execute template zip?
+		//}
+
+		if (IDE != FlxTools.IDE_NONE)
+		{
+			var answer = CommandUtils.askYN("Do you want to automatically open the created templates and demos with " + IDE + "?");
+
+			if(answer == Answer.Yes)
+			{
+				IDEAutoOpen = true;
+
+				if(IDE == FlxTools.SUBLIME_TEXT)
+				{
+					Sys.println("For Sublime Text to open automatically you have to make sure the 'subl' command is setup properly on your system. You can setup it up through the official instructions here http://www.sublimetext.com/docs/2/osx_command_line.html");
+				}
+			}
 		}
 
 		var settingsFile:FlxToolSettings =
@@ -199,6 +207,7 @@ class SetupCommand extends Command
 			IDEA_flexSdkName:ideaFlexSDKName,
 			IDEA_Flixel_Engine_Library:ideaFlixelEngine,
 			IDEA_Flixel_Addons_Library:ideaFlixelAddons,
+			IDEA_Path:ideaPath,
 		};
 
 		CommandUtils.saveToolSettings(settingsFile);
@@ -210,17 +219,15 @@ class SetupCommand extends Command
 		Sys.println(" Default Editor			:" + FlxTools.settings.DefaultEditor);
 		Sys.println(" Author Name			:" + FlxTools.settings.AuthorName);
 
-		if(IDE == FlxTools.SUBLIME_TEXT)
-		{
-			Sys.println(" Sublime CMD Option		:" + FlxTools.settings.IDEAutoOpen);
-		}
-		else if ( IDE == FlxTools.INTELLIJ_IDEA)
+		if ( IDE == FlxTools.INTELLIJ_IDEA)
 		{
 			Sys.println(" IDEA_flexSdkName		:" + FlxTools.settings.IDEA_flexSdkName);
 			Sys.println(" IDEA_Flixel_Addons_Library	:" + FlxTools.settings.IDEA_Flixel_Addons_Library);
 			Sys.println(" IDEA_Flixel_Engine_Library	:" + FlxTools.settings.IDEA_Flixel_Engine_Library);
+			Sys.println(" Idea application path	        :" + FlxTools.settings.IDEA_Path);
 		}
 
+		Sys.println(" Auto open with IDE		    :" + FlxTools.settings.IDEAutoOpen);
 		Sys.println("");
 
 		return settingsFile;
