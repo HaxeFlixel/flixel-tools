@@ -3,6 +3,7 @@ package commands;
 import utils.CommandUtils.Answer;
 import utils.CommandUtils;
 import massive.sys.cmd.Command;
+import utils.ProjectUtils;
 import utils.ProjectUtils.OpenFLProject;
 import utils.DemoUtils;
 
@@ -63,7 +64,7 @@ class CreateCommand extends Command
 
 		Sys.println(" Creating " + demo.NAME);
 
-		var IDEChoice = CommandUtils.resolveIDEChoice(console);
+		var IDEChoice = ProjectUtils.resolveIDEChoice(console);
 		var	destination = CommandUtils.combine(Sys.getCwd(), demo.NAME);
 		var copied = utils.ProjectUtils.duplicateProject(demo, destination, IDEChoice);
 
@@ -76,7 +77,7 @@ class CreateCommand extends Command
 
 			if (FlxTools.settings.IDEAutoOpen)
 			{
-                var opened = CommandUtils.IDEAutoOpen(destination, demo.NAME, IDEChoice, autoContinue);
+                var opened = ProjectUtils.IDEAutoOpen(destination, demo.NAME, IDEChoice, autoContinue);
 				if(!opened)
 					error("There was a problem opening with " + IDEChoice);
 			}
