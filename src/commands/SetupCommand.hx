@@ -111,7 +111,7 @@ class SetupCommand extends Command
 				}
 				else
 				{
-					error("Could not find the flixel-tools alias script");
+					error("Could not find the flixel-tools alias script. You can try 'haxelib selfupdate' and run setup again.");
 				}
 			}
 			else
@@ -131,7 +131,7 @@ class SetupCommand extends Command
 				}
 				else
 				{
-					error("Could not find the flixel-tools alias script");
+					error("Could not find the flixel-tools alias script. You can try 'haxelib selfupdate' and run setup again.");
 				}
 			}
 		}
