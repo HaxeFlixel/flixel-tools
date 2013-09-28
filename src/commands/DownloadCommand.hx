@@ -10,6 +10,7 @@ class DownloadCommand extends Command
 		CommandUtils.gitHaxelib("flixel-addons", FlxTools.FLIXEL_ADDONS_REPO);
 		CommandUtils.gitHaxelib("flixel-demos", FlxTools.FLIXEL_DEMOS_REPO);
 		CommandUtils.gitHaxelib("flixel-templates", FlxTools.FLIXEL_TEMPLATE_REPO);
+		CommandUtils.gitHaxelib("flixel-ui", FlxTools.FLIXEL_UI_REPO);
 
 		exit();
 	}

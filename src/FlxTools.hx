@@ -28,6 +28,7 @@ class FlxTools extends CommandLineRunner
 	inline static public var IDE_NONE:String = "None";
 
 	inline static public var FLIXEL_ADDONS_REPO = "https://github.com/HaxeFlixel/flixel-addons.git";
+	inline static public var FLIXEL_UI_REPO = "https://github.com/HaxeFlixel/flixel-ui.git";
 	inline static public var FLIXEL_TEMPLATE_REPO = "https://github.com/HaxeFlixel/flixel-templates.git";
 	inline static public var FLIXEL_DEMOS_REPO = "https://github.com/HaxeFlixel/flixel-demos.git";
 	inline static public var FLIXEL_REPO = "https://github.com/HaxeFlixel/flixel.git";
