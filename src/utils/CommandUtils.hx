@@ -518,6 +518,37 @@ class CommandUtils
 			return false;
 		}
 	}
+
+	static public function gitHaxelib(HaxeLib:String, Repo:String):Bool
+	{
+		var path = CommandUtils.getHaxelibPath(HaxeLib);
+
+		if(path != "")
+		{
+			Sys.println("");
+			Sys.println("It appears you already have " + HaxeLib + " haxelib installed.");
+			Sys.println(path);
+			Sys.println("");
+
+			return true;
+		}
+		else
+		{
+			Sys.command("haxelib git " + HaxeLib + " " + Repo);
+
+			path = CommandUtils.getHaxelibPath(HaxeLib);
+
+			if (path == "")
+			{
+				Sys.println(" There was a problem installing " + HaxeLib + " from " + Repo);
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		}
+	}
 }
 
 /**
