@@ -105,9 +105,14 @@ class SetupCommand extends Command
 
 				flixelAliasScript = haxePath + "\\flixel.bat";
 
-				if(FileSystem.exists (flixelAliasScript))
+				var scriptSourcePath = CommandUtils.getHaxelibPath("flixel-tools");
+				var scriptFile = "flixel.bat";
+				scriptSourcePath = CommandUtils.combine(scriptSourcePath, "bin");
+				scriptSourcePath = CommandUtils.combine(scriptSourcePath, scriptFile);
+
+				if(FileSystem.exists (scriptSourcePath))
 				{
-					File.copy(CommandUtils.getHaxelibPath("flixel-tools") + "\\\\bin\\flixel.bat", flixelAliasScript);
+					File.copy( scriptSourcePath, flixelAliasScript);
 				}
 				else
 				{
