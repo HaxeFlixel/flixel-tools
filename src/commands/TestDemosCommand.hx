@@ -31,7 +31,7 @@ class TestDemosCommand extends Command
 
 		var results = new Array<BuildResult>();
 
-		Sys.println("Compiling demos [" + (Target != "" ? Target : "flash") + "]:");
+		Sys.println("Building demos - " + (Target != "" ? Target : "flash"));
 		Sys.println("");
 
 		Lambda.foreach(projects, function(p) {
