@@ -144,7 +144,7 @@ class TestDemosCommand extends Command
 
 		if (Display)
 		{
-			Sys.println(getResult(compile));
+			Sys.println(getResult(compile) + " - " + Project.NAME + " (" + Target + ")");
 		}
 
 		var project:BuildResult = {
