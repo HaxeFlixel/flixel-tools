@@ -7,7 +7,6 @@ import utils.CommandUtils;
 
 class DemoUtils
 {
-
 	static public function askQuestionDemoStrings(Question:String, Header:String, Answers:Array<String>, cancel:Bool = true):String
 	{
 		while (true)
@@ -134,8 +133,7 @@ class DemoUtils
 			}
 		}
 
-		var targets = ["flash-","non-flash-"];
-		var projects:Array<OpenFLProject> = ProjectUtils.scanOpenFLProjects(DemosPath, true, targets);
+		var projects:Array<OpenFLProject> = ProjectUtils.scanOpenFLProjects(DemosPath, true);
 
 		if (Lambda.count(projects) > 0)
 		{

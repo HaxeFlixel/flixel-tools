@@ -1,77 +1,75 @@
 package commands;
 
-import sys.io.File;
 import utils.CommandUtils;
+import utils.ProjectUtils;
 import utils.DemoUtils;
-import massive.sys.io.FileSys;
-import utils.ProjectUtils.OpenFLProject;
 import massive.sys.cmd.Command;
+import sys.io.File;
 
-class ValidateCommand extends Command
+class TestDemosCommand extends Command
 {
 	inline static public var PASSED:String = "PASSED";
 	inline static public var FAILED:String = "FAILED";
 
 	override public function execute():Void
 	{
-		compileAllDemos();
+		compileAllDemos(console.options.keys().next());
+		exit();
 	}
 
 	/**
-	 * Validate all the demos recursively
+	 * Compile all the demos recursively
 	 *
-	 * @param   Location    Location of the demos directory to scan and validate
+	 * @param Target Which target to compile apps for (flash, neko, windows, android, 
 	 */
-	private function compileAllDemos(Location:String = ""):Void
+	private function compileAllDemos(Target:String = ""):Void
 	{
-		if (Location == "")
-		{
-			Sys.println(" Copying all demos into the current working directory.");
-
-			var demosPath:String = CommandUtils.getHaxelibPath("flixel-demos");
-
-			Location = Sys.getCwd() + "flixel-demos-validation/";
-
-
-
-			CommandUtils.copyRecursively(demosPath, Location);
-		}
-
 		var projects:Array<OpenFLProject> = DemoUtils.scanDemoProjects();
 
-		if(projects == null)
+		if (projects == null)
+		{
 			error("No Demos were found in haxelib flixel-demos");
+			exit();
+		}
 
 		var results = new Array<BuildResult>();
 
-		Sys.println(" " + Lambda.count(projects) + " demos available to compile.");
+		Sys.println("Compiling demos [" + (Target != "" ? Target : "flash") + "]:");
+		Sys.println("");
+
+		Lambda.foreach(projects, function(p) {
+			if (p != null) {
+				Sys.println(p.NAME);
+				return true;
+			}
+			return false;
+			});
 		Sys.println("");
 
 		for (project in projects)
 		{
 			var demoProject:OpenFLProject = project;
 
-			if(demoProject.TARGETS == "flash-")
+			if(Target.toLowerCase() == "all")
 			{
 				results.push(buildProject("flash", demoProject));
-			}
-			else if (demoProject.TARGETS == "non-flash")
-			{
 				results.push(buildProject("neko", demoProject));
-				//results.push(buildProject("native", demoProject));
+				results.push(buildProject("native", demoProject));
+				results.push(buildProject("html5", demoProject));
+			}
+			else if(Target == "")
+			{
+				results.push(buildProject("flash", demoProject));
 			}
 			else
 			{
-				results.push(buildProject("flash", demoProject));
-				//results.push(buildProject("neko", demoProject));
-				//results.push(buildProject("native", demoProject));
-				//results.push(buildProject("html5", demoProject));
+				results.push(buildProject(Target, demoProject));
 			}
 		}
 
 		Sys.println ("");
 
-		writeResultsToFile(Sys.getCwd() + "validate.log", results);
+		writeResultsToFile(Sys.getCwd() + "compile_results.log", results);
 
 		var totalResult = true;
 
@@ -137,7 +135,7 @@ class ValidateCommand extends Command
 		if(Target == "native")
 			Target = CommandUtils.getCPP();
 
-		var buildCommand:String = "haxelib run openfl build " + "'" + Project.PATH + "'" + " " + Target;
+		var buildCommand:String = "haxelib run openfl build " + "\"" + Project.PATH + "\"" + " " + Target;
 
 		if (Display)
 		{

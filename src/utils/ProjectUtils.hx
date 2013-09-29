@@ -35,7 +35,7 @@ class ProjectUtils
 	 * Scan a Directory recursively for OpenFL projects
 	 * @return Array<OpenFLProject> containing projects with an XML specified
 	 */
-	static public function scanOpenFLProjects(TargetDirectory:String, recursive:Bool = true, TargetFolders:Array<String> = null):Array<OpenFLProject>
+	static public function scanOpenFLProjects(TargetDirectory:String, recursive:Bool = true):Array<OpenFLProject>
 	{
 		var projects = new Array<OpenFLProject>();
 

@@ -1,24 +1,26 @@
 package;
 
-import commands.DocsCommand;
-import commands.SetCommand;
+import commands.BenchmarkCommand;
 import commands.ConvertCommand;
 import commands.CreateCommand;
+import commands.DocsCommand;
 import commands.DownloadCommand;
 import commands.OpenFLTestCommand;
+import commands.SetCommand;
 import commands.SetupCommand;
 import commands.TemplateCommand;
-import commands.ValidateCommand;
-import massive.haxe.util.TemplateUtil;
-import massive.sys.cmd.CommandLineRunner;
+import commands.TestDemosCommand;
+
 import utils.CommandUtils;
 import utils.CommandUtils.HaxelibJSON;
+import massive.haxe.util.TemplateUtil;
+import massive.sys.cmd.CommandLineRunner;
 
 class FlxTools extends CommandLineRunner
 {
 	inline static public var NAME = "HaxeFlixel";
 	inline static public var ALIAS = "flixel";
-	inline static public var VERSION = "0.0.2";
+	inline static public var VERSION = "0.0.3";
 
 	inline static public var SUBLIME_TEXT:String = "Sublime Text";
 	inline static public var FLASH_DEVELOP:String = "Flash Develop";
@@ -27,11 +29,11 @@ class FlxTools extends CommandLineRunner
 	inline static public var INTELLIJ_IDEA_PATH:String = "";
 	inline static public var IDE_NONE:String = "None";
 
-	inline static public var FLIXEL_ADDONS_REPO = "https://github.com/HaxeFlixel/flixel-addons.git";
-	inline static public var FLIXEL_UI_REPO = "https://github.com/HaxeFlixel/flixel-ui.git";
-	inline static public var FLIXEL_TEMPLATE_REPO = "https://github.com/HaxeFlixel/flixel-templates.git";
-	inline static public var FLIXEL_DEMOS_REPO = "https://github.com/HaxeFlixel/flixel-demos.git";
-	inline static public var FLIXEL_REPO = "https://github.com/HaxeFlixel/flixel.git";
+	inline static public var FLIXEL_ADDONS_REPO = "https://github.com/HaxeFlixel/flixel-addons";
+	inline static public var FLIXEL_UI_REPO = "https://github.com/HaxeFlixel/flixel-ui";
+	inline static public var FLIXEL_TEMPLATE_REPO = "https://github.com/HaxeFlixel/flixel-templates";
+	inline static public var FLIXEL_DEMOS_REPO = "https://github.com/HaxeFlixel/flixel-demos";
+	inline static public var FLIXEL_REPO = "https://github.com/HaxeFlixel/flixel";
 
 	static public var settings:FlxToolSettings;
     static public var PWIDTH:Int = 640;
@@ -66,39 +68,40 @@ class FlxTools extends CommandLineRunner
 
 		mapCommand(
 			DownloadCommand,
-			"download", ["dw"],
+			"download", ["dw","download"],
 			"Download the Templates and Demos.",
 			TemplateUtil.getTemplate("download")
 		);
 
 		mapCommand(
 			TemplateCommand,
-			"template", ["tpl"],
+			"template", ["tpl","template"],
 			"Creates a project template.",
 			TemplateUtil.getTemplate("template")
 		);
 
 		mapCommand(
 			ConvertCommand,
-			"convert", ["cn"],
+			"convert", ["cn","convert"],
 			"Converts an old HaxeFlixel Project.",
 			TemplateUtil.getTemplate("convert")
 		);
 
+		mapCommand(
+			TestDemosCommand,
+			"testdemos", ["td", "validate"],
+			"Builds all the demos for flash target (use -target to specify a target, or -all to build for all targets).",
+			""
+			// TemplateUtil.getTemplate("validate")
+		);
+
+		// -- NOT WORKING --
 		//mapCommand(
 		//	DocsCommand,
 		//	"docs", ["d"],
 		//	"Run the docs webserver.",
 		//	""
 		//	// TemplateUtil.getTemplate("convert")
-		//);
-
-		//mapCommand(
-		//	ValidateCommand,
-		//	"validate", ["v"],
-		//	"Compiles a project to validate compile errors.",
-		//	""
-		//	// TemplateUtil.getTemplate("validate")
 		//);
 
 		//mapCommand(
