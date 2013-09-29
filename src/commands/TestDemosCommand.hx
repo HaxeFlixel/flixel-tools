@@ -90,7 +90,6 @@ class TestDemosCommand extends Command
 		Sys.println("Total Demos       : " + total);
 		Sys.println("Failed Builds     : " + failed);
 		Sys.println("Successful Builds : " + passed);
-		Sys.println(passed);
 
 		totalResult ? exit() : exit(1);
 	}
