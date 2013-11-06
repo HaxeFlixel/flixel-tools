@@ -8,9 +8,6 @@ import sys.io.File;
 
 class TestDemosCommand extends Command
 {
-	inline static public var PASSED:String = "PASSED";
-	inline static public var FAILED:String = "FAILED";
-
 	override public function execute():Void
 	{
 		compileAllDemos(console.options.keys().next());
@@ -34,7 +31,7 @@ class TestDemosCommand extends Command
 
 		var results = new Array<BuildResult>();
 
-		Sys.println("Compiling demos [" + (Target != "" ? Target : "flash") + "]:");
+		Sys.println("Building demos - " + (Target != "" ? Target : "flash"));
 		Sys.println("");
 
 		Lambda.foreach(projects, function(p) {
@@ -79,7 +76,7 @@ class TestDemosCommand extends Command
 
 		for (result in results)
 		{
-			if(result.result == FAILED)
+			if(result.failed)
 			{
 				failed++;
 				totalResult = false;
@@ -90,10 +87,9 @@ class TestDemosCommand extends Command
 			}
 		}
 
-		Sys.println("Demos Total   : " + total);
-		Sys.println("Builds Failed : " + failed);
-		Sys.println("Builds Passed : " + passed);
-		Sys.println(passed);
+		Sys.println("Total Demos       : " + total);
+		Sys.println("Failed Builds     : " + failed);
+		Sys.println("Successful Builds : " + passed);
 
 		totalResult ? exit() : exit(1);
 	}
@@ -140,21 +136,22 @@ class TestDemosCommand extends Command
 		if (Display)
 		{
 			Sys.println("");
-			Sys.println(" Compile " + Target + ":: " + buildCommand);
+			Sys.println("Building " + Project.NAME + ":");
+			Sys.println(buildCommand);
 		}
 
 		var compile:Int = Sys.command(buildCommand);
 
 		if (Display)
 		{
-			Sys.println("");
-			Sys.println(" " + Target + "::" + getResult(compile));
+			Sys.println(getResult(compile) + " - " + Project.NAME + " (" + Target + ")");
 		}
 
 		var project:BuildResult = {
 			result : getResult(compile),
 			target : Target,
-			project : Project
+			project : Project,
+			failed : (compile != 0)
 		};
 
 		return project;
@@ -170,11 +167,11 @@ class TestDemosCommand extends Command
 	{
 		if (Result == 0)
 		{
-			return PASSED;
+			return "SUCCESS";
 		}
 		else
 		{
-			return FAILED;
+			return "FAIL";
 		}
 	}
 }
@@ -185,5 +182,6 @@ class TestDemosCommand extends Command
 typedef BuildResult = {
 	var target:String;
 	var result:String;
+	var failed:Bool;
 	var project:OpenFLProject;
 }
