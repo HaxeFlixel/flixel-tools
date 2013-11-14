@@ -158,6 +158,7 @@ class SetupCommand extends Command
 		var ideaPath = "/Applications/Cardea-IU-130.1619.app/Contents/MacOS/idea";
 
 		AuthorName = CommandUtils.askString("Enter the author name to use when generating templates.\n\nJust hit enter to not use an author name.");
+		AuthorName = haxe.Utf8.encode(AuthorName);
 
 		IDE = CommandUtils.askQuestionStrings("Choose your default IDE.", "" , IDES, false);
 		if(IDE == null)
