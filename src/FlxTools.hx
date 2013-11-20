@@ -36,9 +36,8 @@ class FlxTools extends CommandLineRunner
 	inline static public var FLIXEL_REPO = "https://github.com/HaxeFlixel/flixel";
 
 	static public var settings:FlxToolSettings;
-    static public var PWIDTH:Int = 640;
-    static public var PHEIGHT:Int = 480;
-
+	static public var PWIDTH:Int = 640;
+	static public var PHEIGHT:Int = 480;
 
 	static public var flashDevelopFDZSource:String;
 	static public var flashDevelopSource:String;
