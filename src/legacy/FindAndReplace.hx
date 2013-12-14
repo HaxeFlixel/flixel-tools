@@ -427,7 +427,7 @@ class FindAndReplace
 		
 		// No more references left to FlxG.keys, other than the getters for the individual keys
 		// - so we can safely replace all the left references with FlxG.keys.pressed
-		add("FlxG.keys.",				"FlxG.keys.pressed");
+		add("FlxG.keys.",				"FlxG.keys.pressed.");
 		
 		/**
 		 * Rename FlxPhys classes to FlxNape
