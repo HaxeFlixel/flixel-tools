@@ -8,5 +8,3 @@
 -resource info/template.txt@template
 -resource info/download.txt@download
 -resource info/convert.txt@convert
-
--cmd zip -x *.git* -r flixel-tools.zip .

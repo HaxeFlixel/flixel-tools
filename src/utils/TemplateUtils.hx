@@ -31,9 +31,9 @@ class TemplateUtils
 	/**
 	 * Scan a folder recursively for openfl project files
 	 *
-	 * @param   DemosPath       An optional path to scan, default being flixel-demos Haxelib
-	 * @param   Display         [description]
-	 * @return                  Array<OpenFLProject> or null if no Demos were found
+	 * @param   DemosPath	   An optional path to scan, default being flixel-demos Haxelib
+	 * @param   Display		 [description]
+	 * @return				  Array<OpenFLProject> or null if no Demos were found
 	 */
 	static public function scanTemplateProjects(TemplatesPath:String = "", Recursive:Bool = true):Array<TemplateProject>
 	{
@@ -121,7 +121,7 @@ class TemplateUtils
 	/**
 	 * Recursivley alter the template files
 	 *
-	 * @param   TemplatePath    Temaplte path to modify
+	 * @param   TemplatePath	Temaplte path to modify
 	 */
 	static public function modifyTemplate(TemplatePath:String, TemplateData:Array<TemplateReplacement>):Void
 	{

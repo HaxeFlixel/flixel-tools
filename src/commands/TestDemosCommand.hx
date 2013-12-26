@@ -17,7 +17,7 @@ class TestDemosCommand extends Command
 	/**
 	 * Compile all the demos recursively
 	 *
-	 * @param Target Which target to compile apps for (flash, neko, windows, android, 
+	 * @param Target Which target to compile apps for (flash, neko, windows, android,
 	 */
 	private function compileAllDemos(Target:String = ""):Void
 	{
@@ -87,8 +87,8 @@ class TestDemosCommand extends Command
 			}
 		}
 
-		Sys.println("Total Demos       : " + total);
-		Sys.println("Failed Builds     : " + failed);
+		Sys.println("Total Demos	   : " + total);
+		Sys.println("Failed Builds	 : " + failed);
 		Sys.println("Successful Builds : " + passed);
 
 		totalResult ? exit() : exit(1);
@@ -104,11 +104,11 @@ class TestDemosCommand extends Command
 		for (result in Results)
 		{
 			fileObject.writeString("\n");
-			fileObject.writeString("Project Name    :" + result.project.NAME + "\n");
-			fileObject.writeString("Project Path    :" + result.project.PATH + "\n");
-			fileObject.writeString("Targets         :" + result.project.TARGETS + "\n");
-			fileObject.writeString("Build Target    :" + result.target + "\n");
-			fileObject.writeString("Build Result    :" + result.result + "\n");
+			fileObject.writeString("Project Name	:" + result.project.NAME + "\n");
+			fileObject.writeString("Project Path	:" + result.project.PATH + "\n");
+			fileObject.writeString("Targets		 :" + result.project.TARGETS + "\n");
+			fileObject.writeString("Build Target	:" + result.target + "\n");
+			fileObject.writeString("Build Result	:" + result.result + "\n");
 			fileObject.writeString("\n");
 		}
 
@@ -121,9 +121,9 @@ class TestDemosCommand extends Command
 	/**
 	 * Build an openfl target
 	 *
-	 * @param   Target      The openfl target to build
-	 * @param   Project     OpenFLProject The project object to build from
-	 * @param   Display     Echo progress on the command line
+	 * @param   Target	  The openfl target to build
+	 * @param   Project	 OpenFLProject The project object to build from
+	 * @param   Display	 Echo progress on the command line
 	 * @return  BuildResult the result of the compilation
 	 */
 	private function buildProject(Target:String, Project:OpenFLProject, Display:Bool = true):BuildResult

@@ -77,7 +77,7 @@ class CreateCommand extends Command
 
 			if (FlxTools.settings.IDEAutoOpen)
 			{
-                var opened = ProjectUtils.IDEAutoOpen(destination, demo.NAME, IDEChoice, autoContinue);
+				var opened = ProjectUtils.IDEAutoOpen(destination, demo.NAME, IDEChoice, autoContinue);
 				if(!opened)
 					error("There was a problem opening with " + IDEChoice);
 			}

@@ -224,7 +224,7 @@ class SetupCommand extends Command
 		{
 			DefaultEditor:IDE,
 			AuthorName:AuthorName,
-            IDEAutoOpen:IDEAutoOpen,
+			IDEAutoOpen:IDEAutoOpen,
 			IDEA_flexSdkName:ideaFlexSDKName,
 			IDEA_Flixel_Engine_Library:ideaFlixelEngine,
 			IDEA_Flixel_Addons_Library:ideaFlixelAddons,
@@ -245,7 +245,7 @@ class SetupCommand extends Command
 			Sys.println(" IDEA_flexSdkName		:" + FlxTools.settings.IDEA_flexSdkName);
 			Sys.println(" IDEA_Flixel_Addons_Library	:" + FlxTools.settings.IDEA_Flixel_Addons_Library);
 			Sys.println(" IDEA_Flixel_Engine_Library	:" + FlxTools.settings.IDEA_Flixel_Engine_Library);
-			Sys.println(" Idea application path 		:" + FlxTools.settings.IDEA_Path);
+			Sys.println(" Idea application path		:" + FlxTools.settings.IDEA_Path);
 		}
 
 		Sys.println(" Auto open with IDE		:" + FlxTools.settings.IDEAutoOpen);

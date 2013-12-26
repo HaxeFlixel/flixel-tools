@@ -11,8 +11,8 @@ class ProjectUtils
 {
 	/**
 	 * Shortcut Create an OpenFL project by recursively copying the folder according to a name
-	 * 
-	 * @param   Name    The name of the demo to create
+	 *
+	 * @param   Name	The name of the demo to create
 	 */
 	static public function duplicateProject(Project:OpenFLProject, Destination:String = "", IDE:String = ""):Bool
 	{
@@ -129,10 +129,10 @@ class ProjectUtils
 		}
 		else if (IDEOption == FlxTools.FLASH_DEVELOP)
 		{
-            Replacements.push(TemplateUtils.addOption("${WIDTH}", "", FlxTools.PWIDTH));
-            Replacements.push(TemplateUtils.addOption("${HEIGHT}", "", FlxTools.PHEIGHT));
+			Replacements.push(TemplateUtils.addOption("${WIDTH}", "", FlxTools.PWIDTH));
+			Replacements.push(TemplateUtils.addOption("${HEIGHT}", "", FlxTools.PHEIGHT));
 
-            CommandUtils.copyRecursively(FlxTools.flashDevelopSource, TargetPath, TemplateUtils.TemplateFilter, true);
+			CommandUtils.copyRecursively(FlxTools.flashDevelopSource, TargetPath, TemplateUtils.TemplateFilter, true);
 		}
 		else if (IDEOption == FlxTools.FLASH_DEVELOP_FDZ)
 		{
