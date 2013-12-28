@@ -28,7 +28,7 @@ class CreateCommand extends Command
 			Sys.println("");
 			Sys.println("There were no Demos found.");
 			Sys.println("Is your flixel-demos haxelib installed?");
-			Sys.println("Try the 'flixel download' command.");
+			Sys.println("Try 'haxelib install flixel-demos'.");
 			Sys.println("");
 			exit();
 		}

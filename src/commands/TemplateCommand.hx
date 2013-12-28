@@ -50,7 +50,7 @@ class TemplateCommand extends Command
 
 		if (template == null)
 		{
-			error("Error getting the template with the name of " + TemplateName + " make sure you have run the 'flixel download' command.");
+			error("Error getting the template with the name of " + TemplateName + " make sure you have installed flixel-templates ('haxelib install flixel-templates')");
 		}
 		else
 		{
