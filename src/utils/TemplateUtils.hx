@@ -1,5 +1,6 @@
 package utils;
 
+import sys.FileSystem;
 import sys.io.FileOutput;
 import massive.sys.io.File;
 import massive.sys.io.FileSys;
@@ -56,27 +57,26 @@ class TemplateUtils
 		for (name in FileSys.readDirectory(TemplatesPath))
 		{
 			var folderPath = CommandUtils.combine(TemplatesPath, name);
-
-			if(FileSys.exists(folderPath))
+			
+			if (FileSys.exists(folderPath) && FileSys.isDirectory(folderPath) && name != '.git')
 			{
-				if(FileSys.isDirectory(folderPath) && name != '.git')
+				var filePath = CommandUtils.combine(TemplatesPath, name);
+				filePath = CommandUtils.combine(filePath, "template.json");
+				
+				// Make sure we don't get a crash if the file doesn't exist
+				if (FileSystem.exists(filePath))
 				{
-					if(name != 'ide-data')
+					var file = FileSysUtils.getContent(filePath);
+					
+					var FileData:TemplateFile = Json.parse(file);
+					
+					var project:TemplateProject =
 					{
-						var filePath = CommandUtils.combine(TemplatesPath, name);
-
-						var file = FileSysUtils.getContent(CommandUtils.combine( filePath, "template.json"));
-
-						var FileData:TemplateFile = Json.parse(file);
-
-						var project:TemplateProject =
-						{
-							Name : name,
-							Path : TemplatesPath + name,
-							Template : FileData
-						};
-						templates.push(project);
-					}
+						Name : name,
+						Path : TemplatesPath + name,
+						Template : FileData
+					};
+					templates.push(project);
 				}
 			}
 		}
@@ -164,18 +164,16 @@ class TemplateUtils
 }
 
 typedef TemplateFile = {
-
-	var replacements:Array<TemplateReplacement>;
-
+	replacements:Array<TemplateReplacement>
 }
 
 /**
  * Object to pass the data of a template project
  */
 typedef TemplateProject = {
-	var Name:String;
-	var Path:String;
-	var Template:TemplateFile;
+	Name:String,
+	Path:String,
+	Template:TemplateFile
 }
 
 /**
@@ -184,5 +182,5 @@ typedef TemplateProject = {
 typedef TemplateReplacement = {
 	replacement:String,
 	pattern:String,
-	cmdOption:String,
+	cmdOption:String
 }

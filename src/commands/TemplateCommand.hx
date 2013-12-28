@@ -1,15 +1,11 @@
 package commands;
 
-import utils.CommandUtils;
-import utils.TemplateUtils;
-import utils.ProjectUtils;
-import sys.io.FileOutput;
-import sys.io.File;
-import sys.FileSystem;
 import haxe.ds.StringMap;
-import utils.TemplateUtils;
-import utils.CommandUtils;
 import massive.sys.cmd.Command;
+import sys.FileSystem;
+import utils.CommandUtils;
+import utils.ProjectUtils;
+import utils.TemplateUtils;
 
 class TemplateCommand extends Command
 {
@@ -32,7 +28,7 @@ class TemplateCommand extends Command
 
 		ideOption = selectIDE();
 
-		if(console.getOption("-n") != null)
+		if (console.getOption("-n") != null)
 		{
 			targetPath = console.getOption("-n");
 		}
@@ -139,9 +135,11 @@ class TemplateCommand extends Command
 		options.set("-idea", FlxTools.INTELLIJ_IDEA);
 
 		var choice = null;
-
-		if(FlxTools.settings != null)
+		
+		if (FlxTools.settings != null)
+		{
 			choice = FlxTools.settings.DefaultEditor;
+		}
 
 		for (o in options.keys())
 		{
