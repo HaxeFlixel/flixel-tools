@@ -101,6 +101,8 @@ class ProjectUtils
 		if(Replacements == null)
 			Replacements = new Array<TemplateReplacement>();
 
+		Replacements.push(TemplateUtils.addOption("${AUTHOR}", "", FlxTools.settings.AuthorName));
+
 		if(IDEOption == "" && FlxTools.settings.IDEAutoOpen)
 		{
 			IDEOption = FlxTools.settings.DefaultEditor;

@@ -485,7 +485,7 @@ class CommandUtils
 		return true;
 	}
 
-	static public function haxelibCommand(Lib:String, AutoContinue:Bool, Message:String):Bool
+	static public function haxelibCommand(Lib:String, AutoContinue:Bool, ?Message:String):Bool
 	{
 		var libStatus = CommandUtils.getHaxelibPath(Lib);
 

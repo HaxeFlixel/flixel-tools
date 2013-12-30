@@ -64,14 +64,13 @@ class FlxTools extends CommandLineRunner
 			"Setup the tools, download the Demos and Templates haxelib.",
 			TemplateUtil.getTemplate("setup")
 		);
-
-		// Don't need this with flixel-templates and demos on haxelib, but might be useful with improvements again
-		/*mapCommand(
+		
+		mapCommand(
 			DownloadCommand,
 			"download", ["dw","download"],
 			"Download the Templates and Demos.",
 			TemplateUtil.getTemplate("download")
-		);*/
+		);
 
 		mapCommand(
 			TemplateCommand,
