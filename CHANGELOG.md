@@ -1,3 +1,9 @@
+v1.0.2
+------------------------------
+* Fix Download command to use haxelib install for the new flixel HaxeLibs.
+* Author will work in templates specified with ${AUTHOR}
+* Restore the build script for linux/mac with .sh file.
+
 v1.0.1
 ------------------------------
 * Convert command: Fix FlxG.keys. conversion
