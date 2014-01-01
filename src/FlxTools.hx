@@ -20,7 +20,7 @@ class FlxTools extends CommandLineRunner
 {
 	inline static public var NAME = "HaxeFlixel";
 	inline static public var ALIAS = "flixel";
-	inline static public var VERSION = "1.0.1";
+	inline static public var VERSION = "1.0.3";
 
 	inline static public var SUBLIME_TEXT:String = "Sublime Text";
 	inline static public var FLASH_DEVELOP:String = "Flash Develop";
