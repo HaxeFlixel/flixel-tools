@@ -36,18 +36,18 @@ class TestDemosCommand extends Command
 
 		Lambda.foreach(projects, function(p) {
 			if (p != null) {
-				Sys.println(p.NAME);
+				//Sys.println(p.NAME);
 				return true;
 			}
 			return false;
-			});
-		Sys.println("");
+		});
+		//Sys.println("");
 
 		for (project in projects)
 		{
 			var demoProject:OpenFLProject = project;
 
-			if(Target.toLowerCase() == "all")
+			if (Target.toLowerCase() == "all")
 			{
 				results.push(buildProject("flash", demoProject));
 				results.push(buildProject("neko", demoProject));
@@ -76,7 +76,7 @@ class TestDemosCommand extends Command
 
 		for (result in results)
 		{
-			if(result.failed)
+			if (result.failed)
 			{
 				failed++;
 				totalResult = false;
@@ -91,7 +91,7 @@ class TestDemosCommand extends Command
 		Sys.println("Failed Builds	 : " + failed);
 		Sys.println("Successful Builds : " + passed);
 
-		totalResult ? exit() : exit(1);
+		totalResult ? exit(0) : exit(1);
 	}
 
 	private function writeResultsToFile(FilePath:String, Results:Array<BuildResult>):Void
@@ -128,23 +128,26 @@ class TestDemosCommand extends Command
 	 */
 	private function buildProject(Target:String, Project:OpenFLProject, Display:Bool = true):BuildResult
 	{
-		if(Target == "native")
+		if (Target == "native")
+		{
 			Target = CommandUtils.getCPP();
+		}
 
 		var buildCommand:String = "haxelib run openfl build " + "\"" + Project.PATH + "\"" + " " + Target;
 
 		if (Display)
 		{
-			Sys.println("");
-			Sys.println("Building " + Project.NAME + ":");
-			Sys.println(buildCommand);
+			//Sys.println("");
+			//Sys.println("Building " + Project.NAME + ":");
+			//Sys.println(buildCommand);
 		}
 
 		var compile:Int = Sys.command(buildCommand);
 
-		if (Display)
+		var result = getResult(compile);
+		if (result != "SUCCESS")
 		{
-			Sys.println(getResult(compile) + " - " + Project.NAME + " (" + Target + ")");
+			Sys.println(result + " - " + Project.NAME + " (" + Target + ")\n");
 		}
 
 		var project:BuildResult = {
