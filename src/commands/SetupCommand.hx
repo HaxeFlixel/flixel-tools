@@ -71,12 +71,12 @@ class SetupCommand extends Command
 
 				if(download == Answer.Yes)
 				{
-					Sys.command ("flixel download");
+					Sys.command ("haxelib run flixel-tools download");
 				}
 			}
 			else
 			{
-				Sys.command ("flixel download");
+				Sys.command ("haxelib run flixel-tools download");
 			}
 		}
 	}
