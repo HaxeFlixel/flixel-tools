@@ -114,10 +114,10 @@ class ProjectUtils
 
 		if (IDEOption == FlxTools.SUBLIME_TEXT)
 		{
-			Replacements.push(TemplateUtils.addOption("${PROJECT_PATH}", "", TargetPath));
-			Replacements.push(TemplateUtils.addOption("${HAXE_STD_PATH}", "", CommandUtils.combine(CommandUtils.getHaxePath(), "std")));
-			Replacements.push(TemplateUtils.addOption("${FLIXEL_PATH}", "", CommandUtils.getHaxelibPath('flixel')));
-			Replacements.push(TemplateUtils.addOption("${FLIXEL_ADDONS_PATH}", "", CommandUtils.getHaxelibPath('flixel-addons')));
+			Replacements.push(TemplateUtils.addOption("${PROJECT_PATH}", "", StringTools.replace(TargetPath, '\\', '\\\\')));
+			Replacements.push(TemplateUtils.addOption("${HAXE_STD_PATH}", "", StringTools.replace(CommandUtils.combine(CommandUtils.getHaxePath(), "std"), '\\', '\\\\')));
+			Replacements.push(TemplateUtils.addOption("${FLIXEL_PATH}", "", StringTools.replace(CommandUtils.getHaxelibPath('flixel'), '\\', '\\\\')));
+			Replacements.push(TemplateUtils.addOption("${FLIXEL_ADDONS_PATH}", "", StringTools.replace(CommandUtils.getHaxelibPath('flixel-addons'), '\\', '\\\\')));
 
 			CommandUtils.copyRecursively(FlxTools.sublimeSource, TargetPath, TemplateUtils.TemplateFilter, true);
 		}
