@@ -4,8 +4,8 @@
     "license": "MIT",
     "tags": ["game", "openfl", "flash", "neko", "cpp", "android", "ios"],
     "description": "Command-Line tools for the HaxeFlixel game engine",
-    "version": "1.0.3",
-    "releasenote": "Fixes for Sublime Text project files and the setup command.",
+    "version": "1.0.4",
+    "releasenote": "Fix line endings in .sh files.",
     "contributors": ["haxeflixel"],
     "dependencies": {}
 }

@@ -1,3 +1,7 @@
+1.0.4
+------------------------------
+* Fix line endings in .sh files
+
 1.0.3
 ------------------------------
 * Include default settings
