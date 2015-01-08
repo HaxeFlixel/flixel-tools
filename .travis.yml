@@ -6,7 +6,8 @@ before_script:
   - sudo apt-get install haxe -y
   - sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch
   - mkdir ~/haxelib
-  - haxelib setup ~/haxelib 
+  - haxelib setup ~/haxelib
+  - haxelib install mlib
 
 script:
   - haxe build.hxml
