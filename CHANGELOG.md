@@ -1,3 +1,7 @@
+1.0.5
+------------------------------
+* Fix the detection of installed haxelibs for Haxe 3.2.0
+
 1.0.4
 ------------------------------
 * Fix line endings in .sh files
