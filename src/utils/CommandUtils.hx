@@ -6,6 +6,7 @@ import sys.io.Process;
 import sys.io.File;
 import massive.sys.io.FileSys;
 import haxe.Json;
+using StringTools;
 
 /**
  * Utilities for command line tools
@@ -318,7 +319,7 @@ class CommandUtils
 			while (true)
 			{
 				var line:String = proc.stdout.readLine();
-				if (StringTools.startsWith(line,"-D " + Name + "="))
+				if (line.startsWith('-D $Name'))
 				{
 					result = previous;
 					break;
