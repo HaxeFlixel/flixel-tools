@@ -318,7 +318,7 @@ class CommandUtils
 			while (true)
 			{
 				var line:String = proc.stdout.readLine();
-				if (line == "-D " + Name)
+				if (StringTools.startsWith(line,"-D " + Name + "="))
 				{
 					result = previous;
 					break;
