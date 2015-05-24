@@ -1,25 +1,29 @@
 package commands;
 
-import utils.CommandUtils;
-import utils.ProjectUtils;
-import utils.DemoUtils;
+import commands.TestDemosCommand.Result;
 import massive.sys.cmd.Command;
 import sys.io.File;
+import utils.CommandUtils;
+import utils.DemoUtils;
+import utils.ProjectUtils.OpenFLProject;
 
 class TestDemosCommand extends Command
 {
 	override public function execute():Void
 	{
-		compileAllDemos(console.options.keys().next());
+		var target:String = null;
+		if (console.options.keys().hasNext())
+			target = console.options.keys().next();
+		compileAllDemos(target);
 		exit();
 	}
 
 	/**
 	 * Compile all the demos recursively
 	 *
-	 * @param Target Which target to compile apps for (flash, neko, windows, android,
+	 * @param Target Which target to compile apps for (flash, neko, windows, android, ...)
 	 */
-	private function compileAllDemos(Target:String = ""):Void
+	private function compileAllDemos(?Target:String):Void
 	{
 		var projects:Array<OpenFLProject> = DemoUtils.scanDemoProjects();
 
@@ -28,20 +32,14 @@ class TestDemosCommand extends Command
 			error("No Demos were found in haxelib flixel-demos");
 			exit();
 		}
+		
+		if (Target == null)
+			Target = "flash";
 
 		var results = new Array<BuildResult>();
 
-		Sys.println("Building demos - " + (Target != "" ? Target : "flash"));
+		Sys.println("Building demos - " + Target);
 		Sys.println("");
-
-		Lambda.foreach(projects, function(p) {
-			if (p != null) {
-				//Sys.println(p.NAME);
-				return true;
-			}
-			return false;
-		});
-		//Sys.println("");
 
 		for (project in projects)
 		{
@@ -54,21 +52,15 @@ class TestDemosCommand extends Command
 				results.push(buildProject("native", demoProject));
 				results.push(buildProject("html5", demoProject));
 			}
-			else if(Target == "")
-			{
-				results.push(buildProject("flash", demoProject));
-			}
 			else
 			{
 				results.push(buildProject(Target, demoProject));
 			}
 		}
 
-		Sys.println ("");
-
 		writeResultsToFile(Sys.getCwd() + "compile_results.log", results);
 
-		var totalResult = true;
+		var totalResult = Result.SUCCESS;
 
 		var failed = 0;
 		var passed = 0;
@@ -76,10 +68,10 @@ class TestDemosCommand extends Command
 
 		for (result in results)
 		{
-			if (result.failed)
+			if (result.result == Result.FAILURE)
 			{
 				failed++;
-				totalResult = false;
+				totalResult = Result.FAILURE;
 			}
 			else
 			{
@@ -87,35 +79,32 @@ class TestDemosCommand extends Command
 			}
 		}
 
-		Sys.println("Total Demos	   : " + total);
-		Sys.println("Failed Builds	 : " + failed);
+		Sys.println("Total Demos       : " + total);
+		Sys.println("Failed Builds     : " + failed);
 		Sys.println("Successful Builds : " + passed);
 
-		totalResult ? exit(0) : exit(1);
+		exit(totalResult);
 	}
 
 	private function writeResultsToFile(FilePath:String, Results:Array<BuildResult>):Void
 	{
-		var fileObject = File.write(FilePath, false);
+		var file = File.write(FilePath, false);
 
-		fileObject.writeString("flixel-tools compile validate log");
-		fileObject.writeString("\n\n");
+		file.writeString("flixel-tools compile validate log");
+		file.writeString("\n");
 
 		for (result in Results)
 		{
-			fileObject.writeString("\n");
-			fileObject.writeString("Project Name	:" + result.project.NAME + "\n");
-			fileObject.writeString("Project Path	:" + result.project.PATH + "\n");
-			fileObject.writeString("Targets		 :" + result.project.TARGETS + "\n");
-			fileObject.writeString("Build Target	:" + result.target + "\n");
-			fileObject.writeString("Build Result	:" + result.result + "\n");
-			fileObject.writeString("\n");
+			file.writeString("\n");
+			file.writeString("Project Name : " + result.project.NAME + "\n");
+			file.writeString("Project Path : " + result.project.PATH + "\n");
+			file.writeString("Targets      : " + result.project.TARGETS + "\n");
+			file.writeString("Build Target : " + result.target + "\n");
+			file.writeString("Build Result : " + result.result + "\n");
 		}
 
-		fileObject.writeString("\n");
-		fileObject.writeString(" / End of Log.");
-
-		fileObject.close();
+		file.writeString("\n / End of Log.");
+		file.close();
 	}
 
 	/**
@@ -123,10 +112,9 @@ class TestDemosCommand extends Command
 	 *
 	 * @param   Target	  The openfl target to build
 	 * @param   Project	 OpenFLProject The project object to build from
-	 * @param   Display	 Echo progress on the command line
 	 * @return  BuildResult the result of the compilation
 	 */
-	private function buildProject(Target:String, Project:OpenFLProject, Display:Bool = true):BuildResult
+	private function buildProject(Target:String, Project:OpenFLProject):BuildResult
 	{
 		if (Target == "native")
 		{
@@ -134,57 +122,39 @@ class TestDemosCommand extends Command
 		}
 
 		var buildCommand:String = "haxelib run openfl build " + "\"" + Project.PATH + "\"" + " " + Target;
+		
+		var result:Result = Sys.command(buildCommand);
+		Sys.println(result + " - " + Project.NAME);
 
-		if (Display)
-		{
-			//Sys.println("");
-			//Sys.println("Building " + Project.NAME + ":");
-			//Sys.println(buildCommand);
-		}
-
-		var compile:Int = Sys.command(buildCommand);
-
-		var result = getResult(compile);
-		if (result != "SUCCESS")
-		{
-			Sys.println(result + " - " + Project.NAME + " (" + Target + ")\n");
-		}
-
-		var project:BuildResult = {
-			result : getResult(compile),
+		return {
+			result : result,
 			target : Target,
-			project : Project,
-			failed : (compile != 0)
+			project : Project
 		};
-
-		return project;
-	}
-
-	/**
-	 * Return a friendly result string based on an Int value
-	 *
-	 * @param   Result
-	 * @return  string PASSED or FAILED
-	 */
-	private function getResult(Result:Int):String
-	{
-		if (Result == 0)
-		{
-			return "SUCCESS";
-		}
-		else
-		{
-			return "FAIL";
-		}
 	}
 }
 
-/**
- * Object to pass the build result of a project
- */
 typedef BuildResult = {
 	var target:String;
-	var result:String;
-	var failed:Bool;
+	var result:Result;
 	var project:OpenFLProject;
+}
+
+@:enum
+abstract Result(String)
+{
+	var SUCCESS = "SUCCESS";
+	var FAILURE = "FAILURE";
+	
+	@:from
+	static function fromInt(i:Int):Result
+	{
+		return (i == 0) ? SUCCESS : FAILURE;
+	}
+	
+	@:to
+	function toInt():Int
+	{
+		return (this == "SUCCESS") ? 0 : 1;
+	}
 }
