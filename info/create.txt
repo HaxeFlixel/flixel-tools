@@ -1,13 +1,13 @@
 
 usage: create || c
 
-Creates a copy of Demo project, the user will be promted to choose from a list 
+Creates a copy of demo project. The user will be promted to choose from a list 
 if no further arguments are given.
 
 Optional : create <value> <destination>
 
-    <value>         : Either a string representing the Name of the Demo,
-                      or a number representing the index of the Demo to create.
+    <value>         : Either a string representing the name of the demo,
+                      or a number representing the index of the demo to create.
 
-    <destination>   : The destination for the Demo to be created, if none given
+    <destination>   : The destination for the demo to be created, if none given
                       the current directory will be used.

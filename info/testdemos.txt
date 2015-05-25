@@ -1,0 +1,9 @@
+
+usage           : flixel testdemos || td
+common usage    : flixel td neko
+
+Compiles all demo projects for the specified target or flash if no target was specified.
+
+Optional : testdemos <target>
+
+<target>        : The target to pass to "haxelib run openfl build".

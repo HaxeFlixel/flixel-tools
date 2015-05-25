@@ -1,4 +1,4 @@
 
 usage: convert || cn
 
-Runs the basic conversion script that uses a simple Find and Replace on the HaxeFlixel 3.x api.
+Runs the basic conversion script that uses a simple find and replace for the HaxeFlixel 3.x api.

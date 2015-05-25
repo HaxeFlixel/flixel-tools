@@ -54,44 +54,43 @@ class FlxTools extends CommandLineRunner
 		mapCommand(
 			CreateCommand,
 			"create", ["c"],
-			"Creates a copy of a Demo project.",
+			"create a copy of a demo project",
 			TemplateUtil.getTemplate("create")
 		);
 
 		mapCommand(
 			SetupCommand,
 			"setup", ["st"],
-			"Setup the tools, download the Demos and Templates haxelib.",
+			"configure the tools and download the demos and templates",
 			TemplateUtil.getTemplate("setup")
 		);
 		
 		mapCommand(
 			DownloadCommand,
-			"download", ["dw","download"],
-			"Download the Templates and Demos.",
+			"download", ["dw"],
+			"download the templates and demos",
 			TemplateUtil.getTemplate("download")
 		);
 
 		mapCommand(
 			TemplateCommand,
-			"template", ["tpl","template"],
-			"Creates a project template.",
+			"template", ["tpl"],
+			"create a project template",
 			TemplateUtil.getTemplate("template")
 		);
 
 		mapCommand(
 			ConvertCommand,
-			"convert", ["cn","convert"],
-			"Converts an old HaxeFlixel Project.",
+			"convert", ["cn"],
+			"convert an old (2.x) project",
 			TemplateUtil.getTemplate("convert")
 		);
 
 		mapCommand(
 			TestDemosCommand,
-			"testdemos", ["td", "validate"],
-			"Builds all the demos for flash target (use -target to specify a target, or -all to build for all targets).",
-			""
-			// TemplateUtil.getTemplate("validate")
+			"testdemos", ["td"],
+			"builds all demos for flash",
+			TemplateUtil.getTemplate("testdemos")
 		);
 
 		// -- NOT WORKING --

@@ -11,9 +11,7 @@ class TestDemosCommand extends Command
 {
 	override public function execute():Void
 	{
-		var target:String = null;
-		if (console.options.keys().hasNext())
-			target = console.options.keys().next();
+		var target:String = console.getNextArg();
 		compileAllDemos(target);
 		exit();
 	}
@@ -29,7 +27,7 @@ class TestDemosCommand extends Command
 
 		if (projects == null)
 		{
-			error("No Demos were found in haxelib flixel-demos");
+			error("No demos were found in haxelib flixel-demos");
 			exit();
 		}
 		
