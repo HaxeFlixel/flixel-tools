@@ -123,12 +123,10 @@ class FlxTools extends CommandLineRunner
 
 	override public function printHeader():Void
 	{
-		displayInfo();
+		if (console.args.length == 0 || console.args[0] == "help")
+			displayInfo();
 	}
 
-	/**
-	 * Display the main information about HaxeFlixel
-	 */
 	static private function displayInfo():Void
 	{
 		Sys.println("");
