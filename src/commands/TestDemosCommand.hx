@@ -19,10 +19,11 @@ class TestDemosCommand extends Command
 			
 		var demoNames:Array<String> = console.args.slice(2);
 		
+		Sys.println('Scanning flixel-demos haxelib for projects...');
 		var demos:Array<OpenFLProject> = DemoUtils.scanDemoProjects();
 		if (demos.length == 0)
 		{
-			error("No demos were found in haxelib flixel-demos");
+			error("No demos were found.");
 		}
 		else
 		{
