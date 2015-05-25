@@ -43,6 +43,7 @@ class FlxTools extends CommandLineRunner
 	static public var flashDevelopSource:String;
 	static public var intellijSource:String;
 	static public var sublimeSource:String;
+	static public var templatesLoaded:Bool = false;
 
 	public function new():Void
 	{

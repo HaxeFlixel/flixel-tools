@@ -14,6 +14,12 @@ class TemplateCommand extends Command
 
 	override public function execute():Void
 	{
+		if (!FlxTools.templatesLoaded)
+		{
+			Sys.println("Error loading templates, please run 'flixel download'.");
+			return;
+		}
+		
 		var targetPath = "";
 		var templateName = "";
 

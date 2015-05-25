@@ -407,7 +407,6 @@ class CommandUtils
 		var ideDataPath = CommandUtils.getHaxelibPath("flixel-templates");
 		if(ideDataPath == "")
 		{
-			Sys.println("Error loading templates, please run 'flixel download'");
 			return;
 		}
 
@@ -422,6 +421,7 @@ class CommandUtils
 		FlxTools.flashDevelopSource = CommandUtils.combine(ideDataPath, flashDevelopSource);
 		FlxTools.intellijSource = CommandUtils.combine(ideDataPath, intellijSource);
 		FlxTools.sublimeSource = CommandUtils.combine(ideDataPath, sublimeSource);
+		FlxTools.templatesLoaded = true;
 	}
 
 	static public function loadToolSettings():FlxToolSettings
