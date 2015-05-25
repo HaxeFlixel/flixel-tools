@@ -119,7 +119,6 @@ class DemoUtils
 	 *
 	 * @param   DemosPath	   An optional path to scan, default being flixel-demos Haxelib
 	 * @param   Display		 [description]
-	 * @return				  Array<OpenFLProject> or null if no Demos were found
 	 */
 	static public function scanDemoProjects(DemosPath:String = ""):Array<OpenFLProject>
 	{
@@ -128,20 +127,9 @@ class DemoUtils
 			DemosPath = CommandUtils.getHaxelibPath("flixel-demos");
 
 			if (DemosPath == "")
-			{
-				return null;
-			}
+				return [];
 		}
 
-		var projects:Array<OpenFLProject> = ProjectUtils.scanOpenFLProjects(DemosPath, true);
-
-		if (Lambda.count(projects) > 0)
-		{
-			return projects;
-		}
-		else
-		{
-			return null;
-		}
+		return ProjectUtils.scanOpenFLProjects(DemosPath, true);
 	}
 }

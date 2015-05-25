@@ -4,6 +4,9 @@ common usage    : flixel td neko
 
 Compiles all demo projects for the specified target or flash if no target was specified.
 
-Optional : testdemos <target>
+Optional : testdemos <target> ...<demo>
 
-<target>        : The target to pass to "haxelib run openfl build".
+<target>        : The target to pass to "haxelib run openfl build". If "all" is passed,
+                  the demos are built for flash, neko, cpp and html5.
+<demo>          : Name of one or several specific demos to compile - compiles all demos
+                  if no demo names were passed.

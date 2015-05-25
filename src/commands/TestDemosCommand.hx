@@ -12,47 +12,64 @@ class TestDemosCommand extends Command
 	override public function execute():Void
 	{
 		var target:String = console.getNextArg();
-		compileAllDemos(target);
-		exit();
-	}
-
-	/**
-	 * Compile all the demos recursively
-	 *
-	 * @param Target Which target to compile apps for (flash, neko, windows, android, ...)
-	 */
-	private function compileAllDemos(?Target:String):Void
-	{
-		var projects:Array<OpenFLProject> = DemoUtils.scanDemoProjects();
-
-		if (projects == null)
+		if (target == null)
+			target = "flash";
+		else
+			target = target.toLowerCase();
+			
+		var demoNames:Array<String> = console.args.slice(2);
+		
+		var demos:Array<OpenFLProject> = DemoUtils.scanDemoProjects();
+		if (demos.length == 0)
 		{
 			error("No demos were found in haxelib flixel-demos");
-			exit();
+		}
+		else
+		{
+			if (demoNames.length > 0)
+				demos = filterDemos(demos, demoNames);
+			
+			if (demos.length > 0)
+			{
+				var specifier = (demoNames.length > 0) ? "specified" : "all";
+				Sys.println('Building $specifier demos - $target \n');
+				compileDemos(demos, target);
+			}
 		}
 		
-		if (Target == null)
-			Target = "flash";
+		exit();
+	}
+	
+	private function filterDemos(demos:Array<OpenFLProject>, demoNames:Array<String>):Array<OpenFLProject>
+	{
+		var filteredDemos = [];
+		for (demoName in demoNames)
+		{
+			var matching = demos.filter(function(p) return p.NAME == demoName);
+			if (matching.length == 0)
+				Sys.println('Could not find a demo named \'$demoName\'');
+			else
+				filteredDemos.push(matching[0]);
+		}
+		return filteredDemos;
+	}
 
+	private function compileDemos(demos:Array<OpenFLProject>, target:String):Void
+	{
 		var results = new Array<BuildResult>();
 
-		Sys.println("Building demos - " + Target);
-		Sys.println("");
-
-		for (project in projects)
+		for (demo in demos)
 		{
-			var demoProject:OpenFLProject = project;
-
-			if (Target.toLowerCase() == "all")
+			if (target == "all")
 			{
-				results.push(buildProject("flash", demoProject));
-				results.push(buildProject("neko", demoProject));
-				results.push(buildProject("native", demoProject));
-				results.push(buildProject("html5", demoProject));
+				results.push(buildProject("flash", demo));
+				results.push(buildProject("neko", demo));
+				results.push(buildProject("native", demo));
+				results.push(buildProject("html5", demo));
 			}
 			else
 			{
-				results.push(buildProject(Target, demoProject));
+				results.push(buildProject(target, demo));
 			}
 		}
 
@@ -77,6 +94,7 @@ class TestDemosCommand extends Command
 			}
 		}
 
+		Sys.println("");
 		Sys.println("Total Demos       : " + total);
 		Sys.println("Failed Builds     : " + failed);
 		Sys.println("Successful Builds : " + passed);
@@ -105,13 +123,6 @@ class TestDemosCommand extends Command
 		file.close();
 	}
 
-	/**
-	 * Build an openfl target
-	 *
-	 * @param   Target	  The openfl target to build
-	 * @param   Project	 OpenFLProject The project object to build from
-	 * @return  BuildResult the result of the compilation
-	 */
 	private function buildProject(Target:String, Project:OpenFLProject):BuildResult
 	{
 		if (Target == "native")
@@ -122,7 +133,7 @@ class TestDemosCommand extends Command
 		var buildCommand:String = "haxelib run openfl build " + "\"" + Project.PATH + "\"" + " " + Target;
 		
 		var result:Result = Sys.command(buildCommand);
-		Sys.println(result + " - " + Project.NAME);
+		Sys.println(result + " - " + Project.NAME + ' ($Target)');
 
 		return {
 			result : result,

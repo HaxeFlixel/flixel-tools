@@ -33,7 +33,7 @@ class ProjectUtils
 
 	/**
 	 * Scan a Directory recursively for OpenFL projects
-	 * @return Array<OpenFLProject> containing projects with an XML specified
+	 * @return An Array containing projects with an XML specified
 	 */
 	static public function scanOpenFLProjects(TargetDirectory:String, recursive:Bool = true):Array<OpenFLProject>
 	{
@@ -51,14 +51,12 @@ class ProjectUtils
 
 					if(projectPath != "")
 					{
-						var project:OpenFLProject =
-						{
+						projects.push({
 							NAME : name,
 							PATH : folderPath,
 							PROJECTXMLPATH : projectPath,
 							TARGETS : ""
-						};
-						projects.push(project);
+						});
 					}
 
 					var subProjects = scanOpenFLProjects(folderPath);
@@ -76,9 +74,8 @@ class ProjectUtils
 	}
 
 	/**
-	* Scans a path for OpenFL project.xml
-	*
-	*/
+	 * Scans a path for OpenFL project.xml
+	 */
 	static private function scanProjectXML(ProjectPath:String):String
 	{
 		var targetProjectFile = CommandUtils.combine(ProjectPath, "project.xml");
@@ -268,9 +265,6 @@ class ProjectUtils
 	}
 }
 
-/**
- * Object to pass the data of a project
- */
 typedef OpenFLProject = {
 	var NAME:String;
 	var PATH:String;
