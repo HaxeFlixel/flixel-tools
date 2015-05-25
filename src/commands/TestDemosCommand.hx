@@ -77,27 +77,19 @@ class TestDemosCommand extends Command
 
 		var totalResult = Result.SUCCESS;
 
-		var failed = 0;
 		var passed = 0;
 		var total = results.length;
 
 		for (result in results)
 		{
 			if (result.result == Result.FAILURE)
-			{
-				failed++;
 				totalResult = Result.FAILURE;
-			}
 			else
-			{
 				passed++;
-			}
 		}
 
 		Sys.println("");
-		Sys.println("Total Demos       : " + total);
-		Sys.println("Failed Builds     : " + failed);
-		Sys.println("Successful Builds : " + passed);
+		Sys.println('$passed/$total demos built successfully');
 
 		exit(totalResult);
 	}
