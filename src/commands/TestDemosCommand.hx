@@ -6,6 +6,7 @@ import sys.io.File;
 import utils.CommandUtils;
 import utils.DemoUtils;
 import utils.ProjectUtils.OpenFLProject;
+import utils.ConsoleUtils;
 
 class TestDemosCommand extends Command
 {
@@ -90,7 +91,7 @@ class TestDemosCommand extends Command
 		}
 
 		Sys.println("");
-		Sys.println('$passed/$total demos built successfully');
+		ConsoleUtils.printWithColor('$passed/$total demos built successfully\n', totalResult);
 
 		exit(totalResult);
 	}
@@ -126,7 +127,7 @@ class TestDemosCommand extends Command
 		var buildCommand:String = "haxelib run openfl build " + "\"" + Project.PATH + "\"" + " " + Target;
 		
 		var result:Result = Sys.command(buildCommand);
-		Sys.println(result + " - " + Project.NAME + ' ($Target)');
+		ConsoleUtils.printWithColor(result + " - " + Project.NAME + ' ($Target)', result);
 
 		return {
 			result : result,
@@ -158,5 +159,11 @@ abstract Result(String)
 	function toInt():Int
 	{
 		return (this == "SUCCESS") ? 0 : 1;
+	}
+	
+	@:to
+	function toColor():Color
+	{
+		return (this == "SUCCESS") ? Color.Green : Color.Red; 
 	}
 }
