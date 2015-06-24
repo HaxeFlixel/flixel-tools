@@ -8,4 +8,4 @@
 -resource info/template.txt@template
 -resource info/download.txt@download
 -resource info/convert.txt@convert
--resource info/testdemos.txt@testdemos
+-resource info/buildprojects.txt@buildprojects

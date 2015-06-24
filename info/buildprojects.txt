@@ -1,10 +1,10 @@
 
-usage           : flixel testdemos || td
-common usage    : flixel td neko
+usage           : flixel buildprojects || bp
+common usage    : flixel bp neko
 
 Compiles all demo projects for the specified target or flash if no target was specified.
 
-Optional : testdemos <target> ...<demo> -dir <directory>
+Optional : buildprojects <target> ...<demo> -dir <directory>
 
 <target>        : The target to pass to "haxelib run openfl build". If "all" is passed,
                   the demos are built for flash, neko, cpp and html5.

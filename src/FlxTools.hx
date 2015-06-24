@@ -1,20 +1,14 @@
 package;
 
-import commands.BenchmarkCommand;
+import commands.BuildProjectsCommand;
 import commands.ConvertCommand;
 import commands.CreateCommand;
-import commands.DocsCommand;
 import commands.DownloadCommand;
-import commands.OpenFLTestCommand;
-import commands.SetCommand;
 import commands.SetupCommand;
 import commands.TemplateCommand;
-import commands.TestDemosCommand;
-
-import utils.CommandUtils;
-import utils.CommandUtils.HaxelibJSON;
 import massive.haxe.util.TemplateUtil;
 import massive.sys.cmd.CommandLineRunner;
+import utils.CommandUtils;
 
 class FlxTools extends CommandLineRunner
 {
@@ -88,10 +82,10 @@ class FlxTools extends CommandLineRunner
 		);
 
 		mapCommand(
-			TestDemosCommand,
-			"testdemos", ["td"],
+			BuildProjectsCommand,
+			"buildprojects", ["bp"],
 			"builds all demos for flash",
-			TemplateUtil.getTemplate("testdemos")
+			TemplateUtil.getTemplate("buildprojects")
 		);
 
 		// -- NOT WORKING --

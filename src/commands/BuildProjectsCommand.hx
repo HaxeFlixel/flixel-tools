@@ -1,13 +1,12 @@
 package commands;
 
-import commands.TestDemosCommand.Result;
 import massive.sys.cmd.Command;
 import sys.io.File;
 import utils.CommandUtils;
 import utils.ConsoleUtils;
 import utils.ProjectUtils;
 
-class TestDemosCommand extends Command
+class BuildProjectsCommand extends Command
 {
 	override public function execute():Void
 	{
@@ -37,7 +36,7 @@ class TestDemosCommand extends Command
 			if (demos.length > 0)
 			{
 				var specifier = (demoNames.length > 0) ? "specified" : "all";
-				Sys.println('Building $specifier demos - $target \n');
+				Sys.println('Building $specifier projects - $target \n');
 				compileDemos(demos, target);
 			}
 		}
@@ -52,7 +51,7 @@ class TestDemosCommand extends Command
 		{
 			var matching = demos.filter(function(p) return p.NAME == demoName);
 			if (matching.length == 0)
-				Sys.println('Could not find a demo named \'$demoName\'');
+				Sys.println('Could not find a project named \'$demoName\'');
 			else
 				filteredDemos.push(matching[0]);
 		}
@@ -94,7 +93,7 @@ class TestDemosCommand extends Command
 		}
 
 		Sys.println("");
-		ConsoleUtils.printWithColor('$passed/$total demos built successfully\n', totalResult);
+		ConsoleUtils.printWithColor('$passed/$total projects built successfully\n', totalResult);
 
 		exit(totalResult);
 	}
