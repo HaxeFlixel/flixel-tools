@@ -11,14 +11,13 @@ using StringTools;
 class ProjectUtils
 {
 	/**
-	 * Shortcut Create an OpenFL project by recursively copying the folder according to a name
+	 * Shortcut to create a lime project by recursively copying the folder according to a name
 	 *
 	 * @param   Name	The name of the demo to create
 	 */
-	static public function duplicateProject(Project:OpenFLProject, Destination:String = "", IDE:String = ""):Bool
+	static public function duplicateProject(Project:LimeProject, Destination:String = "", IDE:String = ""):Bool
 	{
 		var result = CommandUtils.copyRecursively(Project.path, Destination);
-
 		if (result)
 		{
 			CommandUtils.copyRecursively(Project.path, Destination);
@@ -33,65 +32,53 @@ class ProjectUtils
 	}
 
 	/**
-	 * Scan a Directory recursively for OpenFL projects
-	 * @return An Array containing projects with an XML specified
+	 * Recursively search a directory for Lime projects
 	 */
-	static public function scanOpenFLProjects(TargetDirectory:String, recursive:Bool = true):Array<OpenFLProject>
+	static public function findLimeProjects(TargetDirectory:String):Array<LimeProject>
 	{
-		var projects = new Array<OpenFLProject>();
+		var projects = [];
 
-		if (FileSys.exists(TargetDirectory))
+		if (!FileSys.exists(TargetDirectory))
+			return [];
+		
+		for (name in FileSys.readDirectory(TargetDirectory))
 		{
-			for (name in FileSys.readDirectory(TargetDirectory))
-			{
-				var folderPath:String = CommandUtils.combine(TargetDirectory, name);
-
-				if (FileSys.isDirectory(folderPath) && !StringTools.startsWith(name, "."))
-				{
-					var projectPath = scanProjectXML(folderPath);
-
-					if (projectPath != "")
-					{
-						projects.push({
-							name : name,
-							path : folderPath,
-							projectXmlPath : projectPath,
-							targets : ""
-						});
-					}
-
-					var subProjects = scanOpenFLProjects(folderPath);
-					if (subProjects.length>0)
-					{
-						for (o in subProjects)
-						{
-							projects.push(o);
-						}
-					}
-				}
-			}
-		}
+			var folderPath:String = CommandUtils.combine(TargetDirectory, name);	
+			
+			if (FileSys.isDirectory(folderPath) && !name.startsWith("."))	
+			{	
+				var projectPath = findProjectXml(folderPath);	
+				if (projectPath != null)
+				{	
+					projects.push({	
+						name : name,	
+						path : folderPath,	
+						projectXmlPath : projectPath,	
+						targets : ""	
+					});	
+				}	
+			
+				projects = projects.concat(findLimeProjects(folderPath));	
+			}	
+		}	
+		
 		return projects;
 	}
 
 	/**
-	 * Scans a path for OpenFL project.xml
+	 * Searches a path for a Lime project xml file
 	 */
-	static private function scanProjectXML(ProjectPath:String):String
+	static private function findProjectXml(ProjectPath:String):String
 	{
 		var targetProjectFile = CommandUtils.combine(ProjectPath, "project.xml");
-
 		if (FileSys.exists(targetProjectFile))
-		{
 			return targetProjectFile;
-		}
 
 		targetProjectFile = CommandUtils.combine(ProjectPath, "Project.xml");
 		if (FileSys.exists(targetProjectFile))
-		{
 			return targetProjectFile;
-		}
-		return "";
+		
+		return null;
 	}
 
 	static public function copyIDETemplateFiles(TargetPath:String, ?Replacements:Array<TemplateReplacement>, IDEOption:String = ""):Array<TemplateReplacement>
@@ -242,7 +229,7 @@ class ProjectUtils
 	}
 }
 
-typedef OpenFLProject = {
+typedef LimeProject = {
 	var name:String;
 	var path:String;
 	var projectXmlPath:String;

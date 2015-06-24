@@ -2,7 +2,7 @@ package utils;
 
 import utils.CommandUtils;
 import utils.ProjectUtils;
-import utils.ProjectUtils.OpenFLProject;
+import utils.ProjectUtils.LimeProject;
 
 class DemoUtils
 {
@@ -16,14 +16,14 @@ class DemoUtils
 
 			for( i in 0...Answers.length )
 			{
-				Sys.println( " [" + i + "] " + Answers[i]);
+				Sys.println(" [" + i + "] " + Answers[i]);
 			}
 
 			if (cancel)
 			{
-				Sys.println( "");
-				Sys.println( " [c] Cancel");
-				Sys.println( "");
+				Sys.println("");
+				Sys.println(" [c] Cancel");
+				Sys.println("");
 			}
 
 			Sys.println("");
@@ -35,7 +35,7 @@ class DemoUtils
 
 			for (i in 0...Answers.length)
 			{
-				if ( Answers[i] == userResponse || Std.string(i) == userResponse )
+				if (Answers[i] == userResponse || Std.string(i) == userResponse)
 				{
 					validAnswer = userResponse;
 				}
@@ -65,11 +65,11 @@ class DemoUtils
 	/**
 	 * Check if a Demo exists from an index of all demos
 	 * @param  Name String the name of the demo to check
-	 * @return	  OpenFLProject or null if it doesn't exist
+	 * @return	  LimeProject or null if it doesn't exist
 	 */
-	static public function getByIndex(Index:Int, DemoPath:String = ""):OpenFLProject
+	static public function getByIndex(Index:Int, DemoPath:String = ""):LimeProject
 	{
-		var demos = scanDemoProjects(DemoPath);
+		var demos = findDemos(DemoPath);
 
 		if (demos == null)
 		{
@@ -88,18 +88,18 @@ class DemoUtils
 	/**
 	 * Scan all available Demos to see if one exists by name.
 	 * @param  Name String the name of the demo to check
-	 * @return	  OpenFLProject or null if it doesn't exist
+	 * @return	  LimeProject or null if it doesn't exist
 	 */
-	static public function exists(Name:String):OpenFLProject
+	static public function exists(Name:String):LimeProject
 	{
-		var demos = scanDemoProjects();
+		var demos = findDemos();
 
 		if (demos == null)
 			return null;
 
 		for (demo in demos)
 		{
-			var demoProject:OpenFLProject = demo;
+			var demoProject:LimeProject = demo;
 
 			if (demoProject.name == Name)
 			{
@@ -110,12 +110,11 @@ class DemoUtils
 	}
 
 	/**
-	 * Scan a folder recursively for OpenFL project files
+	 * Scan a folder recursively for Lime project files
 	 *
 	 * @param   DemosPath	   An optional path to scan, default being flixel-demos Haxelib
-	 * @param   Display		 [description]
 	 */
-	static public function scanDemoProjects(DemosPath:String = ""):Array<OpenFLProject>
+	static public function findDemos(DemosPath:String = ""):Array<LimeProject>
 	{
 		if (DemosPath == "")
 		{
@@ -125,6 +124,6 @@ class DemoUtils
 				return [];
 		}
 
-		return ProjectUtils.scanOpenFLProjects(DemosPath);
+		return ProjectUtils.findLimeProjects(DemosPath);
 	}
 }

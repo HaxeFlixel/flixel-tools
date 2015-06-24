@@ -4,7 +4,6 @@ import massive.sys.cmd.Command;
 import utils.CommandUtils;
 import utils.DemoUtils;
 import utils.ProjectUtils;
-import utils.ProjectUtils.OpenFLProject;
 
 class CreateCommand extends Command
 {
@@ -13,7 +12,7 @@ class CreateCommand extends Command
 		if (console.args.length > 3)
 			error("You have given too many arguments for the create command.");
 
-		var projects:Array<OpenFLProject> = DemoUtils.scanDemoProjects();
+		var projects:Array<LimeProject> = DemoUtils.findDemos();
 
 		if (projects == null)
 		{
@@ -25,7 +24,7 @@ class CreateCommand extends Command
 			exit();
 		}
 
-		var demo:OpenFLProject = null;
+		var demo:LimeProject = null;
 
 		if (console.args[1] != null)
 		{
@@ -76,7 +75,7 @@ class CreateCommand extends Command
 		}
 	}
 
-	private function promptDemoChoice(projects:Array<OpenFLProject>):OpenFLProject
+	private function promptDemoChoice(projects:Array<LimeProject>):LimeProject
 	{
 		for (project in projects)
 		{

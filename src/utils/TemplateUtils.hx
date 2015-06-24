@@ -34,7 +34,7 @@ class TemplateUtils
 	 *
 	 * @param   DemosPath	   An optional path to scan, default being flixel-demos Haxelib
 	 * @param   Display		 [description]
-	 * @return				  Array<OpenFLProject> or null if no Demos were found
+	 * @return				  Array<LimeProject> or null if no Demos were found
 	 */
 	static public function scanTemplateProjects(TemplatesPath:String = "", Recursive:Bool = true):Array<TemplateProject>
 	{

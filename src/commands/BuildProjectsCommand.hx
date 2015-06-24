@@ -25,7 +25,7 @@ class BuildProjectsCommand extends Command
 			directory = CommandUtils.getHaxelibPath("flixel-demos");
 		
 		Sys.println('Scanning "$directory" for projects...');
-		var demos:Array<OpenFLProject> = ProjectUtils.scanOpenFLProjects(directory);
+		var demos:Array<LimeProject> = ProjectUtils.findLimeProjects(directory);
 		if (demos.length == 0)
 		{
 			error("No demos were found.");
@@ -46,7 +46,7 @@ class BuildProjectsCommand extends Command
 		exit();
 	}
 	
-	private function filterDemos(demos:Array<OpenFLProject>, demoNames:Array<String>):Array<OpenFLProject>
+	private function filterDemos(demos:Array<LimeProject>, demoNames:Array<String>):Array<LimeProject>
 	{
 		var filteredDemos = [];
 		for (demoName in demoNames)
@@ -60,7 +60,7 @@ class BuildProjectsCommand extends Command
 		return filteredDemos;
 	}
 
-	private function compileDemos(demos:Array<OpenFLProject>, target:String):Void
+	private function compileDemos(demos:Array<LimeProject>, target:String):Void
 	{
 		var results = new Array<BuildResult>();
 
@@ -122,7 +122,7 @@ class BuildProjectsCommand extends Command
 		file.close();
 	}
 
-	private function buildProject(Target:String, Project:OpenFLProject):BuildResult
+	private function buildProject(Target:String, Project:LimeProject):BuildResult
 	{
 		if (Target == "native")
 			Target = CommandUtils.getCPP();
@@ -143,7 +143,7 @@ class BuildProjectsCommand extends Command
 typedef BuildResult = {
 	var target:String;
 	var result:Result;
-	var project:OpenFLProject;
+	var project:LimeProject;
 }
 
 @:enum
