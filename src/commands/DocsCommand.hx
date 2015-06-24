@@ -5,7 +5,6 @@ import massive.sys.cmd.Command;
 
 class DocsCommand extends Command
 {
-
 	override public function execute():Void
 	{
 		Sys.println("docs");

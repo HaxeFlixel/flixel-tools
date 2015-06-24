@@ -89,7 +89,6 @@ class TemplateUtils
 		{
 			return null;
 		}
-
 	}
 
 	public static function getReplacementValue(Replacements:Array<TemplateReplacement>, Pattern:String):String

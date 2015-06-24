@@ -7,7 +7,8 @@
 	* more compact and more helpful output
 	* `-<target>` is now `<target>`
 	* added a `-dir` option to build projects other than the flixel-demos haxelib
-	* made the output on linux colored based on the exit code of `haxelib run openfl` 
+	* made the output on linux colored based on the exit code of `haxelib run openfl`
+	* `compile_results.log` is now only created with the `-log` option
 * The HaxeFlixel header is now only displayed with `flixel` or `flixel help`
 * Don't print an error about missing templates for commands that don't need them
 

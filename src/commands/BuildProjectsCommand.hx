@@ -8,6 +8,8 @@ import utils.ProjectUtils;
 
 class BuildProjectsCommand extends Command
 {
+	private var directory:String;
+	
 	override public function execute():Void
 	{
 		var target:String = console.getNextArg();
@@ -18,7 +20,7 @@ class BuildProjectsCommand extends Command
 		
 		var demoNames:Array<String> = console.args.slice(2);
 		
-		var directory = console.getOption("dir");
+		directory = console.getOption("dir");
 		if (directory == null)
 			directory = CommandUtils.getHaxelibPath("flixel-demos");
 		
@@ -77,7 +79,8 @@ class BuildProjectsCommand extends Command
 			}
 		}
 
-		writeResultsToFile(Sys.getCwd() + "compile_results.log", results);
+		if (console.getOption("log") == "true")
+			writeResultsToFile(Sys.getCwd() + "compile_results.log", results);
 
 		var totalResult = Result.SUCCESS;
 
@@ -102,8 +105,8 @@ class BuildProjectsCommand extends Command
 	{
 		var file = File.write(FilePath, false);
 
-		file.writeString("flixel-tools compile validate log");
-		file.writeString("\n");
+		file.writeString("flixel-tools buildprojects log\n");
+		file.writeString('Directory: $directory \n');
 
 		for (result in Results)
 		{
