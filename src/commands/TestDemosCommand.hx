@@ -4,9 +4,8 @@ import commands.TestDemosCommand.Result;
 import massive.sys.cmd.Command;
 import sys.io.File;
 import utils.CommandUtils;
-import utils.DemoUtils;
-import utils.ProjectUtils.OpenFLProject;
 import utils.ConsoleUtils;
+import utils.ProjectUtils;
 
 class TestDemosCommand extends Command
 {
@@ -17,11 +16,15 @@ class TestDemosCommand extends Command
 			target = "flash";
 		else
 			target = target.toLowerCase();
-			
+		
 		var demoNames:Array<String> = console.args.slice(2);
 		
-		Sys.println('Scanning flixel-demos haxelib for projects...');
-		var demos:Array<OpenFLProject> = DemoUtils.scanDemoProjects();
+		var directory = console.getOption("dir");
+		if (directory == null)
+			directory = CommandUtils.getHaxelibPath("flixel-demos");
+		
+		Sys.println('Scanning "$directory" for projects...');
+		var demos:Array<OpenFLProject> = ProjectUtils.scanOpenFLProjects(directory);
 		if (demos.length == 0)
 		{
 			error("No demos were found.");

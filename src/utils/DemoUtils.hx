@@ -130,6 +130,6 @@ class DemoUtils
 				return [];
 		}
 
-		return ProjectUtils.scanOpenFLProjects(DemosPath, true);
+		return ProjectUtils.scanOpenFLProjects(DemosPath);
 	}
 }
