@@ -19,7 +19,7 @@ class SetupCommand extends Command
 
 		if (console.args.length > 3)
 		{
-			this.error("You have given too many arguments for the create command.");
+			error("You have given too many arguments for the create command.");
 		}
 
 		if (console.getOption("-y") != null)
@@ -129,7 +129,7 @@ class SetupCommand extends Command
 
 				if (FileSystem.exists(flixelAliasScript))
 				{
-					Sys.command("sudo", [ "cp", flixelAliasScript, haxePath + "/flixel" ]);
+					Sys.command("sudo", ["cp", flixelAliasScript, haxePath + "/flixel"]);
 					Sys.command("sudo chmod 755 " + haxePath + "/flixel");
 					Sys.command("sudo ln -s " + haxePath + "/flixel /usr/bin/flixel");
 				}

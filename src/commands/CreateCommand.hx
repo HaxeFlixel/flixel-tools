@@ -8,13 +8,8 @@ import utils.ProjectUtils.OpenFLProject;
 
 class CreateCommand extends Command
 {
-	private var autoContinue:Bool = false;
-
 	override public function execute():Void
 	{
-		if (console.getOption("-y") != null)
-			autoContinue = true;
-
 		if (console.args.length > 3)
 			error("You have given too many arguments for the create command.");
 
@@ -44,7 +39,7 @@ class CreateCommand extends Command
 
 					if (demo == null)
 					{
-						error("This Demo was not found, please try again.");
+						error("This demo was not found, please try again.");
 					}
 				}
 			}
@@ -55,27 +50,22 @@ class CreateCommand extends Command
 		}
 
 		if (demo == null)
-			error("This Demo was not found, please try again.");
+			error("This demo was not found, please try again.");
 		
 		Sys.println(" Creating " + demo.name);
 
-		var IDEChoice = ProjectUtils.resolveIDEChoice(console);
-		var	destination = CommandUtils.combine(Sys.getCwd(), demo.name);
-		var copied = utils.ProjectUtils.duplicateProject(demo, destination, IDEChoice);
+		var ide = ProjectUtils.resolveIDEChoice(console);
+		var destination = CommandUtils.combine(Sys.getCwd(), demo.name);
+		var copied = ProjectUtils.duplicateProject(demo, destination, ide);
 
 		if (copied)
 		{
 			Sys.println("");
 			Sys.println(" The Demo " + demo.name + " has been created at:");
 			Sys.println(" " + destination);
-			Sys.println("");
 
 			if (FlxTools.settings.IDEAutoOpen)
-			{
-				var opened = ProjectUtils.IDEAutoOpen(destination, demo.name, IDEChoice, autoContinue);
-				if (!opened)
-					error("There was a problem opening with " + IDEChoice);
-			}
+				ProjectUtils.openWithIDE(destination, demo.name, ide);
 
 			exit();
 		}
@@ -92,7 +82,7 @@ class CreateCommand extends Command
 		{
 			Sys.println(project.name);
 		}
-		var answers = new Array<String>();
+		var answers = [];
 		var header = " Listing all the demos you can create.";
 		var question = " Please enter a number or name of the demo to create.";
 

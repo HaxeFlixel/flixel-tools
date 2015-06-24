@@ -142,7 +142,7 @@ class ProjectUtils
 		return Replacements;
 	}
 
-	static public function resolveIDEChoice(console:Console):String
+	static public function resolveIDEChoice(console:Console):IDE
 	{
 		var ide = "";
 		var overrideIDE = "";
@@ -175,77 +175,69 @@ class ProjectUtils
 		return ide;
 	}
 
-	static public function IDEAutoOpen(ProjectPath:String, ProjectName:String, ide:String, AutoContinue:Bool = false):Bool
+	static public function openWithIDE(projectPath:String, projectName:String, ide:IDE):Bool
 	{
-		var answer = Answer.Yes;
+		var ideHandlers:Map<String, String->String->Bool> = [
+			IDE.FLASH_DEVELOP => openWithFlashDevelop,
+			IDE.SUBLIME_TEXT => openWithSublimeText,
+			IDE.INTELLIJ_IDEA => openWithIntelliJIDEA
+		];
 
-		if (!AutoContinue)
+		var result = false;
+		var handler = ideHandlers[ide];
+		if (handler != null)
 		{
-			answer = CommandUtils.askYN("Do you want to open it with " + ide + "?");
+			result = handler(projectPath, projectName);
+			if (!result)
+				Sys.println('Could not open the project with $ide');
 		}
-
-		if (answer == Answer.Yes)
+		return result;
+	}
+	
+	static public function openWithFlashDevelop(projectPath:String, projectName:String):Bool
+	{
+		var projectFile = CommandUtils.combine(projectPath, projectName + ".hxproj");
+		projectFile = projectFile.replace("/", "\\");
+		Sys.println(projectFile);
+		if (FileSys.exists(projectFile))
 		{
-			if (ide == IDE.FLASH_DEVELOP)
-			{
-				var projectFile = CommandUtils.combine(ProjectPath, ProjectName + ".hxproj");
-				projectFile = StringTools.replace(projectFile, "/", "\\");
-
-				if (FileSys.exists(projectFile))
-				{
-					Sys.println(projectFile);
-					var sublimeOpen = "explorer " + projectFile;
-					Sys.command(sublimeOpen);
-
-					return true;
-				}
-			}
-			else if (ide == IDE.SUBLIME_TEXT)
-			{
-				var projectFile = CommandUtils.combine(ProjectPath, ProjectName + ".sublime-project");
-
-				if (FileSys.exists(projectFile))
-				{
-					Sys.println(projectFile);
-					if (FileSys.isMac || FileSys.isLinux)
-					{
-						var sublimeOpen = "subl " + projectFile;
-						Sys.command(sublimeOpen);
-					}
-					else if (FileSys.isWindows)
-					{
-						//todo
-					}
-
-					return true;
-				}
-			}
-			else if (ide == IDE.INTELLIJ_IDEA)
-			{
-				var projectFile = CommandUtils.combine(ProjectPath, ".idea");
-
-				if (FileSys.exists(projectFile))
-				{
-					if (FileSys.isMac)
-					{
-						var cmd = FlxTools.settings.IDEA_Path + " " + ProjectPath;
-						Sys.command(cmd);
-					}
-					else if (FileSys.isWindows)
-					{
-						//C://
-					}
-					else if (FileSys.isLinux)
-					{
-						//todo untested
-						var cmd = FlxTools.settings.IDEA_Path + " " + ProjectPath;
-						Sys.command(cmd);
-					}
-					return true;
-				}
-			}
+			Sys.println(projectFile);
+			Sys.command("explorer " + projectFile);
+			return true;
 		}
-
+		return false;
+	}
+	
+	static public function openWithSublimeText(projectPath:String, projectName:String):Bool
+	{
+		var projectFile = CommandUtils.combine(projectPath, projectName + ".sublime-project");
+		
+		if (FileSys.exists(projectFile))
+		{
+			Sys.println(projectFile);
+			if (FileSys.isMac || FileSys.isLinux)
+			{
+				Sys.command("subl " + projectFile);
+			}
+			// TODO: windows
+			return true;
+		}
+		return false;
+	}
+	
+	static public function openWithIntelliJIDEA(projectPath:String, projectName:String):Bool
+	{
+		var projectFile = CommandUtils.combine(projectPath, ".idea");
+		
+		if (FileSys.exists(projectFile))
+		{
+			if (FileSys.isMac || FileSys.isLinux) // TODO: test on linux
+			{
+				Sys.command(FlxTools.settings.IDEA_Path + " " + projectPath);
+			}
+			// TODO: windows
+			return true;
+		}
 		return false;
 	}
 }
