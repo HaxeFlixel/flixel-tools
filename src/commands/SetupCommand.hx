@@ -187,7 +187,7 @@ class SetupCommand extends Command
 
 		if (ide != IDE.NONE)
 		{
-			var answer = CommandUtils.askYN("Do you want to automatically open the created templates and demos with " + IDE + "?");
+			var answer = CommandUtils.askYN("Do you want to automatically open the created templates and demos with " + ide + "?");
 			if (answer == Answer.Yes)
 				IDEAutoOpen = true;
 		}
