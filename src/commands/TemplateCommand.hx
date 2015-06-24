@@ -56,7 +56,8 @@ class TemplateCommand extends Command
 
 		if (template == null)
 		{
-			error("Error getting the template with the name of " + TemplateName + " make sure you have installed flixel-templates ('haxelib install flixel-templates')");
+			error("Error getting the template with the name of " + TemplateName +
+				" make sure you have installed flixel-templates ('haxelib install flixel-templates')");
 		}
 		else
 		{
@@ -189,13 +190,11 @@ class TemplateCommand extends Command
 		if (option != null && option != 'true' && option != 'false')
 			DefaultValue = option;
 
-		var replace:TemplateReplacement =
+		return
 		{
-		replacement : DefaultValue,
-		pattern : Pattern,
-		cmdOption : CMDOption
+			replacement : DefaultValue,
+			pattern : Pattern,
+			cmdOption : CMDOption
 		};
-
-		return replace;
 	}
 }

@@ -1,14 +1,14 @@
 package commands;
 
-import utils.FileSysUtils;
-import massive.sys.io.FileSys;
-import legacy.Warnings;
 import legacy.FindAndReplace;
 import legacy.FindAndReplace.FindAndReplaceObject;
-import sys.io.FileOutput;
+import legacy.Warnings;
 import massive.sys.cmd.Command;
+import massive.sys.io.FileSys;
 import sys.io.File;
+import sys.io.FileOutput;
 import utils.CommandUtils;
+import utils.FileSysUtils;
 
 class ConvertCommand extends Command
 {
@@ -26,11 +26,11 @@ class ConvertCommand extends Command
 		if (console.args[1] != null)
 			convertPath = console.args[1];
 
-		if(console.getOption("-y") != null)
+		if (console.getOption("-y") != null)
 			autoContinue = true;
 
 		var makeBackup = true;
-		if(console.getOption("-nb") != null)
+		if (console.getOption("-nb") != null)
 			makeBackup = false;
 
 
@@ -40,22 +40,18 @@ class ConvertCommand extends Command
 	/**
 	 * Convert an old HaxeFlixel project
 	 */
-
 	private function convertProject(ConvertPath:String = "", MakeBackup:Bool = true):Void
 	{
 		if (ConvertPath == "")
 		{
 			ConvertPath = Sys.getCwd();
 		}
-		else
+		else if (!StringTools.startsWith(ConvertPath, "/"))
 		{
-			if (!StringTools.startsWith(ConvertPath, "/"))
-			{
-				ConvertPath = Sys.getCwd() + CommandUtils.stripPath(ConvertPath);
-			}
+			ConvertPath = Sys.getCwd() + CommandUtils.stripPath(ConvertPath);
 		}
 
-		if(!autoContinue)
+		if (!autoContinue)
 		{
 			var continueConvert = CommandUtils.askYN("Do you want to convert " + ConvertPath);
 
@@ -102,9 +98,10 @@ class ConvertCommand extends Command
 				}
 				else
 				{
-					if(!autoContinue)
+					if (!autoContinue)
 					{
-						var overwrite = CommandUtils.askYN("There is already a backup at " + backupFolder + ", do you want to overwrite it?");
+						var overwrite = CommandUtils.askYN("There is already a backup at "
+							+ backupFolder + ", do you want to overwrite it?");
 
 						if (overwrite == Answer.Yes)
 						{
@@ -142,18 +139,18 @@ class ConvertCommand extends Command
 				var oldAssets = CommandUtils.combine(ConvertPath, "assets");
 				oldAssets = CommandUtils.combine(oldAssets, "data");
 
-				if(FileSys.exists(oldAssets))
+				if (FileSys.exists(oldAssets))
 				{
 					var answer = null;
 
-					if(!autoContinue)
+					if (!autoContinue)
 					{
 						var question = "The old HaxeFlixel data assets was detected, do you want to delete it and its contents?";
 						var warning = "\nPlease make sure you are not storing your own assets in:"+ oldAssets;
 						answer = CommandUtils.askYN(question+warning);
 					}
 
-					if(answer == Answer.Yes || autoContinue)
+					if (answer == Answer.Yes || autoContinue)
 					{
 						Sys.println("Deleting old core assets:"+oldAssets);
 						CommandUtils.deleteRecursively(oldAssets);
@@ -222,7 +219,6 @@ class ConvertCommand extends Command
 	 *
 	 * @param   ProjectPath	 Path to scan recursivley
 	 */
-
 	private inline function convertProjectFolder(ProjectPath:String, Display:Bool = false):Array<WarningResult>
 	{
 		var warnings:Array<WarningResult> = new Array<WarningResult>();
@@ -257,7 +253,7 @@ class ConvertCommand extends Command
 							var obj:FindAndReplaceObject = replacement;
 							sourceText = StringTools.replace(sourceText, obj.find, obj.replacement);
 
-							if(obj.importValidate != null && CommandUtils.strmatch(obj.find, originalText))
+							if (obj.importValidate != null && CommandUtils.strmatch(obj.find, originalText))
 							{
 								var newText = CommandUtils.addImportToFileString(sourceText, obj.importValidate);
 
@@ -365,7 +361,7 @@ class ConvertCommand extends Command
 				}
 			}
 		}
-		catch (ex:haxe.io.Eof){}
+		catch (ex:haxe.io.Eof) {}
 
 		fin.close();
 

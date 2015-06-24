@@ -1,8 +1,7 @@
 package commands;
 
-import utils.CommandUtils.FlxToolSettings;
-import utils.CommandUtils;
 import massive.sys.cmd.Command;
+import utils.CommandUtils;
 
 class SetCommand extends Command
 {
@@ -10,7 +9,7 @@ class SetCommand extends Command
 
 	override public function execute():Void
 	{
-		if(console.getOption("-y") != null)
+		if (console.getOption("-y") != null)
 			autoContinue = true;
 
 		var option = console.args[1];
@@ -21,12 +20,12 @@ class SetCommand extends Command
 		}
 		else
 		{
-			if(option == "dev")
+			if (option == "dev")
 			{
 				var path:String = CommandUtils.getHaxelibPath('flixel');
 				var install = false;
 
-				if(StringTools.endsWith(path, "git/"))
+				if (StringTools.endsWith(path, "git/"))
 				{
 					Sys.println("your using git");
 				}
@@ -37,7 +36,7 @@ class SetCommand extends Command
 					var message = "Do you want to install HaxeFlixel Git version?";
 					install = CommandUtils.haxelibGitCommand("flixel", FlxTools.FLIXEL_REPO, autoContinue,message, "dev");
 
-					if(!install)
+					if (!install)
 						error("There was a problem installing flixel dev branch with haxelib.");
 				}
 			}

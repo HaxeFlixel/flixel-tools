@@ -3,7 +3,6 @@ package utils;
 import utils.CommandUtils;
 import utils.ProjectUtils;
 import utils.ProjectUtils.OpenFLProject;
-import utils.CommandUtils;
 
 class DemoUtils
 {
@@ -20,7 +19,7 @@ class DemoUtils
 				Sys.println( " [" + i + "] " + Answers[i]);
 			}
 
-			if(cancel)
+			if (cancel)
 			{
 				Sys.println( "");
 				Sys.println( " [c] Cancel");
@@ -34,13 +33,13 @@ class DemoUtils
 			var userResponse = CommandUtils.readLine();
 			var validAnswer = "";
 
-			for( i in 0...Answers.length )
+			for (i in 0...Answers.length)
 			{
-				if( Answers[i] == userResponse || Std.string(i) == userResponse )
+				if ( Answers[i] == userResponse || Std.string(i) == userResponse )
 				{
 					validAnswer = userResponse;
 				}
-				else if(userResponse == "c" && cancel)
+				else if (userResponse == "c" && cancel)
 				{
 					Sys.println(" Cancelled");
 					return	null;
@@ -58,10 +57,6 @@ class DemoUtils
 					return Answers[Std.parseInt(userResponse)];
 				}
 			}
-			else
-			{
-				return null;
-			}
 		}
 
 		return null;
@@ -76,7 +71,7 @@ class DemoUtils
 	{
 		var demos = scanDemoProjects(DemoPath);
 
-		if(demos == null)
+		if (demos == null)
 		{
 			return null;
 		}
@@ -99,7 +94,7 @@ class DemoUtils
 	{
 		var demos = scanDemoProjects();
 
-		if(demos == null)
+		if (demos == null)
 			return null;
 
 		for (demo in demos)

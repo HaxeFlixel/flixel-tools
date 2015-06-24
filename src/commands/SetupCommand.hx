@@ -1,12 +1,12 @@
 package commands;
 
 import haxe.Utf8;
-import sys.FileSystem;
-import utils.CommandUtils.FlxToolSettings;
-import utils.CommandUtils;
-import sys.io.File;
-import massive.sys.io.FileSys;
 import massive.sys.cmd.Command;
+import massive.sys.io.FileSys;
+import utils.CommandUtils;
+import utils.CommandUtils.FlxToolSettings;
+import sys.FileSystem;
+import sys.io.File;
 
 class SetupCommand extends Command
 {
@@ -21,7 +21,7 @@ class SetupCommand extends Command
 			this.error("You have given too many arguments for the create command.");
 		}
 
-		if(console.getOption("-y") != null)
+		if (console.getOption("-y") != null)
 			autoContinue = true;
 
 		setupCommandAlias();
@@ -44,13 +44,13 @@ class SetupCommand extends Command
 	{
 		var flixel = CommandUtils.getHaxelibPath("flixel");
 
-		if(flixel == "")
+		if (flixel == "")
 		{
-			if(!autoContinue)
+			if (!autoContinue)
 			{
 				var answer = CommandUtils.askYN ("Would you now like this tool to install flixel for you?");
 
-				if(answer == Answer.Yes)
+				if (answer == Answer.Yes)
 				{
 					Sys.command ("haxelib install flixel");
 				}
@@ -63,21 +63,17 @@ class SetupCommand extends Command
 		var templatesHaxelib = CommandUtils.getHaxelibPath("flixel-templates");
 		var demosHaxelib = CommandUtils.getHaxelibPath("flixel-demos");
 
-		if(templatesHaxelib == "" || demosHaxelib == "")
+		if (templatesHaxelib == "" || demosHaxelib == "")
 		{
-			if(!autoContinue)
+			if (!autoContinue)
 			{
 				var download = CommandUtils.askYN ("Would you now like this tool to download the flixel-demos and flixel-templates?");
 
-				if(download == Answer.Yes)
-				{
-					Sys.command ("haxelib run flixel-tools download");
-				}
+				if (download == Answer.Yes)
+					Sys.command("haxelib run flixel-tools download");
 			}
 			else
-			{
-				Sys.command ("haxelib run flixel-tools download");
-			}
+				Sys.command("haxelib run flixel-tools download");
 		}
 	}
 
@@ -87,12 +83,13 @@ class SetupCommand extends Command
 
 		var message = "Do you want to setup the flixel command Alias?";
 
-		if(FileSys.isLinux||FileSys.isMac)
-			message = "Do you want to set up the command alias 'flixel' to 'haxelib run flixel-tools'?\nA simple flixel script will be added to your /usr/bin/";
+		if (FileSys.isLinux||FileSys.isMac)
+			message = "Do you want to set up the command alias 'flixel' to 'haxelib run flixel-tools'?" +
+			          "\nA simple flixel script will be added to your /usr/bin/";
 
 		answer = CommandUtils.askYN(message);
 
-		if(autoContinue || answer == Answer.Yes)
+		if (autoContinue || answer == Answer.Yes)
 		{
 			var haxePath:String = Sys.getEnv("HAXEPATH");
 			var flixelAliasScript = "";
@@ -111,9 +108,9 @@ class SetupCommand extends Command
 				scriptSourcePath = CommandUtils.combine(scriptSourcePath, "bin");
 				scriptSourcePath = CommandUtils.combine(scriptSourcePath, scriptFile);
 
-				if(FileSystem.exists (scriptSourcePath))
+				if (FileSystem.exists(scriptSourcePath))
 				{
-					File.copy( scriptSourcePath, flixelAliasScript);
+					File.copy(scriptSourcePath, flixelAliasScript);
 				}
 				else
 				{
@@ -129,7 +126,7 @@ class SetupCommand extends Command
 
 				flixelAliasScript = CommandUtils.getHaxelibPath("flixel-tools") + "bin/flixel.sh";
 
-				if(FileSystem.exists (flixelAliasScript))
+				if (FileSystem.exists(flixelAliasScript))
 				{
 					Sys.command("sudo", [ "cp", flixelAliasScript, haxePath + "/flixel" ]);
 					Sys.command("sudo chmod 755 " + haxePath + "/flixel");
@@ -140,10 +137,6 @@ class SetupCommand extends Command
 					error("Could not find the flixel-tools alias script. You can try 'haxelib selfupdate' and run setup again.");
 				}
 			}
-		}
-		else
-		{
-			return;
 		}
 	}
 
@@ -162,7 +155,7 @@ class SetupCommand extends Command
 		AuthorName = Utf8.encode(AuthorName);
 
 		IDE = CommandUtils.askQuestionStrings("Choose your default IDE.", "" , IDES, false);
-		if(IDE == null)
+		if (IDE == null)
 		{
 			Sys.println(" Your IDE choice was not recognised, using default of " + FlxTools.IDE_NONE);
 			IDE = FlxTools.IDE_NONE;
@@ -171,19 +164,19 @@ class SetupCommand extends Command
 		if ( IDE == FlxTools.INTELLIJ_IDEA)
 		{
 			var answer = CommandUtils.askString("Enter the name of your default FlexSDK, just ENTER for default of " + ideaFlexSDKName);
-			if(answer != "")
+			if (answer != "")
 				ideaFlexSDKName = answer;
 
 			var answer = CommandUtils.askString("Enter the name of your default Flixel Library, just ENTER for default of " + ideaFlixelEngine);
-			if(answer != "")
+			if (answer != "")
 				ideaFlixelEngine = answer;
 
 			var answer = CommandUtils.askString("Enter the name of your default Flixel Addons Library, just ENTER for default of " + ideaFlixelAddons);
-			if(answer != "")
+			if (answer != "")
 				ideaFlixelAddons = answer;
 
 			var answer = CommandUtils.askString("Enter the path of where you have installed Intellij Idea, default is " + ideaPath);
-			if(answer != "")
+			if (answer != "")
 				ideaPath = answer;
 		}
 		//else if (IDE == FlxTools.FLASH_DEVELOP)
@@ -195,15 +188,15 @@ class SetupCommand extends Command
 		{
 			var answer = CommandUtils.askYN("Do you want to automatically open the created templates and demos with " + IDE + "?");
 
-			if(answer == Answer.Yes)
+			if (answer == Answer.Yes)
 			{
 				IDEAutoOpen = true;
 			}
 		}
 
-		if(IDE == FlxTools.SUBLIME_TEXT)
+		if (IDE == FlxTools.SUBLIME_TEXT)
 		{
-			if(FileSys.isMac)
+			if (FileSys.isMac)
 			{
 				Sys.println("For Sublime Text to open automatically you have to make sure the 'subl' command is setup properly on your system as in http://www.sublimetext.com/docs/2/osx_command_line.html.");
 
@@ -213,10 +206,8 @@ class SetupCommand extends Command
 
 				answer = CommandUtils.askYN("Do you want to run the symlink command automatically as per official instructions http://www.sublimetext.com/docs/2/osx_command_line.html?\n\n The command that will be executed is as follows:\n '"+sublSetupCommand+"'");
 
-				if(answer == Answer.Yes)
-				{
+				if (answer == Answer.Yes)
 					Sys.command(sublSetupCommand);
-				}
 			}
 		}
 
@@ -240,7 +231,7 @@ class SetupCommand extends Command
 		Sys.println(" Default Editor			:" + FlxTools.settings.DefaultEditor);
 		Sys.println(" Author Name			:" + Utf8.decode(FlxTools.settings.AuthorName));
 
-		if ( IDE == FlxTools.INTELLIJ_IDEA)
+		if (IDE == FlxTools.INTELLIJ_IDEA)
 		{
 			Sys.println(" IDEA_flexSdkName		:" + FlxTools.settings.IDEA_flexSdkName);
 			Sys.println(" IDEA_Flixel_Addons_Library	:" + FlxTools.settings.IDEA_Flixel_Addons_Library);

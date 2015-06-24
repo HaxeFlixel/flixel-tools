@@ -1,11 +1,10 @@
 package utils;
 
-import FlxTools;
-import sys.FileSystem;
-import sys.io.Process;
-import sys.io.File;
-import massive.sys.io.FileSys;
 import haxe.Json;
+import massive.sys.io.FileSys;
+import sys.io.File;
+import sys.io.Process;
+import sys.FileSystem;
 using StringTools;
 
 /**
@@ -14,8 +13,8 @@ using StringTools;
 class CommandUtils
 {
 	/**
-	* Return the correct string for the cpp target based on the current OS
-	*/
+	 * Return the correct string for the cpp target based on the current OS
+	 */
 	static public function getCPP():String
 	{
 		var cppTarget = "";
@@ -41,7 +40,7 @@ class CommandUtils
 	 * @param  ?Overwrite  Overwrite the destination
 	 * @return	Bool true if the new Destination exists after operation
 	 */
-	static public function copyRecursively(Source:String, Destination:String, ?Overwrite:Bool, ?filter:EReg=null, ?exclude:Bool=false):Bool
+	static public function copyRecursively(Source:String, Destination:String, ?Overwrite:Bool, ?filter:EReg, ?exclude:Bool = false):Bool
 	{
 		var current = massive.sys.io.File.current.resolveDirectory("temp");
 
@@ -53,21 +52,21 @@ class CommandUtils
 		return FileSys.exists(Destination);
 	}
 
-	static public function deleteRecursively( Path : String ) : Void
+	static public function deleteRecursively(Path:String) : Void
 	{
-		if( FileSys.exists( Path ) )
+		if (FileSys.exists(Path))
 		{
-			if( FileSys.isDirectory( Path ) )
+			if ( FileSys.isDirectory(Path))
 			{
-				for( entry in FileSys.readDirectory( Path ) )
+				for (entry in FileSys.readDirectory(Path))
 				{
-					deleteRecursively( Path + "/" + entry );
+					deleteRecursively(Path + "/" + entry);
 				}
-				FileSys.deleteDirectory( Path );
+				FileSys.deleteDirectory(Path);
 			}
 			else
 			{
-				FileSys.deleteFile( Path );
+				FileSys.deleteFile(Path);
 			}
 		}
 	}
@@ -82,7 +81,7 @@ class CommandUtils
 		var str:String = FileString;
 		var match = strmatch(ImportString, str);
 
-		if(!match)
+		if (!match)
 		{
 			var newLine = "\n";
 			var r = ~/import+/;
@@ -98,15 +97,8 @@ class CommandUtils
 			}
 			catch (e:Dynamic){}
 
-			if(newString != str)
-			{
+			if (newString != str)
 				return newString;
-			}
-			else
-			{
-				return null;
-			}
-
 		}
 
 		return null;
@@ -143,12 +135,11 @@ class CommandUtils
 			Sys.println("");
 			Sys.println(Question + " [y/n] ? ");
 
-			switch (readLine())
+			return switch (readLine())
 			{
-				case "n", "No":
-					return No;
-				case "y", "Yes":
-					return Yes;
+				case "n", "No": No;
+				case "y", "Yes": Yes;
+				case _: null;
 			}
 		}
 
@@ -168,14 +159,12 @@ class CommandUtils
 			Sys.println("");
 			Sys.println(Question + " [y/n/a] ? ");
 
-			switch (readLine())
+			return switch (readLine())
 			{
-				case "n", "No":
-					return Answer.No;
-				case "y", "Yes":
-					return Answer.Yes;
-				case "a", "Always":
-					return Answer.Always;
+				case "n", "No": Answer.No;
+				case "y", "Yes": Answer.Yes;
+				case "a", "Always": Answer.Always;
+				case _: null;
 			}
 		}
 
@@ -202,7 +191,7 @@ class CommandUtils
 				Sys.println( " [" + i + "] " + Answers[i]);
 			}
 
-			if(cancel)
+			if (cancel)
 			{
 				Sys.println( "");
 				Sys.println( " [c] Cancel");
@@ -218,11 +207,11 @@ class CommandUtils
 
 			for( i in 0...Answers.length )
 			{
-				if( Answers[i] == userResponse || Std.string(i) == userResponse )
+				if ( Answers[i] == userResponse || Std.string(i) == userResponse )
 				{
 					validAnswer = userResponse;
 				}
-				else if(userResponse == "c" && cancel)
+				else if (userResponse == "c" && cancel)
 				{
 					Sys.println(" Cancelled");
 					return "";
@@ -231,7 +220,7 @@ class CommandUtils
 
 			if (validAnswer != "")
 			{
-				if( Std.parseInt(validAnswer) != null )
+				if ( Std.parseInt(validAnswer) != null )
 				{
 					return Answers[Std.parseInt(userResponse)];
 				}
@@ -240,10 +229,6 @@ class CommandUtils
 				{
 					return userResponse;
 				}
-			}
-			else
-			{
-				return "";
 			}
 		}
 
@@ -269,21 +254,12 @@ class CommandUtils
 	static public function getHaxelibJsonData(HaxelibName:String):HaxelibJSON
 	{
 		var haxleibJsonPath = getHaxelibPath(HaxelibName);
-
 		if (haxleibJsonPath == "")
-		{
 			return null;
-		}
 
-		var jsonContent = "";
-
-		jsonContent = FileSysUtils.getContent(haxleibJsonPath + "haxelib.json");
-
-		var jsonData:HaxelibJSON = Json.parse(jsonContent);
-
-		return jsonData;
+		var jsonContent = FileSysUtils.getContent(haxleibJsonPath + "haxelib.json");
+		return Json.parse(jsonContent);
 	}
-
 
 	static public function strmatch(Needle:String, Haystack:String):Bool
 	{
@@ -405,7 +381,7 @@ class CommandUtils
 	{
 		var ideData = "ide-data";
 		var ideDataPath = CommandUtils.getHaxelibPath("flixel-templates");
-		if(ideDataPath == "")
+		if (ideDataPath == "")
 		{
 			return;
 		}
@@ -427,7 +403,7 @@ class CommandUtils
 	static public function loadToolSettings():FlxToolSettings
 	{
 		var toolPath = CommandUtils.getHaxelibPath("flixel-tools");
-		if(toolPath == "")
+		if (toolPath == "")
 		{
 			Sys.println("Error reading your settings, please run 'flixel setup'.");
 			return null;
@@ -435,7 +411,7 @@ class CommandUtils
 
 		var settingsPath = toolPath + "settings.json";
 
-		if( !FileSystem.exists(settingsPath))
+		if (!FileSystem.exists(settingsPath))
 		{
 			Sys.println("It appears you have not run setup yet.");
 			return null;
@@ -450,7 +426,7 @@ class CommandUtils
 	static public function saveToolSettings(Settings:FlxToolSettings):Void
 	{
 		var toolPath = CommandUtils.getHaxelibPath("flixel-tools");
-		if(toolPath == "")
+		if (toolPath == "")
 		{
 			Sys.println("Error detecting path of your haxelib flixel-tools.");
 			return null;
@@ -465,23 +441,16 @@ class CommandUtils
 
 	static public function haxelibGitCommand(Lib:String, URL:String, AutoContinue:Bool, Message:String, Branch:String = ""):Bool
 	{
-		if(Message==null)
+		if (Message == null)
 			Message = "Do you want to install git " + Lib + " " + URL + " " + Branch + "?";
 
 		var command = "haxelib git " + Lib + " " + URL + " " + Branch;
 
-		if(!AutoContinue)
-		{
-			var answer = CommandUtils.askYN (Message);
+		if (!AutoContinue && CommandUtils.askYN(Message) == Answer.No)
+			return false;
 
-			if(answer == Answer.No)
-			{
-				return false;
-			}
-		}
-
-		Sys.println (command);
-		Sys.command (command);
+		Sys.println(command);
+		Sys.command(command);
 
 		return true;
 	}
@@ -490,32 +459,31 @@ class CommandUtils
 	{
 		var libStatus = CommandUtils.getHaxelibPath(Lib);
 
-		if(libStatus == "" )
+		if (libStatus == "")
 		{
-			if(Message==null)
+			if (Message==null)
 				Message = "Do you want to install " + Lib;
 
 			var command = "haxelib install " + Lib;
 
-			if(!AutoContinue)
+			if (!AutoContinue)
 			{
-				var answer = CommandUtils.askYN (Message);
+				var answer = CommandUtils.askYN(Message);
 
-				if(answer == Answer.No)
+				if (answer == Answer.No)
 				{
 					return false;
 				}
 			}
 
-			Sys.println (command);
-			Sys.command (command);
+			Sys.println(command);
+			Sys.command(command);
 
 			return true;
 		}
 		else
 		{
 			Sys.println("You appear to already have " + Lib + " installed.");
-
 			return false;
 		}
 	}
@@ -524,7 +492,7 @@ class CommandUtils
 	{
 		var path = CommandUtils.getHaxelibPath(HaxeLib);
 
-		if(path != "")
+		if (path != "")
 		{
 			Sys.println("");
 			Sys.println("It appears you already have " + HaxeLib + " haxelib installed.");

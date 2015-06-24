@@ -1,11 +1,10 @@
 package utils;
 
-import massive.sys.cmd.Console;
+import massive.sys.io.FileSys;
 import utils.CommandUtils;
 import utils.TemplateUtils;
 import utils.TemplateUtils.TemplateReplacement;
-import massive.sys.io.FileSys;
-import haxe.ds.StringMap;
+import massive.sys.cmd.Console;
 
 class ProjectUtils
 {
@@ -18,7 +17,7 @@ class ProjectUtils
 	{
 		var result = CommandUtils.copyRecursively(Project.PATH, Destination);
 
-		if(result)
+		if (result)
 		{
 			CommandUtils.copyRecursively(Project.PATH, Destination);
 
@@ -45,11 +44,11 @@ class ProjectUtils
 			{
 				var folderPath:String = CommandUtils.combine(TargetDirectory, name);
 
-				if(FileSys.isDirectory(folderPath) && !StringTools.startsWith(name, "."))
+				if (FileSys.isDirectory(folderPath) && !StringTools.startsWith(name, "."))
 				{
 					var projectPath = scanProjectXML(folderPath);
 
-					if(projectPath != "")
+					if (projectPath != "")
 					{
 						projects.push({
 							NAME : name,
@@ -60,7 +59,7 @@ class ProjectUtils
 					}
 
 					var subProjects = scanOpenFLProjects(folderPath);
-					if(subProjects.length>0)
+					if (subProjects.length>0)
 					{
 						for (o in subProjects)
 						{
@@ -95,16 +94,16 @@ class ProjectUtils
 
 	static public function copyIDETemplateFiles(TargetPath:String, ?Replacements:Array<TemplateReplacement>, IDEOption:String = ""):Array<TemplateReplacement>
 	{
-		if(Replacements == null)
+		if (Replacements == null)
 			Replacements = new Array<TemplateReplacement>();
 
 		Replacements.push(TemplateUtils.addOption("${AUTHOR}", "", FlxTools.settings.AuthorName));
 
-		if(IDEOption == "" && FlxTools.settings.IDEAutoOpen)
+		if (IDEOption == "" && FlxTools.settings.IDEAutoOpen)
 		{
 			IDEOption = FlxTools.settings.DefaultEditor;
 		}
-		else if(IDEOption == "")
+		else if (IDEOption == "")
 		{
 			IDEOption = FlxTools.IDE_NONE;
 		}
@@ -145,7 +144,7 @@ class ProjectUtils
 	{
 		var IDE = "";
 
-		var options = new StringMap<String>();
+		var options = new Map<String, String>();
 		options.set("-subl", FlxTools.SUBLIME_TEXT);
 		options.set("-fd", FlxTools.FLASH_DEVELOP);
 		options.set("-idea", FlxTools.INTELLIJ_IDEA);
@@ -157,13 +156,13 @@ class ProjectUtils
 		{
 			var IDEName = options.get(option);
 
-			if(console.getOption(option) != null)
+			if (console.getOption(option) != null)
 			{
 				overrideIDE = IDEName;
 			}
 		}
 
-		if(FlxTools.settings.IDEAutoOpen || overrideIDE != "")
+		if (FlxTools.settings.IDEAutoOpen || overrideIDE != "")
 		{
 			if (overrideIDE != "")
 			{
@@ -189,12 +188,12 @@ class ProjectUtils
 
 		if (answer == Answer.Yes)
 		{
-			if(IDE == FlxTools.FLASH_DEVELOP)
+			if (IDE == FlxTools.FLASH_DEVELOP)
 			{
 				var projectFile = CommandUtils.combine(ProjectPath, ProjectName + ".hxproj");
 				projectFile = StringTools.replace(projectFile, "/", "\\");
 
-				if(FileSys.exists(projectFile))
+				if (FileSys.exists(projectFile))
 				{
 					Sys.println(projectFile);
 					var sublimeOpen = "explorer " + projectFile;
@@ -202,61 +201,49 @@ class ProjectUtils
 
 					return true;
 				}
-				else
-				{
-					return false;
-				}
 			}
-			else if(IDE == FlxTools.SUBLIME_TEXT)
+			else if (IDE == FlxTools.SUBLIME_TEXT)
 			{
 				var projectFile = CommandUtils.combine(ProjectPath, ProjectName + ".sublime-project");
 
-				if(FileSys.exists(projectFile))
+				if (FileSys.exists(projectFile))
 				{
 					Sys.println(projectFile);
-					if(FileSys.isMac || FileSys.isLinux)
+					if (FileSys.isMac || FileSys.isLinux)
 					{
 						var sublimeOpen = "subl " + projectFile;
 						Sys.command(sublimeOpen);
 					}
-					else if(FileSys.isWindows)
+					else if (FileSys.isWindows)
 					{
 						//todo
 					}
 
 					return true;
 				}
-				else
-				{
-					return false;
-				}
 			}
-			else if(IDE == FlxTools.INTELLIJ_IDEA)
+			else if (IDE == FlxTools.INTELLIJ_IDEA)
 			{
 				var projectFile = CommandUtils.combine(ProjectPath, ".idea");
 
-				if(FileSys.exists(projectFile))
+				if (FileSys.exists(projectFile))
 				{
-					if(FileSys.isMac)
+					if (FileSys.isMac)
 					{
 						var cmd = FlxTools.settings.IDEA_Path + " " + ProjectPath;
 						Sys.command(cmd);
 					}
-					else if(FileSys.isWindows)
+					else if (FileSys.isWindows)
 					{
 						//C://
 					}
-					else if(FileSys.isLinux)
+					else if (FileSys.isLinux)
 					{
 						//todo untested
 						var cmd = FlxTools.settings.IDEA_Path + " " + ProjectPath;
 						Sys.command(cmd);
 					}
 					return true;
-				}
-				else
-				{
-					return false;
 				}
 			}
 		}

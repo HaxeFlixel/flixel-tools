@@ -1,11 +1,10 @@
 package commands;
 
-import utils.CommandUtils.Answer;
-import utils.CommandUtils;
 import massive.sys.cmd.Command;
+import utils.CommandUtils;
+import utils.DemoUtils;
 import utils.ProjectUtils;
 import utils.ProjectUtils.OpenFLProject;
-import utils.DemoUtils;
 
 class CreateCommand extends Command
 {
@@ -16,14 +15,12 @@ class CreateCommand extends Command
 		if (console.getOption("-y") != null)
 			autoContinue = true;
 
-		if(console.args.length > 3)
-		{
-			this.error("You have given too many arguments for the create command.");
-		}
+		if (console.args.length > 3)
+			error("You have given too many arguments for the create command.");
 
 		var projects:Array<OpenFLProject> = DemoUtils.scanDemoProjects();
 
-		if(projects == null)
+		if (projects == null)
 		{
 			Sys.println("");
 			Sys.println("There were no Demos found.");
@@ -35,17 +32,17 @@ class CreateCommand extends Command
 
 		var demo:OpenFLProject = null;
 
-		if(console.args[1] != null)
+		if (console.args[1] != null)
 		{
 			demo = DemoUtils.exists(console.args[1]);
 
 			if (demo == null)
 			{
-				if(Std.parseInt(console.args[1]) != null)
+				if (Std.parseInt(console.args[1]) != null)
 				{
 					demo = DemoUtils.getByIndex(Std.parseInt(console.args[1]));
 
-					if(demo == null)
+					if (demo == null)
 					{
 						error("This Demo was not found, please try again.");
 					}
@@ -57,18 +54,16 @@ class CreateCommand extends Command
 			demo = promptDemoChoice(projects);
 		}
 
-		if(demo == null)
-		{
+		if (demo == null)
 			error("This Demo was not found, please try again.");
-		}
-
+		
 		Sys.println(" Creating " + demo.NAME);
 
 		var IDEChoice = ProjectUtils.resolveIDEChoice(console);
 		var	destination = CommandUtils.combine(Sys.getCwd(), demo.NAME);
 		var copied = utils.ProjectUtils.duplicateProject(demo, destination, IDEChoice);
 
-		if(copied)
+		if (copied)
 		{
 			Sys.println("");
 			Sys.println(" The Demo " + demo.NAME + " has been created at:");
@@ -78,7 +73,7 @@ class CreateCommand extends Command
 			if (FlxTools.settings.IDEAutoOpen)
 			{
 				var opened = ProjectUtils.IDEAutoOpen(destination, demo.NAME, IDEChoice, autoContinue);
-				if(!opened)
+				if (!opened)
 					error("There was a problem opening with " + IDEChoice);
 			}
 
@@ -93,7 +88,7 @@ class CreateCommand extends Command
 
 	private function promptDemoChoice(projects:Array<OpenFLProject>):OpenFLProject
 	{
-		for ( project in projects )
+		for (project in projects)
 		{
 			Sys.println(project.NAME);
 		}
@@ -108,19 +103,13 @@ class CreateCommand extends Command
 
 		var answer = DemoUtils.askQuestionDemoStrings(question, header, answers);
 
-		if(answer == null)
+		if (answer == null)
 		{
 			Sys.println(" Your choice was not a valid demo.");
 			Sys.println("");
 			return null;
 		}
 
-		var demo = DemoUtils.exists(answer);
-		if(demo != null)
-		{
-			return demo;
-		}
-		return null;
+		return DemoUtils.exists(answer);
 	}
-
 }

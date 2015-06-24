@@ -90,14 +90,6 @@ class FlxTools extends CommandLineRunner
 
 		// -- NOT WORKING --
 		//mapCommand(
-		//	DocsCommand,
-		//	"docs", ["d"],
-		//	"Run the docs webserver.",
-		//	""
-		//	// TemplateUtil.getTemplate("convert")
-		//);
-
-		//mapCommand(
 		//	OpenFLTestCommand,
 		//	"test", ["t"],
 		//	"Alias for the openfl test command.",
@@ -153,7 +145,7 @@ class FlxTools extends CommandLineRunner
 	{
 		var flixelHaxelib:HaxelibJSON = CommandUtils.getHaxelibJsonData("flixel");
 
-		if(flixelHaxelib != null)
+		if (flixelHaxelib != null)
 		{
 			return flixelHaxelib.version;
 		}

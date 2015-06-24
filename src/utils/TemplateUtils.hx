@@ -1,10 +1,10 @@
 package utils;
 
-import sys.FileSystem;
-import sys.io.FileOutput;
+import haxe.Json;
 import massive.sys.io.File;
 import massive.sys.io.FileSys;
-import haxe.Json;
+import sys.FileSystem;
+import sys.io.FileOutput;
 
 class TemplateUtils
 {
@@ -12,13 +12,13 @@ class TemplateUtils
 
 	static public function get(TemplateName:String = ""):TemplateProject
 	{
-		if(TemplateName == "")
+		if (TemplateName == "")
 			TemplateName = 'default';
 
 		var templates = scanTemplateProjects();
 		var target:TemplateProject = null;
 
-		if(templates == null)
+		if (templates == null)
 			return null;
 
 		for (template in templates)
@@ -48,7 +48,7 @@ class TemplateUtils
 			}
 		}
 
-		if(!FileSys.exists(TemplatesPath))
+		if (!FileSys.exists(TemplatesPath))
 			return null;
 
 		var templates = new Array<TemplateProject>();
@@ -102,14 +102,12 @@ class TemplateUtils
 
 	public static function addOption(Pattern:String, CMDOption:String, DefaultValue:Dynamic):TemplateReplacement
 	{
-		var replace:TemplateReplacement =
+		return
 		{
-		replacement : DefaultValue,
-		pattern : Pattern,
-		cmdOption : CMDOption
+			replacement : DefaultValue,
+			pattern : Pattern,
+			cmdOption : CMDOption
 		};
-
-		return replace;
 	}
 
 	static public function modifyTemplateProject(TemplatePath:String, Template:TemplateProject):Void
