@@ -1,3 +1,16 @@
+?.?.?
+------------------------------
+* `testdemos` command:
+	* removed the `validate` alias 
+	* renamed it to `buildprojects` (`bp`)
+	* fixed an error when not specifying a target (defaults to flash)
+	* more compact and more helpful output
+	* `-<target>` is now `<target>`
+	* added a `-dir` option to build projects other than the flixel-demos haxelib
+	* made the output on linux colored based on the exit code of `haxelib run openfl` 
+* The HaxeFlixel header is now only displayed with `flixel` or `flixel help`
+* Don't print an error about missing templates for commands that don't need them
+
 1.0.5
 ------------------------------
 * Fix the detection of installed haxelibs for Haxe 3.2.0
