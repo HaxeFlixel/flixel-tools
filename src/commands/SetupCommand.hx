@@ -7,6 +7,7 @@ import utils.CommandUtils;
 import utils.CommandUtils.FlxToolSettings;
 import sys.FileSystem;
 import sys.io.File;
+import FlxTools.IDE;
 
 class SetupCommand extends Command
 {
@@ -142,8 +143,8 @@ class SetupCommand extends Command
 
 	private function promptForSettings():FlxToolSettings
 	{
-		var IDES:Array<String> = [FlxTools.SUBLIME_TEXT, FlxTools.FLASH_DEVELOP, FlxTools.INTELLIJ_IDEA, FlxTools.IDE_NONE];
-		var IDE = FlxTools.IDE_NONE;
+		var ides:Array<String> = [IDE.SUBLIME_TEXT, IDE.FLASH_DEVELOP, IDE.INTELLIJ_IDEA, IDE.NONE];
+		var ide = IDE.NONE;
 		var AuthorName = "";
 		var IDEAutoOpen = false;
 		var ideaFlexSDKName = "flex_4.6";
@@ -154,14 +155,14 @@ class SetupCommand extends Command
 		AuthorName = CommandUtils.askString("Enter the author name to use when generating templates.\n\nJust hit enter to not use an author name.");
 		AuthorName = Utf8.encode(AuthorName);
 
-		IDE = CommandUtils.askQuestionStrings("Choose your default IDE.", "" , IDES, false);
-		if (IDE == null)
+		ide = CommandUtils.askQuestionStrings("Choose your default IDE.", "" , ides, false);
+		if (ide == null)
 		{
-			Sys.println(" Your IDE choice was not recognised, using default of " + FlxTools.IDE_NONE);
-			IDE = FlxTools.IDE_NONE;
+			Sys.println(" Your IDE choice was not recognised, using default of " + IDE.NONE);
+			ide = IDE.NONE;
 		}
 
-		if ( IDE == FlxTools.INTELLIJ_IDEA)
+		if (ide == IDE.INTELLIJ_IDEA)
 		{
 			var answer = CommandUtils.askString("Enter the name of your default FlexSDK, just ENTER for default of " + ideaFlexSDKName);
 			if (answer != "")
@@ -184,27 +185,26 @@ class SetupCommand extends Command
 			//todo execute template zip?
 		//}
 
-		if (IDE != FlxTools.IDE_NONE)
+		if (ide != IDE.NONE)
 		{
 			var answer = CommandUtils.askYN("Do you want to automatically open the created templates and demos with " + IDE + "?");
-
 			if (answer == Answer.Yes)
-			{
 				IDEAutoOpen = true;
-			}
 		}
 
-		if (IDE == FlxTools.SUBLIME_TEXT)
+		if (ide == IDE.SUBLIME_TEXT)
 		{
 			if (FileSys.isMac)
 			{
-				Sys.println("For Sublime Text to open automatically you have to make sure the 'subl' command is setup properly on your system as in http://www.sublimetext.com/docs/2/osx_command_line.html.");
+				Sys.println("For Sublime Text to open automatically you have to make sure the 'subl' command is setup properly on your" +
+					"system as in http://www.sublimetext.com/docs/2/osx_command_line.html.");
 
 				var answer = Answer.No;
-
 				var sublSetupCommand = 'ln -s "/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl" ~/bin/subl';
 
-				answer = CommandUtils.askYN("Do you want to run the symlink command automatically as per official instructions http://www.sublimetext.com/docs/2/osx_command_line.html?\n\n The command that will be executed is as follows:\n '"+sublSetupCommand+"'");
+				answer = CommandUtils.askYN("Do you want to run the symlink command automatically as per official instructions" +
+					"http://www.sublimetext.com/docs/2/osx_command_line.html?\n\n The command that will be executed is as follows:\n '" +
+					sublSetupCommand + "'");
 
 				if (answer == Answer.Yes)
 					Sys.command(sublSetupCommand);
@@ -213,7 +213,7 @@ class SetupCommand extends Command
 
 		var settingsFile:FlxToolSettings =
 		{
-			DefaultEditor:IDE,
+			DefaultEditor:ide,
 			AuthorName:AuthorName,
 			IDEAutoOpen:IDEAutoOpen,
 			IDEA_flexSdkName:ideaFlexSDKName,
@@ -231,7 +231,7 @@ class SetupCommand extends Command
 		Sys.println(" Default Editor			:" + FlxTools.settings.DefaultEditor);
 		Sys.println(" Author Name			:" + Utf8.decode(FlxTools.settings.AuthorName));
 
-		if (IDE == FlxTools.INTELLIJ_IDEA)
+		if (ide == IDE.INTELLIJ_IDEA)
 		{
 			Sys.println(" IDEA_flexSdkName		:" + FlxTools.settings.IDEA_flexSdkName);
 			Sys.println(" IDEA_Flixel_Addons_Library	:" + FlxTools.settings.IDEA_Flixel_Addons_Library);

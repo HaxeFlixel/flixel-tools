@@ -57,22 +57,22 @@ class CreateCommand extends Command
 		if (demo == null)
 			error("This Demo was not found, please try again.");
 		
-		Sys.println(" Creating " + demo.NAME);
+		Sys.println(" Creating " + demo.name);
 
 		var IDEChoice = ProjectUtils.resolveIDEChoice(console);
-		var	destination = CommandUtils.combine(Sys.getCwd(), demo.NAME);
+		var	destination = CommandUtils.combine(Sys.getCwd(), demo.name);
 		var copied = utils.ProjectUtils.duplicateProject(demo, destination, IDEChoice);
 
 		if (copied)
 		{
 			Sys.println("");
-			Sys.println(" The Demo " + demo.NAME + " has been created at:");
+			Sys.println(" The Demo " + demo.name + " has been created at:");
 			Sys.println(" " + destination);
 			Sys.println("");
 
 			if (FlxTools.settings.IDEAutoOpen)
 			{
-				var opened = ProjectUtils.IDEAutoOpen(destination, demo.NAME, IDEChoice, autoContinue);
+				var opened = ProjectUtils.IDEAutoOpen(destination, demo.name, IDEChoice, autoContinue);
 				if (!opened)
 					error("There was a problem opening with " + IDEChoice);
 			}
@@ -82,7 +82,7 @@ class CreateCommand extends Command
 		else
 		{
 			Sys.println("");
-			error(" There was an problem creating " + demo.NAME);
+			error(" There was an problem creating " + demo.name);
 		}
 	}
 
@@ -90,7 +90,7 @@ class CreateCommand extends Command
 	{
 		for (project in projects)
 		{
-			Sys.println(project.NAME);
+			Sys.println(project.name);
 		}
 		var answers = new Array<String>();
 		var header = " Listing all the demos you can create.";
@@ -98,7 +98,7 @@ class CreateCommand extends Command
 
 		for (demo in projects)
 		{
-			answers.push(demo.NAME);
+			answers.push(demo.name);
 		}
 
 		var answer = DemoUtils.askQuestionDemoStrings(question, header, answers);

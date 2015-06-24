@@ -51,7 +51,7 @@ class BuildProjectsCommand extends Command
 		var filteredDemos = [];
 		for (demoName in demoNames)
 		{
-			var matching = demos.filter(function(p) return p.NAME == demoName);
+			var matching = demos.filter(function(p) return p.name == demoName);
 			if (matching.length == 0)
 				Sys.println('Could not find a project named \'$demoName\'');
 			else
@@ -111,9 +111,9 @@ class BuildProjectsCommand extends Command
 		for (result in Results)
 		{
 			file.writeString("\n");
-			file.writeString("Project Name : " + result.project.NAME + "\n");
-			file.writeString("Project Path : " + result.project.PATH + "\n");
-			file.writeString("Targets      : " + result.project.TARGETS + "\n");
+			file.writeString("Project Name : " + result.project.name + "\n");
+			file.writeString("Project Path : " + result.project.path + "\n");
+			file.writeString("Targets      : " + result.project.targets + "\n");
 			file.writeString("Build Target : " + result.target + "\n");
 			file.writeString("Build Result : " + result.result + "\n");
 		}
@@ -125,14 +125,12 @@ class BuildProjectsCommand extends Command
 	private function buildProject(Target:String, Project:OpenFLProject):BuildResult
 	{
 		if (Target == "native")
-		{
 			Target = CommandUtils.getCPP();
-		}
 
-		var buildCommand:String = "haxelib run openfl build " + "\"" + Project.PATH + "\"" + " " + Target;
+		var buildCommand:String = "haxelib run openfl build " + "\"" + Project.path + "\"" + " " + Target;
 		
 		var result:Result = Sys.command(buildCommand);
-		ConsoleUtils.printWithColor(result + " - " + Project.NAME + ' ($Target)', result);
+		ConsoleUtils.printWithColor(result + " - " + Project.name + ' ($Target)', result);
 
 		return {
 			result : result,

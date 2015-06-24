@@ -12,32 +12,18 @@ import utils.CommandUtils;
 
 class FlxTools extends CommandLineRunner
 {
-	inline static public var NAME = "HaxeFlixel";
-	inline static public var ALIAS = "flixel";
-	inline static public var VERSION = "1.0.5";
+	public static inline var ALIAS = "flixel";
+	public static inline var VERSION = "1.0.5";
 
-	inline static public var SUBLIME_TEXT:String = "Sublime Text";
-	inline static public var FLASH_DEVELOP:String = "Flash Develop";
-	inline static public var FLASH_DEVELOP_FDZ:String = "Flash Develop FDZ";
-	inline static public var INTELLIJ_IDEA:String = "Intellij Idea";
-	inline static public var INTELLIJ_IDEA_PATH:String = "";
-	inline static public var IDE_NONE:String = "None";
+	public static var settings:FlxToolSettings;
+	public static var PWIDTH:Int = 640;
+	public static var PHEIGHT:Int = 480;
 
-	inline static public var FLIXEL_ADDONS_REPO = "https://github.com/HaxeFlixel/flixel-addons";
-	inline static public var FLIXEL_UI_REPO = "https://github.com/HaxeFlixel/flixel-ui";
-	inline static public var FLIXEL_TEMPLATE_REPO = "https://github.com/HaxeFlixel/flixel-templates";
-	inline static public var FLIXEL_DEMOS_REPO = "https://github.com/HaxeFlixel/flixel-demos";
-	inline static public var FLIXEL_REPO = "https://github.com/HaxeFlixel/flixel";
-
-	static public var settings:FlxToolSettings;
-	static public var PWIDTH:Int = 640;
-	static public var PHEIGHT:Int = 480;
-
-	static public var flashDevelopFDZSource:String;
-	static public var flashDevelopSource:String;
-	static public var intellijSource:String;
-	static public var sublimeSource:String;
-	static public var templatesLoaded:Bool = false;
+	public static var flashDevelopFDZSource:String;
+	public static var flashDevelopSource:String;
+	public static var intellijSource:String;
+	public static var sublimeSource:String;
+	public static var templatesLoaded:Bool = false;
 
 	public function new():Void
 	{
@@ -88,23 +74,6 @@ class FlxTools extends CommandLineRunner
 			TemplateUtil.getTemplate("buildprojects")
 		);
 
-		// -- NOT WORKING --
-		//mapCommand(
-		//	OpenFLTestCommand,
-		//	"test", ["t"],
-		//	"Alias for the openfl test command.",
-		//	""
-		//	//TemplateUtil.getTemplate("template")
-		//);
-
-		//mapCommand(
-		//	SetCommand,
-		//	"set", ["s"],
-		//	"Set the current version of HaxeFlixel",
-		//	""
-		//	//TemplateUtil.getTemplate("set")
-		//);
-
 		run();
 	}
 
@@ -125,9 +94,9 @@ class FlxTools extends CommandLineRunner
 		Sys.println("|_| |_|\\__,_/_/\\_\\___\\_|   |_||_/_/\\_\\___|_|");
 		Sys.println("");
 		Sys.println("Powered by the Haxe Toolkit and OpenFL");
-		Sys.println("Please visit www.haxeflixel.com for community support and resources!");
+		Sys.println("Visit www.haxeflixel.com for community support and resources!");
 		Sys.println("");
-		Sys.println("" + NAME + " Command-Line Tools (" + VERSION + ")");
+		Sys.println("HaxeFlixel command-line tools (" + VERSION + ")");
 
 		if (getFlixelVersion() == null)
 		{
@@ -144,16 +113,21 @@ class FlxTools extends CommandLineRunner
 	static public function getFlixelVersion():String
 	{
 		var flixelHaxelib:HaxelibJSON = CommandUtils.getHaxelibJsonData("flixel");
-
 		if (flixelHaxelib != null)
-		{
 			return flixelHaxelib.version;
-		}
-		else
-		{
-			return null;
-		}
+		
+		return null;
 	}
 
 	static public function main():FlxTools { return new FlxTools(); }
+}
+
+@:enum
+abstract IDE(String) from String to String
+{
+	var SUBLIME_TEXT = "Sublime Text";
+	var FLASH_DEVELOP = "FlashDevelop";
+	var FLASH_DEVELOP_FDZ = "FlashDevelop FDZ";
+	var INTELLIJ_IDEA = "IntelliJ IDEA";
+	var NONE = "None";
 }

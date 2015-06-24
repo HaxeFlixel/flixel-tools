@@ -101,7 +101,7 @@ class DemoUtils
 		{
 			var demoProject:OpenFLProject = demo;
 
-			if (demoProject.NAME == Name)
+			if (demoProject.name == Name)
 			{
 				return demoProject;
 			}

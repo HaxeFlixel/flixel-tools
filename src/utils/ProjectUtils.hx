@@ -5,6 +5,8 @@ import utils.CommandUtils;
 import utils.TemplateUtils;
 import utils.TemplateUtils.TemplateReplacement;
 import massive.sys.cmd.Console;
+import FlxTools.IDE;
+using StringTools;
 
 class ProjectUtils
 {
@@ -15,14 +17,14 @@ class ProjectUtils
 	 */
 	static public function duplicateProject(Project:OpenFLProject, Destination:String = "", IDE:String = ""):Bool
 	{
-		var result = CommandUtils.copyRecursively(Project.PATH, Destination);
+		var result = CommandUtils.copyRecursively(Project.path, Destination);
 
 		if (result)
 		{
-			CommandUtils.copyRecursively(Project.PATH, Destination);
+			CommandUtils.copyRecursively(Project.path, Destination);
 
 			var replacements = new Array<TemplateReplacement>();
-			replacements.push(TemplateUtils.addOption("${PROJECT_NAME}", "", Project.NAME));
+			replacements.push(TemplateUtils.addOption("${PROJECT_NAME}", "", Project.name));
 			replacements = copyIDETemplateFiles(Destination, replacements, IDE);
 
 			TemplateUtils.modifyTemplate(Destination, replacements);
@@ -51,10 +53,10 @@ class ProjectUtils
 					if (projectPath != "")
 					{
 						projects.push({
-							NAME : name,
-							PATH : folderPath,
-							PROJECTXMLPATH : projectPath,
-							TARGETS : ""
+							name : name,
+							path : folderPath,
+							projectXmlPath : projectPath,
+							targets : ""
 						});
 					}
 
@@ -105,19 +107,19 @@ class ProjectUtils
 		}
 		else if (IDEOption == "")
 		{
-			IDEOption = FlxTools.IDE_NONE;
+			IDEOption = IDE.NONE;
 		}
 
-		if (IDEOption == FlxTools.SUBLIME_TEXT)
+		if (IDEOption == IDE.SUBLIME_TEXT)
 		{
-			Replacements.push(TemplateUtils.addOption("${PROJECT_PATH}", "", StringTools.replace(TargetPath, '\\', '\\\\')));
-			Replacements.push(TemplateUtils.addOption("${HAXE_STD_PATH}", "", StringTools.replace(CommandUtils.combine(CommandUtils.getHaxePath(), "std"), '\\', '\\\\')));
-			Replacements.push(TemplateUtils.addOption("${FLIXEL_PATH}", "", StringTools.replace(CommandUtils.getHaxelibPath('flixel'), '\\', '\\\\')));
-			Replacements.push(TemplateUtils.addOption("${FLIXEL_ADDONS_PATH}", "", StringTools.replace(CommandUtils.getHaxelibPath('flixel-addons'), '\\', '\\\\')));
+			Replacements.push(TemplateUtils.addOption("${PROJECT_PATH}", "", TargetPath.replace('\\', '\\\\')));
+			Replacements.push(TemplateUtils.addOption("${HAXE_STD_PATH}", "", CommandUtils.combine(CommandUtils.getHaxePath(), "std").replace('\\', '\\\\')));
+			Replacements.push(TemplateUtils.addOption("${FLIXEL_PATH}", "", CommandUtils.getHaxelibPath('flixel').replace('\\', '\\\\')));
+			Replacements.push(TemplateUtils.addOption("${FLIXEL_ADDONS_PATH}", "", CommandUtils.getHaxelibPath('flixel-addons').replace('\\', '\\\\')));
 
 			CommandUtils.copyRecursively(FlxTools.sublimeSource, TargetPath, TemplateUtils.TemplateFilter, true);
 		}
-		else if (IDEOption == FlxTools.INTELLIJ_IDEA)
+		else if (IDEOption == IDE.INTELLIJ_IDEA)
 		{
 			Replacements.push(TemplateUtils.addOption("${IDEA_flexSdkName}", "", FlxTools.settings.IDEA_flexSdkName));
 			Replacements.push(TemplateUtils.addOption("${IDEA_Flixel_Engine_Library}", "", FlxTools.settings.IDEA_Flixel_Engine_Library));
@@ -125,14 +127,14 @@ class ProjectUtils
 
 			CommandUtils.copyRecursively(FlxTools.intellijSource, TargetPath, TemplateUtils.TemplateFilter, true);
 		}
-		else if (IDEOption == FlxTools.FLASH_DEVELOP)
+		else if (IDEOption == IDE.FLASH_DEVELOP)
 		{
 			Replacements.push(TemplateUtils.addOption("${WIDTH}", "", FlxTools.PWIDTH));
 			Replacements.push(TemplateUtils.addOption("${HEIGHT}", "", FlxTools.PHEIGHT));
 
 			CommandUtils.copyRecursively(FlxTools.flashDevelopSource, TargetPath, TemplateUtils.TemplateFilter, true);
 		}
-		else if (IDEOption == FlxTools.FLASH_DEVELOP_FDZ)
+		else if (IDEOption == IDE.FLASH_DEVELOP_FDZ)
 		{
 			//todo
 		}
@@ -142,15 +144,15 @@ class ProjectUtils
 
 	static public function resolveIDEChoice(console:Console):String
 	{
-		var IDE = "";
-
-		var options = new Map<String, String>();
-		options.set("-subl", FlxTools.SUBLIME_TEXT);
-		options.set("-fd", FlxTools.FLASH_DEVELOP);
-		options.set("-idea", FlxTools.INTELLIJ_IDEA);
-		options.set("-noide", FlxTools.IDE_NONE);
-
+		var ide = "";
 		var overrideIDE = "";
+
+		var options = [
+			"-subl" => IDE.SUBLIME_TEXT,
+			"-fd" => IDE.FLASH_DEVELOP,
+			"-idea" => IDE.INTELLIJ_IDEA,
+			"-noide" => IDE.NONE,
+		];
 
 		for (option in options.keys())
 		{
@@ -165,30 +167,26 @@ class ProjectUtils
 		if (FlxTools.settings.IDEAutoOpen || overrideIDE != "")
 		{
 			if (overrideIDE != "")
-			{
-				IDE = overrideIDE;
-			}
+				ide = overrideIDE;
 			else
-			{
-				IDE = FlxTools.settings.DefaultEditor;
-			}
+				ide = FlxTools.settings.DefaultEditor;
 		}
 
-		return IDE;
+		return ide;
 	}
 
-	static public function IDEAutoOpen(ProjectPath:String, ProjectName:String, IDE:String, AutoContinue:Bool = false):Bool
+	static public function IDEAutoOpen(ProjectPath:String, ProjectName:String, ide:String, AutoContinue:Bool = false):Bool
 	{
 		var answer = Answer.Yes;
 
 		if (!AutoContinue)
 		{
-			answer = CommandUtils.askYN("Do you want to open it with "+IDE+"?");
+			answer = CommandUtils.askYN("Do you want to open it with " + ide + "?");
 		}
 
 		if (answer == Answer.Yes)
 		{
-			if (IDE == FlxTools.FLASH_DEVELOP)
+			if (ide == IDE.FLASH_DEVELOP)
 			{
 				var projectFile = CommandUtils.combine(ProjectPath, ProjectName + ".hxproj");
 				projectFile = StringTools.replace(projectFile, "/", "\\");
@@ -202,7 +200,7 @@ class ProjectUtils
 					return true;
 				}
 			}
-			else if (IDE == FlxTools.SUBLIME_TEXT)
+			else if (ide == IDE.SUBLIME_TEXT)
 			{
 				var projectFile = CommandUtils.combine(ProjectPath, ProjectName + ".sublime-project");
 
@@ -222,7 +220,7 @@ class ProjectUtils
 					return true;
 				}
 			}
-			else if (IDE == FlxTools.INTELLIJ_IDEA)
+			else if (ide == IDE.INTELLIJ_IDEA)
 			{
 				var projectFile = CommandUtils.combine(ProjectPath, ".idea");
 
@@ -253,8 +251,8 @@ class ProjectUtils
 }
 
 typedef OpenFLProject = {
-	var NAME:String;
-	var PATH:String;
-	var PROJECTXMLPATH:String;
-	var TARGETS:String;
+	var name:String;
+	var path:String;
+	var projectXmlPath:String;
+	var targets:String;
 }

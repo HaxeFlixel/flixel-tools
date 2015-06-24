@@ -6,6 +6,7 @@ import sys.FileSystem;
 import utils.CommandUtils;
 import utils.ProjectUtils;
 import utils.TemplateUtils;
+import FlxTools.IDE;
 
 class TemplateCommand extends Command
 {
@@ -71,12 +72,9 @@ class TemplateCommand extends Command
 		{
 			TargetPath = Sys.getCwd() + TemplateName;
 		}
-		else
+		else if (!StringTools.startsWith(TargetPath, "/"))
 		{
-			if (!StringTools.startsWith(TargetPath, "/"))
-			{
-				TargetPath = CommandUtils.combine(Sys.getCwd(), CommandUtils.stripPath(TargetPath));
-			}
+			TargetPath = CommandUtils.combine(Sys.getCwd(), CommandUtils.stripPath(TargetPath));
 		}
 
 		if (FileSystem.exists(TargetPath))
@@ -106,7 +104,7 @@ class TemplateCommand extends Command
 		Sys.println(" " + TargetPath);
 		Sys.println(" ");
 
-		if (ideOption == FlxTools.SUBLIME_TEXT)
+		if (ideOption == IDE.SUBLIME_TEXT)
 		{
 			if (FlxTools.settings.IDEAutoOpen)
 			{
@@ -134,12 +132,12 @@ class TemplateCommand extends Command
 
 	private function selectIDE():String
 	{
-		var options = new StringMap<String>();
-
-		options.set("-subl", FlxTools.SUBLIME_TEXT);
-		options.set("-fd", FlxTools.FLASH_DEVELOP);
-		options.set("-fdz", FlxTools.FLASH_DEVELOP_FDZ);
-		options.set("-idea", FlxTools.INTELLIJ_IDEA);
+		var options = [
+			"-subl" => IDE.SUBLIME_TEXT,
+			"-fd" => IDE.FLASH_DEVELOP,
+			"-fdz" => IDE.FLASH_DEVELOP_FDZ,
+			"-noide" => IDE.NONE
+		];
 
 		var choice = null;
 		
@@ -159,14 +157,7 @@ class TemplateCommand extends Command
 				choice = IDE;
 		}
 
-		if (choice != null)
-		{
-			return choice;
-		}
-		else
-		{
-			return FlxTools.IDE_NONE;
-		}
+		return (choice != null) ? choice : IDE.NONE;
 	}
 
 	private function addOptionReplacement(Template:TemplateProject):TemplateProject

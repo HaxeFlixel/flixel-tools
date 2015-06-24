@@ -18,7 +18,7 @@ class FileSysUtils
 		{
 			content = sys.io.File.getContent(FilePath);
 		}
-		catch(e:Dynamic)
+		catch (e:Dynamic)
 		{
 			throw ("Error loading file::" + FilePath + " \n check you dont have it open and you have permissions to modify it.");
 		}
