@@ -86,7 +86,7 @@ class FlxTools extends CommandLineRunner
 
 	static private function displayInfo():Void
 	{
-		printLogo();
+		displayLogo();
 		Sys.println("");
 		
 		Sys.println("Powered by the Haxe Toolkit and OpenFL");
@@ -106,7 +106,7 @@ class FlxTools extends CommandLineRunner
 		Sys.println("");
 	}
 	
-	static private function printLogo():Void
+	static private function displayLogo():Void
 	{
 		var y = ColorUtils.print.bind(_, Color.Yellow);
 		var r = ColorUtils.print.bind(_, Color.Red);
@@ -119,8 +119,8 @@ class FlxTools extends CommandLineRunner
 		y("| | | |"); r("      "); g("      ");   b("  ");    c("|  ___|"); y(" ");   r("(_)"); g("      ");   b("  ");    c("| |"); nl();
 		y("| |_| |"); r(" __ _");  g("__  __");   b("___");   c("| |__ ");  y("| |"); r( "_");  g("__  __");   b("___");   c("| |"); nl();
 		y("|  _  |"); r("/ _` ");  g("\\ \\/ /"); b(" _ \\"); c(" ___|");   y("| |"); r( " ");  g("\\ \\/ /"); b(" _ \\"); c( " |"); nl();
-		y("| | | |"); r(" (_| |"); g(">  <  ");   b( "__/");  c("  |  ");   y("| |"); r( " |"); g( ">  <  ");  b("__/");   c( " |"); nl();
-		y("|_| |_|"); r("\\ __,"); g("/_/\\_\\"); b("___|");  c(" _|  ");   y("|_|"); r( "_");  g("/_/\\_\\"); b("___|");  c( "_|"); nl();
+		y("| | | |"); r(" (_| |"); g(">  <  ");   b( "__/");  c(" |   ");   y("| |"); r( " |"); g( ">  <  ");  b("__/");   c( " |"); nl();
+		y("|_| |_|"); r("\\ __,"); g("/_/\\_\\"); b("___|");  c("_|   ");   y("|_|"); r( "_");  g("/_/\\_\\"); b("___|");  c( "_|"); nl();
 	}
 
 	static public function getFlixelVersion():String
