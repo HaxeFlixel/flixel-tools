@@ -86,7 +86,7 @@ class TemplateCommand extends Command
 
 			if (!autoContinue)
 			{
-				answer = CommandUtils.askYN("Directory exists do you want to delete it first?");
+				answer = CommandUtils.askYN("Directory exists - do you want to delete it first?");
 			}
 
 			if (answer == Answer.Yes)

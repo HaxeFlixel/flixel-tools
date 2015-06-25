@@ -240,47 +240,44 @@ class ConvertCommand extends Command
 						}
 					}
 				}
-				else
+				else if (fileName.endsWith(".hx"))
 				{
-					if (fileName.endsWith(".hx"))
+					var filePath:String = CommandUtils.combine(ProjectPath, fileName);
+					var sourceText:String = FileSysUtils.getContent(filePath);
+					var originalText:String = Reflect.copy(sourceText);
+					var replacements:Array<FindAndReplaceObject> = FindAndReplace.init();
+
+					for (replacement in replacements)
 					{
-						var filePath:String = CommandUtils.combine(ProjectPath, fileName);
-						var sourceText:String = FileSysUtils.getContent(filePath);
-						var originalText:String = Reflect.copy(sourceText);
-						var replacements:Array<FindAndReplaceObject> = FindAndReplace.init();
+						var obj:FindAndReplaceObject = replacement;
+						sourceText = sourceText.replace(obj.find, obj.replacement);
 
-						for (replacement in replacements)
+						if (obj.importValidate != null && CommandUtils.strmatch(obj.find, originalText))
 						{
-							var obj:FindAndReplaceObject = replacement;
-							sourceText = sourceText.replace(obj.find, obj.replacement);
+							var newText = CommandUtils.addImportToFileString(sourceText, obj.importValidate);
 
-							if (obj.importValidate != null && CommandUtils.strmatch(obj.find, originalText))
+							if (newText != null)
 							{
-								var newText = CommandUtils.addImportToFileString(sourceText, obj.importValidate);
-
-								if (newText != null)
-								{
-									sourceText = newText;
-								}
-							}
-
-							if (originalText != sourceText)
-							{
-								FileSys.deleteFile(filePath);
-								var o:FileOutput = sys.io.File.write(filePath, true);
-								o.writeString(sourceText);
-								o.close();
+								sourceText = newText;
 							}
 						}
 
-						var warningsCurrent = scanFileForWarnings(filePath);
-
-						if (warningsCurrent != null)
+						if (originalText != sourceText)
 						{
-							for (warning in warningsCurrent)
-							{
-								warnings.push(warning);
-							}
+							FileSys.deleteFile(filePath);
+							var o:FileOutput = sys.io.File.write(filePath, true);
+							o.writeString(sourceText);
+							o.close();
+						}
+					}
+
+					var warningsCurrent = scanFileForWarnings(filePath);
+
+					if (warningsCurrent != null)
+					{
+						for (warning in warningsCurrent)
+						{
+							warnings.push(warning);
 						}
 					}
 				}
