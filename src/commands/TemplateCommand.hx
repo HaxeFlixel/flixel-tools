@@ -7,6 +7,7 @@ import utils.CommandUtils;
 import utils.ProjectUtils;
 import utils.TemplateUtils;
 import FlxTools.IDE;
+using StringTools;
 
 class TemplateCommand extends Command
 {
@@ -42,7 +43,7 @@ class TemplateCommand extends Command
 
 		//support a path as an arg without name for default
 		//flixel t ./<new_directory> <options>
-		if (StringTools.startsWith(templateName, "./"))
+		if (templateName.startsWith("./"))
 		{
 			targetPath = templateName;
 			templateName = "";
@@ -72,7 +73,7 @@ class TemplateCommand extends Command
 		{
 			TargetPath = Sys.getCwd() + TemplateName;
 		}
-		else if (!StringTools.startsWith(TargetPath, "/"))
+		else if (!TargetPath.startsWith("/"))
 		{
 			TargetPath = CommandUtils.combine(Sys.getCwd(), CommandUtils.stripPath(TargetPath));
 		}

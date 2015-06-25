@@ -5,6 +5,7 @@ import massive.sys.io.File;
 import massive.sys.io.FileSys;
 import sys.FileSystem;
 import sys.io.FileOutput;
+using StringTools;
 
 class TemplateUtils
 {
@@ -128,21 +129,18 @@ class TemplateUtils
 			{
 				modifyTemplate(TemplatePath + "/" + fileName, TemplateData);
 			}
-			else
+			else if (fileName.endsWith(".tpl"))
 			{
-				if (StringTools.endsWith(fileName, ".tpl"))
-				{
-					var text:String = FileSysUtils.getContent(TemplatePath + "/" + fileName);
-					text = projectTemplateReplacements(text, TemplateData);
+				var text:String = FileSysUtils.getContent(TemplatePath + "/" + fileName);
+				text = projectTemplateReplacements(text, TemplateData);
 
-					var newFileName:String = projectTemplateReplacements(fileName.substr(0, -4), TemplateData);
+				var newFileName:String = projectTemplateReplacements(fileName.substr(0, -4), TemplateData);
 
-					var o:FileOutput = sys.io.File.write(TemplatePath + "/" + newFileName, true);
-					o.writeString(text);
-					o.close();
+				var o:FileOutput = sys.io.File.write(TemplatePath + "/" + newFileName, true);
+				o.writeString(text);
+				o.close();
 
-					FileSys.deleteFile(TemplatePath + "/" + fileName);
-				}
+				FileSys.deleteFile(TemplatePath + "/" + fileName);
 			}
 		}
 	}

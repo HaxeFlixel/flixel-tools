@@ -9,6 +9,7 @@ import sys.io.File;
 import sys.io.FileOutput;
 import utils.CommandUtils;
 import utils.FileSysUtils;
+using StringTools;
 
 class ConvertCommand extends Command
 {
@@ -46,7 +47,7 @@ class ConvertCommand extends Command
 		{
 			ConvertPath = Sys.getCwd();
 		}
-		else if (!StringTools.startsWith(ConvertPath, "/"))
+		else if (!ConvertPath.startsWith("/"))
 		{
 			ConvertPath = Sys.getCwd() + CommandUtils.stripPath(ConvertPath);
 		}
@@ -241,7 +242,7 @@ class ConvertCommand extends Command
 				}
 				else
 				{
-					if (StringTools.endsWith(fileName, ".hx"))
+					if (fileName.endsWith(".hx"))
 					{
 						var filePath:String = CommandUtils.combine(ProjectPath, fileName);
 						var sourceText:String = FileSysUtils.getContent(filePath);
@@ -251,7 +252,7 @@ class ConvertCommand extends Command
 						for (replacement in replacements)
 						{
 							var obj:FindAndReplaceObject = replacement;
-							sourceText = StringTools.replace(sourceText, obj.find, obj.replacement);
+							sourceText = sourceText.replace(obj.find, obj.replacement);
 
 							if (obj.importValidate != null && CommandUtils.strmatch(obj.find, originalText))
 							{

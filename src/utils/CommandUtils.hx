@@ -365,12 +365,12 @@ class CommandUtils
 	 */
 	static public function stripPath(Path:String):String
 	{
-		if (StringTools.startsWith(Path,"./"))
+		if (Path.startsWith("./"))
 		{
 			Path = Path.substring(2);
 		}
 
-		if (StringTools.endsWith( Path,"/" ))
+		if (Path.endsWith("/"))
 		{
 			Path = Path.substring(0,Path.length-1);
 		}
