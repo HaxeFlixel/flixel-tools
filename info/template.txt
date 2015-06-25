@@ -1,17 +1,10 @@
-
-usage           : flixel template || tpl
-common usage    : flixel tpl -n "Custom"
-
-Creates a new HaxeFlixel template project a default project is provided as
-well as IDE specific project support.
-
-Optional : template <name> <path> <options> [-subl|-fd|-idea|-noide]
-
-<name>        : The name for the template to generate, default template
-                will be created when none is specified.
-<path>        : The name for the path to create the template in, default
-                is the name of the template itself.
-<options>     : The options available will depend on the specific
-                template's template.json. The default template has options
-                such as -n for project name and -w -h for width and height.
-                Eg. flixel tpl -n "Custom" -w 680 -h 480
+ Usage : template [name] [path] [options]
+  [name]    : The name for the template to generate, the "default"
+              template will be created when none is specified.
+  [path]    : The name for the path to create the template in, default
+              is the name of the template itself.
+  [options] : The options available will depend on the specific
+              template's template.json. The default template has options
+              such as -n for project name and -w -h for width and height.
+              Eg. flixel tpl -n "Name" -w 680 -h 480
+  -subl|-fd|-idea|-noide : The IDE to use (overrides the configuration).

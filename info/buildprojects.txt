@@ -1,15 +1,9 @@
-
-usage           : flixel buildprojects || bp
-common usage    : flixel bp neko
-
-Compiles all demos for the specified target.
-
-Optional   : buildprojects <target> ...<demo> -dir <dir> -log
-
-<target>   : The target to pass to "haxelib run openfl build". If "all" is
-             passed, the demos are built for flash, neko, cpp and html5.
-<demo>     : Name of one or several specific demos to compile - compiles all
-             demos if no demo names were passed.
--dir <dir> : The directory in which to (recursively) look for projects.
-             Optional, defaults to the flixel-demos haxelib.
--log       : Writes the results to a "compile_results.log" file if present.
+ Usage : buildprojects [target] [project...]
+  <target>     : The target to pass to "haxelib run openfl build".
+                 "all" builds for flash, neko, cpp and html5.
+                 Defaults to flash.
+  <project...> : Name of one or several specific projects to compile.
+                 If none are given, all projects are compiled.
+  -dir <dir>   : The directory in which to (recursively) look for projects.
+                 Defaults to the flixel-demos haxelib.
+  -log         : Write the results to a "compile_results.log" file.

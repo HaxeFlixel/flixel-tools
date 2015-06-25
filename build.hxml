@@ -4,8 +4,6 @@
 -lib mlib
 
 -resource info/create.txt@create
--resource info/setup.txt@setup
 -resource info/template.txt@template
--resource info/download.txt@download
 -resource info/convert.txt@convert
 -resource info/buildprojects.txt@buildprojects

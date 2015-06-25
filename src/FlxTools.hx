@@ -38,21 +38,19 @@ class FlxTools extends CommandLineRunner
 		mapCommand(
 			SetupCommand,
 			"setup", ["st"],
-			"configure the tools and download the demos and templates",
-			TemplateUtil.getTemplate("setup")
+			"configure the tools and download the flixel libs"
 		);
 		
 		mapCommand(
 			DownloadCommand,
 			"download", ["dw"],
-			"download the templates and demos",
-			TemplateUtil.getTemplate("download")
+			"download the flixel libs"
 		);
 
 		mapCommand(
 			TemplateCommand,
 			"template", ["tpl"],
-			"create a project template",
+			"create a project from a template",
 			TemplateUtil.getTemplate("template")
 		);
 
@@ -66,7 +64,7 @@ class FlxTools extends CommandLineRunner
 		mapCommand(
 			BuildProjectsCommand,
 			"buildprojects", ["bp"],
-			"builds all demos for flash",
+			"builds all demos for the specified target",
 			TemplateUtil.getTemplate("buildprojects")
 		);
 

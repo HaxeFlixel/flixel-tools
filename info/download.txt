@@ -1,4 +1,0 @@
-
-usage: download || dw
-
-Runs the download commands to get the flixel-templates and flixel-demos repositories automatically.
