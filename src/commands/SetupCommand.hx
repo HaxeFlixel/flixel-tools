@@ -78,7 +78,7 @@ class SetupCommand extends Command
 	{
 		var answer = Answer.No;
 
-		var message = "Do you want to setup the flixel command Alias?";
+		var message = "Do you want to setup the flixel command alias?";
 
 		if (FileSys.isLinux||FileSys.isMac)
 			message = "Do you want to set up the command alias 'flixel' to 'haxelib run flixel-tools'?" +
@@ -145,14 +145,11 @@ class SetupCommand extends Command
 		var ideaFlixelEngine = "Flixel Engine";
 		var ideaFlixelAddons = "Flixel Addons";
 		var ideaPath = "/Applications/Cardea-IU-130.1619.app/Contents/MacOS/idea";
-
-		AuthorName = CommandUtils.askString("Enter the author name to use when generating templates.\n\nJust hit enter to not use an author name.");
-		AuthorName = Utf8.encode(AuthorName);
-
+		
 		ide = CommandUtils.askQuestionStrings("Choose your default IDE.", "" , ides, false);
 		if (ide == null)
 		{
-			Sys.println(" Your IDE choice was not recognised, using default of " + IDE.NONE);
+			Sys.println("Your IDE choice was not recognised, using default of " + IDE.NONE);
 			ide = IDE.NONE;
 		}
 
@@ -162,15 +159,15 @@ class SetupCommand extends Command
 			if (answer != "")
 				ideaFlexSDKName = answer;
 
-			var answer = CommandUtils.askString("Enter the name of your default Flixel Library, just ENTER for default of " + ideaFlixelEngine);
+			var answer = CommandUtils.askString("Enter the name of your default flixel Library, just ENTER for default of " + ideaFlixelEngine);
 			if (answer != "")
 				ideaFlixelEngine = answer;
 
-			var answer = CommandUtils.askString("Enter the name of your default Flixel Addons Library, just ENTER for default of " + ideaFlixelAddons);
+			var answer = CommandUtils.askString("Enter the name of your default flixel-addons Library, just ENTER for default of " + ideaFlixelAddons);
 			if (answer != "")
 				ideaFlixelAddons = answer;
 
-			var answer = CommandUtils.askString("Enter the path of where you have installed Intellij Idea, default is " + ideaPath);
+			var answer = CommandUtils.askString("Enter the path to your IntelliJ IDEA installation, default is " + ideaPath);
 			if (answer != "")
 				ideaPath = answer;
 		}
@@ -186,54 +183,50 @@ class SetupCommand extends Command
 				IDEAutoOpen = true;
 		}
 
-		if (ide == IDE.SUBLIME_TEXT)
+		if (ide == IDE.SUBLIME_TEXT && FileSys.isMac)
 		{
-			if (FileSys.isMac)
-			{
-				Sys.println("For Sublime Text to open automatically you have to make sure the 'subl' command is setup properly on your" +
-					"system as in http://www.sublimetext.com/docs/2/osx_command_line.html.");
+			Sys.println("For Sublime Text to open automatically you have to make sure the 'subl' command is setup properly on your" +
+				"system as in http://www.sublimetext.com/docs/2/osx_command_line.html.");
 
-				var answer = Answer.No;
-				var sublSetupArgs = ["-s", "/Applications/Sublime Text", "2.app/Contents/SharedSupport/bin/subl", "~/bin/subl"];
+			var answer = Answer.No;
+			var sublSetupArgs = ["-s", "/Applications/Sublime Text", "2.app/Contents/SharedSupport/bin/subl", "~/bin/subl"];
 
-				answer = CommandUtils.askYN("Do you want to run the symlink command automatically as per official instructions" +
-					"http://www.sublimetext.com/docs/2/osx_command_line.html?\n\n The command that will be executed is as follows:\n '" +
-					"ln " + sublSetupArgs.join(" ") + "'");
+			answer = CommandUtils.askYN("Do you want to run the symlink command automatically as per official instructions" +
+				"http://www.sublimetext.com/docs/2/osx_command_line.html?\n\n The command that will be executed is as follows:\n '" +
+				"ln " + sublSetupArgs.join(" ") + "'");
 
-				if (answer == Answer.Yes)
-					Sys.command("ln", sublSetupArgs);
-			}
+			if (answer == Answer.Yes)
+				Sys.command("ln", sublSetupArgs);
 		}
 
 		var settingsFile:FlxToolSettings =
 		{
-			DefaultEditor:ide,
-			AuthorName:AuthorName,
-			IDEAutoOpen:IDEAutoOpen,
-			IDEA_flexSdkName:ideaFlexSDKName,
-			IDEA_Flixel_Engine_Library:ideaFlixelEngine,
-			IDEA_Flixel_Addons_Library:ideaFlixelAddons,
-			IDEA_Path:ideaPath,
+			DefaultEditor: ide,
+			AuthorName: AuthorName,
+			IDEAutoOpen: IDEAutoOpen,
+			IDEA_flexSdkName: ideaFlexSDKName,
+			IDEA_Flixel_Engine_Library: ideaFlixelEngine,
+			IDEA_Flixel_Addons_Library: ideaFlixelAddons,
+			IDEA_Path: ideaPath,
 		};
 
 		CommandUtils.saveToolSettings(settingsFile);
 
 		Sys.println("");
-		Sys.println(" Your current settings:");
+		Sys.println("Your current settings:");
 		Sys.println("");
 
-		Sys.println(" Default Editor			:" + FlxTools.settings.DefaultEditor);
-		Sys.println(" Author Name			:" + Utf8.decode(FlxTools.settings.AuthorName));
+		Sys.println("Default Editor			:" + FlxTools.settings.DefaultEditor);
 
 		if (ide == IDE.INTELLIJ_IDEA)
 		{
-			Sys.println(" IDEA_flexSdkName		:" + FlxTools.settings.IDEA_flexSdkName);
-			Sys.println(" IDEA_Flixel_Addons_Library	:" + FlxTools.settings.IDEA_Flixel_Addons_Library);
-			Sys.println(" IDEA_Flixel_Engine_Library	:" + FlxTools.settings.IDEA_Flixel_Engine_Library);
-			Sys.println(" Idea application path		:" + FlxTools.settings.IDEA_Path);
+			Sys.println("IDEA_flexSdkName		:" + FlxTools.settings.IDEA_flexSdkName);
+			Sys.println("IDEA_Flixel_Addons_Library	:" + FlxTools.settings.IDEA_Flixel_Addons_Library);
+			Sys.println("IDEA_Flixel_Engine_Library	:" + FlxTools.settings.IDEA_Flixel_Engine_Library);
+			Sys.println("Idea application path		:" + FlxTools.settings.IDEA_Path);
 		}
 
-		Sys.println(" Auto open with IDE		:" + FlxTools.settings.IDEAutoOpen);
+		Sys.println("Auto open with IDE		:" + FlxTools.settings.IDEAutoOpen);
 		Sys.println("");
 
 		return settingsFile;
