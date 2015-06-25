@@ -34,7 +34,7 @@ class CommandUtils
 	 * @param  ?Overwrite  Overwrite the destination
 	 * @return	Bool true if the new Destination exists after operation
 	 */
-	static public function copyRecursively(Source:String, Destination:String, ?Overwrite:Bool, ?filter:EReg, ?exclude:Bool = false):Bool
+	static public function copyRecursively(Source:String, Destination:String, Overwrite:Bool = true, ?filter:EReg, exclude:Bool = false):Bool
 	{
 		var current = massive.sys.io.File.current.resolveDirectory("temp");
 

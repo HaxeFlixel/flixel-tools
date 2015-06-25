@@ -75,24 +75,18 @@ class CreateCommand extends Command
 	{
 		Sys.println("Listing all available demos...\n");
 		for (i in 0...projects.length)
-			Sys.println('\t[$i] ${projects[i].name}');
+			Sys.println('  [${i + 1}] ${projects[i].name}');
 		
-		var project = getProjectChoice(projects);
-		if (project == null)
-		{
-			Sys.println("Your choice was not a valid demo.\n");
-			return null;
-		}
-		return project;
+		return getProjectChoice(projects);
 	}
 	
 	private function getProjectChoice(projects:Array<LimeProject>):LimeProject
 	{
+		Sys.println("\n  [c] Cancel\n");
+		Sys.println("Please enter the number or name of the demo to create.\n");
+		
 		while (true)
 		{
-			Sys.println("\n[c] Cancel\n");
-			Sys.println("Please enter the number or name of the demo to create.\n");
-
 			var userResponse = CommandUtils.readLine();
 			if (userResponse == "c")
 			{
@@ -103,6 +97,8 @@ class CreateCommand extends Command
 			var project = resolveProject(projects, userResponse);
 			if (project != null)
 				return project;
+			else
+				Sys.println("Your choice was not a valid demo, please try again.");
 		}
 
 		return null;
@@ -111,8 +107,8 @@ class CreateCommand extends Command
 	private function resolveProject(projects:Array<LimeProject>, nameOrIndex:String):LimeProject
 	{
 		var index = Std.parseInt(nameOrIndex);
-		if (index != null && projects.length >= index)
-			return projects[index];
+		if (index != null)
+			return projects[index - 1];
 		
 		for (project in projects)
 			if (project.name == nameOrIndex)

@@ -3,7 +3,6 @@ package utils;
 import massive.sys.io.FileSys;
 import utils.CommandUtils;
 import utils.TemplateUtils;
-import utils.TemplateUtils.TemplateReplacement;
 import massive.sys.cmd.Console;
 import FlxTools.IDE;
 using StringTools;
@@ -12,8 +11,6 @@ class ProjectUtils
 {
 	/**
 	 * Shortcut to create a lime project by recursively copying the folder according to a name
-	 *
-	 * @param   Name	The name of the demo to create
 	 */
 	static public function duplicateProject(Project:LimeProject, Destination:String = "", IDE:String = ""):Bool
 	{
@@ -185,10 +182,9 @@ class ProjectUtils
 	{
 		var projectFile = CommandUtils.combine(projectPath, projectName + ".hxproj");
 		projectFile = projectFile.replace("/", "\\");
-		Sys.println(projectFile);
+		
 		if (FileSys.exists(projectFile))
 		{
-			Sys.println(projectFile);
 			Sys.command("explorer", [projectFile]);
 			return true;
 		}
@@ -201,7 +197,6 @@ class ProjectUtils
 		
 		if (FileSys.exists(projectFile))
 		{
-			Sys.println(projectFile);
 			if (FileSys.isMac || FileSys.isLinux)
 			{
 				Sys.command("subl", [projectFile]);
