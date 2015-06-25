@@ -29,8 +29,7 @@ class SetupCommand extends Command
 
 		Sys.println("");
 		Sys.println("flixel-tools setup completed.");
-		Sys.println("Try the 'flixel' command to test it :)");
-		Sys.println("");
+		Sys.println("Try the 'flixel' command to test it! :)");
 
 		exit();
 	}
@@ -146,7 +145,7 @@ class SetupCommand extends Command
 		var ideaFlixelAddons = "Flixel Addons";
 		var ideaPath = "/Applications/Cardea-IU-130.1619.app/Contents/MacOS/idea";
 		
-		ide = CommandUtils.askQuestionStrings("Choose your default IDE.", "" , ides, false);
+		ide = CommandUtils.askQuestionStrings("Choose your default IDE:", ides);
 		if (ide == null)
 		{
 			Sys.println("Your IDE choice was not recognised, using default of " + IDE.NONE);
@@ -171,10 +170,6 @@ class SetupCommand extends Command
 			if (answer != "")
 				ideaPath = answer;
 		}
-		//else if (IDE == FlxTools.FLASH_DEVELOP)
-		//{
-			//todo execute template zip?
-		//}
 
 		if (ide != IDE.NONE)
 		{
@@ -216,18 +211,17 @@ class SetupCommand extends Command
 		Sys.println("Your current settings:");
 		Sys.println("");
 
-		Sys.println("Default Editor			:" + FlxTools.settings.DefaultEditor);
+		Sys.println("Default Editor			: " + FlxTools.settings.DefaultEditor);
 
 		if (ide == IDE.INTELLIJ_IDEA)
 		{
-			Sys.println("IDEA_flexSdkName		:" + FlxTools.settings.IDEA_flexSdkName);
-			Sys.println("IDEA_Flixel_Addons_Library	:" + FlxTools.settings.IDEA_Flixel_Addons_Library);
-			Sys.println("IDEA_Flixel_Engine_Library	:" + FlxTools.settings.IDEA_Flixel_Engine_Library);
-			Sys.println("Idea application path		:" + FlxTools.settings.IDEA_Path);
+			Sys.println("IDEA_flexSdkName		: " + FlxTools.settings.IDEA_flexSdkName);
+			Sys.println("IDEA_Flixel_Addons_Library	: " + FlxTools.settings.IDEA_Flixel_Addons_Library);
+			Sys.println("IDEA_Flixel_Engine_Library	: " + FlxTools.settings.IDEA_Flixel_Engine_Library);
+			Sys.println("IDEA application path		: " + FlxTools.settings.IDEA_Path);
 		}
 
-		Sys.println("Auto open with IDE		:" + FlxTools.settings.IDEAutoOpen);
-		Sys.println("");
+		Sys.println("Auto open with IDE		: " + FlxTools.settings.IDEAutoOpen);
 
 		return settingsFile;
 	}

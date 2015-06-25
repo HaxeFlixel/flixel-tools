@@ -113,7 +113,7 @@ class CommandUtils
 		while (true)
 		{
 			Sys.println("");
-			Sys.println(question + " [y/n] ? ");
+			Sys.println(question + " [y/n]?");
 
 			return switch (readLine())
 			{
@@ -137,7 +137,7 @@ class CommandUtils
 		while (true)
 		{
 			Sys.println("");
-			Sys.println(question + " [y/n/a] ? ");
+			Sys.println(question + " [y/n/a]?");
 
 			return switch (readLine())
 			{
@@ -154,11 +154,10 @@ class CommandUtils
 	/**
 	 * As the user a question with automatic numeric references to string answers,
 	 * includes simple validation and cancel
-	 * @param  question		String to display as the question
-	 * @param  Answers<String> Array<String> containing all the available answers
-	 * @return				 String the answer given or null if the choice was invalid
+	 * @param  answers 	array containing all the available answers
+	 * @return			String the answer given or null if the choice was invalid
 	 */
-	public static function askQuestionStrings(question:String, header:String, answers:Array<String>, cancel:Bool = true):String
+	public static function askQuestionStrings(header:String, answers:Array<String>):String
 	{
 		while (true)
 		{
@@ -167,21 +166,9 @@ class CommandUtils
 			Sys.println("");
 
 			for (i in 0...answers.length)
-			{
-				Sys.println(" [" + i + "] " + answers[i]);
-			}
-
-			if (cancel)
-			{
-				Sys.println("");
-				Sys.println(" [c] Cancel");
-				Sys.println("");
-			}
-
+				Sys.println("  [" + i + "] " + answers[i]);
 			Sys.println("");
-			Sys.println(question);
-			Sys.println("");
-
+			
 			var userResponse = readLine();
 			var validAnswer = "";
 
@@ -190,11 +177,6 @@ class CommandUtils
 				if (answers[i] == userResponse || Std.string(i) == userResponse)
 				{
 					validAnswer = userResponse;
-				}
-				else if (userResponse == "c" && cancel)
-				{
-					Sys.println(" Cancelled");
-					return "";
 				}
 			}
 
