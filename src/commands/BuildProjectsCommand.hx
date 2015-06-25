@@ -18,64 +18,64 @@ class BuildProjectsCommand extends Command
 		else
 			target = target.toLowerCase();
 		
-		var demoNames:Array<String> = console.args.slice(2);
+		var projectNames:Array<String> = console.args.slice(2);
 		
 		directory = console.getOption("dir");
 		if (directory == null)
 			directory = CommandUtils.getHaxelibPath("flixel-demos");
 		
 		Sys.println('Scanning "$directory" for projects...');
-		var demos:Array<LimeProject> = ProjectUtils.findLimeProjects(directory);
-		if (demos.length == 0)
+		var projects:Array<LimeProject> = ProjectUtils.findLimeProjects(directory);
+		if (projects.length == 0)
 		{
 			error("No projects were found.");
 		}
 		else
 		{
-			if (demoNames.length > 0)
-				demos = filterDemos(demos, demoNames);
+			if (projectNames.length > 0)
+				projects = filterProjects(projects, projectNames);
 			
-			if (demos.length > 0)
+			if (projects.length > 0)
 			{
-				var specifier = (demoNames.length > 0) ? "specified" : "all";
+				var specifier = (projectNames.length > 0) ? "specified" : "all";
 				Sys.println('Building $specifier projects - $target \n');
-				compileDemos(demos, target);
+				compileProjects(projects, target);
 			}
 		}
 		
 		exit();
 	}
 	
-	private function filterDemos(demos:Array<LimeProject>, demoNames:Array<String>):Array<LimeProject>
+	private function filterProjects(projects:Array<LimeProject>, projectNames:Array<String>):Array<LimeProject>
 	{
-		var filteredDemos = [];
-		for (demoName in demoNames)
+		var filteredProjects = [];
+		for (projectName in projectNames)
 		{
-			var matching = demos.filter(function(p) return p.name == demoName);
+			var matching = projects.filter(function(p) return p.name == projectName);
 			if (matching.length == 0)
-				Sys.println('Could not find a project named \'$demoName\'');
+				Sys.println('Could not find a project named \'$projectName\'');
 			else
-				filteredDemos.push(matching[0]);
+				filteredProjects.push(matching[0]);
 		}
-		return filteredDemos;
+		return filteredProjects;
 	}
 
-	private function compileDemos(demos:Array<LimeProject>, target:String):Void
+	private function compileProjects(projects:Array<LimeProject>, target:String):Void
 	{
 		var results = new Array<BuildResult>();
 
-		for (demo in demos)
+		for (project in projects)
 		{
 			if (target == "all")
 			{
-				results.push(buildProject("flash", demo));
-				results.push(buildProject("neko", demo));
-				results.push(buildProject("native", demo));
-				results.push(buildProject("html5", demo));
+				results.push(buildProject("flash", project));
+				results.push(buildProject("neko", project));
+				results.push(buildProject("native", project));
+				results.push(buildProject("html5", project));
 			}
 			else
 			{
-				results.push(buildProject(target, demo));
+				results.push(buildProject(target, project));
 			}
 		}
 
@@ -122,20 +122,17 @@ class BuildProjectsCommand extends Command
 		file.close();
 	}
 
-	private function buildProject(Target:String, Project:LimeProject):BuildResult
+	private function buildProject(target:String, project:LimeProject):BuildResult
 	{
-		if (Target == "native")
-			Target = CommandUtils.getCPP();
-
-		var buildArgs = ["run", "openfl", "build", Project.path, Target];
+		var buildArgs = ["run", "openfl", "build", project.path, target];
 		var result:Result = Sys.command("haxelib", buildArgs);
 		
-		ColorUtils.println(result + " - " + Project.name + ' ($Target)', result);
+		ColorUtils.println(result + " - " + project.name + ' ($target)', result);
 
 		return {
 			result : result,
-			target : Target,
-			project : Project
+			target : target,
+			project : project
 		};
 	}
 }

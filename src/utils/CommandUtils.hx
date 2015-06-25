@@ -13,21 +13,6 @@ using StringTools;
 class CommandUtils
 {
 	/**
-	 * Return the correct string for the cpp target based on the current OS
-	 */
-	static public function getCPP():String
-	{
-		if (FileSys.isWindows)
-			return "windows";
-		else if (FileSys.isMac)
-			return "mac";
-		else if (FileSys.isLinux)
-			return "linux";
-		
-		return "";
-	}
-
-	/**
 	 * Copy a directory and its contents recursively
 	 * @param  Source	  String the source directory to copy
 	 * @param  Destination String to destination to copy the directory to

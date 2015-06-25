@@ -18,8 +18,8 @@
 * `template` command:
 	* fixed the auto-open in IDE option only being respected with Sublime Text 
 * The HaxeFlixel header is now only displayed with `flixel` or `flixel help`
-* Don't print an error about missing templates for commands that don't need them
-* The logo in the header is printed in color on Linux and Mac
+* The logo in the header is now printed in color on Linux and Mac
+* The missing templates error is no longer printed for commands that don't need them
 
 1.0.5
 ------------------------------
