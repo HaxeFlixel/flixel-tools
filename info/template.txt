@@ -1,9 +1,9 @@
- Usage : template [name] [path] [options]
-  [name]    : The name for the template to generate, the "default"
+ Usage : template <name> <path> <options>
+  <name>    : The name for the template to generate, the "default"
               template will be created when none is specified.
-  [path]    : The name for the path to create the template in, default
+  <path>    : The name for the path to create the template in, default
               is the name of the template itself.
-  [options] : The options available will depend on the specific
+  <options> : The options available will depend on the specific
               template's template.json. The default template has options
               such as -n for project name and -w -h for width and height.
               Eg. flixel tpl -n "Name" -w 680 -h 480

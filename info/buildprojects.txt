@@ -1,4 +1,4 @@
- Usage : buildprojects [target] [project...]
+ Usage : buildprojects <target> <project...>
   <target>     : The target to pass to "haxelib run openfl build".
                  "all" builds for flash, neko, cpp and html5.
                  Defaults to flash.
