@@ -9,11 +9,13 @@
 	* added a `-dir` option to build projects other than the flixel-demos haxelib
 	* made the output on linux colored based on the exit code of `haxelib run openfl`
 	* `compile_results.log` is now only created with the `-log` option
+	* fixed `openfl build` calls not working when the tools are built with Haxe 3.2+
 * `create` command:
 	* don't ask for confirmation for the auto-open in IDE option 
 	* minor optimization 
-	* demo list now starts 
-	* 1, not 0
+	* improved the demo list output
+* `template` command:
+	* fixed the auto-open in IDE option only being respected with Sublime Text 
 * The HaxeFlixel header is now only displayed with `flixel` or `flixel help`
 * Don't print an error about missing templates for commands that don't need them
 
