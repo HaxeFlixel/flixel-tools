@@ -9,14 +9,14 @@ using StringTools;
 
 class TemplateUtils
 {
-	static public var TemplateFilter:EReg = new EReg("\\btemplate.json\\b", "");
+	static public var templateFilter:EReg = new EReg("\\btemplate.json\\b", "");
 
-	static public function get(TemplateName:String = ""):TemplateProject
+	static public function get(templateName:String = ""):TemplateProject
 	{
-		if (TemplateName == "")
-			TemplateName = 'default';
+		if (templateName == "")
+			templateName = 'default';
 
-		var templates = scanTemplateProjects();
+		var templates = findTemplates();
 		var target:TemplateProject = null;
 
 		if (templates == null)
@@ -24,44 +24,34 @@ class TemplateUtils
 
 		for (template in templates)
 		{
-			if (template.Name == TemplateName)
+			if (template.Name == templateName)
 				target = template;
 		}
 		return target;
 	}
 
-	/**
-	 * Scan a folder recursively for openfl project files
-	 *
-	 * @param   DemosPath	   An optional path to scan, default being flixel-demos Haxelib
-	 * @param   Display		 [description]
-	 * @return				  Array<LimeProject> or null if no Demos were found
-	 */
-	static public function scanTemplateProjects(TemplatesPath:String = "", Recursive:Bool = true):Array<TemplateProject>
+	static public function findTemplates(?templatesPath:String):Array<TemplateProject>
 	{
-		if (TemplatesPath == "")
+		if (templatesPath == null)
 		{
-			TemplatesPath = CommandUtils.getHaxelibPath("flixel-templates");
-
-			if (TemplatesPath == "")
-			{
+			templatesPath = CommandUtils.getHaxelibPath("flixel-templates");
+			if (templatesPath == "")
 				return null;
-			}
 		}
 
-		if (!FileSys.exists(TemplatesPath))
+		if (!FileSys.exists(templatesPath))
 			return null;
 
 		var templates = new Array<TemplateProject>();
 		var ideDataPath = "";
 
-		for (name in FileSys.readDirectory(TemplatesPath))
+		for (name in FileSys.readDirectory(templatesPath))
 		{
-			var folderPath = CommandUtils.combine(TemplatesPath, name);
+			var folderPath = CommandUtils.combine(templatesPath, name);
 			
 			if (FileSys.exists(folderPath) && FileSys.isDirectory(folderPath) && name != '.git')
 			{
-				var filePath = CommandUtils.combine(TemplatesPath, name);
+				var filePath = CommandUtils.combine(templatesPath, name);
 				filePath = CommandUtils.combine(filePath, "template.json");
 				
 				// Make sure we don't get a crash if the file doesn't exist
@@ -74,7 +64,7 @@ class TemplateUtils
 					var project:TemplateProject =
 					{
 						Name : name,
-						Path : TemplatesPath + name,
+						Path : templatesPath + name,
 						Template : FileData
 					};
 					templates.push(project);
@@ -92,28 +82,28 @@ class TemplateUtils
 		}
 	}
 
-	public static function getReplacementValue(Replacements:Array<TemplateReplacement>, Pattern:String):String
+	public static function getReplacementValue(replacements:Array<TemplateReplacement>, pattern:String):String
 	{
-		for (o in Replacements)
+		for (o in replacements)
 		{
 			return o.replacement;
 		}
 		return null;
 	}
 
-	public static function addOption(Pattern:String, CMDOption:String, DefaultValue:Dynamic):TemplateReplacement
+	public static function addOption(pattern:String, cmdOption:String, defaultValue:Dynamic):TemplateReplacement
 	{
 		return
 		{
-			replacement : DefaultValue,
-			pattern : Pattern,
-			cmdOption : CMDOption
+			replacement : defaultValue,
+			pattern : pattern,
+			cmdOption : cmdOption
 		};
 	}
 
-	static public function modifyTemplateProject(TemplatePath:String, Template:TemplateProject):Void
+	static public function modifyTemplateProject(templatePath:String, template:TemplateProject):Void
 	{
-		modifyTemplate(TemplatePath, Template.Template.replacements);
+		modifyTemplate(templatePath, template.Template.replacements);
 	}
 
 	/**
@@ -121,41 +111,40 @@ class TemplateUtils
 	 *
 	 * @param   TemplatePath	Temaplte path to modify
 	 */
-	static public function modifyTemplate(TemplatePath:String, TemplateData:Array<TemplateReplacement>):Void
+	static public function modifyTemplate(templatePath:String, templates:Array<TemplateReplacement>):Void
 	{
-		for (fileName in FileSys.readDirectory(TemplatePath))
+		for (fileName in FileSys.readDirectory(templatePath))
 		{
-			if (FileSys.isDirectory(TemplatePath + "/" + fileName))
+			if (FileSys.isDirectory(templatePath + "/" + fileName))
 			{
-				modifyTemplate(TemplatePath + "/" + fileName, TemplateData);
+				modifyTemplate(templatePath + "/" + fileName, templates);
 			}
 			else if (fileName.endsWith(".tpl"))
 			{
-				var text:String = FileSysUtils.getContent(TemplatePath + "/" + fileName);
-				text = projectTemplateReplacements(text, TemplateData);
+				var text:String = FileSysUtils.getContent(templatePath + "/" + fileName);
+				text = projectTemplateReplacements(text, templates);
 
-				var newFileName:String = projectTemplateReplacements(fileName.substr(0, -4), TemplateData);
+				var newFileName:String = projectTemplateReplacements(fileName.substr(0, -4), templates);
 
-				var o:FileOutput = sys.io.File.write(TemplatePath + "/" + newFileName, true);
+				var o:FileOutput = sys.io.File.write(templatePath + "/" + newFileName, true);
 				o.writeString(text);
 				o.close();
 
-				FileSys.deleteFile(TemplatePath + "/" + fileName);
+				FileSys.deleteFile(templatePath + "/" + fileName);
 			}
 		}
 	}
 
-	static public function projectTemplateReplacements(Source:String, Replacements:Array<TemplateReplacement>):String
+	static public function projectTemplateReplacements(source:String, replacements:Array<TemplateReplacement>):String
 	{
-		for (replacement in Replacements)
+		for (replacement in replacements)
 		{
 			if (replacement.replacement != null)
-				Source = StringTools.replace(Source, replacement.pattern, replacement.replacement);
+				source = StringTools.replace(source, replacement.pattern, replacement.replacement);
 		}
 
-		return Source;
+		return source;
 	}
-
 }
 
 typedef TemplateFile = {

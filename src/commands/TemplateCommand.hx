@@ -52,35 +52,35 @@ class TemplateCommand extends Command
 		processTemplate(templateName, targetPath);
 	}
 
-	public function processTemplate(TemplateName:String = "", TargetPath:String = ""):Void
+	public function processTemplate(templateName:String = "", targetPath:String = ""):Void
 	{
-		var template:TemplateProject = TemplateUtils.get(TemplateName);
+		var template:TemplateProject = TemplateUtils.get(templateName);
 
 		if (template == null)
 		{
-			error("Error getting the template with the name of " + TemplateName +
+			error("Error getting the template with the name of " + templateName +
 				" make sure you have installed flixel-templates ('haxelib install flixel-templates')");
 		}
 		else
 		{
-			TemplateName = template.Name;
+			templateName = template.Name;
 		}
 
 		//override the template defaults form the command arguments
 		template = addOptionReplacement(template);
 
-		if (TargetPath == "")
+		if (targetPath == "")
 		{
-			TargetPath = Sys.getCwd() + TemplateName;
+			targetPath = Sys.getCwd() + templateName;
 		}
-		else if (!TargetPath.startsWith("/"))
+		else if (!targetPath.startsWith("/"))
 		{
-			TargetPath = CommandUtils.combine(Sys.getCwd(), CommandUtils.stripPath(TargetPath));
+			targetPath = CommandUtils.combine(Sys.getCwd(), CommandUtils.stripPath(targetPath));
 		}
 
-		if (FileSystem.exists(TargetPath))
+		if (FileSystem.exists(targetPath))
 		{
-			Sys.println("Warning::" + TargetPath);
+			Sys.println("Warning::" + targetPath);
 
 			var answer = Answer.Yes;
 
@@ -91,24 +91,24 @@ class TemplateCommand extends Command
 
 			if (answer == Answer.Yes)
 			{
-				CommandUtils.deleteRecursively(TargetPath);
+				CommandUtils.deleteRecursively(targetPath);
 			}
 		}
 
-		template.Template.replacements = ProjectUtils.copyIDETemplateFiles(TargetPath, template.Template.replacements, ideOption);
+		template.Template.replacements = ProjectUtils.copyIDETemplateFiles(targetPath, template.Template.replacements, ideOption);
 
-		CommandUtils.copyRecursively(template.Path, TargetPath, TemplateUtils.TemplateFilter, true);
+		CommandUtils.copyRecursively(template.Path, targetPath, TemplateUtils.templateFilter, true);
 
-		TemplateUtils.modifyTemplateProject(TargetPath, template);
+		TemplateUtils.modifyTemplateProject(targetPath, template);
 
-		Sys.println(" Created Template at:");
-		Sys.println(" " + TargetPath);
+		Sys.println(" Created template at:");
+		Sys.println(" " + targetPath);
 		Sys.println(" ");
 
 		if (FlxTools.settings.IDEAutoOpen)
 		{
 			var projectName = TemplateUtils.getReplacementValue(template.Template.replacements, "${PROJECT_NAME}");
-			ProjectUtils.openWithIDE(TargetPath, projectName, ideOption);
+			ProjectUtils.openWithIDE(targetPath, projectName, ideOption);
 		}
 
 		exit();
@@ -126,9 +126,7 @@ class TemplateCommand extends Command
 		var choice = null;
 		
 		if (FlxTools.settings != null)
-		{
 			choice = FlxTools.settings.DefaultEditor;
-		}
 
 		for (o in options.keys())
 		{
@@ -144,9 +142,9 @@ class TemplateCommand extends Command
 		return (choice != null) ? choice : IDE.NONE;
 	}
 
-	private function addOptionReplacement(Template:TemplateProject):TemplateProject
+	private function addOptionReplacement(template:TemplateProject):TemplateProject
 	{
-		var replacements = Template.Template.replacements;
+		var replacements = template.Template.replacements;
 
 		for (o in replacements)
 		{
@@ -155,21 +153,21 @@ class TemplateCommand extends Command
 				o.replacement = replace.replacement;
 		}
 
-		return Template;
+		return template;
 	}
 
-	private function addOptions(Pattern:String, CMDOption:String, DefaultValue:Dynamic):TemplateReplacement
+	private function addOptions(pattern:String, cmdOption:String, defaultValue:Dynamic):TemplateReplacement
 	{
-		var option = console.getOption(CMDOption);
+		var option = console.getOption(cmdOption);
 
 		if (option != null && option != 'true' && option != 'false')
-			DefaultValue = option;
+			defaultValue = option;
 
 		return
 		{
-			replacement : DefaultValue,
-			pattern : Pattern,
-			cmdOption : CMDOption
+			replacement : defaultValue,
+			pattern : pattern,
+			cmdOption : cmdOption
 		};
 	}
 }

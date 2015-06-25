@@ -12,18 +12,18 @@ class ProjectUtils
 	/**
 	 * Shortcut to create a lime project by recursively copying the folder according to a name
 	 */
-	static public function duplicateProject(Project:LimeProject, Destination:String = "", IDE:String = ""):Bool
+	static public function duplicateProject(project:LimeProject, destination:String, ide:IDE):Bool
 	{
-		var result = CommandUtils.copyRecursively(Project.path, Destination);
+		var result = CommandUtils.copyRecursively(project.path, destination);
 		if (result)
 		{
-			CommandUtils.copyRecursively(Project.path, Destination);
+			CommandUtils.copyRecursively(project.path, destination);
 
 			var replacements = new Array<TemplateReplacement>();
-			replacements.push(TemplateUtils.addOption("${PROJECT_NAME}", "", Project.name));
-			replacements = copyIDETemplateFiles(Destination, replacements, IDE);
+			replacements.push(TemplateUtils.addOption("${PROJECT_NAME}", "", project.name));
+			replacements = copyIDETemplateFiles(destination, replacements, ide);
 
-			TemplateUtils.modifyTemplate(Destination, replacements);
+			TemplateUtils.modifyTemplate(destination, replacements);
 		}
 		return result;
 	}
@@ -31,16 +31,16 @@ class ProjectUtils
 	/**
 	 * Recursively search a directory for Lime projects
 	 */
-	static public function findLimeProjects(TargetDirectory:String):Array<LimeProject>
+	static public function findLimeProjects(targetDirectory:String):Array<LimeProject>
 	{
 		var projects = [];
 
-		if (!FileSys.exists(TargetDirectory))
+		if (!FileSys.exists(targetDirectory))
 			return [];
 		
-		for (name in FileSys.readDirectory(TargetDirectory))
+		for (name in FileSys.readDirectory(targetDirectory))
 		{
-			var folderPath:String = CommandUtils.combine(TargetDirectory, name);	
+			var folderPath:String = CommandUtils.combine(targetDirectory, name);	
 			
 			if (FileSys.isDirectory(folderPath) && !name.startsWith("."))	
 			{	
@@ -65,65 +65,56 @@ class ProjectUtils
 	/**
 	 * Searches a path for a Lime project xml file
 	 */
-	static private function findProjectXml(ProjectPath:String):String
+	static private function findProjectXml(projectPath:String):String
 	{
-		var targetProjectFile = CommandUtils.combine(ProjectPath, "project.xml");
+		var targetProjectFile = CommandUtils.combine(projectPath, "project.xml");
 		if (FileSys.exists(targetProjectFile))
 			return targetProjectFile;
 
-		targetProjectFile = CommandUtils.combine(ProjectPath, "Project.xml");
+		targetProjectFile = CommandUtils.combine(projectPath, "Project.xml");
 		if (FileSys.exists(targetProjectFile))
 			return targetProjectFile;
 		
 		return null;
 	}
 
-	static public function copyIDETemplateFiles(TargetPath:String, ?Replacements:Array<TemplateReplacement>, IDEOption:String = ""):Array<TemplateReplacement>
+	static public function copyIDETemplateFiles(targetPath:String, replacements:Array<TemplateReplacement>, ide:IDE):Array<TemplateReplacement>
 	{
-		if (Replacements == null)
-			Replacements = new Array<TemplateReplacement>();
+		if (replacements == null)
+			replacements = new Array<TemplateReplacement>();
 
-		Replacements.push(TemplateUtils.addOption("${AUTHOR}", "", FlxTools.settings.AuthorName));
+		replacements.push(TemplateUtils.addOption("${AUTHOR}", "", FlxTools.settings.AuthorName));
 
-		if (IDEOption == "" && FlxTools.settings.IDEAutoOpen)
+		if (ide == IDE.SUBLIME_TEXT)
 		{
-			IDEOption = FlxTools.settings.DefaultEditor;
-		}
-		else if (IDEOption == "")
-		{
-			IDEOption = IDE.NONE;
-		}
+			replacements.push(TemplateUtils.addOption("${PROJECT_PATH}", "", targetPath.replace('\\', '\\\\')));
+			replacements.push(TemplateUtils.addOption("${HAXE_STD_PATH}", "", CommandUtils.combine(CommandUtils.getHaxePath(), "std").replace('\\', '\\\\')));
+			replacements.push(TemplateUtils.addOption("${FLIXEL_PATH}", "", CommandUtils.getHaxelibPath('flixel').replace('\\', '\\\\')));
+			replacements.push(TemplateUtils.addOption("${FLIXEL_ADDONS_PATH}", "", CommandUtils.getHaxelibPath('flixel-addons').replace('\\', '\\\\')));
 
-		if (IDEOption == IDE.SUBLIME_TEXT)
-		{
-			Replacements.push(TemplateUtils.addOption("${PROJECT_PATH}", "", TargetPath.replace('\\', '\\\\')));
-			Replacements.push(TemplateUtils.addOption("${HAXE_STD_PATH}", "", CommandUtils.combine(CommandUtils.getHaxePath(), "std").replace('\\', '\\\\')));
-			Replacements.push(TemplateUtils.addOption("${FLIXEL_PATH}", "", CommandUtils.getHaxelibPath('flixel').replace('\\', '\\\\')));
-			Replacements.push(TemplateUtils.addOption("${FLIXEL_ADDONS_PATH}", "", CommandUtils.getHaxelibPath('flixel-addons').replace('\\', '\\\\')));
-
-			CommandUtils.copyRecursively(FlxTools.sublimeSource, TargetPath, TemplateUtils.TemplateFilter, true);
+			CommandUtils.copyRecursively(FlxTools.sublimeSource, targetPath, TemplateUtils.templateFilter, true);
 		}
-		else if (IDEOption == IDE.INTELLIJ_IDEA)
+		else if (ide == IDE.INTELLIJ_IDEA)
 		{
-			Replacements.push(TemplateUtils.addOption("${IDEA_flexSdkName}", "", FlxTools.settings.IDEA_flexSdkName));
-			Replacements.push(TemplateUtils.addOption("${IDEA_Flixel_Engine_Library}", "", FlxTools.settings.IDEA_Flixel_Engine_Library));
-			Replacements.push(TemplateUtils.addOption("${IDEA_Flixel_Addons_Library}", "", FlxTools.settings.IDEA_Flixel_Addons_Library));
+			replacements.push(TemplateUtils.addOption("${IDEA_flexSdkName}", "", FlxTools.settings.IDEA_flexSdkName));
+			replacements.push(TemplateUtils.addOption("${IDEA_Flixel_Engine_Library}", "", FlxTools.settings.IDEA_Flixel_Engine_Library));
+			replacements.push(TemplateUtils.addOption("${IDEA_Flixel_Addons_Library}", "", FlxTools.settings.IDEA_Flixel_Addons_Library));
 
-			CommandUtils.copyRecursively(FlxTools.intellijSource, TargetPath, TemplateUtils.TemplateFilter, true);
+			CommandUtils.copyRecursively(FlxTools.intellijSource, targetPath, TemplateUtils.templateFilter, true);
 		}
-		else if (IDEOption == IDE.FLASH_DEVELOP)
+		else if (ide == IDE.FLASH_DEVELOP)
 		{
-			Replacements.push(TemplateUtils.addOption("${WIDTH}", "", FlxTools.PWIDTH));
-			Replacements.push(TemplateUtils.addOption("${HEIGHT}", "", FlxTools.PHEIGHT));
+			replacements.push(TemplateUtils.addOption("${WIDTH}", "", FlxTools.PWIDTH));
+			replacements.push(TemplateUtils.addOption("${HEIGHT}", "", FlxTools.PHEIGHT));
 
-			CommandUtils.copyRecursively(FlxTools.flashDevelopSource, TargetPath, TemplateUtils.TemplateFilter, true);
+			CommandUtils.copyRecursively(FlxTools.flashDevelopSource, targetPath, TemplateUtils.templateFilter, true);
 		}
-		else if (IDEOption == IDE.FLASH_DEVELOP_FDZ)
+		else if (ide == IDE.FLASH_DEVELOP_FDZ)
 		{
 			//todo
 		}
 
-		return Replacements;
+		return replacements;
 	}
 
 	static public function resolveIDEChoice(console:Console):IDE

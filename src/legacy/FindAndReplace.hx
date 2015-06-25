@@ -14,22 +14,20 @@ class FindAndReplace
 
 	/**
 	 * Init the replacements map
-	 *
-	 * @return The constructed map
 	 */
 	static public function init():Array<FindAndReplaceObject>
 	{
 		replacements = new Array<FindAndReplaceObject>();
 
 		/**
-		* Removal of the org package
-		*/
+		 * Removal of the org package
+		 */
 
 		add("org.flixel.", "flixel.");
 
 		/**
-		* FlxU splitup
-		*/
+		 * FlxU splitup
+		 */
 
 		addFunction("FlxU.abs",					"Math.abs");
 		addFunction("FlxU.floor",				"Math.floor");
@@ -443,54 +441,52 @@ class FindAndReplace
 	/**
 	* Shortcut to add a replacement and import validation
 	*
-	* @param   Find			String to find
-	* @param   Replacement	 String to replace the string found with
-	* @param   ImportValidate  Make sure this import exists
+	* @param   find			String to find
+	* @param   replacement	 String to replace the string found with
+	* @param   importValidate  Make sure this import exists
 	*/
-	static public function add(Find:String, Replacement:String, ?ImportValidate:String):Void
+	static public function add(find:String, replacement:String, ?importValidate:String):Void
 	{
-		if (ImportValidate != null)
-		{
-			ImportValidate = "import flixel." +  ImportValidate;
-		}
+		if (importValidate != null)
+			importValidate = "import flixel." +  importValidate;
 
 		var object:FindAndReplaceObject = {
-			find: Find,
-			replacement: Replacement,
-			importValidate: ImportValidate,
+			find: find,
+			replacement: replacement,
+			importValidate: importValidate,
 		};
 
 		replacements.push(object);
 	}
 
 	/**
-	* Shortcut to add an import replacement and import validation
-	*
-	* @param	Find			String to find
-	* @param	Replacement	 String to replace the string found with
-	* @param	ImportValidate  Make sure this import exists
-	*/
-	inline static public function addImport(Find:String, Replacement:String, ?ImportValidate):Void
+	 * Shortcut to add an import replacement and import validation
+	 *
+	 * @param	find			String to find
+	 * @param	replacement	 String to replace the string found with
+	 * @param	importValidate  Make sure this import exists
+	 */
+	inline static public function addImport(find:String, replacement:String, ?importValidate:String):Void
 	{
-		Find = "import flixel." + Find;
-		Replacement = "import flixel." + Replacement;
+		find = "import flixel." + find;
+		replacement = "import flixel." + replacement;
 
-		add(Find, Replacement, ImportValidate);
+		add(find, replacement, importValidate);
 	}
 
 	/**
-	* Shortcut to add a function call and import validation
-	*
-	* @param	Find			String to find
-	* @param	Replacement	 String to replace the string found with
-	* @param	ImportValidate  Make sure this import exists
-	*/
-	inline static public function addFunction(Find:String, Replacement:String, ?ImportValidate):Void
+	 * Shortcut to add a function call and import validation
+	 *
+	 * @param	find			String to find
+	 * @param	replacement	 String to replace the string found with
+	 * @param	importValidate  Make sure this import exists
+	 */
+	inline static public function addFunction(find:String, replacement:String, ?importValidate:String):Void
 	{
-		//Find = Find + "(";
-		//Replacement = Replacement + "(";
+		//find = find + "(";
+		//replacement = replacement + "(";
 
-		add(Find, Replacement, ImportValidate);
+		add(find, replacement, importValidate);
 	}
 }
 

@@ -18,24 +18,18 @@ class SetupCommand extends Command
 		setupFlixel();
 
 		if (console.args.length > 3)
-		{
 			error("You have given too many arguments for the create command.");
-		}
 
 		if (console.getOption("-y") != null)
 			autoContinue = true;
 
 		setupCommandAlias();
-
 		setupFlixelLibs();
-
 		promptForSettings();
 
 		Sys.println("");
-		Sys.println("");
-		Sys.println(" You have now setup HaxeFlixel Tools");
-		Sys.println("");
-		Sys.println(" Try the 'flixel' command to test it :)");
+		Sys.println("flixel-tools setup completed.");
+		Sys.println("Try the 'flixel' command to test it :)");
 		Sys.println("");
 
 		exit();
@@ -75,7 +69,7 @@ class SetupCommand extends Command
 		}
 	}
 	
-	private function runDownloadCommand()
+	private function runDownloadCommand():Void
 	{
 		Sys.command("haxelib", ["run", "flixel-tools", "download"]);
 	}

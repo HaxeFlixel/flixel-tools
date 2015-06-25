@@ -14,51 +14,51 @@ class CommandUtils
 {
 	/**
 	 * Copy a directory and its contents recursively
-	 * @param  Source	  String the source directory to copy
-	 * @param  Destination String to destination to copy the directory to
-	 * @param  ?Overwrite  Overwrite the destination
+	 * @param  source	  String the source directory to copy
+	 * @param  destination String to destination to copy the directory to
+	 * @param  overwrite  Overwrite the destination
 	 * @return	Bool true if the new Destination exists after operation
 	 */
-	static public function copyRecursively(Source:String, Destination:String, Overwrite:Bool = true, ?filter:EReg, exclude:Bool = false):Bool
+	static public function copyRecursively(source:String, destination:String, overwrite:Bool = true, ?filter:EReg, exclude:Bool = false):Bool
 	{
 		var current = massive.sys.io.File.current.resolveDirectory("temp");
 
-		var dir1:massive.sys.io.File = current.resolvePath(Source, true);
-		var dir2:massive.sys.io.File = current.resolvePath(Destination, true);
+		var dir1:massive.sys.io.File = current.resolvePath(source, true);
+		var dir2:massive.sys.io.File = current.resolvePath(destination, true);
 
-		dir1.copyTo(dir2, Overwrite, filter, exclude);
+		dir1.copyTo(dir2, overwrite, filter, exclude);
 
-		return FileSys.exists(Destination);
+		return FileSys.exists(destination);
 	}
 
-	static public function deleteRecursively(Path:String):Void
+	static public function deleteRecursively(path:String):Void
 	{
-		if (FileSys.exists(Path))
+		if (FileSys.exists(path))
 		{
-			if (FileSys.isDirectory(Path))
+			if (FileSys.isDirectory(path))
 			{
-				for (entry in FileSys.readDirectory(Path))
+				for (entry in FileSys.readDirectory(path))
 				{
-					deleteRecursively(Path + "/" + entry);
+					deleteRecursively(path + "/" + entry);
 				}
-				FileSys.deleteDirectory(Path);
+				FileSys.deleteDirectory(path);
 			}
 			else
 			{
-				FileSys.deleteFile(Path);
+				FileSys.deleteFile(path);
 			}
 		}
 	}
 
 	/**
 	* Basic Ereg match to add an import above the first in a file if none exists
-	* @param FilePath	 Path to the file to add to
-	* @param ImportString The complete import string to seach for and add
+	* @param fileString	 Path to the file to add to
+	* @param importString The complete import string to seach for and add
 	*/
-	public static function addImportToFileString(FileString:String, ImportString:String):String
+	public static function addImportToFileString(fileString:String, importString:String):String
 	{
-		var str:String = FileString;
-		var match = strmatch(ImportString, str);
+		var str:String = fileString;
+		var match = strmatch(importString, str);
 
 		if (!match)
 		{
@@ -70,9 +70,9 @@ class CommandUtils
 			try
 			{
 				var matchPos = r.matchedPos();
-				var beggining = str.substr(0,matchPos.pos);
+				var beggining = str.substr(0, matchPos.pos);
 				var end = str.substr(matchPos.pos, str.length);
-				newString = beggining + ImportString + ";" + newLine + end;
+				newString = beggining + importString + ";" + newLine + end;
 			}
 			catch (e:Dynamic) {}
 
@@ -86,15 +86,15 @@ class CommandUtils
 	/**
 	 * Prompt user with a y/n/a
 	 *
-	 * @param   Question	String with the prompt to display
+	 * @param   question	String with the prompt to display
 	 * @return  User choice in an Answer enum or null if an invalid answer given
 	 */
-	static public function askString(Question:String):String
+	static public function askString(question:String):String
 	{
 		while (true)
 		{
 			Sys.println("");
-			Sys.println(Question);
+			Sys.println(question);
 			return readLine();
 		}
 
@@ -104,15 +104,15 @@ class CommandUtils
 	/**
 	 * Prompt user with a y/n/a
 	 *
-	 * @param   Question	String with the prompt to display
+	 * @param   question	String with the prompt to display
 	 * @return  User choice in an Answer enum or null if an invalid answer given
 	 */
-	static public function askYN(Question:String):Answer
+	static public function askYN(question:String):Answer
 	{
 		while (true)
 		{
 			Sys.println("");
-			Sys.println(Question + " [y/n] ? ");
+			Sys.println(question + " [y/n] ? ");
 
 			return switch (readLine())
 			{
@@ -128,15 +128,15 @@ class CommandUtils
 	/**
 	 * Prompt user with a y/n/a
 	 *
-	 * @param   Question	String with the prompt to display
+	 * @param   question	String with the prompt to display
 	 * @return  User choice in an Answer enum or null if an invalid answer given
 	 */
-	static public function askYNA(Question:String):Answer
+	static public function askYNA(question:String):Answer
 	{
 		while (true)
 		{
 			Sys.println("");
-			Sys.println(Question + " [y/n/a] ? ");
+			Sys.println(question + " [y/n/a] ? ");
 
 			return switch (readLine())
 			{
@@ -153,21 +153,21 @@ class CommandUtils
 	/**
 	 * As the user a question with automatic numeric references to string answers,
 	 * includes simple validation and cancel
-	 * @param  Question		String to display as the question
+	 * @param  question		String to display as the question
 	 * @param  Answers<String> Array<String> containing all the available answers
 	 * @return				 String the answer given or null if the choice was invalid
 	 */
-	static public function askQuestionStrings(Question:String, Header:String, Answers:Array<String>, cancel:Bool = true):String
+	static public function askQuestionStrings(question:String, header:String, answers:Array<String>, cancel:Bool = true):String
 	{
 		while (true)
 		{
 			Sys.println("");
-			Sys.println(Header);
+			Sys.println(header);
 			Sys.println("");
 
-			for (i in 0...Answers.length)
+			for (i in 0...answers.length)
 			{
-				Sys.println(" [" + i + "] " + Answers[i]);
+				Sys.println(" [" + i + "] " + answers[i]);
 			}
 
 			if (cancel)
@@ -178,15 +178,15 @@ class CommandUtils
 			}
 
 			Sys.println("");
-			Sys.println(Question);
+			Sys.println(question);
 			Sys.println("");
 
 			var userResponse = readLine();
 			var validAnswer = "";
 
-			for (i in 0...Answers.length)
+			for (i in 0...answers.length)
 			{
-				if (Answers[i] == userResponse || Std.string(i) == userResponse)
+				if (answers[i] == userResponse || Std.string(i) == userResponse)
 				{
 					validAnswer = userResponse;
 				}
@@ -201,7 +201,7 @@ class CommandUtils
 			{
 				if (Std.parseInt(validAnswer) != null)
 				{
-					return Answers[Std.parseInt(userResponse)];
+					return answers[Std.parseInt(userResponse)];
 				}
 
 				if (userResponse != "")
@@ -227,12 +227,12 @@ class CommandUtils
 	/**
 	 * Load and parse the date from a Haxelib json file
 	 *
-	 * @param   HaxelibName	 String name of the Haxelib to load
+	 * @param   haxelibName	 String name of the Haxelib to load
 	 * @return  Haxelib typedef or null if no Haxelib was found
 	 */
-	static public function getHaxelibJsonData(HaxelibName:String):HaxelibJSON
+	static public function getHaxelibJsonData(haxelibName:String):HaxelibJSON
 	{
-		var haxleibJsonPath = getHaxelibPath(HaxelibName);
+		var haxleibJsonPath = getHaxelibPath(haxelibName);
 		if (haxleibJsonPath == "")
 			return null;
 
@@ -240,10 +240,10 @@ class CommandUtils
 		return Json.parse(jsonContent);
 	}
 
-	static public function strmatch(Needle:String, Haystack:String):Bool
+	static public function strmatch(needle:String, haystack:String):Bool
 	{
-		var search = new EReg("\\b" + Needle + "\\b", "");
-		return search.match(Haystack);
+		var search = new EReg("\\b" + needle + "\\b", "");
+		return search.match(haystack);
 	}
 
 	static public function getHaxePath():String
@@ -258,12 +258,12 @@ class CommandUtils
 
 	/**
 	 * Get the path of a Haxelib on the current system
-	 * @param  Name String of the Haxelib to scan for
+	 * @param  name String of the Haxelib to scan for
 	 * @return	  String path of the Haxelib or "" if none found
 	 */
-	static public function getHaxelibPath(Name:String):String
+	static public function getHaxelibPath(name:String):String
 	{
-		var proc:Process = new Process("haxelib", ["path", Name]);
+		var proc:Process = new Process("haxelib", ["path", name]);
 		var result:String = "";
 
 		try
@@ -272,7 +272,7 @@ class CommandUtils
 			while (true)
 			{
 				var line:String = proc.stdout.readLine();
-				if (line.startsWith('-D $Name'))
+				if (line.startsWith('-D $name'))
 				{
 					result = previous;
 					break;
@@ -289,64 +289,60 @@ class CommandUtils
 	/**
 	 * Shortcut to join paths that is platform safe
 	 */
-	static public function combine(FirstPath:String, SecondPath:String):String
+	static public function combine(firstPath:String, secondPath:String):String
 	{
-		if (FirstPath == null || FirstPath == "")
+		if (firstPath == null || firstPath == "")
 		{
-			return SecondPath;
+			return secondPath;
 		}
-		else if (SecondPath != null && SecondPath != "")
+		else if (secondPath != null && secondPath != "")
 		{
 			if (FileSys.isWindows)
 			{
-				if (SecondPath.indexOf (":") == 1)
+				if (secondPath.indexOf(":") == 1)
 				{
-					return SecondPath;
+					return secondPath;
 				}
 			}
-			else
+			else if (secondPath.substr(0, 1) == "/")
 			{
-				if (SecondPath.substr (0, 1) == "/")
-				{
-					return SecondPath;
-				}
+				return secondPath;
 			}
 
-			var firstSlash:Bool = (FirstPath.substr (-1) == "/" || FirstPath.substr (-1) == "\\");
-			var secondSlash:Bool = (SecondPath.substr (0, 1) == "/" || SecondPath.substr (0, 1) == "\\");
+			var firstSlash:Bool = (firstPath.substr(-1) == "/" || firstPath.substr(-1) == "\\");
+			var secondSlash:Bool = (secondPath.substr(0, 1) == "/" || secondPath.substr(0, 1) == "\\");
 
 			if (firstSlash && secondSlash)
 			{
-				return FirstPath + SecondPath.substr (1);
+				return firstPath + secondPath.substr(1);
 			}
 			else if (!firstSlash && !secondSlash)
 			{
-				return FirstPath + "/" + SecondPath;
-
+				return firstPath + "/" + secondPath;
 			}
 			else
 			{
-				return FirstPath + SecondPath;
+				return firstPath + secondPath;
 			}
 		}
 
-		return FirstPath;
+		return firstPath;
 	}
 
 	/**
 	 * Shortcut to strip a relative path
-	 * @param  Path String to strip
+	 * @param  path String to strip
 	 * @return	  Stripped string
 	 */
-	static public function stripPath(Path:String):String
+	static public function stripPath(path:String):String
 	{
-		if (Path.startsWith("./"))
-			Path = Path.substring(2);
+		if (path.startsWith("./"))
+			path = path.substring(2);
 
-		if (Path.endsWith("/"))
-			Path = Path.substring(0, Path.length - 1);
+		if (path.endsWith("/"))
+			path = path.substring(0, path.length - 1);
 		
-		return Path;
+		return path;
 	}
 
 	static public function loadIDESettings():Void
@@ -393,7 +389,7 @@ class CommandUtils
 		return settings;
 	}
 
-	static public function saveToolSettings(Settings:FlxToolSettings):Void
+	static public function saveToolSettings(settings:FlxToolSettings):Void
 	{
 		var toolPath = CommandUtils.getHaxelibPath("flixel-tools");
 		if (toolPath == "")
@@ -404,34 +400,33 @@ class CommandUtils
 
 		var settingsPath = toolPath + "settings.json";
 
-		File.saveContent(settingsPath, Json.stringify(Settings));
+		File.saveContent(settingsPath, Json.stringify(settings));
 
 		FlxTools.settings = CommandUtils.loadToolSettings();
 	}
 
-	static public function haxelibCommand(Lib:String, AutoContinue:Bool, ?Message:String):Bool
+	static public function haxelibCommand(lib:String, autoContinue:Bool, ?message:String):Bool
 	{
-		var libStatus = CommandUtils.getHaxelibPath(Lib);
-
+		var libStatus = CommandUtils.getHaxelibPath(lib);
 		if (libStatus == "")
 		{
-			if (Message == null)
-				Message = "Do you want to install " + Lib;
+			if (message == null)
+				message = "Do you want to install " + lib;
 
-			if (!AutoContinue)
+			if (!autoContinue)
 			{
-				var answer = CommandUtils.askYN(Message);
+				var answer = CommandUtils.askYN(message);
 				if (answer == Answer.No)
 					return false;
 			}
 
-			Sys.println('haxelib install $Lib');
-			Sys.command("haxelib", ["install", Lib]);
+			Sys.println('haxelib install $lib');
+			Sys.command("haxelib", ["install", lib]);
 			return true;
 		}
 		else
 		{
-			Sys.println("You appear to already have " + Lib + " installed.");
+			Sys.println("You appear to already have " + lib + " installed.");
 			return false;
 		}
 	}
