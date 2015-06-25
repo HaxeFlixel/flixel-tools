@@ -100,9 +100,7 @@ class SetupCommand extends Command
 			if (FileSys.isWindows)
 			{
 				if (haxePath == null || haxePath == "")
-				{
 					haxePath = "C:\\HaxeToolkit\\haxe\\";
-				}
 
 				flixelAliasScript = haxePath + "\\flixel.bat";
 

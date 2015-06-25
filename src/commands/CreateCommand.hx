@@ -91,7 +91,6 @@ class CreateCommand extends Command
 		while (true)
 		{
 			Sys.println("\n[c] Cancel\n");
-			
 			Sys.println("Please enter the number or name of the demo to create.\n");
 
 			var userResponse = CommandUtils.readLine();

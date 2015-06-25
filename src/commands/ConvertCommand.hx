@@ -106,7 +106,7 @@ class ConvertCommand extends Command
 
 						if (overwrite == Answer.Yes)
 						{
-							createBackup( ConvertPath, backupFolder);
+							createBackup(ConvertPath, backupFolder);
 						}
 						else
 						{
@@ -116,7 +116,7 @@ class ConvertCommand extends Command
 					}
 					else
 					{
-						createBackup( ConvertPath, backupFolder);
+						createBackup(ConvertPath, backupFolder);
 					}
 				}
 			}

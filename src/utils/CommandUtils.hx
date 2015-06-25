@@ -17,20 +17,14 @@ class CommandUtils
 	 */
 	static public function getCPP():String
 	{
-		var cppTarget = "";
 		if (FileSys.isWindows)
-		{
-			cppTarget = "windows";
-		}
+			return "windows";
 		else if (FileSys.isMac)
-		{
-			cppTarget = "mac";
-		}
+			return "mac";
 		else if (FileSys.isLinux)
-		{
-			cppTarget = "linux";
-		}
-		return cppTarget;
+			return "linux";
+		
+		return "";
 	}
 
 	/**
@@ -52,11 +46,11 @@ class CommandUtils
 		return FileSys.exists(Destination);
 	}
 
-	static public function deleteRecursively(Path:String) : Void
+	static public function deleteRecursively(Path:String):Void
 	{
 		if (FileSys.exists(Path))
 		{
-			if ( FileSys.isDirectory(Path))
+			if (FileSys.isDirectory(Path))
 			{
 				for (entry in FileSys.readDirectory(Path))
 				{
@@ -95,7 +89,7 @@ class CommandUtils
 				var end = str.substr(matchPos.pos, str.length);
 				newString = beggining + ImportString + ";" + newLine + end;
 			}
-			catch (e:Dynamic){}
+			catch (e:Dynamic) {}
 
 			if (newString != str)
 				return newString;
@@ -186,16 +180,16 @@ class CommandUtils
 			Sys.println(Header);
 			Sys.println("");
 
-			for( i in 0...Answers.length )
+			for (i in 0...Answers.length)
 			{
-				Sys.println( " [" + i + "] " + Answers[i]);
+				Sys.println(" [" + i + "] " + Answers[i]);
 			}
 
 			if (cancel)
 			{
-				Sys.println( "");
-				Sys.println( " [c] Cancel");
-				Sys.println( "");
+				Sys.println("");
+				Sys.println(" [c] Cancel");
+				Sys.println("");
 			}
 
 			Sys.println("");
@@ -205,9 +199,9 @@ class CommandUtils
 			var userResponse = readLine();
 			var validAnswer = "";
 
-			for( i in 0...Answers.length )
+			for (i in 0...Answers.length)
 			{
-				if ( Answers[i] == userResponse || Std.string(i) == userResponse )
+				if (Answers[i] == userResponse || Std.string(i) == userResponse)
 				{
 					validAnswer = userResponse;
 				}
@@ -220,7 +214,7 @@ class CommandUtils
 
 			if (validAnswer != "")
 			{
-				if ( Std.parseInt(validAnswer) != null )
+				if (Std.parseInt(validAnswer) != null)
 				{
 					return Answers[Std.parseInt(userResponse)];
 				}
@@ -271,10 +265,8 @@ class CommandUtils
 	{
 		var haxePath = Sys.getEnv ("HAXEPATH");
 
-		if (haxePath == null || haxePath == "") {
-
+		if (haxePath == null || haxePath == "")
 			haxePath = "/usr/lib/haxe";
-		}
 
 		return haxePath;
 	}
@@ -303,7 +295,7 @@ class CommandUtils
 				previous = line;
 			}
 		}
-		catch (e:Dynamic) { };
+		catch (e:Dynamic) {}
 		proc.close();
 
 		return result;
@@ -352,10 +344,8 @@ class CommandUtils
 				return FirstPath + SecondPath;
 			}
 		}
-		else
-		{
-			return FirstPath;
-		}
+
+		return FirstPath;
 	}
 
 	/**
@@ -366,14 +356,11 @@ class CommandUtils
 	static public function stripPath(Path:String):String
 	{
 		if (Path.startsWith("./"))
-		{
 			Path = Path.substring(2);
-		}
 
 		if (Path.endsWith("/"))
-		{
-			Path = Path.substring(0,Path.length-1);
-		}
+			Path = Path.substring(0, Path.length - 1);
+		
 		return Path;
 	}
 
@@ -382,9 +369,7 @@ class CommandUtils
 		var ideData = "ide-data";
 		var ideDataPath = CommandUtils.getHaxelibPath("flixel-templates");
 		if (ideDataPath == "")
-		{
 			return;
-		}
 
 		var ideDataPath = CommandUtils.combine(ideDataPath, ideData);
 
