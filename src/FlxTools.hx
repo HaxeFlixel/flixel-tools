@@ -17,13 +17,8 @@ class FlxTools extends CommandLineRunner
 	public static inline var VERSION = "1.0.5";
 
 	public static var settings:FlxToolSettings;
-	public static var PWIDTH:Int = 640;
-	public static var PHEIGHT:Int = 480;
 
-	public static var flashDevelopFDZSource:String;
-	public static var flashDevelopSource:String;
-	public static var intellijSource:String;
-	public static var sublimeSource:String;
+	public static var templateSourcePaths = new Map<IDE, String>();
 	public static var templatesLoaded:Bool = false;
 
 	public function new():Void

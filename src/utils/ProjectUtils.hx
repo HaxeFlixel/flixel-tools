@@ -20,7 +20,7 @@ class ProjectUtils
 			CommandUtils.copyRecursively(project.path, destination);
 
 			var replacements = new Array<TemplateReplacement>();
-			replacements.push(TemplateUtils.addOption("${PROJECT_NAME}", "", project.name));
+			replacements.push(TemplateUtils.addOption("PROJECT_NAME", "", project.name));
 			replacements = copyIDETemplateFiles(destination, replacements, ide);
 
 			TemplateUtils.modifyTemplate(destination, replacements);
@@ -83,36 +83,40 @@ class ProjectUtils
 		if (replacements == null)
 			replacements = new Array<TemplateReplacement>();
 
-		replacements.push(TemplateUtils.addOption("${AUTHOR}", "", FlxTools.settings.AuthorName));
-
-		if (ide == IDE.SUBLIME_TEXT)
+		var templateSource:String = FlxTools.templateSourcePaths[ide];
+		if (templateSource == null)
+			return [];
+		
+		var settings = FlxTools.settings;
+		var addOption = function(name:String, defaultValue:Dynamic) {
+			replacements.push(TemplateUtils.addOption(name, "", defaultValue));
+		};
+		
+		addOption("AUTHOR", settings.AuthorName);
+		
+		switch (ide)
 		{
-			replacements.push(TemplateUtils.addOption("${PROJECT_PATH}", "", targetPath.replace('\\', '\\\\')));
-			replacements.push(TemplateUtils.addOption("${HAXE_STD_PATH}", "", CommandUtils.combine(CommandUtils.getHaxePath(), "std").replace('\\', '\\\\')));
-			replacements.push(TemplateUtils.addOption("${FLIXEL_PATH}", "", CommandUtils.getHaxelibPath('flixel').replace('\\', '\\\\')));
-			replacements.push(TemplateUtils.addOption("${FLIXEL_ADDONS_PATH}", "", CommandUtils.getHaxelibPath('flixel-addons').replace('\\', '\\\\')));
-
-			CommandUtils.copyRecursively(FlxTools.sublimeSource, targetPath, TemplateUtils.templateFilter, true);
+			case IDE.SUBLIME_TEXT:
+				var escape = function(path:String) return path.replace('\\', '\\\\');
+				addOption("PROJECT_PATH", escape(targetPath));
+				addOption("HAXE_STD_PATH", escape(CommandUtils.combine(CommandUtils.getHaxePath(), "std")));
+				addOption("FLIXEL_PATH", escape(CommandUtils.getHaxelibPath('flixel')));
+				addOption("FLIXEL_ADDONS_PATH", escape(CommandUtils.getHaxelibPath('flixel-addons')));
+			
+			case IDE.INTELLIJ_IDEA:
+				addOption("IDEA_flexSdkName", settings.IDEA_flexSdkName);
+				addOption("IDEA_Flixel_Engine_Library", settings.IDEA_Flixel_Engine_Library);
+				addOption("IDEA_Flixel_Addons_Library", settings.IDEA_Flixel_Addons_Library);
+			
+			case IDE.FLASH_DEVELOP:
+				addOption("WIDTH", 640);
+				addOption("HEIGHT", 480);
+			
+			case _: // TODO: IDE.FLASH_DEVELOP_FDZ
 		}
-		else if (ide == IDE.INTELLIJ_IDEA)
-		{
-			replacements.push(TemplateUtils.addOption("${IDEA_flexSdkName}", "", FlxTools.settings.IDEA_flexSdkName));
-			replacements.push(TemplateUtils.addOption("${IDEA_Flixel_Engine_Library}", "", FlxTools.settings.IDEA_Flixel_Engine_Library));
-			replacements.push(TemplateUtils.addOption("${IDEA_Flixel_Addons_Library}", "", FlxTools.settings.IDEA_Flixel_Addons_Library));
-
-			CommandUtils.copyRecursively(FlxTools.intellijSource, targetPath, TemplateUtils.templateFilter, true);
-		}
-		else if (ide == IDE.FLASH_DEVELOP)
-		{
-			replacements.push(TemplateUtils.addOption("${WIDTH}", "", FlxTools.PWIDTH));
-			replacements.push(TemplateUtils.addOption("${HEIGHT}", "", FlxTools.PHEIGHT));
-
-			CommandUtils.copyRecursively(FlxTools.flashDevelopSource, targetPath, TemplateUtils.templateFilter, true);
-		}
-		else if (ide == IDE.FLASH_DEVELOP_FDZ)
-		{
-			//todo
-		}
+		
+		if (templateSource != null)
+			CommandUtils.copyRecursively(templateSource, targetPath, TemplateUtils.templateFilter, true);
 
 		return replacements;
 	}

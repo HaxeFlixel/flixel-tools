@@ -9,9 +9,9 @@ using StringTools;
 
 class TemplateUtils
 {
-	static public var templateFilter:EReg = new EReg("\\btemplate.json\\b", "");
+	public static var templateFilter:EReg = new EReg("\\btemplate.json\\b", "");
 
-	static public function get(templateName:String = ""):TemplateProject
+	public static function get(templateName:String = ""):TemplateProject
 	{
 		if (templateName == "")
 			templateName = 'default';
@@ -30,7 +30,7 @@ class TemplateUtils
 		return target;
 	}
 
-	static public function findTemplates(?templatesPath:String):Array<TemplateProject>
+	public static function findTemplates(?templatesPath:String):Array<TemplateProject>
 	{
 		if (templatesPath == null)
 		{
@@ -96,12 +96,12 @@ class TemplateUtils
 		return
 		{
 			replacement : defaultValue,
-			pattern : pattern,
+			pattern : "${" + pattern + "}",
 			cmdOption : cmdOption
 		};
 	}
 
-	static public function modifyTemplateProject(templatePath:String, template:TemplateProject):Void
+	public static function modifyTemplateProject(templatePath:String, template:TemplateProject):Void
 	{
 		modifyTemplate(templatePath, template.Template.replacements);
 	}
@@ -111,7 +111,7 @@ class TemplateUtils
 	 *
 	 * @param   TemplatePath	Temaplte path to modify
 	 */
-	static public function modifyTemplate(templatePath:String, templates:Array<TemplateReplacement>):Void
+	public static function modifyTemplate(templatePath:String, templates:Array<TemplateReplacement>):Void
 	{
 		for (fileName in FileSys.readDirectory(templatePath))
 		{
@@ -135,7 +135,7 @@ class TemplateUtils
 		}
 	}
 
-	static public function projectTemplateReplacements(source:String, replacements:Array<TemplateReplacement>):String
+	public static function projectTemplateReplacements(source:String, replacements:Array<TemplateReplacement>):String
 	{
 		for (replacement in replacements)
 		{

@@ -119,8 +119,7 @@ class TemplateCommand extends Command
 		var options = [
 			"-subl" => IDE.SUBLIME_TEXT,
 			"-fd" => IDE.FLASH_DEVELOP,
-			"-fdz" => IDE.FLASH_DEVELOP_FDZ,
-			"-noide" => IDE.NONE
+			"-idea" => IDE.INTELLIJ_IDEA
 		];
 
 		var choice = null;
@@ -131,12 +130,12 @@ class TemplateCommand extends Command
 		for (o in options.keys())
 		{
 			var option = o;
-			var IDE = options.get(o);
+			var ide = options.get(o);
 
 			var optionGet = console.getOption(option);
 
 			if (optionGet != null)
-				choice = IDE;
+				choice = ide;
 		}
 
 		return (choice != null) ? choice : IDE.NONE;

@@ -5,6 +5,7 @@ import massive.sys.io.FileSys;
 import sys.io.File;
 import sys.io.Process;
 import sys.FileSystem;
+import FlxTools.IDE;
 using StringTools;
 
 /**
@@ -347,22 +348,17 @@ class CommandUtils
 
 	public static function loadIDESettings():Void
 	{
-		var ideData = "ide-data";
 		var ideDataPath = CommandUtils.getHaxelibPath("flixel-templates");
 		if (ideDataPath == "")
 			return;
 
-		var ideDataPath = CommandUtils.combine(ideDataPath, ideData);
+		ideDataPath = CommandUtils.combine(ideDataPath, "ide-data");
 
-		var flashDevelopSource = "flash-develop";
-		var flashDevelopFDZSource = "flash-develop-fdz";
-		var intellijSource = "intellij-idea";
-		var sublimeSource = "sublime-text";
-
-		FlxTools.flashDevelopFDZSource = CommandUtils.combine(ideDataPath, flashDevelopFDZSource);
-		FlxTools.flashDevelopSource = CommandUtils.combine(ideDataPath, flashDevelopSource);
-		FlxTools.intellijSource = CommandUtils.combine(ideDataPath, intellijSource);
-		FlxTools.sublimeSource = CommandUtils.combine(ideDataPath, sublimeSource);
+		FlxTools.templateSourcePaths = [
+			IDE.FLASH_DEVELOP => CommandUtils.combine(ideDataPath, "flash-develop"),
+			IDE.INTELLIJ_IDEA => CommandUtils.combine(ideDataPath, "intellij-idea"),
+			IDE.SUBLIME_TEXT => CommandUtils.combine(ideDataPath, "sublime-text")
+		];
 		FlxTools.templatesLoaded = true;
 	}
 
