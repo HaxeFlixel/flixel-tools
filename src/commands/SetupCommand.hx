@@ -114,9 +114,7 @@ class SetupCommand extends Command
 			else
 			{
 				if (haxePath == null || haxePath == "")
-				{
 					haxePath = "/usr/lib/haxe";
-				}
 
 				flixelAliasScript = CommandUtils.getHaxelibPath("flixel-tools") + "bin/flixel.sh";
 

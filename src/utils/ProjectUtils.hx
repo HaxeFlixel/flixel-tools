@@ -123,35 +123,29 @@ class ProjectUtils
 
 	public static function resolveIDEChoice(console:Console):IDE
 	{
-		var ide = "";
-		var overrideIDE = "";
-
 		var options = [
 			"-subl" => IDE.SUBLIME_TEXT,
 			"-fd" => IDE.FLASH_DEVELOP,
 			"-idea" => IDE.INTELLIJ_IDEA,
-			"-noide" => IDE.NONE,
+			"-noide" => IDE.NONE
 		];
 
-		for (option in options.keys())
-		{
-			var IDEName = options.get(option);
+		var choice = null;
+		if (FlxTools.settings != null)
+			choice = FlxTools.settings.DefaultEditor;
 
-			if (console.getOption(option) != null)
-			{
-				overrideIDE = IDEName;
-			}
+		for (o in options.keys())
+		{
+			var option = o;
+			var ide = options.get(o);
+
+			var optionGet = console.getOption(option);
+
+			if (optionGet != null)
+				choice = ide;
 		}
 
-		if (FlxTools.settings.IDEAutoOpen || overrideIDE != "")
-		{
-			if (overrideIDE != "")
-				ide = overrideIDE;
-			else
-				ide = FlxTools.settings.DefaultEditor;
-		}
-
-		return ide;
+		return (choice != null) ? choice : IDE.NONE;
 	}
 
 	public static function openWithIDE(projectPath:String, projectName:String, ide:IDE):Bool

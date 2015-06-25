@@ -34,7 +34,7 @@ class TemplateCommand extends Command
 		if (console.getOption("-y") != null)
 			autoContinue = true;
 
-		ideOption = getSelectedIDE();
+		ideOption = ProjectUtils.resolveIDEChoice(console);
 
 		if (console.getOption("-n") != null)
 		{
@@ -114,32 +114,7 @@ class TemplateCommand extends Command
 		exit();
 	}
 
-	private function getSelectedIDE():IDE
-	{
-		var options = [
-			"-subl" => IDE.SUBLIME_TEXT,
-			"-fd" => IDE.FLASH_DEVELOP,
-			"-idea" => IDE.INTELLIJ_IDEA
-		];
-
-		var choice = null;
-		
-		if (FlxTools.settings != null)
-			choice = FlxTools.settings.DefaultEditor;
-
-		for (o in options.keys())
-		{
-			var option = o;
-			var ide = options.get(o);
-
-			var optionGet = console.getOption(option);
-
-			if (optionGet != null)
-				choice = ide;
-		}
-
-		return (choice != null) ? choice : IDE.NONE;
-	}
+	
 
 	private function addOptionReplacement(template:TemplateProject):TemplateProject
 	{
