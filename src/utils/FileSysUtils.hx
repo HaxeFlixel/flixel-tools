@@ -10,7 +10,7 @@ class FileSysUtils
 	/**
 	 * Return the content of a text based file or throws an error with the problem path
 	 */
-	static public function getContent(filePath:String):String
+	public static function getContent(filePath:String):String
 	{
 		var content = "";
 

@@ -19,7 +19,7 @@ class CommandUtils
 	 * @param  overwrite  Overwrite the destination
 	 * @return	Bool true if the new Destination exists after operation
 	 */
-	static public function copyRecursively(source:String, destination:String, overwrite:Bool = true, ?filter:EReg, exclude:Bool = false):Bool
+	public static function copyRecursively(source:String, destination:String, overwrite:Bool = true, ?filter:EReg, exclude:Bool = false):Bool
 	{
 		var current = massive.sys.io.File.current.resolveDirectory("temp");
 
@@ -31,7 +31,7 @@ class CommandUtils
 		return FileSys.exists(destination);
 	}
 
-	static public function deleteRecursively(path:String):Void
+	public static function deleteRecursively(path:String):Void
 	{
 		if (FileSys.exists(path))
 		{
@@ -89,7 +89,7 @@ class CommandUtils
 	 * @param   question	String with the prompt to display
 	 * @return  User choice in an Answer enum or null if an invalid answer given
 	 */
-	static public function askString(question:String):String
+	public static function askString(question:String):String
 	{
 		while (true)
 		{
@@ -107,7 +107,7 @@ class CommandUtils
 	 * @param   question	String with the prompt to display
 	 * @return  User choice in an Answer enum or null if an invalid answer given
 	 */
-	static public function askYN(question:String):Answer
+	public static function askYN(question:String):Answer
 	{
 		while (true)
 		{
@@ -131,7 +131,7 @@ class CommandUtils
 	 * @param   question	String with the prompt to display
 	 * @return  User choice in an Answer enum or null if an invalid answer given
 	 */
-	static public function askYNA(question:String):Answer
+	public static function askYNA(question:String):Answer
 	{
 		while (true)
 		{
@@ -157,7 +157,7 @@ class CommandUtils
 	 * @param  Answers<String> Array<String> containing all the available answers
 	 * @return				 String the answer given or null if the choice was invalid
 	 */
-	static public function askQuestionStrings(question:String, header:String, answers:Array<String>, cancel:Bool = true):String
+	public static function askQuestionStrings(question:String, header:String, answers:Array<String>, cancel:Bool = true):String
 	{
 		while (true)
 		{
@@ -219,7 +219,7 @@ class CommandUtils
 	 *
 	 * @return  String of the current line
 	 */
-	inline static public function readLine()
+	public static inline function readLine()
 	{
 		return Sys.stdin().readLine();
 	}
@@ -230,7 +230,7 @@ class CommandUtils
 	 * @param   haxelibName	 String name of the Haxelib to load
 	 * @return  Haxelib typedef or null if no Haxelib was found
 	 */
-	static public function getHaxelibJsonData(haxelibName:String):HaxelibJSON
+	public static function getHaxelibJsonData(haxelibName:String):HaxelibJSON
 	{
 		var haxleibJsonPath = getHaxelibPath(haxelibName);
 		if (haxleibJsonPath == "")
@@ -240,13 +240,13 @@ class CommandUtils
 		return Json.parse(jsonContent);
 	}
 
-	static public function strmatch(needle:String, haystack:String):Bool
+	public static function strmatch(needle:String, haystack:String):Bool
 	{
 		var search = new EReg("\\b" + needle + "\\b", "");
 		return search.match(haystack);
 	}
 
-	static public function getHaxePath():String
+	public static function getHaxePath():String
 	{
 		var haxePath = Sys.getEnv ("HAXEPATH");
 
@@ -261,7 +261,7 @@ class CommandUtils
 	 * @param  name String of the Haxelib to scan for
 	 * @return	  String path of the Haxelib or "" if none found
 	 */
-	static public function getHaxelibPath(name:String):String
+	public static function getHaxelibPath(name:String):String
 	{
 		var proc:Process = new Process("haxelib", ["path", name]);
 		var result:String = "";
@@ -289,7 +289,7 @@ class CommandUtils
 	/**
 	 * Shortcut to join paths that is platform safe
 	 */
-	static public function combine(firstPath:String, secondPath:String):String
+	public static function combine(firstPath:String, secondPath:String):String
 	{
 		if (firstPath == null || firstPath == "")
 		{
@@ -334,7 +334,7 @@ class CommandUtils
 	 * @param  path String to strip
 	 * @return	  Stripped string
 	 */
-	static public function stripPath(path:String):String
+	public static function stripPath(path:String):String
 	{
 		if (path.startsWith("./"))
 			path = path.substring(2);
@@ -345,7 +345,7 @@ class CommandUtils
 		return path;
 	}
 
-	static public function loadIDESettings():Void
+	public static function loadIDESettings():Void
 	{
 		var ideData = "ide-data";
 		var ideDataPath = CommandUtils.getHaxelibPath("flixel-templates");
@@ -366,7 +366,7 @@ class CommandUtils
 		FlxTools.templatesLoaded = true;
 	}
 
-	static public function loadToolSettings():FlxToolSettings
+	public static function loadToolSettings():FlxToolSettings
 	{
 		var toolPath = CommandUtils.getHaxelibPath("flixel-tools");
 		if (toolPath == "")
@@ -389,7 +389,7 @@ class CommandUtils
 		return settings;
 	}
 
-	static public function saveToolSettings(settings:FlxToolSettings):Void
+	public static function saveToolSettings(settings:FlxToolSettings):Void
 	{
 		var toolPath = CommandUtils.getHaxelibPath("flixel-tools");
 		if (toolPath == "")
@@ -405,7 +405,7 @@ class CommandUtils
 		FlxTools.settings = CommandUtils.loadToolSettings();
 	}
 
-	static public function haxelibCommand(lib:String, autoContinue:Bool, ?message:String):Bool
+	public static function haxelibCommand(lib:String, autoContinue:Bool, ?message:String):Bool
 	{
 		var libStatus = CommandUtils.getHaxelibPath(lib);
 		if (libStatus == "")

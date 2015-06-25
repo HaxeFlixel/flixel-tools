@@ -10,12 +10,12 @@ class FindAndReplace
 	 * Key being the String to search for
 	 * Value being the String to replace it with
 	 */
-	static public var replacements:Array<FindAndReplaceObject>;
+	public static var replacements:Array<FindAndReplaceObject>;
 
 	/**
 	 * Init the replacements map
 	 */
-	static public function init():Array<FindAndReplaceObject>
+	public static function init():Array<FindAndReplaceObject>
 	{
 		replacements = new Array<FindAndReplaceObject>();
 
@@ -445,7 +445,7 @@ class FindAndReplace
 	* @param   replacement	 String to replace the string found with
 	* @param   importValidate  Make sure this import exists
 	*/
-	static public function add(find:String, replacement:String, ?importValidate:String):Void
+	public static function add(find:String, replacement:String, ?importValidate:String):Void
 	{
 		if (importValidate != null)
 			importValidate = "import flixel." +  importValidate;
@@ -466,7 +466,7 @@ class FindAndReplace
 	 * @param	replacement	 String to replace the string found with
 	 * @param	importValidate  Make sure this import exists
 	 */
-	inline static public function addImport(find:String, replacement:String, ?importValidate:String):Void
+	public static inline function addImport(find:String, replacement:String, ?importValidate:String):Void
 	{
 		find = "import flixel." + find;
 		replacement = "import flixel." + replacement;
@@ -481,7 +481,7 @@ class FindAndReplace
 	 * @param	replacement	 String to replace the string found with
 	 * @param	importValidate  Make sure this import exists
 	 */
-	inline static public function addFunction(find:String, replacement:String, ?importValidate:String):Void
+	public static inline function addFunction(find:String, replacement:String, ?importValidate:String):Void
 	{
 		//find = find + "(";
 		//replacement = replacement + "(";

@@ -84,7 +84,7 @@ class FlxTools extends CommandLineRunner
 			displayInfo();
 	}
 
-	static private function displayInfo():Void
+	private static function displayInfo():Void
 	{
 		displayLogo();
 		Sys.println("");
@@ -106,7 +106,7 @@ class FlxTools extends CommandLineRunner
 		Sys.println("");
 	}
 	
-	static private function displayLogo():Void
+	private static function displayLogo():Void
 	{
 		var y = ColorUtils.print.bind(_, Color.Yellow);
 		var r = ColorUtils.print.bind(_, Color.Red);
@@ -123,7 +123,7 @@ class FlxTools extends CommandLineRunner
 		y("|_| |_|"); r("\\ __,"); g("/_/\\_\\"); b("___|");  c("_|   ");   y("|_|"); r( "_");  g("/_/\\_\\"); b("___|");  c( "_|"); nl();
 	}
 
-	static public function getFlixelVersion():String
+	public static function getFlixelVersion():String
 	{
 		var flixelHaxelib:HaxelibJSON = CommandUtils.getHaxelibJsonData("flixel");
 		if (flixelHaxelib != null)
@@ -132,7 +132,7 @@ class FlxTools extends CommandLineRunner
 		return null;
 	}
 
-	static public function main():FlxTools { return new FlxTools(); }
+	public static function main():FlxTools { return new FlxTools(); }
 }
 
 @:enum

@@ -289,7 +289,7 @@ class ConvertCommand extends Command
 	 * @param  Warnings<WarningResult>  Array containing all the WarningResults
 	 * @param  ConvertProjectPath	   The path that the convert command was performed on
 	 */
-	static public function writeWarningsToFile(filePath:String, warnings:Array<WarningResult>, convertProjectPath:String):Void
+	public static function writeWarningsToFile(filePath:String, warnings:Array<WarningResult>, convertProjectPath:String):Void
 	{
 		var fileObject = File.write(filePath, false);
 
@@ -318,7 +318,7 @@ class ConvertCommand extends Command
 	 * @param  FilePath the path of the file to scan
 	 * @return		  WarningResult with data for what the warning was and info
 	 */
-	static public function scanFileForWarnings(filePath:String):Array<WarningResult>
+	public static function scanFileForWarnings(filePath:String):Array<WarningResult>
 	{
 		var results = new Array<WarningResult>();
 

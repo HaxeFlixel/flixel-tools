@@ -12,7 +12,7 @@ class ProjectUtils
 	/**
 	 * Shortcut to create a lime project by recursively copying the folder according to a name
 	 */
-	static public function duplicateProject(project:LimeProject, destination:String, ide:IDE):Bool
+	public static function duplicateProject(project:LimeProject, destination:String, ide:IDE):Bool
 	{
 		var result = CommandUtils.copyRecursively(project.path, destination);
 		if (result)
@@ -31,7 +31,7 @@ class ProjectUtils
 	/**
 	 * Recursively search a directory for Lime projects
 	 */
-	static public function findLimeProjects(targetDirectory:String):Array<LimeProject>
+	public static function findLimeProjects(targetDirectory:String):Array<LimeProject>
 	{
 		var projects = [];
 
@@ -65,7 +65,7 @@ class ProjectUtils
 	/**
 	 * Searches a path for a Lime project xml file
 	 */
-	static private function findProjectXml(projectPath:String):String
+	private static function findProjectXml(projectPath:String):String
 	{
 		var targetProjectFile = CommandUtils.combine(projectPath, "project.xml");
 		if (FileSys.exists(targetProjectFile))
@@ -78,7 +78,7 @@ class ProjectUtils
 		return null;
 	}
 
-	static public function copyIDETemplateFiles(targetPath:String, replacements:Array<TemplateReplacement>, ide:IDE):Array<TemplateReplacement>
+	public static function copyIDETemplateFiles(targetPath:String, replacements:Array<TemplateReplacement>, ide:IDE):Array<TemplateReplacement>
 	{
 		if (replacements == null)
 			replacements = new Array<TemplateReplacement>();
@@ -117,7 +117,7 @@ class ProjectUtils
 		return replacements;
 	}
 
-	static public function resolveIDEChoice(console:Console):IDE
+	public static function resolveIDEChoice(console:Console):IDE
 	{
 		var ide = "";
 		var overrideIDE = "";
@@ -150,7 +150,7 @@ class ProjectUtils
 		return ide;
 	}
 
-	static public function openWithIDE(projectPath:String, projectName:String, ide:IDE):Bool
+	public static function openWithIDE(projectPath:String, projectName:String, ide:IDE):Bool
 	{
 		var ideHandlers:Map<String, String->String->Bool> = [
 			IDE.FLASH_DEVELOP => openWithFlashDevelop,
@@ -169,7 +169,7 @@ class ProjectUtils
 		return result;
 	}
 	
-	static public function openWithFlashDevelop(projectPath:String, projectName:String):Bool
+	public static function openWithFlashDevelop(projectPath:String, projectName:String):Bool
 	{
 		var projectFile = CommandUtils.combine(projectPath, projectName + ".hxproj");
 		projectFile = projectFile.replace("/", "\\");
@@ -182,7 +182,7 @@ class ProjectUtils
 		return false;
 	}
 	
-	static public function openWithSublimeText(projectPath:String, projectName:String):Bool
+	public static function openWithSublimeText(projectPath:String, projectName:String):Bool
 	{
 		var projectFile = CommandUtils.combine(projectPath, projectName + ".sublime-project");
 		
@@ -198,7 +198,7 @@ class ProjectUtils
 		return false;
 	}
 	
-	static public function openWithIntelliJIDEA(projectPath:String, projectName:String):Bool
+	public static function openWithIntelliJIDEA(projectPath:String, projectName:String):Bool
 	{
 		var projectFile = CommandUtils.combine(projectPath, ".idea");
 		

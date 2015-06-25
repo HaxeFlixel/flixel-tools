@@ -10,9 +10,9 @@ class Warnings
 	 * Key being the String to search for
 	 * Value being the String info about the solution
 	 */
-	static public var warningList(get, never):Map<String,String>;
+	public static var warningList(get, never):Map<String,String>;
 
-	static public function get_warningList():Map<String,String>
+	public static function get_warningList():Map<String,String>
 	{
 		var warningList = new Map<String, String>();
 
