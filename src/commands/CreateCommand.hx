@@ -75,12 +75,22 @@ class CreateCommand extends Command
 	{
 		Sys.println("Listing all available demos...\n");
 		
+		// sort alphabetically
+		projects.sort(function(p1, p2) {
+			if (p1.name < p2.name)
+				return -1;
+			if (p1.name > p2.name)
+				return 1;
+			return 0;
+		});
+		
 		var lines = columnsFromList(projects, 3, function(project) {
 			return project.name;
 		});
 		
 		for (line in lines)
 			Sys.println(line);
+		
 		return getProjectChoice(projects);
 	}
 	
