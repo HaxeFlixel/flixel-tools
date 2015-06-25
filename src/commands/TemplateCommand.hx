@@ -12,7 +12,7 @@ using StringTools;
 class TemplateCommand extends Command
 {
 	private var autoContinue:Bool = false;
-	private var ideOption:String = "";
+	private var ideOption:IDE = IDE.NONE;
 
 	override public function execute():Void
 	{
@@ -34,7 +34,7 @@ class TemplateCommand extends Command
 		if (console.getOption("-y") != null)
 			autoContinue = true;
 
-		ideOption = selectIDE();
+		ideOption = getSelectedIDE();
 
 		if (console.getOption("-n") != null)
 		{
@@ -105,32 +105,16 @@ class TemplateCommand extends Command
 		Sys.println(" " + TargetPath);
 		Sys.println(" ");
 
-		if (ideOption == IDE.SUBLIME_TEXT)
+		if (FlxTools.settings.IDEAutoOpen)
 		{
-			if (FlxTools.settings.IDEAutoOpen)
-			{
-				var answer = Answer.Yes;
-
-				if (!autoContinue)
-				{
-					answer = CommandUtils.askYN("Do you want to open it with Sublime?");
-				}
-
-				if (answer == Answer.Yes)
-				{
-					var projectName = TemplateUtils.getReplacementValue(template.Template.replacements, "${PROJECT_NAME}");
-					var projectFile = TargetPath + "/" + projectName + ".sublime-project";
-
-					Sys.command("subl");
-					Sys.command("subl", [projectFile]);
-				}
-			}
+			var projectName = TemplateUtils.getReplacementValue(template.Template.replacements, "${PROJECT_NAME}");
+			ProjectUtils.openWithIDE(TargetPath, projectName, ideOption);
 		}
 
 		exit();
 	}
 
-	private function selectIDE():String
+	private function getSelectedIDE():IDE
 	{
 		var options = [
 			"-subl" => IDE.SUBLIME_TEXT,
