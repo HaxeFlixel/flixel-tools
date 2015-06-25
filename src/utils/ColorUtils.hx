@@ -41,7 +41,7 @@ class ColorUtils
 	
 	public static function setColor(color:Color, style:Style = Style.Normal):Void
 	{
-		if (Sys.systemName() == "Linux")
+		if (Sys.systemName() == "Linux" || Sys.systemName() == "Mac")
 		{
 			var id = (color == Color.None) ? "" : ';$color';
 			Sys.print("\033[" + style + id + "m");
