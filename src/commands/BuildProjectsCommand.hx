@@ -39,7 +39,7 @@ class BuildProjectsCommand extends Command
 			{
 				var specifier = (projectNames.length > 0) ? "specified" : "all";
 				Sys.println('Building $specifier projects - $target \n');
-				compileProjects(projects, target);
+				buildProjects(projects, target);
 			}
 		}
 		
@@ -60,23 +60,15 @@ class BuildProjectsCommand extends Command
 		return filteredProjects;
 	}
 
-	private function compileProjects(projects:Array<LimeProject>, target:String):Void
+	private function buildProjects(projects:Array<LimeProject>, target:String):Void
 	{
 		var results = new Array<BuildResult>();
 
 		for (project in projects)
 		{
-			if (target == "all")
-			{
-				results.push(buildProject("flash", project));
-				results.push(buildProject("neko", project));
-				results.push(buildProject("native", project));
-				results.push(buildProject("html5", project));
-			}
-			else
-			{
-				results.push(buildProject(target, project));
-			}
+			var targets = (target == "all") ? ["flash", "html5", "neko", "cpp"] : [target];
+			for (target in targets)
+				results.push(buildProject(project, target));
 		}
 
 		if (console.getOption("log") == "true")
@@ -100,6 +92,20 @@ class BuildProjectsCommand extends Command
 
 		exit(totalResult);
 	}
+	
+	private function buildProject(project:LimeProject, target:String):BuildResult
+	{
+		var buildArgs = ["run", "openfl", "build", project.path, target];
+		var result:Result = Sys.command("haxelib", buildArgs);
+		
+		ColorUtils.println(result + " - " + project.name + ' ($target)', result);
+
+		return {
+			result : result,
+			target : target,
+			project : project
+		};
+	}
 
 	private function writeResultsToFile(FilePath:String, Results:Array<BuildResult>):Void
 	{
@@ -120,20 +126,6 @@ class BuildProjectsCommand extends Command
 
 		file.writeString("\n / End of Log.");
 		file.close();
-	}
-
-	private function buildProject(target:String, project:LimeProject):BuildResult
-	{
-		var buildArgs = ["run", "openfl", "build", project.path, target];
-		var result:Result = Sys.command("haxelib", buildArgs);
-		
-		ColorUtils.println(result + " - " + project.name + ' ($target)', result);
-
-		return {
-			result : result,
-			target : target,
-			project : project
-		};
 	}
 }
 
