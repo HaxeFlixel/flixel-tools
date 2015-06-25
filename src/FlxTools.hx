@@ -8,6 +8,7 @@ import commands.SetupCommand;
 import commands.TemplateCommand;
 import massive.haxe.util.TemplateUtil;
 import massive.sys.cmd.CommandLineRunner;
+import utils.ColorUtils;
 import utils.CommandUtils;
 
 class FlxTools extends CommandLineRunner
@@ -85,14 +86,9 @@ class FlxTools extends CommandLineRunner
 
 	static private function displayInfo():Void
 	{
+		printLogo();
 		Sys.println("");
-		Sys.println(" _   _               ______ _  _          _");
-		Sys.println("| | | |              |  ___| ||_|        | |");
-		Sys.println("| |_| | __ ___  _____| |_  | |____  _____| |");
-		Sys.println("|  _  |/ _` \\ \\/ / _ \\  _| | || \\ \\/ / _ \\ |");
-		Sys.println("| | | | (_| |>  <  __/ |   | || |>  <  __/ |");
-		Sys.println("|_| |_|\\__,_/_/\\_\\___\\_|   |_||_/_/\\_\\___|_|");
-		Sys.println("");
+		
 		Sys.println("Powered by the Haxe Toolkit and OpenFL");
 		Sys.println("Visit www.haxeflixel.com for community support and resources!");
 		Sys.println("");
@@ -108,6 +104,23 @@ class FlxTools extends CommandLineRunner
 		}
 
 		Sys.println("");
+	}
+	
+	static private function printLogo():Void
+	{
+		var y = ColorUtils.print.bind(_, Color.Yellow);
+		var r = ColorUtils.print.bind(_, Color.Red);
+		var g = ColorUtils.print.bind(_, Color.Green);
+		var b = ColorUtils.print.bind(_, Color.Blue);
+		var c = ColorUtils.print.bind(_, Color.Cyan);
+		var nl = Sys.println.bind("");
+
+		y(" _   _ "); r("      "); g("      ");   b("  ");    c("______");  y(" _ "); r("_");   g("      ");   b("   ");   c(" _ "); nl();
+		y("| | | |"); r("      "); g("      ");   b("  ");    c("|  ___|"); y(" ");   r("(_)"); g("      ");   b("  ");    c("| |"); nl();
+		y("| |_| |"); r(" __ _");  g("__  __");   b("___");   c("| |__ ");  y("| |"); r( "_");  g("__  __");   b("___");   c("| |"); nl();
+		y("|  _  |"); r("/ _` ");  g("\\ \\/ /"); b(" _ \\"); c(" ___|");   y("| |"); r( " ");  g("\\ \\/ /"); b(" _ \\"); c( " |"); nl();
+		y("| | | |"); r(" (_| |"); g(">  <  ");   b( "__/");  c("  |  ");   y("| |"); r( " |"); g( ">  <  ");  b("__/");   c( " |"); nl();
+		y("|_| |_|"); r("\\ __,"); g("/_/\\_\\"); b("___|");  c(" _|  ");   y("|_|"); r( "_");  g("/_/\\_\\"); b("___|");  c( "_|"); nl();
 	}
 
 	static public function getFlixelVersion():String

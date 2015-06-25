@@ -2,9 +2,9 @@ package commands;
 
 import massive.sys.cmd.Command;
 import sys.io.File;
-import utils.CommandUtils;
-import utils.ConsoleUtils;
+import utils.ColorUtils;
 import utils.ProjectUtils;
+import utils.CommandUtils;
 
 class BuildProjectsCommand extends Command
 {
@@ -96,7 +96,7 @@ class BuildProjectsCommand extends Command
 		}
 
 		Sys.println("");
-		ConsoleUtils.printWithColor('$passed/$total projects built successfully\n', totalResult);
+		ColorUtils.println('$passed/$total projects built successfully\n', totalResult);
 
 		exit(totalResult);
 	}
@@ -130,7 +130,7 @@ class BuildProjectsCommand extends Command
 		var buildArgs = ["run", "openfl", "build", Project.path, Target];
 		var result:Result = Sys.command("haxelib", buildArgs);
 		
-		ConsoleUtils.printWithColor(result + " - " + Project.name + ' ($Target)', result);
+		ColorUtils.println(result + " - " + Project.name + ' ($Target)', result);
 
 		return {
 			result : result,
