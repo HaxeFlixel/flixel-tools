@@ -74,10 +74,44 @@ class CreateCommand extends Command
 	private function promptProjectChoice(projects:Array<LimeProject>):LimeProject
 	{
 		Sys.println("Listing all available demos...\n");
-		for (i in 0...projects.length)
-			Sys.println('  [${i + 1}] ${projects[i].name}');
 		
+		var lines = columnsFromList(projects, 3, function(project) {
+			return project.name;
+		});
+		
+		for (line in lines)
+			Sys.println(line);
 		return getProjectChoice(projects);
+	}
+	
+	private function columnsFromList<T>(list:Array<T>, columns:Int, stringifier:T->String):Array<String>
+	{
+		var splitAmount = Math.ceil(list.length / columns);
+		var lines = [for (i in 0...splitAmount) ""];
+		var maxLineLength = 0;
+		
+		for (i in 0...list.length)
+		{
+			var number = Std.string(i + 1);
+			if (number.length < 2)
+				number = "0" + number;
+			
+			var output = '[$number] ${stringifier(list[i])}';
+			
+			if (i % splitAmount == 0)
+			{
+				for (line in lines)
+					if (line.length > maxLineLength)
+						maxLineLength = line.length;
+			}
+			
+			var j = i % splitAmount;
+			var numSpaces = (maxLineLength - lines[j].length) + 2;
+			lines[j] += [for (i in 0...numSpaces) " "].join("");
+			lines[j] += output;
+		}
+		
+		return lines;
 	}
 	
 	private function getProjectChoice(projects:Array<LimeProject>):LimeProject
