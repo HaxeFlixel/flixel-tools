@@ -439,83 +439,30 @@ class CommandUtils
 		FlxTools.settings = CommandUtils.loadToolSettings();
 	}
 
-	static public function haxelibGitCommand(Lib:String, URL:String, AutoContinue:Bool, Message:String, Branch:String = ""):Bool
-	{
-		if (Message == null)
-			Message = "Do you want to install git " + Lib + " " + URL + " " + Branch + "?";
-
-		var command = "haxelib git " + Lib + " " + URL + " " + Branch;
-
-		if (!AutoContinue && CommandUtils.askYN(Message) == Answer.No)
-			return false;
-
-		Sys.println(command);
-		Sys.command(command);
-
-		return true;
-	}
-
 	static public function haxelibCommand(Lib:String, AutoContinue:Bool, ?Message:String):Bool
 	{
 		var libStatus = CommandUtils.getHaxelibPath(Lib);
 
 		if (libStatus == "")
 		{
-			if (Message==null)
+			if (Message == null)
 				Message = "Do you want to install " + Lib;
-
-			var command = "haxelib install " + Lib;
 
 			if (!AutoContinue)
 			{
 				var answer = CommandUtils.askYN(Message);
-
 				if (answer == Answer.No)
-				{
 					return false;
-				}
 			}
 
-			Sys.println(command);
-			Sys.command(command);
-
+			Sys.println('haxelib install $Lib');
+			Sys.command("haxelib", ["install", Lib]);
 			return true;
 		}
 		else
 		{
 			Sys.println("You appear to already have " + Lib + " installed.");
 			return false;
-		}
-	}
-
-	static public function gitHaxelib(HaxeLib:String, Repo:String):Bool
-	{
-		var path = CommandUtils.getHaxelibPath(HaxeLib);
-
-		if (path != "")
-		{
-			Sys.println("");
-			Sys.println("It appears you already have " + HaxeLib + " haxelib installed.");
-			Sys.println(path);
-			Sys.println("");
-
-			return true;
-		}
-		else
-		{
-			Sys.command("haxelib git " + HaxeLib + " " + Repo);
-
-			path = CommandUtils.getHaxelibPath(HaxeLib);
-
-			if (path == "")
-			{
-				Sys.println(" There was a problem installing " + HaxeLib + " from " + Repo);
-				return false;
-			}
-			else
-			{
-				return true;
-			}
 		}
 	}
 }

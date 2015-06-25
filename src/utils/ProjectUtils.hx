@@ -189,7 +189,7 @@ class ProjectUtils
 		if (FileSys.exists(projectFile))
 		{
 			Sys.println(projectFile);
-			Sys.command("explorer " + projectFile);
+			Sys.command("explorer", [projectFile]);
 			return true;
 		}
 		return false;
@@ -204,7 +204,7 @@ class ProjectUtils
 			Sys.println(projectFile);
 			if (FileSys.isMac || FileSys.isLinux)
 			{
-				Sys.command("subl " + projectFile);
+				Sys.command("subl", [projectFile]);
 			}
 			// TODO: windows
 			return true;
@@ -220,7 +220,7 @@ class ProjectUtils
 		{
 			if (FileSys.isMac || FileSys.isLinux) // TODO: test on linux
 			{
-				Sys.command(FlxTools.settings.IDEA_Path + " " + projectPath);
+				Sys.command(FlxTools.settings.IDEA_Path, [projectPath]);
 			}
 			// TODO: windows
 			return true;

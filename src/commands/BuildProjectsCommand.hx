@@ -127,9 +127,9 @@ class BuildProjectsCommand extends Command
 		if (Target == "native")
 			Target = CommandUtils.getCPP();
 
-		var buildCommand:String = "haxelib run openfl build " + "\"" + Project.path + "\"" + " " + Target;
+		var buildArgs = ["run", "openfl", "build", Project.path, Target];
+		var result:Result = Sys.command("haxelib", buildArgs);
 		
-		var result:Result = Sys.command(buildCommand);
 		ConsoleUtils.printWithColor(result + " - " + Project.name + ' ($Target)', result);
 
 		return {

@@ -45,16 +45,13 @@ class SetupCommand extends Command
 	{
 		var flixel = CommandUtils.getHaxelibPath("flixel");
 
-		if (flixel == "")
+		if (flixel == "" && !autoContinue)
 		{
-			if (!autoContinue)
-			{
-				var answer = CommandUtils.askYN ("Would you now like this tool to install flixel for you?");
+			var answer = CommandUtils.askYN("Would you now like this tool to install flixel for you?");
 
-				if (answer == Answer.Yes)
-				{
-					Sys.command ("haxelib install flixel");
-				}
+			if (answer == Answer.Yes)
+			{
+				Sys.command("haxelib", ["install", "flixel"]);
 			}
 		}
 	}
@@ -68,14 +65,19 @@ class SetupCommand extends Command
 		{
 			if (!autoContinue)
 			{
-				var download = CommandUtils.askYN ("Would you now like this tool to download the flixel-demos and flixel-templates?");
+				var download = CommandUtils.askYN("Would you now like this tool to download the flixel-demos and flixel-templates?");
 
 				if (download == Answer.Yes)
-					Sys.command("haxelib run flixel-tools download");
+					runDownloadCommand();
 			}
 			else
-				Sys.command("haxelib run flixel-tools download");
+				runDownloadCommand();
 		}
+	}
+	
+	private function runDownloadCommand()
+	{
+		Sys.command("haxelib", ["run", "flixel-tools", "download"]);
 	}
 
 	private function setupCommandAlias():Void
@@ -130,8 +132,8 @@ class SetupCommand extends Command
 				if (FileSystem.exists(flixelAliasScript))
 				{
 					Sys.command("sudo", ["cp", flixelAliasScript, haxePath + "/flixel"]);
-					Sys.command("sudo chmod 755 " + haxePath + "/flixel");
-					Sys.command("sudo ln -s " + haxePath + "/flixel /usr/bin/flixel");
+					Sys.command("sudo", ["chmod", "755", haxePath + "/flixel"]);
+					Sys.command("sudo", ["ln", "-s", haxePath + "/flixel", "/usr/bin/flixel"]);
 				}
 				else
 				{
@@ -200,14 +202,14 @@ class SetupCommand extends Command
 					"system as in http://www.sublimetext.com/docs/2/osx_command_line.html.");
 
 				var answer = Answer.No;
-				var sublSetupCommand = 'ln -s "/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl" ~/bin/subl';
+				var sublSetupArgs = ["-s", "/Applications/Sublime Text", "2.app/Contents/SharedSupport/bin/subl", "~/bin/subl"];
 
 				answer = CommandUtils.askYN("Do you want to run the symlink command automatically as per official instructions" +
 					"http://www.sublimetext.com/docs/2/osx_command_line.html?\n\n The command that will be executed is as follows:\n '" +
-					sublSetupCommand + "'");
+					"ln " + sublSetupArgs.join(" ") + "'");
 
 				if (answer == Answer.Yes)
-					Sys.command(sublSetupCommand);
+					Sys.command("ln", sublSetupArgs);
 			}
 		}
 
