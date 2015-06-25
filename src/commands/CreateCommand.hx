@@ -39,8 +39,11 @@ class CreateCommand extends Command
 	
 	private function getProjects():Array<LimeProject>
 	{
-		var demosPath = CommandUtils.getHaxelibPath("flixel-demos");
-		var projects:Array<LimeProject> = ProjectUtils.findLimeProjects(demosPath);
+		var directory = console.getOption("dir");
+		if (directory == null)
+			directory = CommandUtils.getHaxelibPath("flixel-demos");
+
+		var projects:Array<LimeProject> = ProjectUtils.findLimeProjects(directory);
 
 		if (projects.length == 0)
 		{

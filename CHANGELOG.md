@@ -14,6 +14,7 @@
 	* don't ask for confirmation for the auto-open in IDE option 
 	* minor optimization 
 	* improved the demo list output
+	* added a `-dir` option to create projects other than the flixel-demos haxelib
 * `template` command:
 	* fixed the auto-open in IDE option only being respected with Sublime Text 
 * The HaxeFlixel header is now only displayed with `flixel` or `flixel help`
