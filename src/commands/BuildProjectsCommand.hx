@@ -28,7 +28,7 @@ class BuildProjectsCommand extends Command
 		var demos:Array<LimeProject> = ProjectUtils.findLimeProjects(directory);
 		if (demos.length == 0)
 		{
-			error("No demos were found.");
+			error("No projects were found.");
 		}
 		else
 		{

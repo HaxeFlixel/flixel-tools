@@ -2,7 +2,6 @@ package commands;
 
 import massive.sys.cmd.Command;
 import utils.CommandUtils;
-import utils.DemoUtils;
 import utils.ProjectUtils;
 
 class CreateCommand extends Command
@@ -12,93 +11,114 @@ class CreateCommand extends Command
 		if (console.args.length > 3)
 			error("You have given too many arguments for the create command.");
 
-		var projects:Array<LimeProject> = DemoUtils.findDemos();
-
-		if (projects == null)
-		{
-			Sys.println("");
-			Sys.println("There were no Demos found.");
-			Sys.println("Is your flixel-demos haxelib installed?");
-			Sys.println("Try 'haxelib install flixel-demos'.");
-			Sys.println("");
-			exit();
-		}
-
-		var demo:LimeProject = null;
-
-		if (console.args[1] != null)
-		{
-			demo = DemoUtils.exists(console.args[1]);
-
-			if (demo == null)
-			{
-				if (Std.parseInt(console.args[1]) != null)
-				{
-					demo = DemoUtils.getByIndex(Std.parseInt(console.args[1]));
-
-					if (demo == null)
-					{
-						error("This demo was not found, please try again.");
-					}
-				}
-			}
-		}
-		else
-		{
-			demo = promptDemoChoice(projects);
-		}
-
-		if (demo == null)
-			error("This demo was not found, please try again.");
+		var projects:Array<LimeProject> = getProjects();
+		var project = getProject(projects);
 		
-		Sys.println(" Creating " + demo.name);
+		Sys.println("Creating '" + project.name + "'...");
 
 		var ide = ProjectUtils.resolveIDEChoice(console);
-		var destination = CommandUtils.combine(Sys.getCwd(), demo.name);
-		var copied = ProjectUtils.duplicateProject(demo, destination, ide);
+		var destination = CommandUtils.combine(Sys.getCwd(), project.name);
+		var copied = ProjectUtils.duplicateProject(project, destination, ide);
 
 		if (copied)
 		{
-			Sys.println("");
-			Sys.println(" The Demo " + demo.name + " has been created at:");
-			Sys.println(" " + destination);
+			Sys.println("The demo '" + project.name + "' has been created at:");
+			Sys.println(destination);
 
 			if (FlxTools.settings.IDEAutoOpen)
-				ProjectUtils.openWithIDE(destination, demo.name, ide);
+				ProjectUtils.openWithIDE(destination, project.name, ide);
 
 			exit();
 		}
 		else
 		{
 			Sys.println("");
-			error(" There was an problem creating " + demo.name);
+			error("There was a problem creating " + project.name);
 		}
 	}
-
-	private function promptDemoChoice(projects:Array<LimeProject>):LimeProject
+	
+	private function getProjects():Array<LimeProject>
 	{
-		for (project in projects)
+		var demosPath = CommandUtils.getHaxelibPath("flixel-demos");
+		var projects:Array<LimeProject> = ProjectUtils.findLimeProjects(demosPath);
+
+		if (projects.length == 0)
 		{
-			Sys.println(project.name);
+			Sys.println("No demos found.");
+			Sys.println("Is the flixel-demos haxelib installed?");
+			Sys.println("Try 'haxelib install flixel-demos'.");
+			exit();
 		}
-		var answers = [];
-		var header = " Listing all the demos you can create.";
-		var question = " Please enter a number or name of the demo to create.";
-
-		for (demo in projects)
+		
+		return projects;
+	}
+	
+	private function getProject(projects:Array<LimeProject>):LimeProject
+	{
+		var project:LimeProject = null;
+		if (console.args[1] != null)
 		{
-			answers.push(demo.name);
+			project = resolveProject(projects, console.args[1]);
+			if (project == null)
+				error("This demo was not found, please try again.");
 		}
+		else
+			project = promptProjectChoice(projects);
 
-		var answer = DemoUtils.askQuestionDemoStrings(question, header, answers);
+		if (project == null)
+			error("This demo was not found, please try again.");
+		
+		return project;
+	}
 
-		if (answer == null)
+	private function promptProjectChoice(projects:Array<LimeProject>):LimeProject
+	{
+		Sys.println("Listing all available demos...\n");
+		for (i in 0...projects.length)
+			Sys.println('\t[$i] ${projects[i].name}');
+		
+		var project = getProjectChoice(projects);
+		if (project == null)
 		{
-			Sys.println(" Your choice was not a valid demo.");
-			Sys.println("");
+			Sys.println("Your choice was not a valid demo.\n");
 			return null;
 		}
+		return project;
+	}
+	
+	private function getProjectChoice(projects:Array<LimeProject>):LimeProject
+	{
+		while (true)
+		{
+			Sys.println("\n[c] Cancel\n");
+			
+			Sys.println("Please enter the number or name of the demo to create.\n");
 
-		return DemoUtils.exists(answer);
+			var userResponse = CommandUtils.readLine();
+			if (userResponse == "c")
+			{
+				Sys.println("Cancelled");
+				break;
+			}
+			
+			var project = resolveProject(projects, userResponse);
+			if (project != null)
+				return project;
+		}
+
+		return null;
+	}
+	
+	private function resolveProject(projects:Array<LimeProject>, nameOrIndex:String):LimeProject
+	{
+		var index = Std.parseInt(nameOrIndex);
+		if (index != null && projects.length >= index)
+			return projects[index];
+		
+		for (project in projects)
+			if (project.name == nameOrIndex)
+				return project;
+		
+		return null;
 	}
 }
