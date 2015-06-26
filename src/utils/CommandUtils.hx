@@ -364,6 +364,12 @@ class CommandUtils
 		var jsonContent:String = FileSysUtils.getContent(toolPath + "settings.json");
 		var settings:FlxToolSettings = Json.parse(jsonContent);
 
+		// backwards compatibility with settings from versions <= 1.0.5
+		if (settings.DefaultEditor == "Flash Develop")
+			settings.DefaultEditor = IDE.FLASH_DEVELOP;
+		else if (settings.DefaultEditor == "Intellij Idea")
+			settings.DefaultEditor = IDE.INTELLIJ_IDEA;
+		
 		return settings;
 	}
 
