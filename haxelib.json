@@ -4,8 +4,8 @@
     "license": "MIT",
     "tags": ["game", "openfl", "flash", "neko", "cpp", "android", "ios"],
     "description": "Command-Line tools for the HaxeFlixel game engine",
-    "version": "1.0.5",
-    "releasenote": "Compatibility fix for Haxe 3.2.0",
+    "version": "1.1.0",
+    "releasenote": "General improvements and fixes, see the CHANGELOG.md for more details.",
     "contributors": ["haxeflixel"],
     "dependencies": {}
 }
