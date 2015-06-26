@@ -1,4 +1,4 @@
-?.?.?
+1.1.0
 ------------------------------
 * `testdemos` command:
 	* removed the `validate` alias 
@@ -15,8 +15,12 @@
 	* minor optimization 
 	* improved the demo list output
 	* added a `-dir` option to create projects other than the flixel-demos haxelib
+	* don't copy `export` folders
 * `template` command:
 	* fixed the auto-open in IDE option only being respected with Sublime Text
+	* fixed exception when trying to delete already exisitng dir when files in that dir are in use
+* `setup` command:
+	* don't ask for an author name anymore (wasn't being used) 
 * Changed the syntax for the IDE override options of `create` and `template` from `-subl|-fd|-idea|-noide` to `-ide <subl|fd|idea|none>`
 * The HaxeFlixel header is now only displayed with `flixel` or `flixel help`
 * The logo in the header is now printed in color on Linux and Mac
