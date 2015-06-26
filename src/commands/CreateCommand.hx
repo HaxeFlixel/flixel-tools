@@ -141,7 +141,7 @@ class CreateCommand extends Command
 			if (userResponse == "c")
 			{
 				Sys.println("Cancelled");
-				break;
+				exit();
 			}
 			
 			var project = resolveProject(projects, userResponse);
