@@ -16,7 +16,8 @@
 	* improved the demo list output
 	* added a `-dir` option to create projects other than the flixel-demos haxelib
 * `template` command:
-	* fixed the auto-open in IDE option only being respected with Sublime Text 
+	* fixed the auto-open in IDE option only being respected with Sublime Text
+* Changed the syntax for the IDE override options of `create` and `template` from `-subl|-fd|-idea|-noide` to `-ide <subl|fd|idea|none>`
 * The HaxeFlixel header is now only displayed with `flixel` or `flixel help`
 * The logo in the header is now printed in color on Linux and Mac
 * The missing templates error is no longer printed for commands that don't need them

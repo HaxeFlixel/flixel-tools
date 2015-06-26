@@ -133,7 +133,6 @@ abstract IDE(String) from String to String
 {
 	var SUBLIME_TEXT = "Sublime Text";
 	var FLASH_DEVELOP = "FlashDevelop";
-	var FLASH_DEVELOP_FDZ = "FlashDevelop FDZ";
 	var INTELLIJ_IDEA = "IntelliJ IDEA";
 	var NONE = "None";
 }

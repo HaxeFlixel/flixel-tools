@@ -6,4 +6,4 @@
                   the current directory will be used.
   -dir <dir>    : The directory in which to (recursively) look for projects.
                   Optional, defaults to the flixel-demos haxelib.
-  -subl|-fd|-idea|-noide : The IDE to use (overrides the configuration).
+  -ide <subl|fd|idea|none> : The IDE to use (overrides the configuration).
