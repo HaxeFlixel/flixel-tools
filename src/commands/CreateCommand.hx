@@ -88,7 +88,10 @@ class CreateCommand extends Command
 		});
 		
 		var lines = columnsFromList(projects, 3, function(project) {
-			return project.name;
+			if (project.name.length <= 20) 
+				return project.name;
+			else
+				return project.name.substring(0, 17) + "...";
 		});
 		
 		for (line in lines)

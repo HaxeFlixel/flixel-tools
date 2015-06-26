@@ -101,8 +101,8 @@ class TemplateCommand extends Command
 
 		TemplateUtils.modifyTemplateProject(targetPath, template);
 
-		Sys.println(" Created template at:");
-		Sys.println(" " + targetPath);
+		Sys.println("Created template at:");
+		Sys.println(targetPath);
 		Sys.println(" ");
 
 		if (FlxTools.settings.IDEAutoOpen)
@@ -112,9 +112,7 @@ class TemplateCommand extends Command
 		}
 
 		exit();
-	}
-
-	
+	}	
 
 	private function addOptionReplacement(template:TemplateProject):TemplateProject
 	{
