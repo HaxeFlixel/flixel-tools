@@ -14,11 +14,9 @@ class ProjectUtils
 	 */
 	public static function duplicateProject(project:LimeProject, destination:String, ide:IDE):Bool
 	{
-		var result = CommandUtils.copyRecursively(project.path, destination);
+		var result = CommandUtils.copyRecursively(project.path, destination, ~/export/, true);
 		if (result)
 		{
-			CommandUtils.copyRecursively(project.path, destination);
-
 			var replacements = new Array<TemplateReplacement>();
 			replacements.push(TemplateUtils.addOption("PROJECT_NAME", "", project.name));
 			replacements = copyIDETemplateFiles(destination, replacements, ide);
