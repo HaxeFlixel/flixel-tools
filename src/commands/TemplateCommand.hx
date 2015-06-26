@@ -91,7 +91,15 @@ class TemplateCommand extends Command
 
 			if (answer == Answer.Yes)
 			{
-				CommandUtils.deleteRecursively(targetPath);
+				try
+				{
+					CommandUtils.deleteRecursively(targetPath);
+				}
+				catch (e:Dynamic)
+				{
+					Sys.println("Error while trying to delete the directory. Is it in use?");
+					exit();
+				}
 			}
 		}
 
