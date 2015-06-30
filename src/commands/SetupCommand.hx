@@ -182,7 +182,7 @@ class SetupCommand extends Command
 				"system as in http://www.sublimetext.com/docs/2/osx_command_line.html.");
 
 			var answer = Answer.No;
-			var sublSetupArgs = ["-s", "/Applications/Sublime Text", "2.app/Contents/SharedSupport/bin/subl", "~/bin/subl"];
+			var sublSetupArgs = ["-s", "/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl", "~/bin/subl"];
 
 			answer = CommandUtils.askYN("Do you want to run the symlink command automatically as per official instructions" +
 				"http://www.sublimetext.com/docs/2/osx_command_line.html?\n\n The command that will be executed is as follows:\n '" +
