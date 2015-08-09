@@ -83,7 +83,7 @@ class ProjectUtils
 
 		var templateSource:String = FlxTools.templateSourcePaths[ide];
 		if (templateSource == null)
-			return [];
+			return replacements;
 		
 		var settings = FlxTools.settings;
 		var addOption = function(name:String, defaultValue:Dynamic) {
