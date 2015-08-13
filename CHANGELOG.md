@@ -1,3 +1,10 @@
+1.1.1
+------------------------------
+* `setup` command:
+	* fixed the Sublime Text symlink command on Mac
+* `template` command:
+	* fixed some template variables not being replaced with IDE option "None" 
+
 1.1.0
 ------------------------------
 * `testdemos` command:
