@@ -18,7 +18,7 @@ class SetupCommand extends Command
 		setupFlixel();
 
 		if (console.args.length > 3)
-			error("You have given too many arguments for the create command.");
+			error("You have given too many arguments for the setup command.");
 
 		if (console.getOption("-y") != null)
 			autoContinue = true;
