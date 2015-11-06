@@ -122,7 +122,7 @@ class SetupCommand extends Command
 				{
 					Sys.command("sudo", ["cp", flixelAliasScript, haxePath + "/flixel"]);
 					Sys.command("sudo", ["chmod", "755", haxePath + "/flixel"]);
-					Sys.command("sudo", ["ln", "-s", haxePath + "/flixel", "/usr/bin/flixel"]);
+					Sys.command("sudo", ["ln", "-s", haxePath + "/flixel", "/usr/local/bin/flixel"]);
 				}
 				else
 				{
