@@ -1,3 +1,8 @@
+1.1.2
+------------------------------
+* `setup` command:
+	* fixed the installation path on OS X El Capitan
+
 1.1.1
 ------------------------------
 * `setup` command:
