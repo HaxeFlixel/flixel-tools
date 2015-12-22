@@ -231,10 +231,10 @@ class CommandUtils
 
 	public static function getHaxePath():String
 	{
-		var haxePath = Sys.getEnv ("HAXEPATH");
+		var haxePath = Sys.getEnv("HAXEPATH");
 
 		if (haxePath == null || haxePath == "")
-			haxePath = "/usr/lib/haxe";
+			haxePath =  (FileSys.isMac ? "/usr/local/lib" : "/usr/lib") + "/haxe";
 
 		return haxePath;
 	}
