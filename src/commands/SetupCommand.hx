@@ -79,9 +79,12 @@ class SetupCommand extends Command
 
 		var message = "Do you want to setup the flixel command alias?";
 
+		var binPath = if (FileSys.isMac) "/usr/local/bin" else "/usr/bin";
+		var libPath = if (FileSys.isMac) "/usr/local/lib" else "/usr/lib";
+
 		if (FileSys.isLinux||FileSys.isMac)
 			message = "Do you want to set up the command alias 'flixel' to 'haxelib run flixel-tools'?" +
-			          "\nA simple flixel script will be added to your /usr/bin/";
+			          "\nA simple flixel script will be added to your " + binPath + "/";
 
 		answer = CommandUtils.askYN(message);
 
@@ -114,7 +117,7 @@ class SetupCommand extends Command
 			else
 			{
 				if (haxePath == null || haxePath == "")
-					haxePath = "/usr/lib/haxe";
+					haxePath = libPath + "/haxe";
 
 				flixelAliasScript = CommandUtils.getHaxelibPath("flixel-tools") + "bin/flixel.sh";
 
@@ -122,7 +125,7 @@ class SetupCommand extends Command
 				{
 					Sys.command("sudo", ["cp", flixelAliasScript, haxePath + "/flixel"]);
 					Sys.command("sudo", ["chmod", "755", haxePath + "/flixel"]);
-					Sys.command("sudo", ["ln", "-s", haxePath + "/flixel", "/usr/bin/flixel"]);
+					Sys.command("sudo", ["ln", "-s", haxePath + "/flixel", binPath + "/flixel"]);
 				}
 				else
 				{
