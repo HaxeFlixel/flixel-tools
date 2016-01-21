@@ -2,6 +2,7 @@
 ------------------------------
 * `buildprojects` command:
 	* added a `-verbose` option
+	* added support for `-Dvalue`
 
 1.1.2
 ------------------------------

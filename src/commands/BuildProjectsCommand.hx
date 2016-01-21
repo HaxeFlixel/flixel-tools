@@ -5,6 +5,7 @@ import sys.io.File;
 import utils.ColorUtils;
 import utils.ProjectUtils;
 import utils.CommandUtils;
+using StringTools;
 
 class BuildProjectsCommand extends Command
 {
@@ -27,26 +28,29 @@ class BuildProjectsCommand extends Command
 		Sys.println('Scanning "$directory" for projects...');
 		var projects:Array<LimeProject> = ProjectUtils.findLimeProjects(directory);
 		if (projects.length == 0)
-		{
 			error("No projects were found.");
-		}
-		else
-		{
-			if (projectNames.length > 0)
-				projects = filterProjects(projects, projectNames);
-			
-			if (projects.length > 0)
-			{
-				var specifier = (projectNames.length > 0) ? "specified" : "all";
-				Sys.println('Building $specifier projects - $target \n');
-				
-				var log = console.getOption("log") == "true";
-				var verbose = console.getOption("verbose") == "true";
-				buildProjects(projects, target, log, verbose);
-			}
-		}
 		
-		exit();
+		if (projectNames.length > 0)
+			projects = filterProjects(projects, projectNames);
+		
+		if (projects.length > 0)
+		{
+			var specifier = (projectNames.length > 0) ? "specified" : "all";
+			Sys.println('Building $specifier projects - $target \n');
+			
+			var log = console.getOption("log") == "true";
+			var verbose = console.getOption("verbose") == "true";
+			buildProjects(projects, target, log, verbose, getDefines());
+		}
+	}
+	
+	private function getDefines():Array<String>
+	{
+		var defines = [];
+		for (option in console.options.keys())
+			if (option.startsWith("D"))
+				defines.push("-" + option);
+		return defines;
 	}
 	
 	private function filterProjects(projects:Array<LimeProject>, projectNames:Array<String>):Array<LimeProject>
@@ -63,7 +67,8 @@ class BuildProjectsCommand extends Command
 		return filteredProjects;
 	}
 
-	private function buildProjects(projects:Array<LimeProject>, target:String, log:Bool, verbose:Bool):Void
+	private function buildProjects(projects:Array<LimeProject>, target:String, log:Bool,
+		verbose:Bool, defines:Array<String>):Void
 	{
 		var results = new Array<BuildResult>();
 
@@ -71,7 +76,7 @@ class BuildProjectsCommand extends Command
 		{
 			var targets = (target == "all") ? ["flash", "html5", "neko", "cpp"] : [target];
 			for (target in targets)
-				results.push(buildProject(project, target, verbose));
+				results.push(buildProject(project, target, verbose, defines));
 		}
 
 		if (log)
@@ -96,9 +101,10 @@ class BuildProjectsCommand extends Command
 		exit(totalResult);
 	}
 	
-	private function buildProject(project:LimeProject, target:String, verbose:Bool):BuildResult
+	private function buildProject(project:LimeProject, target:String, verbose:Bool,
+		defines:Array<String>):BuildResult
 	{
-		var buildArgs = ["run", "openfl", "build", project.path, target];
+		var buildArgs = ["run", "openfl", "build", project.path, target].concat(defines);
 		if (verbose)
 			Sys.println("haxelib " + buildArgs.join(" "));
 		
