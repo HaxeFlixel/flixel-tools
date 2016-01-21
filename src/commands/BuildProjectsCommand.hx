@@ -39,7 +39,10 @@ class BuildProjectsCommand extends Command
 			{
 				var specifier = (projectNames.length > 0) ? "specified" : "all";
 				Sys.println('Building $specifier projects - $target \n');
-				buildProjects(projects, target);
+				
+				var log = console.getOption("log") == "true";
+				var verbose = console.getOption("verbose") == "true";
+				buildProjects(projects, target, log, verbose);
 			}
 		}
 		
@@ -60,7 +63,7 @@ class BuildProjectsCommand extends Command
 		return filteredProjects;
 	}
 
-	private function buildProjects(projects:Array<LimeProject>, target:String):Void
+	private function buildProjects(projects:Array<LimeProject>, target:String, log:Bool, verbose:Bool):Void
 	{
 		var results = new Array<BuildResult>();
 
@@ -68,10 +71,10 @@ class BuildProjectsCommand extends Command
 		{
 			var targets = (target == "all") ? ["flash", "html5", "neko", "cpp"] : [target];
 			for (target in targets)
-				results.push(buildProject(project, target));
+				results.push(buildProject(project, target, verbose));
 		}
 
-		if (console.getOption("log") == "true")
+		if (log)
 			writeResultsToFile(Sys.getCwd() + "compile_results.log", results);
 
 		var totalResult = Result.SUCCESS;
@@ -93,9 +96,12 @@ class BuildProjectsCommand extends Command
 		exit(totalResult);
 	}
 	
-	private function buildProject(project:LimeProject, target:String):BuildResult
+	private function buildProject(project:LimeProject, target:String, verbose:Bool):BuildResult
 	{
 		var buildArgs = ["run", "openfl", "build", project.path, target];
+		if (verbose)
+			Sys.println("haxelib " + buildArgs.join(" "));
+		
 		var result:Result = Sys.command("haxelib", buildArgs);
 		
 		ColorUtils.println(result + " - " + project.name + ' ($target)', result);

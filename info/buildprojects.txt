@@ -7,3 +7,4 @@
   -dir <dir>   : The directory in which to (recursively) look for projects.
                  Defaults to the flixel-demos haxelib.
   -log         : Write the results to a "compile_results.log" file.
+  -verbose     : Whether to print the compile commands.

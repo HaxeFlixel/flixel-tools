@@ -1,3 +1,8 @@
+1.1.3
+------------------------------
+* `buildprojects` command:
+	* added a `-verbose` option
+
 1.1.2
 ------------------------------
 * `setup` command:
