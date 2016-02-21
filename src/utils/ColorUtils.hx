@@ -27,24 +27,21 @@ class ColorUtils
 {
 	public static function println(message:String, color:Color, style:Style = Style.Normal):Void
 	{
-		setColor(color, style);
-		Sys.println(message);
-		setColor(Color.None);
+		Sys.println(setColor(color, style) + message + setColor(Color.None));
 	}
 	
 	public static function print(message:String, color:Color, style:Style = Style.Normal):Void
 	{
-		setColor(color, style);
-		Sys.print(message);
-		setColor(Color.None);
+		Sys.print(setColor(color, style) + message + setColor(Color.None));
 	}
 	
-	public static function setColor(color:Color, style:Style = Style.Normal):Void
+	public static function setColor(color:Color, style:Style = Style.Normal):String
 	{
 		if (Sys.systemName() == "Linux" || Sys.systemName() == "Mac")
 		{
 			var id = (color == Color.None) ? "" : ';$color';
-			Sys.print("\033[" + style + id + "m");
+			return "\033[" + style + id + "m";
 		}
+		return "";
 	}
 }
