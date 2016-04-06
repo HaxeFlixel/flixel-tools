@@ -25,7 +25,3 @@ script:
   - haxelib run flixel-tools tpl -n "default"
   - cd default
   - haxelib run lime build $TARGET
-  - cd ..
-  - haxelib run flixel-tools tpl barebones -n "barebones"
-  - cd barebones
-  - haxelib run lime build $TARGET
