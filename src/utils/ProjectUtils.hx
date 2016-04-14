@@ -134,7 +134,7 @@ class ProjectUtils
 
 		var ideOption = console.getOption("ide");
 		if (ideOption != null)
-			ide = ideOption;
+			ide = options[ideOption];
 		
 		return ide;
 	}

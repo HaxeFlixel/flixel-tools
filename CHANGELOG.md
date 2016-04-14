@@ -3,6 +3,8 @@
 * `buildprojects` command:
 	* added a `-verbose` option
 	* added support for `-Dvalue`
+* `template` command:
+	* fixed `-ide` option not working
 
 1.1.2
 ------------------------------
