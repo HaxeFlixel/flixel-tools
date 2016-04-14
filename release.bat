@@ -1,0 +1,1 @@
+7z a -tzip -i!bin -i!run.n -i!settings.json -i!haxelib.json flixel-tools.zip
