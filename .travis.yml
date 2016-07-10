@@ -10,8 +10,8 @@ env:
   - TARGET=html5
 
 install:
-  - haxelib install lime > /dev/null
-  - haxelib install openfl > /dev/null
+  - haxelib install lime 2.9.1 > /dev/null
+  - haxelib install openfl 3.6.1 > /dev/null
   - haxelib install hxcpp > /dev/null
   - haxelib install mlib > /dev/null
   - haxelib git flixel https://github.com/HaxeFlixel/flixel > /dev/null
