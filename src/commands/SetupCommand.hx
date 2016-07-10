@@ -12,6 +12,7 @@ import FlxTools.IDE;
 class SetupCommand extends Command
 {
 	private var autoContinue:Bool = false;
+	private var isAliasSetUp = false;
 
 	override public function execute():Void
 	{
@@ -29,7 +30,7 @@ class SetupCommand extends Command
 
 		Sys.println("");
 		Sys.println("flixel-tools setup completed.");
-		Sys.println("Try the 'flixel' command to test it! :)");
+		if (isAliasSetUp) Sys.println("Try the 'flixel' command to test it! :)");
 
 		exit();
 	}
@@ -90,6 +91,8 @@ class SetupCommand extends Command
 
 		if (autoContinue || answer == Answer.Yes)
 		{
+			isAliasSetUp = true;
+			
 			var haxePath:String = Sys.getEnv("HAXEPATH");
 			var flixelAliasScript = "";
 
