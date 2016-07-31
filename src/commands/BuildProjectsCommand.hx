@@ -1,7 +1,9 @@
 package commands;
 
 import massive.sys.cmd.Command;
-import sys.io.File;
+import massive.sys.io.FileSys;
+import massive.sys.io.File;
+import haxe.io.Path;
 import utils.ColorUtils;
 import utils.ProjectUtils;
 import utils.CommandUtils;
@@ -40,7 +42,13 @@ class BuildProjectsCommand extends Command
 			
 			var log = console.getOption("log") == "true";
 			var verbose = console.getOption("verbose") == "true";
-			buildProjects(projects, target, log, verbose, getDefines());
+			var totalResult = buildProjects(projects, target, log, verbose, getDefines());
+
+			var createServerFolder = console.getOption("server") == "true";
+			if(createServerFolder)
+				createDemoServer(Path.join([Sys.getCwd() + 'server']), projects, target);
+
+			exit(totalResult);
 		}
 	}
 	
@@ -68,7 +76,7 @@ class BuildProjectsCommand extends Command
 	}
 
 	private function buildProjects(projects:Array<LimeProject>, target:String, log:Bool,
-		verbose:Bool, defines:Array<String>):Void
+		verbose:Bool, defines:Array<String>):Result
 	{
 		var results = new Array<BuildResult>();
 
@@ -98,7 +106,7 @@ class BuildProjectsCommand extends Command
 		Sys.println("");
 		ColorUtils.println('$passed/$total projects built successfully\n', totalResult);
 
-		exit(totalResult);
+		return totalResult;
 	}
 	
 	private function buildProject(project:LimeProject, target:String, verbose:Bool,
@@ -119,9 +127,33 @@ class BuildProjectsCommand extends Command
 		};
 	}
 
+	private function createDemoServer(serverPath:String, projects:Array<LimeProject>,
+		target:String):Void
+	{
+		var serverDirectory = File.create(serverPath);
+		
+		for (project in projects)
+		{
+			var projectBinPath = Path.join([project.path, 'export/html5/bin']);
+			var projectBinPathExists = FileSys.exists(projectBinPath);
+
+			if(projectBinPathExists)
+			{
+				var projectDirectory = File.create(projectBinPath);
+				var demoProjectPath = Path.join([
+					serverDirectory.nativePath, project.name
+				]);
+				var demoProjectDirectory = File.create(demoProjectPath);
+
+				demoProjectDirectory.createDirectory();
+				projectDirectory.copyTo(demoProjectDirectory);
+			}
+		}
+	}
+
 	private function writeResultsToFile(FilePath:String, Results:Array<BuildResult>):Void
 	{
-		var file = File.write(FilePath, false);
+		var file = sys.io.File.write(FilePath, false);
 
 		file.writeString("flixel-tools buildprojects log\n");
 		file.writeString('Directory: $directory \n');
@@ -137,7 +169,6 @@ class BuildProjectsCommand extends Command
 		}
 
 		file.writeString("\n / End of Log.");
-		file.close();
 	}
 }
 
