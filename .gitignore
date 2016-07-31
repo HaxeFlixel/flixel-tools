@@ -2,3 +2,8 @@
 *.sublime-project
 *.sublime-workspace
 *.zip
+.idea
+.vscode
+vscode-project.hxml
+server
+compile_results.log
