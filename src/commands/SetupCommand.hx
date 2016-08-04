@@ -122,6 +122,9 @@ class SetupCommand extends Command
 				if (haxePath == null || haxePath == "")
 					haxePath = libPath + "/haxe";
 
+				if (!FileSystem.exists(haxePath))
+					FileSystem.createDirectory(haxePath);
+
 				flixelAliasScript = CommandUtils.getHaxelibPath("flixel-tools") + "bin/flixel.sh";
 
 				if (FileSystem.exists(flixelAliasScript))
