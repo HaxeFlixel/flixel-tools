@@ -64,7 +64,7 @@ class ProjectUtils
 	/**
 	 * Searches a path for a Lime project xml file
 	 */
-	private static function findProjectXml(projectPath:String):String
+	public static function findProjectXml(projectPath:String):String
 	{
 		var targetProjectFile = CommandUtils.combine(projectPath, "project.xml");
 		if (FileSys.exists(targetProjectFile))

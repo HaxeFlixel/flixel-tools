@@ -11,6 +11,15 @@ class TemplateUtils
 {
 	public static var templateFilter:EReg = new EReg("\\btemplate.json\\b", "");
 
+	public static function verifyTemplatesLoaded()
+	{
+		if (!FlxTools.templatesLoaded)
+		{
+			Sys.println("Error loading templates, please run 'flixel download'.");
+			Sys.exit(1);
+		}
+	}
+
 	public static function get(templateName:String = ""):TemplateProject
 	{
 		if (templateName == "")

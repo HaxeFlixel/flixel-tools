@@ -6,6 +6,7 @@ import commands.CreateCommand;
 import commands.DownloadCommand;
 import commands.SetupCommand;
 import commands.TemplateCommand;
+import commands.ConfigureCommand;
 import massive.haxe.util.TemplateUtil;
 import massive.sys.cmd.CommandLineRunner;
 import utils.ColorUtils;
@@ -66,6 +67,13 @@ class FlxTools extends CommandLineRunner
 			"buildprojects", ["bp"],
 			"builds all demos for the specified target",
 			TemplateUtil.getTemplate("buildprojects")
+		);
+
+		mapCommand(
+			ConfigureCommand,
+			"configure", ["conf"],
+			"adds IDE template files to one or multiple projects",
+			TemplateUtil.getTemplate("configure")
 		);
 
 		run();

@@ -5,7 +5,6 @@ import sys.FileSystem;
 import utils.CommandUtils;
 import utils.ProjectUtils;
 import utils.TemplateUtils;
-import utils.FileSysUtils;
 import FlxTools.IDE;
 using StringTools;
 
@@ -16,11 +15,7 @@ class TemplateCommand extends Command
 
 	override public function execute():Void
 	{
-		if (!FlxTools.templatesLoaded)
-		{
-			Sys.println("Error loading templates, please run 'flixel download'.");
-			return;
-		}
+		TemplateUtils.verifyTemplatesLoaded();
 		
 		var targetPath = "";
 		var templateName = "";
@@ -37,9 +32,7 @@ class TemplateCommand extends Command
 		ideOption = ProjectUtils.resolveIDEChoice(console);
 
 		if (console.getOption("-n") != null)
-		{
 			targetPath = console.getOption("-n");
-		}
 
 		//support a path as an arg without name for default
 		//flixel t ./<new_directory> <options>
