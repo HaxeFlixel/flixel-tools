@@ -22,6 +22,7 @@ class ProjectUtils
 			replacements = copyIDETemplateFiles(destination, replacements, ide);
 
 			TemplateUtils.modifyTemplate(destination, replacements);
+			TemplateUtils.compileIfNeeded(destination, ide);
 		}
 		return result;
 	}
@@ -125,6 +126,7 @@ class ProjectUtils
 			"subl" => IDE.SUBLIME_TEXT,
 			"fd" => IDE.FLASH_DEVELOP,
 			"idea" => IDE.INTELLIJ_IDEA,
+			"vscode" => IDE.VISUAL_STUDIO_CODE,
 			"none" => IDE.NONE
 		];
 
@@ -144,7 +146,8 @@ class ProjectUtils
 		var ideHandlers:Map<String, String->String->Bool> = [
 			IDE.FLASH_DEVELOP => openWithFlashDevelop,
 			IDE.SUBLIME_TEXT => openWithSublimeText,
-			IDE.INTELLIJ_IDEA => openWithIntelliJIDEA
+			IDE.INTELLIJ_IDEA => openWithIntelliJIDEA,
+			IDE.VISUAL_STUDIO_CODE => openWithVisualStudioCode
 		];
 
 		var result = false;
@@ -200,6 +203,17 @@ class ProjectUtils
 			// TODO: windows
 			return true;
 		}
+		return false;
+	}
+
+	public static function openWithVisualStudioCode(projectPath:String, projectName:String):Bool
+	{
+		if (FileSys.isWindows)
+		{
+			Sys.command("C:\\Program Files (x86)\\Microsoft VS Code\\code.exe", [projectPath]);
+			return true;
+		}
+		// TODO: mac and linux
 		return false;
 	}
 }

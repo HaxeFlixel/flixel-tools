@@ -25,4 +25,17 @@ class FileSysUtils
 
 		return content;
 	}
+
+	/**
+	 * Run some code in the specified directory, then move the cwd back where it was previously.
+	 */
+	public static function runInDirectory(directory:String, f:Void->Void)
+	{
+		var cwd = Sys.getCwd();
+		Sys.setCwd(directory);
+
+		f();
+
+		Sys.setCwd(cwd);
+	}
 }

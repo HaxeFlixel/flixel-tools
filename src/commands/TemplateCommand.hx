@@ -1,11 +1,11 @@
 package commands;
 
-import haxe.ds.StringMap;
 import massive.sys.cmd.Command;
 import sys.FileSystem;
 import utils.CommandUtils;
 import utils.ProjectUtils;
 import utils.TemplateUtils;
+import utils.FileSysUtils;
 import FlxTools.IDE;
 using StringTools;
 
@@ -107,7 +107,7 @@ class TemplateCommand extends Command
 
 		CommandUtils.copyRecursively(template.Path, targetPath, TemplateUtils.templateFilter, true);
 
-		TemplateUtils.modifyTemplateProject(targetPath, template);
+		TemplateUtils.modifyTemplateProject(targetPath, template, ideOption);
 
 		Sys.println("Created template at:");
 		Sys.println(targetPath);

@@ -140,7 +140,7 @@ class SetupCommand extends Command
 
 	private function promptForSettings():FlxToolSettings
 	{
-		var ides:Array<String> = [IDE.SUBLIME_TEXT, IDE.FLASH_DEVELOP, IDE.INTELLIJ_IDEA, IDE.NONE];
+		var ides:Array<String> = [IDE.SUBLIME_TEXT, IDE.FLASH_DEVELOP, IDE.INTELLIJ_IDEA, IDE.VISUAL_STUDIO_CODE, IDE.NONE];
 		var ide = IDE.NONE;
 		var AuthorName = "";
 		var IDEAutoOpen = false;

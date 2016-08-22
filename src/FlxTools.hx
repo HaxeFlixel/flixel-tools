@@ -134,5 +134,6 @@ abstract IDE(String) from String to String
 	var SUBLIME_TEXT = "Sublime Text";
 	var FLASH_DEVELOP = "FlashDevelop";
 	var INTELLIJ_IDEA = "IntelliJ IDEA";
+	var VISUAL_STUDIO_CODE = "Visual Studio Code";
 	var NONE = "None";
 }

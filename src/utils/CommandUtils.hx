@@ -339,7 +339,8 @@ class CommandUtils
 		FlxTools.templateSourcePaths = [
 			IDE.FLASH_DEVELOP => CommandUtils.combine(ideDataPath, "flash-develop"),
 			IDE.INTELLIJ_IDEA => CommandUtils.combine(ideDataPath, "intellij-idea"),
-			IDE.SUBLIME_TEXT => CommandUtils.combine(ideDataPath, "sublime-text")
+			IDE.SUBLIME_TEXT => CommandUtils.combine(ideDataPath, "sublime-text"),
+			IDE.VISUAL_STUDIO_CODE => CommandUtils.combine(ideDataPath, "visual-studio-code")
 		];
 		FlxTools.templatesLoaded = true;
 	}
