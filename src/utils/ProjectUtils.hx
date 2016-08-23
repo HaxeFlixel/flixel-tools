@@ -208,13 +208,8 @@ class ProjectUtils
 
 	public static function openWithVisualStudioCode(projectPath:String, projectName:String):Bool
 	{
-		if (FileSys.isWindows)
-		{
-			Sys.command("C:\\Program Files (x86)\\Microsoft VS Code\\code.exe", [projectPath]);
-			return true;
-		}
-		// TODO: mac and linux
-		return false;
+		Sys.command("code", [projectPath]);
+		return true;
 	}
 }
 
