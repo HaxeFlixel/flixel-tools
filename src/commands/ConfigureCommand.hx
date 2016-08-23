@@ -3,6 +3,7 @@ package commands;
 import massive.sys.cmd.Command;
 import utils.ProjectUtils;
 import utils.TemplateUtils;
+import sys.FileSystem;
 import FlxTools.IDE;
 
 class ConfigureCommand extends Command
@@ -30,10 +31,17 @@ class ConfigureCommand extends Command
 				function(p) return p.path
 			);
 		}
-		
+
+		if (projects.length == 0)
+		{
+			var fullPath = FileSystem.fullPath(directory);
+			error('Could not find any Project.xml files in \'$fullPath\'');
+		}
+			
 		for (project in projects)
 		{
-			print('Adding $ide files to $project...');
+			var fullPath = FileSystem.fullPath(project);
+			print('Adding $ide files to \'$fullPath\'...');
 			ProjectUtils.copyIDETemplateFiles(project, null, ide);
 		}
 	}
