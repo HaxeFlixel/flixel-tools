@@ -52,7 +52,6 @@ class TemplateUtils
 			return null;
 
 		var templates = new Array<TemplateProject>();
-		var ideDataPath = "";
 
 		for (name in FileSys.readDirectory(templatesPath))
 		{

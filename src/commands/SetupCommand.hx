@@ -1,6 +1,5 @@
 package commands;
 
-import haxe.Utf8;
 import massive.sys.cmd.Command;
 import massive.sys.io.FileSys;
 import utils.CommandUtils;
