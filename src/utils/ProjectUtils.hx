@@ -36,28 +36,28 @@ class ProjectUtils
 
 		if (!FileSys.exists(targetDirectory))
 			return [];
-		
+
 		for (name in FileSys.readDirectory(targetDirectory))
 		{
-			var folderPath:String = CommandUtils.combine(targetDirectory, name);	
-			
-			if (FileSys.isDirectory(folderPath) && !name.startsWith("."))	
-			{	
-				var projectPath = findProjectXml(folderPath);	
+			var folderPath:String = CommandUtils.combine(targetDirectory, name);
+
+			if (FileSys.isDirectory(folderPath) && !name.startsWith("."))
+			{
+				var projectPath = findProjectXml(folderPath);
 				if (projectPath != null)
-				{	
-					projects.push({	
-						name : name,	
-						path : folderPath,	
-						projectXmlPath : projectPath,	
-						targets : ""	
-					});	
-				}	
-			
-				projects = projects.concat(findLimeProjects(folderPath));	
-			}	
-		}	
-		
+				{
+					projects.push({
+						name : name,
+						path : folderPath,
+						projectXmlPath : projectPath,
+						targets : ""
+					});
+				}
+
+				projects = projects.concat(findLimeProjects(folderPath));
+			}
+		}
+
 		return projects;
 	}
 
@@ -73,7 +73,7 @@ class ProjectUtils
 		targetProjectFile = CommandUtils.combine(projectPath, "Project.xml");
 		if (FileSys.exists(targetProjectFile))
 			return targetProjectFile;
-		
+
 		return null;
 	}
 
@@ -85,14 +85,14 @@ class ProjectUtils
 		var templateSource:String = FlxTools.templateSourcePaths[ide];
 		if (templateSource == null)
 			return replacements;
-		
+
 		var settings = FlxTools.settings;
 		var addOption = function(name:String, defaultValue:Dynamic) {
 			replacements.push(TemplateUtils.addOption(name, "", defaultValue));
 		};
-		
+
 		addOption("AUTHOR", settings.AuthorName);
-		
+
 		switch (ide)
 		{
 			case IDE.SUBLIME_TEXT:
@@ -101,19 +101,19 @@ class ProjectUtils
 				addOption("HAXE_STD_PATH", escape(CommandUtils.combine(CommandUtils.getHaxePath(), "std")));
 				addOption("FLIXEL_PATH", escape(CommandUtils.getHaxelibPath('flixel')));
 				addOption("FLIXEL_ADDONS_PATH", escape(CommandUtils.getHaxelibPath('flixel-addons')));
-			
+
 			case IDE.INTELLIJ_IDEA:
 				addOption("IDEA_flexSdkName", settings.IDEA_flexSdkName);
 				addOption("IDEA_Flixel_Engine_Library", settings.IDEA_Flixel_Engine_Library);
 				addOption("IDEA_Flixel_Addons_Library", settings.IDEA_Flixel_Addons_Library);
-			
+
 			case IDE.FLASH_DEVELOP:
 				addOption("WIDTH", 640);
 				addOption("HEIGHT", 480);
-			
+
 			case _: // TODO: IDE.FLASH_DEVELOP_FDZ
 		}
-		
+
 		if (templateSource != null)
 			CommandUtils.copyRecursively(templateSource, targetPath, TemplateUtils.templateFilter, true);
 
@@ -137,7 +137,7 @@ class ProjectUtils
 		var ideOption = console.getOption("ide");
 		if (ideOption != null)
 			ide = options[ideOption];
-		
+
 		return ide;
 	}
 
@@ -160,12 +160,12 @@ class ProjectUtils
 		}
 		return result;
 	}
-	
+
 	public static function openWithFlashDevelop(projectPath:String, projectName:String):Bool
 	{
 		var projectFile = CommandUtils.combine(projectPath, projectName + ".hxproj");
 		projectFile = projectFile.replace("/", "\\");
-		
+
 		if (FileSys.exists(projectFile))
 		{
 			Sys.command("explorer", [projectFile]);
@@ -173,11 +173,11 @@ class ProjectUtils
 		}
 		return false;
 	}
-	
+
 	public static function openWithSublimeText(projectPath:String, projectName:String):Bool
 	{
 		var projectFile = CommandUtils.combine(projectPath, projectName + ".sublime-project");
-		
+
 		if (FileSys.exists(projectFile))
 		{
 			if (FileSys.isMac || FileSys.isLinux)
@@ -189,18 +189,25 @@ class ProjectUtils
 		}
 		return false;
 	}
-	
+
 	public static function openWithIntelliJIDEA(projectPath:String, projectName:String):Bool
 	{
 		var projectFile = CommandUtils.combine(projectPath, ".idea");
-		
+
 		if (FileSys.exists(projectFile))
 		{
-			if (FileSys.isMac || FileSys.isLinux) // TODO: test on linux
+			if (FileSys.isMac)
+			{
+				Sys.command("open", ["-a",FlxTools.settings.IDEA_Path, projectPath]);
+			}
+			else	if (FileSys.isLinux || FileSys.isWindows) // TODO: test on linux
+			{
+				Sys.command(FlxTools.settings.IDEA_Path, [projectPath," & disown"]);
+			}
+			else	if (FileSys.isWindows) // TODO: test on windows
 			{
 				Sys.command(FlxTools.settings.IDEA_Path, [projectPath]);
 			}
-			// TODO: windows
 			return true;
 		}
 		return false;
