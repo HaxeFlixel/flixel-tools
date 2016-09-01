@@ -200,11 +200,11 @@ class ProjectUtils
 			{
 				Sys.command("open", ["-a",FlxTools.settings.IDEA_Path, projectPath]);
 			}
-			else	if (FileSys.isLinux || FileSys.isWindows) // TODO: test on linux
+			else if (FileSys.isLinux || FileSys.isWindows) // TODO: test on linux
 			{
 				Sys.command(FlxTools.settings.IDEA_Path, [projectPath," & disown"]);
 			}
-			else	if (FileSys.isWindows) // TODO: test on windows
+			else if (FileSys.isWindows) // TODO: test on windows
 			{
 				Sys.command(FlxTools.settings.IDEA_Path, [projectPath]);
 			}
