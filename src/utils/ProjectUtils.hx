@@ -200,14 +200,14 @@ class ProjectUtils
 			{
 				Sys.command("open", ["-a",FlxTools.settings.IDEA_Path, projectPath]);
 			}
-			else if (FileSys.isLinux) // TODO: test on linux
+			else if (FileSys.isLinux)
 			{
-				Sys.command(FlxTools.settings.IDEA_Path, [projectPath," & disown"]);
+				Sys.command('"'+FlxTools.settings.IDEA_Path+'" "'+projectPath+'" &');
+
+			}else if(FileSys.isWindows){
+				Sys.command(FlxTools.settings.IDEA_Path,[projectPath]); //Not tested, but should work
 			}
-			else if (FileSys.isWindows) // TODO: test on windows
-			{
-				Sys.command(FlxTools.settings.IDEA_Path, [projectPath]);
-			}
+
 			return true;
 		}
 		return false;
