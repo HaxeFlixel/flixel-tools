@@ -198,14 +198,15 @@ class ProjectUtils
 		{
 			if (FileSys.isMac)
 			{
-				Sys.command("open", ["-a",FlxTools.settings.IDEA_Path, projectPath]);
+				Sys.command("open", ["-a", FlxTools.settings.IDEA_Path, projectPath]);
 			}
 			else if (FileSys.isLinux)
 			{
-				Sys.command('"'+FlxTools.settings.IDEA_Path+'" "'+projectPath+'" &');
-
-			}else if(FileSys.isWindows){
-				Sys.command(FlxTools.settings.IDEA_Path,[projectPath]); //Not tested, but should work
+				Sys.command('"' + FlxTools.settings.IDEA_Path + '" "' + projectPath + '" &');
+			}
+			else if (FileSys.isWindows)
+			{
+				Sys.command(FlxTools.settings.IDEA_Path, [projectPath]); //Not tested, but should work
 			}
 
 			return true;
