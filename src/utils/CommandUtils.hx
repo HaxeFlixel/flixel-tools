@@ -380,7 +380,7 @@ class CommandUtils
 		if (toolPath == "")
 		{
 			Sys.println("Error detecting path of your haxelib flixel-tools.");
-			return null;
+			return;
 		}
 
 		var settingsPath = toolPath + "settings.json";
