@@ -42,7 +42,7 @@ class ConfigureCommand extends Command
 		{
 			var fullPath = FileSystem.fullPath(project);
 			print('Adding $ide files to \'$fullPath\'...');
-			ProjectUtils.copyIDETemplateFiles(project, null, ide);
+			ProjectUtils.copyIDETemplateFiles(fullPath, null, ide);
 		}
 	}
 }
