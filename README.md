@@ -5,7 +5,7 @@
 [![Haxelib Version](https://img.shields.io/github/tag/HaxeFlixel/flixel-tools.svg?style=flat-square&label=haxelib)](http://lib.haxe.org/p/flixel-tools)
 [![Build Status](https://img.shields.io/travis/HaxeFlixel/flixel-tools.svg?style=flat-square)](https://travis-ci.org/HaxeFlixel/flixel-tools)
 
-##About
+## About
 
 These are command line tools for HaxeFlixel to create demos, templates and more.
 

@@ -1,3 +1,10 @@
+1.2.0
+------------------------------
+* Added a new `configure` command (allows adding VSCode config files to a project)
+* Added `vscode` as an option for `-ide` flags
+* Added support for auto-opening in IntelliJ IDEA on all platforms (#66)
+* Changed the default IDE to Visual Studio code
+
 1.1.3
 ------------------------------
 * `buildprojects` command:
