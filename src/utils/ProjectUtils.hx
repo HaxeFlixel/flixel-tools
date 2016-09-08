@@ -80,11 +80,18 @@ class ProjectUtils
 	public static function copyIDETemplateFiles(targetPath:String, replacements:Array<TemplateReplacement>, ide:IDE):Array<TemplateReplacement>
 	{
 		if (replacements == null)
-			replacements = new Array<TemplateReplacement>();
+			replacements = [];
 
 		var templateSource:String = FlxTools.templateSourcePaths[ide];
 		if (templateSource == null)
 			return replacements;
+		
+		if (!FileSys.exists(templateSource))
+		{
+			Sys.println('$ide template path does not exist (expected \'$templateSource\').');
+			Sys.println("\nIs flixel-templates up-to-date? Try running 'haxelib update flixel-templates'.");
+			Sys.exit(1);
+		}
 
 		var settings = FlxTools.settings;
 		var addOption = function(name:String, defaultValue:Dynamic) {
