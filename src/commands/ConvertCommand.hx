@@ -250,8 +250,7 @@ class ConvertCommand extends Command
 
 						if (obj.importValidate != null && CommandUtils.strmatch(obj.find, originalText))
 						{
-							var newText = CommandUtils.addImportToFileString(sourceText, obj.importValidate);
-
+							var newText = addImportToFileString(sourceText, obj.importValidate);
 							if (newText != null)
 							{
 								sourceText = newText;
@@ -360,6 +359,39 @@ class ConvertCommand extends Command
 		fin.close();
 
 		return results;
+	}
+
+	/**
+	 * Basic Ereg match to add an import above the first in a file if none exists
+	 * @param fileString	 Path to the file to add to
+	 * @param importString The complete import string to seach for and add
+	 */
+	public static function addImportToFileString(fileString:String, importString:String):String
+	{
+		var str:String = fileString;
+		var match = CommandUtils.strmatch(importString, str);
+
+		if (!match)
+		{
+			var newLine = "\n";
+			var r = ~/import+/;
+			var newString = Reflect.copy(str);
+			r.match(str);
+
+			try
+			{
+				var matchPos = r.matchedPos();
+				var beggining = str.substr(0, matchPos.pos);
+				var end = str.substr(matchPos.pos, str.length);
+				newString = beggining + importString + ";" + newLine + end;
+			}
+			catch (e:Dynamic) {}
+
+			if (newString != str)
+				return newString;
+		}
+
+		return null;
 	}
 }
 

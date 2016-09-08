@@ -52,39 +52,6 @@ class CommandUtils
 	}
 
 	/**
-	* Basic Ereg match to add an import above the first in a file if none exists
-	* @param fileString	 Path to the file to add to
-	* @param importString The complete import string to seach for and add
-	*/
-	public static function addImportToFileString(fileString:String, importString:String):String
-	{
-		var str:String = fileString;
-		var match = strmatch(importString, str);
-
-		if (!match)
-		{
-			var newLine = "\n";
-			var r = ~/import+/;
-			var newString = Reflect.copy(str);
-			r.match(str);
-
-			try
-			{
-				var matchPos = r.matchedPos();
-				var beggining = str.substr(0, matchPos.pos);
-				var end = str.substr(matchPos.pos, str.length);
-				newString = beggining + importString + ";" + newLine + end;
-			}
-			catch (e:Dynamic) {}
-
-			if (newString != str)
-				return newString;
-		}
-
-		return null;
-	}
-
-	/**
 	 * Prompt user with a y/n/a
 	 *
 	 * @param   question	String with the prompt to display
