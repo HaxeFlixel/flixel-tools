@@ -67,7 +67,7 @@ class SetupCommand extends Command
 				runDownloadCommand();
 		}
 	}
-	
+
 	private function runDownloadCommand():Void
 	{
 		Sys.command("haxelib", ["run", "flixel-tools", "download"]);
@@ -91,7 +91,7 @@ class SetupCommand extends Command
 		if (autoContinue || answer == Answer.Yes)
 		{
 			isAliasSetUp = true;
-			
+
 			var haxePath:String = Sys.getEnv("HAXEPATH");
 			var flixelAliasScript = "";
 
@@ -125,9 +125,7 @@ class SetupCommand extends Command
 
 				if (FileSystem.exists(flixelAliasScript))
 				{
-					Sys.command("sudo", ["cp", flixelAliasScript, haxePath + "/flixel"]);
-					Sys.command("sudo", ["chmod", "755", haxePath + "/flixel"]);
-					Sys.command("sudo", ["ln", "-s", haxePath + "/flixel", binPath + "/flixel"]);
+					Sys.command("sudo", ["cp", flixelAliasScript, binPath + "/flixel"]);					
 				}
 				else
 				{
@@ -147,7 +145,7 @@ class SetupCommand extends Command
 		var ideaFlixelEngine = "Flixel Engine";
 		var ideaFlixelAddons = "Flixel Addons";
 		var ideaPath = "/Applications/Cardea-IU-130.1619.app/Contents/MacOS/idea";
-		
+
 		ide = CommandUtils.askQuestionStrings("Choose your default IDE:", ides);
 		if (ide == null)
 		{
