@@ -4,8 +4,8 @@
     "license": "MIT",
     "tags": ["game", "openfl", "flash", "neko", "cpp", "android", "ios"],
     "description": "Command-Line tools for the HaxeFlixel game engine",
-    "version": "1.2.0",
-    "releasenote": "Visual Studio Code support, improved IntelliJ support.",
+    "version": "1.2.1",
+    "releasenote": "Fixed a setup issue on Linux.",
     "contributors": ["haxeflixel"],
     "dependencies": {}
 }

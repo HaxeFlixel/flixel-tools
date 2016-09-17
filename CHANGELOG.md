@@ -1,3 +1,8 @@
+1.2.1
+------------------------------
+* `setup` command:
+	* fixed an installation issue on Linux (#68)
+
 1.2.0
 ------------------------------
 * Added a new `configure` command (allows adding VSCode config files to a project)
