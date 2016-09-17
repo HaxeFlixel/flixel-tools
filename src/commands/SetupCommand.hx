@@ -125,7 +125,8 @@ class SetupCommand extends Command
 
 				if (FileSystem.exists(flixelAliasScript))
 				{
-					Sys.command("sudo", ["cp", flixelAliasScript, binPath + "/flixel"]);					
+					Sys.command("sudo", ["cp", flixelAliasScript, binPath + "/flixel"]);
+					Sys.command("sudo", ["chmod", "+x", binPath + "/flixel"]);					
 				}
 				else
 				{
