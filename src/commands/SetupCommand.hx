@@ -91,17 +91,14 @@ class SetupCommand extends Command
 		if (autoContinue || answer == Answer.Yes)
 		{
 			isAliasSetUp = true;
-
-			var haxePath:String = Sys.getEnv("HAXEPATH");
-			var flixelAliasScript = "";
-
+			
 			if (FileSys.isWindows)
 			{
+				var haxePath:String = Sys.getEnv("HAXEPATH");
 				if (haxePath == null || haxePath == "")
 					haxePath = "C:\\HaxeToolkit\\haxe\\";
 
-				flixelAliasScript = haxePath + "\\flixel.bat";
-
+				var flixelAliasScript = haxePath + "\\flixel.bat";
 				var scriptSourcePath = CommandUtils.getHaxelibPath("flixel-tools");
 				var scriptFile = "flixel.bat";
 				scriptSourcePath = CommandUtils.combine(scriptSourcePath, "bin");
@@ -118,15 +115,12 @@ class SetupCommand extends Command
 			}
 			else
 			{
-				if (haxePath == null || haxePath == "")
-					haxePath = libPath + "/haxe";
-
-				flixelAliasScript = CommandUtils.getHaxelibPath("flixel-tools") + "bin/flixel.sh";
+				var flixelAliasScript = CommandUtils.getHaxelibPath("flixel-tools") + "bin/flixel.sh";
 
 				if (FileSystem.exists(flixelAliasScript))
 				{
 					Sys.command("sudo", ["cp", flixelAliasScript, binPath + "/flixel"]);
-					Sys.command("sudo", ["chmod", "+x", binPath + "/flixel"]);					
+					Sys.command("sudo", ["chmod", "+x", binPath + "/flixel"]);
 				}
 				else
 				{
