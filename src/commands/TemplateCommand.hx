@@ -45,7 +45,7 @@ class TemplateCommand extends Command
 		processTemplate(templateName, targetPath);
 	}
 
-	public function processTemplate(templateName:String = "", targetPath:String = ""):Void
+	public function processTemplate(templateName:String, targetPath:String):Void
 	{
 		var template:TemplateProject = TemplateUtils.get(templateName);
 
@@ -100,6 +100,8 @@ class TemplateCommand extends Command
 
 		CommandUtils.copyRecursively(template.path, targetPath, TemplateUtils.templateFilter, true);
 
+		var projectName = TemplateUtils.getReplacementValue(template.template.replacements, "${PROJECT_NAME}");
+		template.template.replacements.push(TemplateUtils.addOption("APPLICATION_FILE", "", projectName));
 		TemplateUtils.modifyTemplateProject(targetPath, template, ideOption);
 
 		Sys.println("Created template at:");
@@ -107,10 +109,7 @@ class TemplateCommand extends Command
 		Sys.println(" ");
 
 		if (FlxTools.settings.IDEAutoOpen)
-		{
-			var projectName = TemplateUtils.getReplacementValue(template.template.replacements, "${PROJECT_NAME}");
 			ProjectUtils.openWithIDE(targetPath, projectName, ideOption);
-		}
 
 		exit();
 	}	
