@@ -182,9 +182,6 @@ typedef TemplateProject = {
 	Template:TemplateFile
 }
 
-/**
-* Definition of template replacement
-*/
 typedef TemplateReplacement = {
 	replacement:String,
 	pattern:String,

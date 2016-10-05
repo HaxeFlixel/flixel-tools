@@ -1,5 +1,8 @@
 package utils;
 
+import haxe.io.Path;
+import haxe.xml.Fast;
+import sys.io.File;
 import massive.sys.io.FileSys;
 import utils.CommandUtils;
 import utils.TemplateUtils;
@@ -30,35 +33,38 @@ class ProjectUtils
 	/**
 	 * Recursively search a directory for Lime projects
 	 */
-	public static function findLimeProjects(targetDirectory:String):Array<LimeProject>
+	public static function findLimeProjects(directory:String):Array<LimeProject>
 	{
 		var projects = [];
 
-		if (!FileSys.exists(targetDirectory))
-			return [];
+		if (!FileSys.exists(directory))
+			return projects;
 
-		for (name in FileSys.readDirectory(targetDirectory))
+		var projectPath = findProjectXml(directory);
+		if (projectPath != null)
 		{
-			var folderPath:String = CommandUtils.combine(targetDirectory, name);
-
+			projects.push({
+				name : new Path(projectPath).file,
+				path : directory,
+				projectXmlPath : projectPath,
+				targets : ""
+			});
+		}
+		
+		for (name in FileSys.readDirectory(directory))
+		{
+			var folderPath:String = CommandUtils.combine(directory, name);
 			if (FileSys.isDirectory(folderPath) && !name.startsWith("."))
-			{
-				var projectPath = findProjectXml(folderPath);
-				if (projectPath != null)
-				{
-					projects.push({
-						name : name,
-						path : folderPath,
-						projectXmlPath : projectPath,
-						targets : ""
-					});
-				}
-
 				projects = projects.concat(findLimeProjects(folderPath));
-			}
 		}
 
 		return projects;
+	}
+
+	public static function getApplicationFile(projectXmlPath:String):String
+	{
+		var fast = new Fast(Xml.parse(File.getContent(projectXmlPath)));
+		return fast.node.project.node.app.att.file;
 	}
 
 	/**
@@ -94,9 +100,8 @@ class ProjectUtils
 		}
 
 		var settings = FlxTools.settings;
-		var addOption = function(name:String, defaultValue:Dynamic) {
+		function addOption(name:String, defaultValue:Dynamic)
 			replacements.push(TemplateUtils.addOption(name, "", defaultValue));
-		};
 
 		addOption("AUTHOR", settings.AuthorName);
 

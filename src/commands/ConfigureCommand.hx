@@ -21,16 +21,7 @@ class ConfigureCommand extends Command
 			// TOOD: support other IDEs (need template replacements)
 			error('configure only supports ${IDE.VISUAL_STUDIO_CODE} at the moment');
 		
-		var projects = [];
-		var isProjectFolder = ProjectUtils.findProjectXml(directory) != null;
-		if (isProjectFolder)
-			projects.push(directory);
-		else
-		{
-			projects = ProjectUtils.findLimeProjects(directory).map(
-				function(p) return p.path
-			);
-		}
+		var projects = ProjectUtils.findLimeProjects(directory);
 
 		if (projects.length == 0)
 		{
@@ -40,9 +31,18 @@ class ConfigureCommand extends Command
 			
 		for (project in projects)
 		{
-			var fullPath = FileSystem.fullPath(project);
+			var fullPath = FileSystem.fullPath(project.path);
 			print('Adding $ide files to \'$fullPath\'...');
-			ProjectUtils.copyIDETemplateFiles(fullPath, null, ide);
+
+			var applicationName =
+				try
+					ProjectUtils.getApplicationFile(FileSystem.fullPath(project.projectXmlPath))
+				catch (_:Dynamic)
+					project.name;
+
+			var replacements = [TemplateUtils.addOption("APPLICATION_FILE", "", applicationName)];
+			replacements = ProjectUtils.copyIDETemplateFiles(fullPath, replacements, ide);
+			TemplateUtils.modifyTemplate(fullPath, replacements);
 		}
 	}
 }
