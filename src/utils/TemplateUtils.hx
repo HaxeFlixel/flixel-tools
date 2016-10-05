@@ -33,7 +33,7 @@ class TemplateUtils
 
 		for (template in templates)
 		{
-			if (template.Name == templateName)
+			if (template.name == templateName)
 				target = template;
 		}
 		return target;
@@ -71,9 +71,9 @@ class TemplateUtils
 					
 					var project:TemplateProject =
 					{
-						Name : name,
-						Path : templatesPath + name,
-						Template : FileData
+						name : name,
+						path : templatesPath + name,
+						template : FileData
 					};
 					templates.push(project);
 				}
@@ -111,7 +111,7 @@ class TemplateUtils
 
 	public static function modifyTemplateProject(templatePath:String, template:TemplateProject, ide:IDE):Void
 	{
-		modifyTemplate(templatePath, template.Template.replacements);
+		modifyTemplate(templatePath, template.template.replacements);
 		compileIfNeeded(templatePath, ide);
 	}
 
@@ -173,13 +173,10 @@ typedef TemplateFile = {
 	replacements:Array<TemplateReplacement>
 }
 
-/**
- * Object to pass the data of a template project
- */
 typedef TemplateProject = {
-	Name:String,
-	Path:String,
-	Template:TemplateFile
+	name:String,
+	path:String,
+	template:TemplateFile
 }
 
 typedef TemplateReplacement = {

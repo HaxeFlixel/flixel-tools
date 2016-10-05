@@ -56,7 +56,7 @@ class TemplateCommand extends Command
 		}
 		else
 		{
-			templateName = template.Name;
+			templateName = template.name;
 		}
 
 		//override the template defaults form the command arguments
@@ -96,9 +96,9 @@ class TemplateCommand extends Command
 			}
 		}
 
-		template.Template.replacements = ProjectUtils.copyIDETemplateFiles(targetPath, template.Template.replacements, ideOption);
+		template.template.replacements = ProjectUtils.copyIDETemplateFiles(targetPath, template.template.replacements, ideOption);
 
-		CommandUtils.copyRecursively(template.Path, targetPath, TemplateUtils.templateFilter, true);
+		CommandUtils.copyRecursively(template.path, targetPath, TemplateUtils.templateFilter, true);
 
 		TemplateUtils.modifyTemplateProject(targetPath, template, ideOption);
 
@@ -108,7 +108,7 @@ class TemplateCommand extends Command
 
 		if (FlxTools.settings.IDEAutoOpen)
 		{
-			var projectName = TemplateUtils.getReplacementValue(template.Template.replacements, "${PROJECT_NAME}");
+			var projectName = TemplateUtils.getReplacementValue(template.template.replacements, "${PROJECT_NAME}");
 			ProjectUtils.openWithIDE(targetPath, projectName, ideOption);
 		}
 
@@ -117,7 +117,7 @@ class TemplateCommand extends Command
 
 	private function addOptionReplacement(template:TemplateProject):TemplateProject
 	{
-		var replacements = template.Template.replacements;
+		var replacements = template.template.replacements;
 
 		for (o in replacements)
 		{
