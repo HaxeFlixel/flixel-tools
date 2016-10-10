@@ -44,7 +44,7 @@ class ProjectUtils
 		if (projectPath != null)
 		{
 			projects.push({
-				name : new Path(projectPath).file,
+				name : new Path(directory).file,
 				path : directory,
 				projectXmlPath : projectPath,
 				targets : ""
