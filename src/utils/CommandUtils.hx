@@ -297,24 +297,24 @@ class CommandUtils
 
 	public static function loadIDESettings():Void
 	{
-		var ideDataPath = CommandUtils.getHaxelibPath("flixel-templates");
+		var ideDataPath = getHaxelibPath("flixel-templates");
 		if (ideDataPath == "")
 			return;
 
-		ideDataPath = CommandUtils.combine(ideDataPath, "ide-data");
+		ideDataPath = combine(ideDataPath, "ide-data");
 
 		FlxTools.templateSourcePaths = [
-			IDE.FLASH_DEVELOP => CommandUtils.combine(ideDataPath, "flash-develop"),
-			IDE.INTELLIJ_IDEA => CommandUtils.combine(ideDataPath, "intellij-idea"),
-			IDE.SUBLIME_TEXT => CommandUtils.combine(ideDataPath, "sublime-text"),
-			IDE.VISUAL_STUDIO_CODE => CommandUtils.combine(ideDataPath, "visual-studio-code")
+			IDE.FLASH_DEVELOP => combine(ideDataPath, "flash-develop"),
+			IDE.INTELLIJ_IDEA => combine(ideDataPath, "intellij-idea"),
+			IDE.SUBLIME_TEXT => combine(ideDataPath, "sublime-text"),
+			IDE.VISUAL_STUDIO_CODE => combine(ideDataPath, "visual-studio-code")
 		];
 		FlxTools.templatesLoaded = true;
 	}
 
 	public static function loadToolSettings():FlxToolSettings
 	{
-		var toolPath = CommandUtils.getHaxelibPath("flixel-tools");
+		var toolPath = getHaxelibPath("flixel-tools");
 		if (toolPath == "")
 		{
 			Sys.println("Error reading your settings, please run 'flixel setup'.");
@@ -343,7 +343,7 @@ class CommandUtils
 
 	public static function saveToolSettings(settings:FlxToolSettings):Void
 	{
-		var toolPath = CommandUtils.getHaxelibPath("flixel-tools");
+		var toolPath = getHaxelibPath("flixel-tools");
 		if (toolPath == "")
 		{
 			Sys.println("Error detecting path of your haxelib flixel-tools.");
@@ -354,12 +354,12 @@ class CommandUtils
 
 		File.saveContent(settingsPath, Json.stringify(settings));
 
-		FlxTools.settings = CommandUtils.loadToolSettings();
+		FlxTools.settings = loadToolSettings();
 	}
 
 	public static function haxelibCommand(lib:String, autoContinue:Bool, ?message:String):Bool
 	{
-		var libStatus = CommandUtils.getHaxelibPath(lib);
+		var libStatus = getHaxelibPath(lib);
 		if (libStatus == "")
 		{
 			if (message == null)
@@ -367,7 +367,7 @@ class CommandUtils
 
 			if (!autoContinue)
 			{
-				var answer = CommandUtils.askYN(message);
+				var answer = askYN(message);
 				if (answer == Answer.No)
 					return false;
 			}
