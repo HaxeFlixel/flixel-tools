@@ -1,3 +1,7 @@
+1.3.0
+------------------------------
+* Added support for flixel-templates' VSCode `launch.json`
+
 1.2.1
 ------------------------------
 * `setup` command:
