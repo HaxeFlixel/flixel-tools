@@ -42,7 +42,7 @@ class BuildProjectsCommand extends Command
 			
 			var log = console.getOption("log") == "true";
 			var verbose = console.getOption("verbose") == "true";
-			var totalResult = buildProjects(projects, target, log, verbose, getDefines());
+			var totalResult = buildProjects(projects, target, log, verbose, getOptions(), getDefines());
 
 			var createServerFolder = console.getOption("server") == "true";
 			if(createServerFolder)
@@ -51,7 +51,17 @@ class BuildProjectsCommand extends Command
 			exit(totalResult);
 		}
 	}
-	
+
+	private function getOptions():Array<String>
+	{
+		var options = [];
+		for (option in console.options.keys())
+			if (option.startsWith("O")) {
+				options.push(option.replace("O", ""));
+			}
+		return options;
+	}
+
 	private function getDefines():Array<String>
 	{
 		var defines = [];
@@ -76,7 +86,7 @@ class BuildProjectsCommand extends Command
 	}
 
 	private function buildProjects(projects:Array<LimeProject>, target:String, log:Bool,
-		verbose:Bool, defines:Array<String>):Result
+		verbose:Bool, options:Array<String>, defines:Array<String>):Result
 	{
 		var results = new Array<BuildResult>();
 
@@ -84,7 +94,7 @@ class BuildProjectsCommand extends Command
 		{
 			var targets = (target == "all") ? ["flash", "html5", "neko", "cpp"] : [target];
 			for (target in targets)
-				results.push(buildProject(project, target, verbose, defines));
+				results.push(buildProject(project, target, verbose, options, defines));
 		}
 
 		if (log)
@@ -110,9 +120,9 @@ class BuildProjectsCommand extends Command
 	}
 	
 	private function buildProject(project:LimeProject, target:String, verbose:Bool,
-		defines:Array<String>):BuildResult
+		options:Array<String>, defines:Array<String>):BuildResult
 	{
-		var buildArgs = ["run", "openfl", "build", project.path, target].concat(defines);
+		var buildArgs = ["run", "openfl", "build", project.path, target].concat(options).concat(defines);
 		if (verbose)
 			Sys.println("haxelib " + buildArgs.join(" "));
 		

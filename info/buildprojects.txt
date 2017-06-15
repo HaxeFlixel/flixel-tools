@@ -8,4 +8,5 @@
                  Defaults to the flixel-demos haxelib.
   -log         : Write the results to a "compile_results.log" file.
   -verbose     : Whether to print the compile commands.
-  -Dvalue      : Specify a define to pass onto "haxelib run openfl build".
+  -Dvalue      : Specify a define to pass onto "haxelib run openfl build -D".
+  -Ovalue      : Specify an option to pass onto the haxelib command "haxelib run openfl build O".
