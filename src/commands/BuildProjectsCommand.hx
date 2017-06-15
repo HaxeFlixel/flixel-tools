@@ -169,6 +169,7 @@ class BuildProjectsCommand extends Command
 		}
 
 		file.writeString("\n / End of Log.");
+		file.close();
 	}
 }
 
