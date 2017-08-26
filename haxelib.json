@@ -4,8 +4,8 @@
     "license": "MIT",
     "tags": ["game", "openfl", "flash", "neko", "cpp", "android", "ios"],
     "description": "Command-Line tools for the HaxeFlixel game engine",
-    "version": "1.3.0",
-    "releasenote": "Support flixel-templates' VSCode launch.json.",
+    "version": "1.4.0",
+    "releasenote": "VSCode .code-workspace support for the configure command",
     "contributors": ["haxeflixel"],
     "dependencies": {}
 }

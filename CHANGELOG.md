@@ -1,3 +1,7 @@
+1.4.0 (August 26, 2017)
+------------------------------
+* `configure`: added support for VSCode `.code-workspace` files
+
 1.3.0 (May 14, 2017)
 ------------------------------
 * Added support for flixel-templates' VSCode `launch.json`
