@@ -4,3 +4,5 @@
                  the tool recursively scans subdirectories and adds IDE templates
                  to all projects it finds (handy for flixel-demos for instance).
   -ide <subl|fd|idea|vscode|none> : The IDE to use (overrides your setup).
+                                    For VSCode, a .code-workspace file is
+                                    generated if there's more than one project.

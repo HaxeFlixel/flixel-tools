@@ -3,7 +3,11 @@ package commands;
 import massive.sys.cmd.Command;
 import utils.ProjectUtils;
 import utils.TemplateUtils;
+import utils.FileSysUtils;
 import sys.FileSystem;
+import sys.io.File;
+import haxe.io.Path;
+import haxe.Json;
 import FlxTools.IDE;
 
 class ConfigureCommand extends Command
@@ -22,7 +26,6 @@ class ConfigureCommand extends Command
 			error('configure only supports ${IDE.VISUAL_STUDIO_CODE} at the moment');
 		
 		var projects = ProjectUtils.findLimeProjects(directory);
-
 		if (projects.length == 0)
 		{
 			var fullPath = FileSystem.fullPath(directory);
@@ -44,5 +47,32 @@ class ConfigureCommand extends Command
 			replacements = ProjectUtils.copyIDETemplateFiles(fullPath, replacements, ide);
 			TemplateUtils.modifyTemplate(fullPath, replacements);
 		}
+
+		if (projects.length > 1 && ide == IDE.VISUAL_STUDIO_CODE)
+			generateVSCodeWorkspace(directory, projects);
+	}
+
+	function generateVSCodeWorkspace(directory:String, projects:Array<LimeProject>)
+	{
+		var workspace = {
+			folders: []
+		};
+
+		var fullPath = FileSystem.fullPath(directory);
+
+		for (project in projects)
+		{
+			workspace.folders.push({
+				path: FileSysUtils.relativize(project.path, fullPath)
+			});
+		}
+
+		var segments = Path.normalize(fullPath).split("/");
+		var lastSegment = segments[segments.length - 1];
+		var projectName = if (lastSegment == "git") segments[segments.length - 2] else lastSegment;
+		var workspaceFile = '$projectName.code-workspace';
+		
+		Sys.println('Adding $workspaceFile to \'${fullPath}\'...');
+		File.saveContent(Path.join([directory, workspaceFile]), Json.stringify(workspace, null, "\t"));
 	}
 }

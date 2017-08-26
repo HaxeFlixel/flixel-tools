@@ -1,6 +1,7 @@
 package utils;
 
 import sys.io.File;
+import haxe.io.Path;
 
 /**
  * Utilities for FileSys Commands
@@ -37,5 +38,15 @@ class FileSysUtils
 		f();
 
 		Sys.setCwd(cwd);
+	}
+
+	public static function relativize(path:String, cwd:String)
+	{
+		path = Path.normalize(path);
+		cwd = Path.normalize(cwd) + "/";
+
+		var segments = path.split(cwd);
+		segments.shift();
+		return segments.join(cwd);
 	}
 }
