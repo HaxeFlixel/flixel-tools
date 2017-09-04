@@ -23,6 +23,8 @@ class ProjectUtils
 		{
 			var replacements = new Array<TemplateReplacement>();
 			replacements.push(TemplateUtils.addOption("PROJECT_NAME", "", project.name));
+
+			Sys.println('Adding project files for $ide (can be changed with "flixel setup")...\n');
 			replacements = copyIDETemplateFiles(destination, replacements, ide);
 
 			TemplateUtils.modifyTemplate(destination, replacements);
@@ -128,10 +130,7 @@ class ProjectUtils
 		}
 
 		if (templateSource != null)
-		{
-			Sys.println('Adding project files for $ide (can be changed with "flixel setup")...\n');
 			CommandUtils.copyRecursively(templateSource, targetPath, TemplateUtils.templateFilter, true);
-		}
 
 		return replacements;
 	}

@@ -98,6 +98,7 @@ class TemplateCommand extends Command
 
 		Sys.println('Copying template files...');
 
+		Sys.println('Adding project files for $ideOption (can be changed with "flixel setup")...\n');
 		template.template.replacements = ProjectUtils.copyIDETemplateFiles(targetPath, template.template.replacements, ideOption);
 
 		CommandUtils.copyRecursively(template.path, targetPath, TemplateUtils.templateFilter, true);

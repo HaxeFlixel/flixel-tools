@@ -14,7 +14,7 @@ class CreateCommand extends Command
 		var projects:Array<LimeProject> = getProjects();
 		var project = getProject(projects);
 		
-		Sys.println("Copying demo '" + project.name + "'...\n");
+		Sys.println("Copying demo '" + project.name + "'...");
 
 		var ide = ProjectUtils.resolveIDEChoice(console);
 		var destination = CommandUtils.combine(Sys.getCwd(), project.name);
