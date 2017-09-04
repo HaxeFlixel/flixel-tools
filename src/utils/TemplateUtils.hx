@@ -110,6 +110,7 @@ class TemplateUtils
 		{
 			Sys.println("Initializing project for code completion...");
 			runCommand("haxelib", ["run", "lime", "update", "flash", "-debug"]);
+			Sys.println("");
 		});
 	}
 
