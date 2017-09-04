@@ -25,18 +25,12 @@ class TemplateUtils
 		if (templateName == "")
 			templateName = 'default';
 
-		var templates = findTemplates();
-		var target:TemplateProject = null;
-
-		if (templates == null)
-			return null;
-
-		for (template in templates)
+		for (template in findTemplates())
 		{
 			if (template.name == templateName)
-				target = template;
+				return template;
 		}
-		return target;
+		return null;
 	}
 
 	public static function findTemplates(?templatesPath:String):Array<TemplateProject>
@@ -51,7 +45,7 @@ class TemplateUtils
 		if (!FileSys.exists(templatesPath))
 			return null;
 
-		var templates = new Array<TemplateProject>();
+		var templates = [];
 
 		for (name in FileSys.readDirectory(templatesPath))
 		{
@@ -66,36 +60,26 @@ class TemplateUtils
 				if (FileSystem.exists(filePath))
 				{
 					var file = FileSysUtils.getContent(filePath);
-					
 					var FileData:TemplateFile = Json.parse(file);
-					
 					var project:TemplateProject =
 					{
-						name : name,
-						path : templatesPath + name,
-						template : FileData
+						name: name,
+						path: templatesPath + name,
+						template: FileData
 					};
 					templates.push(project);
 				}
 			}
 		}
 
-		if (Lambda.count(templates) > 0)
-		{
-			return templates;
-		}
-		else
-		{
-			return null;
-		}
+		return templates;
 	}
 
 	public static function getReplacementValue(replacements:Array<TemplateReplacement>, pattern:String):String
 	{
 		for (o in replacements)
-		{
 			return o.replacement;
-		}
+
 		return null;
 	}
 
@@ -103,9 +87,9 @@ class TemplateUtils
 	{
 		return
 		{
-			replacement : defaultValue,
-			pattern : "${" + pattern + "}",
-			cmdOption : cmdOption
+			replacement: defaultValue,
+			pattern: "${" + pattern + "}",
+			cmdOption: cmdOption
 		};
 	}
 

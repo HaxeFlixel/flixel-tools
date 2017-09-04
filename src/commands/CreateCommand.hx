@@ -24,6 +24,7 @@ class CreateCommand extends Command
 		{
 			Sys.println("Successfully created the demo '" + project.name + "' at:");
 			Sys.println(destination);
+			Sys.println("");
 
 			if (FlxTools.settings.IDEAutoOpen)
 				ProjectUtils.openWithIDE(destination, project.name, ide);

@@ -106,7 +106,7 @@ class TemplateCommand extends Command
 
 		Sys.println("Successfully created template at:");
 		Sys.println(targetPath);
-		Sys.println(" ");
+		Sys.println("");
 
 		if (FlxTools.settings.IDEAutoOpen)
 			ProjectUtils.openWithIDE(targetPath, projectName, ideOption);
