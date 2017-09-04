@@ -1,6 +1,13 @@
+1.4.1 (September 4, 2017)
+------------------------------
+* `create` and `template` commands:
+	* made the output more verbose / helpful
+	* sped up initialization by replacing `lime build` with `lime update`
+
 1.4.0 (August 26, 2017)
 ------------------------------
-* `configure`: added support for VSCode `.code-workspace` files
+* `configure` command:
+	* added support for VSCode `.code-workspace` files
 
 1.3.0 (May 14, 2017)
 ------------------------------
