@@ -96,6 +96,8 @@ class TemplateCommand extends Command
 			}
 		}
 
+		Sys.println('Copying template files...');
+
 		template.template.replacements = ProjectUtils.copyIDETemplateFiles(targetPath, template.template.replacements, ideOption);
 
 		CommandUtils.copyRecursively(template.path, targetPath, TemplateUtils.templateFilter, true);
