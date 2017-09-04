@@ -4,6 +4,7 @@ import haxe.Json;
 import massive.sys.io.FileSys;
 import sys.FileSystem;
 import sys.io.FileOutput;
+import utils.CommandUtils.runCommand;
 import FlxTools.IDE;
 using StringTools;
 
@@ -96,10 +97,10 @@ class TemplateUtils
 	public static function modifyTemplateProject(templatePath:String, template:TemplateProject, ide:IDE):Void
 	{
 		modifyTemplate(templatePath, template.template.replacements);
-		compileIfNeeded(templatePath, ide);
+		initializeProject(templatePath, ide);
 	}
 
-	public static function compileIfNeeded(templatePath:String, ide:IDE)
+	public static function initializeProject(templatePath:String, ide:IDE)
 	{
 		if (ide != IDE.VISUAL_STUDIO_CODE)
 			return;
@@ -107,8 +108,8 @@ class TemplateUtils
 		// HACK: let's compile once to get the default completion hxml
 		FileSysUtils.runInDirectory(templatePath, function()
 		{
-			Sys.println("Compiling the project once...");
-			Sys.command("haxelib", ["run", "lime", "build", "flash", "-Ddebug"]);
+			Sys.println("Initializing project for code completion...");
+			runCommand("haxelib", ["run", "lime", "update", "flash", "-debug"]);
 		});
 	}
 
