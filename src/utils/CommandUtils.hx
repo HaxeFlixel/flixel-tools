@@ -372,8 +372,7 @@ class CommandUtils
 					return false;
 			}
 
-			Sys.println('haxelib install $lib');
-			Sys.command("haxelib", ["install", lib]);
+			runCommand("haxelib", ["install", lib]);
 			return true;
 		}
 		else
@@ -381,6 +380,19 @@ class CommandUtils
 			Sys.println("You appear to already have " + lib + " installed.");
 			return false;
 		}
+	}
+
+	/**
+	 * Wrapper around `Sys.command()` that also prints the command.
+	 */
+	public static function runCommand(cmd:String, ?args:Array<String>)
+	{
+		if (args == null)
+			Sys.println(cmd);
+		else
+			Sys.println(cmd + " " + args.join(" "));
+
+		Sys.command(cmd, args);
 	}
 }
 

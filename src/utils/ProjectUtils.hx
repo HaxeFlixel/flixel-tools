@@ -5,6 +5,7 @@ import haxe.xml.Fast;
 import sys.io.File;
 import massive.sys.io.FileSys;
 import utils.CommandUtils;
+import utils.CommandUtils.runCommand;
 import utils.TemplateUtils;
 import massive.sys.cmd.Console;
 import FlxTools.IDE;
@@ -166,6 +167,7 @@ class ProjectUtils
 		var handler = ideHandlers[ide];
 		if (handler != null)
 		{
+			Sys.println('Opening the project with $ide (can be changed with "flixel setup")...');
 			result = handler(projectPath, projectName);
 			if (!result)
 				Sys.println('Could not open the project with $ide');
@@ -180,7 +182,7 @@ class ProjectUtils
 
 		if (FileSys.exists(projectFile))
 		{
-			Sys.command("explorer", [projectFile]);
+			runCommand("explorer", [projectFile]);
 			return true;
 		}
 		return false;
@@ -194,7 +196,7 @@ class ProjectUtils
 		{
 			if (FileSys.isMac || FileSys.isLinux)
 			{
-				Sys.command("subl", [projectFile]);
+				runCommand("subl", [projectFile]);
 			}
 			// TODO: windows
 			return true;
@@ -210,15 +212,15 @@ class ProjectUtils
 		{
 			if (FileSys.isMac)
 			{
-				Sys.command("open", ["-a", FlxTools.settings.IDEA_Path, projectPath]);
+				runCommand("open", ["-a", FlxTools.settings.IDEA_Path, projectPath]);
 			}
 			else if (FileSys.isLinux)
 			{
-				Sys.command('"' + FlxTools.settings.IDEA_Path + '" "' + projectPath + '" &');
+				runCommand('"' + FlxTools.settings.IDEA_Path + '" "' + projectPath + '" &');
 			}
 			else if (FileSys.isWindows)
 			{
-				Sys.command(FlxTools.settings.IDEA_Path, [projectPath]); //Not tested, but should work
+				runCommand(FlxTools.settings.IDEA_Path, [projectPath]); //Not tested, but should work
 			}
 
 			return true;
@@ -228,7 +230,7 @@ class ProjectUtils
 
 	public static function openWithVisualStudioCode(projectPath:String, projectName:String):Bool
 	{
-		Sys.command("code", [projectPath]);
+		runCommand("code", [projectPath]);
 		return true;
 	}
 }

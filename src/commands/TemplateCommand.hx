@@ -104,7 +104,7 @@ class TemplateCommand extends Command
 		template.template.replacements.push(TemplateUtils.addOption("APPLICATION_FILE", "", projectName));
 		TemplateUtils.modifyTemplateProject(targetPath, template, ideOption);
 
-		Sys.println("Created template at:");
+		Sys.println("Successfully created template at:");
 		Sys.println(targetPath);
 		Sys.println(" ");
 

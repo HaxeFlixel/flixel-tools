@@ -22,7 +22,7 @@ class CreateCommand extends Command
 
 		if (copied)
 		{
-			Sys.println("The demo '" + project.name + "' has been created at:");
+			Sys.println("Successfully created the demo '" + project.name + "' at:");
 			Sys.println(destination);
 
 			if (FlxTools.settings.IDEAutoOpen)
