@@ -12,7 +12,7 @@ env:
 install:
   - haxelib install lime 2.9.1 > /dev/null
   - haxelib install openfl 3.6.1 > /dev/null
-  - haxelib install hxcpp > /dev/null
+  - haxelib install hxcpp 3.3.49 > /dev/null
   - haxelib install mlib > /dev/null
   - haxelib git flixel https://github.com/HaxeFlixel/flixel > /dev/null
   - haxelib git flixel-templates https://github.com/HaxeFlixel/flixel-templates > /dev/null
