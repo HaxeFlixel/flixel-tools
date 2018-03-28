@@ -108,7 +108,7 @@ class BuildProjectsCommand extends Command
 		if (verbose)
 			Sys.println("haxelib " + buildArgs.join(" "));
 		
-		var result:Result = Result.fromInt(Sys.command("haxelib", buildArgs));
+		var result:Result = Sys.command("haxelib", buildArgs);
 		
 		ColorUtils.println(result + " - " + project.name + ' ($target)', result);
 
@@ -154,7 +154,7 @@ abstract Result(String)
 	var FAILURE = "FAILURE";
 	
 	@:from
-	public static function fromInt(i:Int):Result
+	static function fromInt(i:Int):Result
 	{
 		return (i == 0) ? SUCCESS : FAILURE;
 	}
