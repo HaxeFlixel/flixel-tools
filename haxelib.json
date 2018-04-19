@@ -6,6 +6,6 @@
     "description": "Command-Line tools for the HaxeFlixel game engine",
     "version": "1.4.1",
     "releasenote": "Improved output and performance of template and create commands",
-    "contributors": ["haxeflixel"],
+    "contributors": ["haxeflixel", "Gama11"],
     "dependencies": {}
 }
