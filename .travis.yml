@@ -2,11 +2,10 @@ language: haxe
 
 haxe:
   - 3.4.7
- 
-env: 
+
+env:
   - TARGET=flash
   - TARGET=neko
-  - TARGET=cpp
   - TARGET=html5
 
 install:
