@@ -81,7 +81,7 @@ class SetupCommand extends Command
 
 		var binPath = if (FileSys.isMac) "/usr/local/bin" else "/usr/bin";
 
-		if (FileSys.isLinux||FileSys.isMac)
+		if (FileSys.isLinux || FileSys.isMac)
 			message = "Do you want to set up the command alias 'flixel' to 'haxelib run flixel-tools'?" +
 			          "\nA simple flixel script will be added to your " + binPath + "/";
 
