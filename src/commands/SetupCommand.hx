@@ -10,8 +10,8 @@ import FlxTools.IDE;
 
 class SetupCommand extends Command
 {
-	private var autoContinue:Bool = false;
-	private var isAliasSetUp = false;
+	var autoContinue:Bool = false;
+	var isAliasSetUp = false;
 
 	override public function execute():Void
 	{
@@ -34,7 +34,7 @@ class SetupCommand extends Command
 		exit();
 	}
 
-	private function setupFlixel():Void
+	function setupFlixel():Void
 	{
 		var flixel = CommandUtils.getHaxelibPath("flixel");
 
@@ -49,7 +49,7 @@ class SetupCommand extends Command
 		}
 	}
 
-	private function setupFlixelLibs():Void
+	function setupFlixelLibs():Void
 	{
 		var templatesHaxelib = CommandUtils.getHaxelibPath("flixel-templates");
 		var demosHaxelib = CommandUtils.getHaxelibPath("flixel-demos");
@@ -68,12 +68,12 @@ class SetupCommand extends Command
 		}
 	}
 
-	private function runDownloadCommand():Void
+	function runDownloadCommand():Void
 	{
 		Sys.command("haxelib", ["run", "flixel-tools", "download"]);
 	}
 
-	private function setupCommandAlias():Void
+	function setupCommandAlias():Void
 	{
 		var answer = Answer.No;
 
@@ -129,7 +129,7 @@ class SetupCommand extends Command
 		}
 	}
 
-	private function promptForSettings():FlxToolSettings
+	function promptForSettings():FlxToolSettings
 	{
 		var ides:Array<String> = [IDE.SUBLIME_TEXT, IDE.FLASH_DEVELOP, IDE.INTELLIJ_IDEA, IDE.VISUAL_STUDIO_CODE, IDE.NONE];
 		var ide = IDE.NONE;

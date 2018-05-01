@@ -38,7 +38,7 @@ class CreateCommand extends Command
 		}
 	}
 	
-	private function getProjects():Array<LimeProject>
+	function getProjects():Array<LimeProject>
 	{
 		var directory = console.getOption("dir");
 		if (directory == null)
@@ -57,7 +57,7 @@ class CreateCommand extends Command
 		return projects;
 	}
 	
-	private function getProject(projects:Array<LimeProject>):LimeProject
+	function getProject(projects:Array<LimeProject>):LimeProject
 	{
 		var project:LimeProject = null;
 		if (console.args[1] != null)
@@ -75,7 +75,7 @@ class CreateCommand extends Command
 		return project;
 	}
 
-	private function promptProjectChoice(projects:Array<LimeProject>):LimeProject
+	function promptProjectChoice(projects:Array<LimeProject>):LimeProject
 	{
 		Sys.println("Listing all available demos...\n");
 		
@@ -101,7 +101,7 @@ class CreateCommand extends Command
 		return getProjectChoice(projects);
 	}
 	
-	private function columnsFromList<T>(list:Array<T>, columns:Int, stringifier:T->String):Array<String>
+	function columnsFromList<T>(list:Array<T>, columns:Int, stringifier:T->String):Array<String>
 	{
 		var splitAmount = Math.ceil(list.length / columns);
 		var lines = [for (i in 0...splitAmount) ""];
@@ -131,7 +131,7 @@ class CreateCommand extends Command
 		return lines;
 	}
 	
-	private function getProjectChoice(projects:Array<LimeProject>):LimeProject
+	function getProjectChoice(projects:Array<LimeProject>):LimeProject
 	{
 		Sys.println("\n  [c] Cancel\n");
 		Sys.println("Please enter the number or name of the demo to create.\n");
@@ -155,7 +155,7 @@ class CreateCommand extends Command
 		return null;
 	}
 	
-	private function resolveProject(projects:Array<LimeProject>, nameOrIndex:String):LimeProject
+	function resolveProject(projects:Array<LimeProject>, nameOrIndex:String):LimeProject
 	{
 		var index = Std.parseInt(nameOrIndex);
 		if (index != null)

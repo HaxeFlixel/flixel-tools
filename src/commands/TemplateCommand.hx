@@ -10,8 +10,8 @@ using StringTools;
 
 class TemplateCommand extends Command
 {
-	private var autoContinue:Bool = false;
-	private var ideOption:IDE = IDE.NONE;
+	var autoContinue:Bool = false;
+	var ideOption:IDE = IDE.NONE;
 
 	override public function execute():Void
 	{
@@ -117,7 +117,7 @@ class TemplateCommand extends Command
 		exit();
 	}	
 
-	private function addOptionReplacement(template:TemplateProject):TemplateProject
+	function addOptionReplacement(template:TemplateProject):TemplateProject
 	{
 		var replacements = template.template.replacements;
 
@@ -131,7 +131,7 @@ class TemplateCommand extends Command
 		return template;
 	}
 
-	private function addOptions(pattern:String, cmdOption:String, defaultValue:Dynamic):TemplateReplacement
+	function addOptions(pattern:String, cmdOption:String, defaultValue:Dynamic):TemplateReplacement
 	{
 		var option = console.getOption(cmdOption);
 

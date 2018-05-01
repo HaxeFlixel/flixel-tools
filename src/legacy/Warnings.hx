@@ -12,7 +12,7 @@ class Warnings
 	 */
 	public static var warningList(get, never):Map<String,String>;
 
-	public static function get_warningList():Map<String,String>
+	static function get_warningList():Map<String,String>
 	{
 		var warningList = new Map<String, String>();
 

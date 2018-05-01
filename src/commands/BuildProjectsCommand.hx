@@ -9,7 +9,7 @@ using StringTools;
 
 class BuildProjectsCommand extends Command
 {
-	private var directory:String;
+	var directory:String;
 	
 	override public function execute():Void
 	{
@@ -44,7 +44,7 @@ class BuildProjectsCommand extends Command
 		}
 	}
 	
-	private function getDefines():Array<String>
+	function getDefines():Array<String>
 	{
 		var defines = [];
 		for (option in console.options.keys())
@@ -53,7 +53,7 @@ class BuildProjectsCommand extends Command
 		return defines;
 	}
 	
-	private function filterProjects(projects:Array<LimeProject>, projectNames:Array<String>):Array<LimeProject>
+	function filterProjects(projects:Array<LimeProject>, projectNames:Array<String>):Array<LimeProject>
 	{
 		var filteredProjects = [];
 		for (projectName in projectNames)
@@ -67,7 +67,7 @@ class BuildProjectsCommand extends Command
 		return filteredProjects;
 	}
 
-	private function buildProjects(projects:Array<LimeProject>, target:String, log:Bool,
+	function buildProjects(projects:Array<LimeProject>, target:String, log:Bool,
 		verbose:Bool, defines:Array<String>):Void
 	{
 		var results = new Array<BuildResult>();
@@ -101,7 +101,7 @@ class BuildProjectsCommand extends Command
 		exit(totalResult);
 	}
 	
-	private function buildProject(project:LimeProject, target:String, verbose:Bool,
+	function buildProject(project:LimeProject, target:String, verbose:Bool,
 		defines:Array<String>):BuildResult
 	{
 		var buildArgs = ["run", "openfl", "build", project.path, target].concat(defines);
@@ -119,7 +119,7 @@ class BuildProjectsCommand extends Command
 		};
 	}
 
-	private function writeResultsToFile(FilePath:String, Results:Array<BuildResult>):Void
+	function writeResultsToFile(FilePath:String, Results:Array<BuildResult>):Void
 	{
 		var file = File.write(FilePath, false);
 

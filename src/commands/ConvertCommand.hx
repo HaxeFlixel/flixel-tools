@@ -12,7 +12,7 @@ using StringTools;
 
 class ConvertCommand extends Command
 {
-	private var autoContinue:Bool = false;
+	var autoContinue:Bool = false;
 
 	override public function execute():Void
 	{
@@ -37,7 +37,7 @@ class ConvertCommand extends Command
 	/**
 	 * Convert an old HaxeFlixel project
 	 */
-	private function convertProject(convertPath:String = "", makeBackup:Bool = true):Void
+	function convertProject(convertPath:String = "", makeBackup:Bool = true):Void
 	{
 		if (convertPath == "")
 		{
@@ -70,7 +70,7 @@ class ConvertCommand extends Command
 		}
 	}
 
-	private function convert(convertPath:String, makeBackup:Bool):Void
+	function convert(convertPath:String, makeBackup:Bool):Void
 	{
 		if (FileSys.exists(convertPath))
 		{
@@ -176,7 +176,7 @@ class ConvertCommand extends Command
 		exit();
 	}
 
-	private inline function displayWarnings(warnings:Array<WarningResult>):Void
+	inline function displayWarnings(warnings:Array<WarningResult>):Void
 	{
 		Sys.println("");
 		Sys.println(warnings.length + " Warnings");
@@ -197,7 +197,7 @@ class ConvertCommand extends Command
 		Sys.println("");
 	}
 
-	private inline function createBackup(convertPath:String, backupFolder:String):Void
+	inline function createBackup(convertPath:String, backupFolder:String):Void
 	{
 		var backup = CommandUtils.copyRecursively(convertPath, backupFolder);
 		if (backup)
@@ -216,7 +216,7 @@ class ConvertCommand extends Command
 	 *
 	 * @param   projectPath	 Path to scan recursivley
 	 */
-	private inline function convertProjectFolder(projectPath:String, display:Bool = false):Array<WarningResult>
+	inline function convertProjectFolder(projectPath:String, display:Bool = false):Array<WarningResult>
 	{
 		var warnings:Array<WarningResult> = new Array<WarningResult>();
 

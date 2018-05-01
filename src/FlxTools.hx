@@ -85,7 +85,7 @@ class FlxTools extends CommandLineRunner
 			displayInfo();
 	}
 
-	private static function displayInfo():Void
+	static function displayInfo():Void
 	{
 		displayLogo();
 		Sys.println("");
@@ -107,7 +107,7 @@ class FlxTools extends CommandLineRunner
 		Sys.println("");
 	}
 	
-	private static function displayLogo():Void
+	static function displayLogo():Void
 	{
 		var y = ColorUtils.print.bind(_, Color.Yellow);
 		var r = ColorUtils.print.bind(_, Color.Red);
