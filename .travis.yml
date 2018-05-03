@@ -13,6 +13,7 @@ install:
   - cd ~/haxe/lib/flixel/git/tests
   - haxe RunTravis.hxml
   - neko RunTravis.n flash new -install
+  - cd -
   - haxelib dev flixel-tools $TRAVIS_BUILD_DIR  
 
 script:
