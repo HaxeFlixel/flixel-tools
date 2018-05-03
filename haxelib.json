@@ -4,8 +4,8 @@
     "license": "MIT",
     "tags": ["game", "openfl", "flash", "neko", "cpp", "android", "ios"],
     "description": "Command-Line tools for the HaxeFlixel game engine",
-    "version": "1.4.1",
-    "releasenote": "Improved output and performance of template and create commands",
+    "version": "1.4.2",
+    "releasenote": "Support rest arguments after -- in buildprojects.",
     "contributors": ["haxeflixel", "Gama11"],
     "dependencies": {}
 }

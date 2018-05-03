@@ -1,4 +1,4 @@
-1.4.2 (to be released)
+1.4.2 (May 3, 2018)
 ------------------------------
 * `buildprojects` command:
 	* added `--` for rest arguments

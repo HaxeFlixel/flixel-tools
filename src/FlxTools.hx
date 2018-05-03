@@ -15,7 +15,7 @@ import utils.CommandUtils;
 class FlxTools extends CommandLineRunner
 {
 	public static inline var ALIAS = "flixel";
-	public static inline var VERSION = "1.4.1";
+	public static inline var VERSION = "1.4.2";
 
 	public static var settings:FlxToolSettings;
 
