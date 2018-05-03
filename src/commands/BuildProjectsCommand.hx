@@ -40,7 +40,7 @@ class BuildProjectsCommand extends Command
 			
 			var log = console.getOption("log") == "true";
 			var verbose = console.getOption("verbose") == "true";
-			buildProjects(projects, target, log, verbose, getDefines());
+			buildProjects(projects, target, log, verbose, getDefines(), getAdditionArguments());
 		}
 	}
 	
@@ -51,6 +51,25 @@ class BuildProjectsCommand extends Command
 			if (option.startsWith("D"))
 				defines.push("-" + option);
 		return defines;
+	}
+
+	function getAdditionArguments():Array<String>
+	{
+		var additionalArguments = [];
+		var doubleDash = false;
+		var args = Sys.args();
+		for (i in 0...args.length)
+		{
+			var arg = args[i];
+			if (i == args.length - 1)
+				continue;
+
+			if (arg == "--")
+				doubleDash = true;
+			else if (doubleDash)
+				additionalArguments.push(arg);
+		}
+		return additionalArguments;
 	}
 	
 	function filterProjects(projects:Array<LimeProject>, projectNames:Array<String>):Array<LimeProject>
@@ -68,7 +87,7 @@ class BuildProjectsCommand extends Command
 	}
 
 	function buildProjects(projects:Array<LimeProject>, target:String, log:Bool,
-		verbose:Bool, defines:Array<String>):Void
+		verbose:Bool, defines:Array<String>, additionalArguments:Array<String>):Void
 	{
 		var results = new Array<BuildResult>();
 
@@ -76,7 +95,7 @@ class BuildProjectsCommand extends Command
 		{
 			var targets = (target == "all") ? ["flash", "html5", "neko", "cpp"] : [target];
 			for (target in targets)
-				results.push(buildProject(project, target, verbose, defines));
+				results.push(buildProject(project, target, verbose, defines, additionalArguments));
 		}
 
 		if (log)
@@ -102,9 +121,9 @@ class BuildProjectsCommand extends Command
 	}
 	
 	function buildProject(project:LimeProject, target:String, verbose:Bool,
-		defines:Array<String>):BuildResult
+		defines:Array<String>, additionalArguments:Array<String>):BuildResult
 	{
-		var buildArgs = ["run", "openfl", "build", project.path, target].concat(defines);
+		var buildArgs = ["run", "openfl", "build", project.path, target].concat(defines).concat(additionalArguments);
 		if (verbose)
 			Sys.println("haxelib " + buildArgs.join(" "));
 		

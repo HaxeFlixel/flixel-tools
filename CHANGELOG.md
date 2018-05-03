@@ -1,3 +1,8 @@
+1.4.2 (to be released)
+------------------------------
+* `buildprojects` command:
+	* added `--` for rest arguments
+
 1.4.1 (September 4, 2017)
 ------------------------------
 * `create` and `template` commands:

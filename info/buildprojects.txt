@@ -9,3 +9,4 @@
   -log         : Write the results to a "compile_results.log" file.
   -verbose     : Whether to print the compile commands.
   -Dvalue      : Specify a define to pass onto "haxelib run openfl build".
+  -- [args...] : Arguments that will be passed to openfl build verbatim.
