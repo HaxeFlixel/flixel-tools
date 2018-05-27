@@ -10,11 +10,8 @@ env:
 
 install:
   - haxelib git flixel https://github.com/HaxeFlixel/flixel
-  - cd ~/haxe/lib/flixel/git/tests
-  - haxe RunTravis.hxml
-  - neko RunTravis.n flash new -install
-  - cd -
-  - haxelib dev flixel-tools $TRAVIS_BUILD_DIR  
+  - haxe --cwd ~/haxe/lib/flixel/git/tests --run RunTravis flash new -install
+  - haxelib dev flixel-tools .
 
 script:
   - haxe build.hxml
