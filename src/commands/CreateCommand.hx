@@ -54,6 +54,15 @@ class CreateCommand extends Command
 			exit();
 		}
 		
+		// sort alphabetically
+		projects.sort(function(p1, p2) {
+			if (p1.name < p2.name)
+				return -1;
+			if (p1.name > p2.name)
+				return 1;
+			return 0;
+		});
+		
 		return projects;
 	}
 	
@@ -78,15 +87,6 @@ class CreateCommand extends Command
 	function promptProjectChoice(projects:Array<LimeProject>):LimeProject
 	{
 		Sys.println("Listing all available demos...\n");
-		
-		// sort alphabetically
-		projects.sort(function(p1, p2) {
-			if (p1.name < p2.name)
-				return -1;
-			if (p1.name > p2.name)
-				return 1;
-			return 0;
-		});
 		
 		var lines = columnsFromList(projects, 3, function(project) {
 			if (project.name.length <= 20) 
