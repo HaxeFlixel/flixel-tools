@@ -109,7 +109,7 @@ class TemplateUtils
 		FileSysUtils.runInDirectory(templatePath, function()
 		{
 			Sys.println("Initializing project for code completion...");
-			runCommand("haxelib", ["run", "lime", "update", "flash", "-debug"]);
+			runCommand("haxelib", ["run", "lime", "update", "neko", "-debug"]);
 			Sys.println("");
 		});
 	}
