@@ -4,8 +4,8 @@
     "license": "MIT",
     "tags": ["game", "openfl", "flash", "neko", "cpp", "android", "ios"],
     "description": "Command-Line tools for the HaxeFlixel game engine",
-    "version": "1.4.2",
-    "releasenote": "Support rest arguments after -- in buildprojects.",
+    "version": "1.4.3",
+    "releasenote": "Fixed VSCode setup being out of sync with flixel-templates.",
     "contributors": ["haxeflixel", "Gama11"],
     "dependencies": {}
 }

@@ -1,3 +1,10 @@
+1.4.3 (December 29, 2018)
+------------------------------
+* `template` command:
+	* fixed VSCode setup being out of sync with flixel-templates (#71)
+* `create` command:
+	* fixed inconsistent numbering of demos (#70)
+
 1.4.2 (May 3, 2018)
 ------------------------------
 * `buildprojects` command:
