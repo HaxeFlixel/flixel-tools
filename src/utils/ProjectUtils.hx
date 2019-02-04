@@ -1,7 +1,6 @@
 package utils;
 
 import haxe.io.Path;
-import haxe.xml.Fast;
 import sys.io.File;
 import massive.sys.io.FileSys;
 import utils.CommandUtils;
@@ -10,6 +9,12 @@ import utils.TemplateUtils;
 import massive.sys.cmd.Console;
 import FlxTools.IDE;
 using StringTools;
+
+#if haxe4
+import haxe.xml.Access;
+#else
+import haxe.xml.Fast as Access;
+#end
 
 class ProjectUtils
 {
@@ -66,7 +71,7 @@ class ProjectUtils
 
 	public static function getApplicationFile(projectXmlPath:String):String
 	{
-		var fast = new Fast(Xml.parse(File.getContent(projectXmlPath)));
+		var fast = new Access(Xml.parse(File.getContent(projectXmlPath)));
 		return fast.node.project.node.app.att.file;
 	}
 
