@@ -33,7 +33,6 @@ class ProjectUtils
 			replacements = copyIDETemplateFiles(destination, replacements, ide);
 
 			TemplateUtils.modifyTemplate(destination, replacements);
-			TemplateUtils.initializeProject(destination, ide);
 		}
 		return result;
 	}
