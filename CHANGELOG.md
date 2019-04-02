@@ -1,3 +1,8 @@
+1.4.4 (April 2, 2019)
+------------------------------
+* `template` command:
+	* removed the pre-compilation step (no longer needed with Lime 7.3.0)
+
 1.4.3 (December 29, 2018)
 ------------------------------
 * `template` command:

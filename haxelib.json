@@ -4,8 +4,8 @@
     "license": "MIT",
     "tags": ["game", "openfl", "flash", "neko", "cpp", "android", "ios"],
     "description": "Command-Line tools for the HaxeFlixel game engine",
-    "version": "1.4.3",
-    "releasenote": "Fixed VSCode setup being out of sync with flixel-templates.",
+    "version": "1.4.4",
+    "releasenote": "Updated the template command for Lime 7.3.0.",
     "contributors": ["haxeflixel", "Gama11"],
     "dependencies": {}
 }
