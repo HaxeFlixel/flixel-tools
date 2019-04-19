@@ -1,4 +1,5 @@
 language: haxe
+dist: xenial
 
 haxe:
   - 3.4.7
