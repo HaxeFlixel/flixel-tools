@@ -37,8 +37,14 @@ class ConfigureCommand extends Command
 			var fullPath = FileSystem.fullPath(project.path);
 			print('Adding $ide files to \'$fullPath\'...');
 
-			var applicationName = try ProjectUtils.getApplicationFile(FileSystem.fullPath(project.projectXmlPath))
-			catch (_:Dynamic) project.name;
+			var applicationName = try
+			{
+				ProjectUtils.getApplicationFile(FileSystem.fullPath(project.projectXmlPath));
+			}
+			catch (_:Dynamic)
+			{
+				project.name;
+			}
 
 			var replacements = [TemplateUtils.addOption("APPLICATION_FILE", "", applicationName)];
 			replacements = ProjectUtils.copyIDETemplateFiles(fullPath, replacements, ide);
