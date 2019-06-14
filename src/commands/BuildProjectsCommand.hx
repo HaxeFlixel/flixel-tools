@@ -5,12 +5,13 @@ import sys.io.File;
 import utils.ColorUtils;
 import utils.ProjectUtils;
 import utils.CommandUtils;
+
 using StringTools;
 
 class BuildProjectsCommand extends Command
 {
 	var directory:String;
-	
+
 	override public function execute():Void
 	{
 		var target:String = console.getNextArg();
@@ -18,32 +19,32 @@ class BuildProjectsCommand extends Command
 			target = "flash";
 		else
 			target = target.toLowerCase();
-		
+
 		var projectNames:Array<String> = console.args.slice(2);
-		
+
 		directory = console.getOption("dir");
 		if (directory == null)
 			directory = CommandUtils.getHaxelibPath("flixel-demos");
-		
+
 		Sys.println('Scanning "$directory" for projects...');
 		var projects:Array<LimeProject> = ProjectUtils.findLimeProjects(directory);
 		if (projects.length == 0)
 			error("No projects were found.");
-		
+
 		if (projectNames.length > 0)
 			projects = filterProjects(projects, projectNames);
-		
+
 		if (projects.length > 0)
 		{
 			var specifier = (projectNames.length > 0) ? "specified" : "all";
 			Sys.println('Building $specifier projects - $target \n');
-			
+
 			var log = console.getOption("log") == "true";
 			var verbose = console.getOption("verbose") == "true";
 			buildProjects(projects, target, log, verbose, getDefines(), getAdditionArguments());
 		}
 	}
-	
+
 	function getDefines():Array<String>
 	{
 		var defines = [];
@@ -71,7 +72,7 @@ class BuildProjectsCommand extends Command
 		}
 		return additionalArguments;
 	}
-	
+
 	function filterProjects(projects:Array<LimeProject>, projectNames:Array<String>):Array<LimeProject>
 	{
 		var filteredProjects = [];
@@ -86,8 +87,7 @@ class BuildProjectsCommand extends Command
 		return filteredProjects;
 	}
 
-	function buildProjects(projects:Array<LimeProject>, target:String, log:Bool,
-		verbose:Bool, defines:Array<String>, additionalArguments:Array<String>):Void
+	function buildProjects(projects:Array<LimeProject>, target:String, log:Bool, verbose:Bool, defines:Array<String>, additionalArguments:Array<String>):Void
 	{
 		var results = new Array<BuildResult>();
 
@@ -119,22 +119,21 @@ class BuildProjectsCommand extends Command
 
 		exit(totalResult);
 	}
-	
-	function buildProject(project:LimeProject, target:String, verbose:Bool,
-		defines:Array<String>, additionalArguments:Array<String>):BuildResult
+
+	function buildProject(project:LimeProject, target:String, verbose:Bool, defines:Array<String>, additionalArguments:Array<String>):BuildResult
 	{
 		var buildArgs = ["run", "openfl", "build", project.path, target].concat(defines).concat(additionalArguments);
 		if (verbose)
 			Sys.println("haxelib " + buildArgs.join(" "));
-		
+
 		var result:Result = Sys.command("haxelib", buildArgs);
-		
+
 		ColorUtils.println(result + " - " + project.name + ' ($target)', result);
 
 		return {
-			result : result,
-			target : target,
-			project : project
+			result: result,
+			target: target,
+			project: project
 		};
 	}
 
@@ -160,7 +159,8 @@ class BuildProjectsCommand extends Command
 	}
 }
 
-typedef BuildResult = {
+typedef BuildResult =
+{
 	var target:String;
 	var result:Result;
 	var project:LimeProject;
@@ -171,22 +171,22 @@ abstract Result(String)
 {
 	var SUCCESS = "SUCCESS";
 	var FAILURE = "FAILURE";
-	
+
 	@:from
 	static function fromInt(i:Int):Result
 	{
 		return (i == 0) ? SUCCESS : FAILURE;
 	}
-	
+
 	@:to
 	function toInt():Int
 	{
 		return (this == "SUCCESS") ? 0 : 1;
 	}
-	
+
 	@:to
 	function toColor():Color
 	{
-		return (this == "SUCCESS") ? Color.Green : Color.Red; 
+		return (this == "SUCCESS") ? Color.Green : Color.Red;
 	}
 }

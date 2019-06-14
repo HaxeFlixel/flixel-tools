@@ -5,6 +5,7 @@ import massive.sys.io.FileSys;
 import sys.FileSystem;
 import sys.io.FileOutput;
 import FlxTools.IDE;
+
 using StringTools;
 
 class TemplateUtils
@@ -50,19 +51,18 @@ class TemplateUtils
 		for (name in FileSys.readDirectory(templatesPath))
 		{
 			var folderPath = CommandUtils.combine(templatesPath, name);
-			
+
 			if (FileSys.exists(folderPath) && FileSys.isDirectory(folderPath) && name != '.git')
 			{
 				var filePath = CommandUtils.combine(templatesPath, name);
 				filePath = CommandUtils.combine(filePath, "template.json");
-				
+
 				// Make sure we don't get a crash if the file doesn't exist
 				if (FileSystem.exists(filePath))
 				{
 					var file = FileSysUtils.getContent(filePath);
 					var FileData:TemplateFile = Json.parse(file);
-					var project:TemplateProject =
-					{
+					var project:TemplateProject = {
 						name: name,
 						path: templatesPath + name,
 						template: FileData
@@ -85,8 +85,7 @@ class TemplateUtils
 
 	public static function addOption(pattern:String, cmdOption:String, defaultValue:Dynamic):TemplateReplacement
 	{
-		return
-		{
+		return {
 			replacement: defaultValue,
 			pattern: "${" + pattern + "}",
 			cmdOption: cmdOption
@@ -139,17 +138,20 @@ class TemplateUtils
 	}
 }
 
-typedef TemplateFile = {
+typedef TemplateFile =
+{
 	replacements:Array<TemplateReplacement>
 }
 
-typedef TemplateProject = {
+typedef TemplateProject =
+{
 	name:String,
 	path:String,
 	template:TemplateFile
 }
 
-typedef TemplateReplacement = {
+typedef TemplateReplacement =
+{
 	replacement:String,
 	pattern:String,
 	cmdOption:String

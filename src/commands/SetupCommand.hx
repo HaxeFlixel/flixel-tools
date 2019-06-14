@@ -29,7 +29,8 @@ class SetupCommand extends Command
 
 		Sys.println("");
 		Sys.println("flixel-tools setup completed.");
-		if (isAliasSetUp) Sys.println("Try the 'flixel' command to test it! :)");
+		if (isAliasSetUp)
+			Sys.println("Try the 'flixel' command to test it! :)");
 
 		exit();
 	}
@@ -82,15 +83,17 @@ class SetupCommand extends Command
 		var binPath = if (FileSys.isMac) "/usr/local/bin" else "/usr/bin";
 
 		if (FileSys.isLinux || FileSys.isMac)
-			message = "Do you want to set up the command alias 'flixel' to 'haxelib run flixel-tools'?" +
-			          "\nA simple flixel script will be added to your " + binPath + "/";
+			message = "Do you want to set up the command alias 'flixel' to 'haxelib run flixel-tools'?"
+				+ "\nA simple flixel script will be added to your "
+				+ binPath
+				+ "/";
 
 		answer = CommandUtils.askYN(message);
 
 		if (autoContinue || answer == Answer.Yes)
 		{
 			isAliasSetUp = true;
-			
+
 			if (FileSys.isWindows)
 			{
 				var haxePath:String = Sys.getEnv("HAXEPATH");
@@ -131,7 +134,13 @@ class SetupCommand extends Command
 
 	function promptForSettings():FlxToolSettings
 	{
-		var ides:Array<String> = [IDE.SUBLIME_TEXT, IDE.FLASH_DEVELOP, IDE.INTELLIJ_IDEA, IDE.VISUAL_STUDIO_CODE, IDE.NONE];
+		var ides:Array<String> = [
+			IDE.SUBLIME_TEXT,
+			IDE.FLASH_DEVELOP,
+			IDE.INTELLIJ_IDEA,
+			IDE.VISUAL_STUDIO_CODE,
+			IDE.NONE
+		];
 		var ide = IDE.NONE;
 		var AuthorName = "";
 		var IDEAutoOpen = false;
@@ -175,22 +184,27 @@ class SetupCommand extends Command
 
 		if (ide == IDE.SUBLIME_TEXT && FileSys.isMac)
 		{
-			Sys.println("For Sublime Text to open automatically you have to make sure the 'subl' command is setup properly on your" +
-				"system as in http://www.sublimetext.com/docs/2/osx_command_line.html.");
+			Sys.println("For Sublime Text to open automatically you have to make sure the 'subl' command is setup properly on your"
+				+ "system as in http://www.sublimetext.com/docs/2/osx_command_line.html.");
 
 			var answer = Answer.No;
-			var sublSetupArgs = ["-s", "/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl", "~/bin/subl"];
+			var sublSetupArgs = [
+				"-s",
+				"/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl",
+				"~/bin/subl"
+			];
 
-			answer = CommandUtils.askYN("Do you want to run the symlink command automatically as per official instructions" +
-				"http://www.sublimetext.com/docs/2/osx_command_line.html?\n\n The command that will be executed is as follows:\n '" +
-				"ln " + sublSetupArgs.join(" ") + "'");
+			answer = CommandUtils.askYN("Do you want to run the symlink command automatically as per official instructions"
+				+ "http://www.sublimetext.com/docs/2/osx_command_line.html?\n\n The command that will be executed is as follows:\n '"
+				+ "ln "
+				+ sublSetupArgs.join(" ")
+				+ "'");
 
 			if (answer == Answer.Yes)
 				Sys.command("ln", sublSetupArgs);
 		}
 
-		var settingsFile:FlxToolSettings =
-		{
+		var settingsFile:FlxToolSettings = {
 			DefaultEditor: ide,
 			AuthorName: AuthorName,
 			IDEAutoOpen: IDEAutoOpen,

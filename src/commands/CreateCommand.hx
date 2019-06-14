@@ -13,7 +13,7 @@ class CreateCommand extends Command
 
 		var projects:Array<LimeProject> = getProjects();
 		var project = getProject(projects);
-		
+
 		Sys.println("Copying demo '" + project.name + "'...");
 
 		var ide = ProjectUtils.resolveIDEChoice(console);
@@ -37,7 +37,7 @@ class CreateCommand extends Command
 			error("There was a problem creating " + project.name);
 		}
 	}
-	
+
 	function getProjects():Array<LimeProject>
 	{
 		var directory = console.getOption("dir");
@@ -53,19 +53,20 @@ class CreateCommand extends Command
 			Sys.println("Try 'haxelib install flixel-demos'.");
 			exit();
 		}
-		
+
 		// sort alphabetically
-		projects.sort(function(p1, p2) {
+		projects.sort(function(p1, p2)
+		{
 			if (p1.name < p2.name)
 				return -1;
 			if (p1.name > p2.name)
 				return 1;
 			return 0;
 		});
-		
+
 		return projects;
 	}
-	
+
 	function getProject(projects:Array<LimeProject>):LimeProject
 	{
 		var project:LimeProject = null;
@@ -80,62 +81,63 @@ class CreateCommand extends Command
 
 		if (project == null)
 			error("This demo was not found, please try again.");
-		
+
 		return project;
 	}
 
 	function promptProjectChoice(projects:Array<LimeProject>):LimeProject
 	{
 		Sys.println("Listing all available demos...\n");
-		
-		var lines = columnsFromList(projects, 3, function(project) {
-			if (project.name.length <= 20) 
+
+		var lines = columnsFromList(projects, 3, function(project)
+		{
+			if (project.name.length <= 20)
 				return project.name;
 			else
 				return project.name.substring(0, 17) + "...";
 		});
-		
+
 		for (line in lines)
 			Sys.println(line);
-		
+
 		return getProjectChoice(projects);
 	}
-	
+
 	function columnsFromList<T>(list:Array<T>, columns:Int, stringifier:T->String):Array<String>
 	{
 		var splitAmount = Math.ceil(list.length / columns);
 		var lines = [for (i in 0...splitAmount) ""];
 		var maxLineLength = 0;
-		
+
 		for (i in 0...list.length)
 		{
 			var number = Std.string(i + 1);
 			if (number.length < 2)
 				number = "0" + number;
-			
+
 			var output = '[$number] ${stringifier(list[i])}';
-			
+
 			if (i % splitAmount == 0)
 			{
 				for (line in lines)
 					if (line.length > maxLineLength)
 						maxLineLength = line.length;
 			}
-			
+
 			var j = i % splitAmount;
 			var numSpaces = (maxLineLength - lines[j].length) + 2;
 			lines[j] += [for (i in 0...numSpaces) " "].join("");
 			lines[j] += output;
 		}
-		
+
 		return lines;
 	}
-	
+
 	function getProjectChoice(projects:Array<LimeProject>):LimeProject
 	{
 		Sys.println("\n  [c] Cancel\n");
 		Sys.println("Please enter the number or name of the demo to create.\n");
-		
+
 		while (true)
 		{
 			var userResponse = CommandUtils.readLine();
@@ -144,7 +146,7 @@ class CreateCommand extends Command
 				Sys.println("Cancelled");
 				exit();
 			}
-			
+
 			var project = resolveProject(projects, userResponse);
 			if (project != null)
 				return project;
@@ -154,17 +156,17 @@ class CreateCommand extends Command
 
 		return null;
 	}
-	
+
 	function resolveProject(projects:Array<LimeProject>, nameOrIndex:String):LimeProject
 	{
 		var index = Std.parseInt(nameOrIndex);
 		if (index != null)
 			return projects[index - 1];
-		
+
 		for (project in projects)
 			if (project.name == nameOrIndex)
 				return project;
-		
+
 		return null;
 	}
 }

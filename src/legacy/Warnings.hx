@@ -10,9 +10,9 @@ class Warnings
 	 * Key being the String to search for
 	 * Value being the String info about the solution
 	 */
-	public static var warningList(get, never):Map<String,String>;
+	public static var warningList(get, never):Map<String, String>;
 
-	static function get_warningList():Map<String,String>
+	static function get_warningList():Map<String, String>
 	{
 		var warningList = new Map<String, String>();
 
@@ -31,7 +31,7 @@ class Warnings
 
 		warningList.set("FlxGridSprite", "FlxGridSprite has been removed");
 
-		//Find and Replace conflicts with other code such as with FlxPoint.set etc
+		// Find and Replace conflicts with other code such as with FlxPoint.set etc
 		warningList.set(".make\\(", "FlxPoint.make() and FlxRect.make() renamed to set()");
 
 		// <haxedef name="FLX_RECORD"/>

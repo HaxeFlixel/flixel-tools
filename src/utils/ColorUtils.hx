@@ -1,6 +1,7 @@
 package utils;
 
 // http://stackoverflow.com/a/28938235/2631715
+
 @:enum
 abstract Color(Int)
 {
@@ -29,12 +30,12 @@ class ColorUtils
 	{
 		Sys.println(setColor(color, style) + message + setColor(Color.None));
 	}
-	
+
 	public static function print(message:String, color:Color, style:Style = Style.Normal):Void
 	{
 		Sys.print(setColor(color, style) + message + setColor(Color.None));
 	}
-	
+
 	public static function setColor(color:Color, style:Style = Style.Normal):String
 	{
 		if (Sys.systemName() == "Linux" || Sys.systemName() == "Mac")

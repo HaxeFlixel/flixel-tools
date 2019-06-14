@@ -29,52 +29,19 @@ class FlxTools extends CommandLineRunner
 		settings = CommandUtils.loadToolSettings();
 		CommandUtils.loadIDESettings();
 
-		mapCommand(
-			CreateCommand,
-			"create", ["c"],
-			"create a copy of a demo project",
-			TemplateUtil.getTemplate("create")
-		);
+		mapCommand(CreateCommand, "create", ["c"], "create a copy of a demo project", TemplateUtil.getTemplate("create"));
 
-		mapCommand(
-			SetupCommand,
-			"setup", ["st"],
-			"configure the tools and download the flixel libs"
-		);
-		
-		mapCommand(
-			DownloadCommand,
-			"download", ["dw"],
-			"download the flixel libs"
-		);
+		mapCommand(SetupCommand, "setup", ["st"], "configure the tools and download the flixel libs");
 
-		mapCommand(
-			TemplateCommand,
-			"template", ["tpl"],
-			"create a project from a template",
-			TemplateUtil.getTemplate("template")
-		);
+		mapCommand(DownloadCommand, "download", ["dw"], "download the flixel libs");
 
-		mapCommand(
-			ConvertCommand,
-			"convert", ["cn"],
-			"convert an old (2.x) project",
-			TemplateUtil.getTemplate("convert")
-		);
+		mapCommand(TemplateCommand, "template", ["tpl"], "create a project from a template", TemplateUtil.getTemplate("template"));
 
-		mapCommand(
-			BuildProjectsCommand,
-			"buildprojects", ["bp"],
-			"builds all demos for the specified target",
-			TemplateUtil.getTemplate("buildprojects")
-		);
+		mapCommand(ConvertCommand, "convert", ["cn"], "convert an old (2.x) project", TemplateUtil.getTemplate("convert"));
 
-		mapCommand(
-			ConfigureCommand,
-			"configure", ["conf"],
-			"adds IDE template files to one or multiple projects",
-			TemplateUtil.getTemplate("configure")
-		);
+		mapCommand(BuildProjectsCommand, "buildprojects", ["bp"], "builds all demos for the specified target", TemplateUtil.getTemplate("buildprojects"));
+
+		mapCommand(ConfigureCommand, "configure", ["conf"], "adds IDE template files to one or multiple projects", TemplateUtil.getTemplate("configure"));
 
 		run();
 	}
@@ -89,7 +56,7 @@ class FlxTools extends CommandLineRunner
 	{
 		displayLogo();
 		Sys.println("");
-		
+
 		Sys.println("Powered by the Haxe Toolkit and OpenFL");
 		Sys.println("Visit www.haxeflixel.com for community support and resources!");
 		Sys.println("");
@@ -106,7 +73,7 @@ class FlxTools extends CommandLineRunner
 
 		Sys.println("");
 	}
-	
+
 	static function displayLogo():Void
 	{
 		var y = ColorUtils.print.bind(_, Color.Yellow);
@@ -116,12 +83,72 @@ class FlxTools extends CommandLineRunner
 		var c = ColorUtils.print.bind(_, Color.Cyan);
 		var nl = Sys.println.bind("");
 
-		y(" _   _ "); r("      "); g("      ");   b("  ");    c("______");  y(" _ "); r("_");   g("      ");   b("   ");   c(" _ "); nl();
-		y("| | | |"); r("      "); g("      ");   b("  ");    c("|  ___|"); y(" ");   r("(_)"); g("      ");   b("  ");    c("| |"); nl();
-		y("| |_| |"); r(" __ _");  g("__  __");   b("___");   c("| |__ ");  y("| |"); r( "_");  g("__  __");   b("___");   c("| |"); nl();
-		y("|  _  |"); r("/ _` ");  g("\\ \\/ /"); b(" _ \\"); c(" ___|");   y("| |"); r( " ");  g("\\ \\/ /"); b(" _ \\"); c( " |"); nl();
-		y("| | | |"); r(" (_| |"); g(">  <  ");   b( "__/");  c(" |   ");   y("| |"); r( " |"); g( ">  <  ");  b("__/");   c( " |"); nl();
-		y("|_| |_|"); r("\\ __,"); g("/_/\\_\\"); b("___|");  c("_|   ");   y("|_|"); r( "_");  g("/_/\\_\\"); b("___|");  c( "_|"); nl();
+		y(" _   _ ");
+		r("      ");
+		g("      ");
+		b("  ");
+		c("______");
+		y(" _ ");
+		r("_");
+		g("      ");
+		b("   ");
+		c(" _ ");
+		nl();
+		y("| | | |");
+		r("      ");
+		g("      ");
+		b("  ");
+		c("|  ___|");
+		y(" ");
+		r("(_)");
+		g("      ");
+		b("  ");
+		c("| |");
+		nl();
+		y("| |_| |");
+		r(" __ _");
+		g("__  __");
+		b("___");
+		c("| |__ ");
+		y("| |");
+		r("_");
+		g("__  __");
+		b("___");
+		c("| |");
+		nl();
+		y("|  _  |");
+		r("/ _` ");
+		g("\\ \\/ /");
+		b(" _ \\");
+		c(" ___|");
+		y("| |");
+		r(" ");
+		g("\\ \\/ /");
+		b(" _ \\");
+		c(" |");
+		nl();
+		y("| | | |");
+		r(" (_| |");
+		g(">  <  ");
+		b("__/");
+		c(" |   ");
+		y("| |");
+		r(" |");
+		g(">  <  ");
+		b("__/");
+		c(" |");
+		nl();
+		y("|_| |_|");
+		r("\\ __,");
+		g("/_/\\_\\");
+		b("___|");
+		c("_|   ");
+		y("|_|");
+		r("_");
+		g("/_/\\_\\");
+		b("___|");
+		c("_|");
+		nl();
 	}
 
 	public static function getFlixelVersion():String
@@ -129,11 +156,14 @@ class FlxTools extends CommandLineRunner
 		var flixelHaxelib:HaxelibJSON = CommandUtils.getHaxelibJsonData("flixel");
 		if (flixelHaxelib != null)
 			return flixelHaxelib.version;
-		
+
 		return null;
 	}
 
-	public static function main():FlxTools { return new FlxTools(); }
+	public static function main():FlxTools
+	{
+		return new FlxTools();
+	}
 }
 
 @:enum

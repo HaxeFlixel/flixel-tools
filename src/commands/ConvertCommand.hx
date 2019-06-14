@@ -8,6 +8,7 @@ import sys.io.File;
 import sys.io.FileOutput;
 import utils.CommandUtils;
 import utils.FileSysUtils;
+
 using StringTools;
 
 class ConvertCommand extends Command
@@ -97,8 +98,7 @@ class ConvertCommand extends Command
 				{
 					if (!autoContinue)
 					{
-						var overwrite = CommandUtils.askYN("There is already a backup at "
-							+ backupFolder + ", do you want to overwrite it?");
+						var overwrite = CommandUtils.askYN("There is already a backup at " + backupFolder + ", do you want to overwrite it?");
 
 						if (overwrite == Answer.Yes)
 						{
@@ -143,7 +143,7 @@ class ConvertCommand extends Command
 					if (!autoContinue)
 					{
 						var question = "The old HaxeFlixel data assets was detected, do you want to delete it and its contents?";
-						var warning = "\nPlease make sure you are not storing your own assets in:"+ oldAssets;
+						var warning = "\nPlease make sure you are not storing your own assets in:" + oldAssets;
 						answer = CommandUtils.askYN(question + warning);
 					}
 
@@ -192,7 +192,7 @@ class ConvertCommand extends Command
 
 		Sys.println("");
 		Sys.println(" Warning although this command updates a lot, its not perfect.");
-		//todo wiki page
+		// todo wiki page
 		Sys.println(" Please visit haxeflixel.com/wiki/convert for further documentation on converting old code.");
 		Sys.println("");
 	}
@@ -209,7 +209,6 @@ class ConvertCommand extends Command
 			error("A problem occured when making a backup at " + backupFolder);
 		}
 	}
-
 
 	/**
 	 * Recursively use find and replace on *.hx files inside a project directory
@@ -341,12 +340,11 @@ class ConvertCommand extends Command
 
 					if (match)
 					{
-						var result:WarningResult =
-						{
-							oldCode : warning,
-							newCode : fix,
-							lineNumber : Std.string(lineNum),
-							filePath : filePath
+						var result:WarningResult = {
+							oldCode: warning,
+							newCode: fix,
+							lineNumber: Std.string(lineNum),
+							filePath: filePath
 						};
 
 						results.push(result);
@@ -398,7 +396,8 @@ class ConvertCommand extends Command
 /**
  * Warning Result for warning about old code that cannot be updated manually
  */
-typedef WarningResult = {
+typedef WarningResult =
+{
 	var oldCode:String;
 	var newCode:String;
 	var lineNumber:String;

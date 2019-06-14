@@ -8,6 +8,7 @@ import utils.CommandUtils.runCommand;
 import utils.TemplateUtils;
 import massive.sys.cmd.Console;
 import FlxTools.IDE;
+
 using StringTools;
 
 #if haxe4
@@ -57,7 +58,7 @@ class ProjectUtils
 				targets: ""
 			});
 		}
-		
+
 		for (name in FileSys.readDirectory(directory))
 		{
 			var folderPath:String = CommandUtils.combine(directory, name);
@@ -98,7 +99,7 @@ class ProjectUtils
 		var templateSource:String = FlxTools.templateSourcePaths[ide];
 		if (templateSource == null)
 			return replacements;
-		
+
 		if (!FileSys.exists(templateSource))
 		{
 			Sys.println('$ide template path does not exist (expected \'$templateSource\').');
@@ -226,7 +227,7 @@ class ProjectUtils
 			}
 			else if (FileSys.isWindows)
 			{
-				runCommand(FlxTools.settings.IDEA_Path, [projectPath]); //Not tested, but should work
+				runCommand(FlxTools.settings.IDEA_Path, [projectPath]); // Not tested, but should work
 			}
 
 			return true;
@@ -241,7 +242,8 @@ class ProjectUtils
 	}
 }
 
-typedef LimeProject = {
+typedef LimeProject =
+{
 	var name:String;
 	var path:String;
 	var projectXmlPath:String;

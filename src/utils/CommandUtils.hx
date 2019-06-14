@@ -6,6 +6,7 @@ import sys.io.File;
 import sys.io.Process;
 import sys.FileSystem;
 import FlxTools.IDE;
+
 using StringTools;
 
 /**
@@ -135,7 +136,7 @@ class CommandUtils
 			for (i in 0...answers.length)
 				Sys.println("  [" + i + "] " + answers[i]);
 			Sys.println("");
-			
+
 			var userResponse = readLine();
 			var validAnswer = "";
 
@@ -201,7 +202,7 @@ class CommandUtils
 		var haxePath = Sys.getEnv("HAXEPATH");
 
 		if (haxePath == null || haxePath == "")
-			haxePath =  (FileSys.isMac ? "/usr/local/lib" : "/usr/lib") + "/haxe";
+			haxePath = (FileSys.isMac ? "/usr/local/lib" : "/usr/lib") + "/haxe";
 
 		return haxePath;
 	}
@@ -291,7 +292,7 @@ class CommandUtils
 
 		if (path.endsWith("/"))
 			path = path.substring(0, path.length - 1);
-		
+
 		return path;
 	}
 
@@ -337,7 +338,7 @@ class CommandUtils
 			settings.DefaultEditor = IDE.FLASH_DEVELOP;
 		else if (settings.DefaultEditor == "Intellij Idea")
 			settings.DefaultEditor = IDE.INTELLIJ_IDEA;
-		
+
 		return settings;
 	}
 
@@ -399,7 +400,8 @@ class CommandUtils
 /**
  * Definition for the user Settings File of the tools
  */
-typedef FlxToolSettings = {
+typedef FlxToolSettings =
+{
 	DefaultEditor:String,
 	AuthorName:String,
 	IDEAutoOpen:Bool,
@@ -412,7 +414,8 @@ typedef FlxToolSettings = {
 /**
  * Definition of a haxelib json file
  */
-typedef HaxelibJSON = {
+typedef HaxelibJSON =
+{
 	name:String,
 	url:String,
 	license:String,
@@ -427,7 +430,8 @@ typedef HaxelibJSON = {
 /**
  * Type for command user prompts
  */
-enum Answer {
+enum Answer
+{
 	Yes;
 	No;
 	Always;

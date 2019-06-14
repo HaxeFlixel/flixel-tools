@@ -6,6 +6,7 @@ import utils.CommandUtils;
 import utils.ProjectUtils;
 import utils.TemplateUtils;
 import FlxTools.IDE;
+
 using StringTools;
 
 class TemplateCommand extends Command
@@ -16,7 +17,7 @@ class TemplateCommand extends Command
 	override public function execute():Void
 	{
 		TemplateUtils.verifyTemplatesLoaded();
-		
+
 		var targetPath = "";
 		var templateName = "";
 
@@ -34,8 +35,8 @@ class TemplateCommand extends Command
 		if (console.getOption("-n") != null)
 			targetPath = console.getOption("-n");
 
-		//support a path as an arg without name for default
-		//flixel t ./<new_directory> <options>
+		// support a path as an arg without name for default
+		// flixel t ./<new_directory> <options>
 		if (templateName.startsWith("./"))
 		{
 			targetPath = templateName;
@@ -51,15 +52,16 @@ class TemplateCommand extends Command
 
 		if (template == null)
 		{
-			error("Error getting the template with the name of " + templateName +
-				" make sure you have installed flixel-templates ('haxelib install flixel-templates')");
+			error("Error getting the template with the name of "
+				+ templateName
+				+ " make sure you have installed flixel-templates ('haxelib install flixel-templates')");
 		}
 		else
 		{
 			templateName = template.name;
 		}
 
-		//override the template defaults form the command arguments
+		// override the template defaults form the command arguments
 		template = addOptionReplacement(template);
 
 		if (targetPath == "")
@@ -115,7 +117,7 @@ class TemplateCommand extends Command
 			ProjectUtils.openWithIDE(targetPath, projectName, ideOption);
 
 		exit();
-	}	
+	}
 
 	function addOptionReplacement(template:TemplateProject):TemplateProject
 	{
@@ -138,11 +140,10 @@ class TemplateCommand extends Command
 		if (option != null && option != 'true' && option != 'false')
 			defaultValue = option;
 
-		return
-		{
-			replacement : defaultValue,
-			pattern : pattern,
-			cmdOption : cmdOption
+		return {
+			replacement: defaultValue,
+			pattern: pattern,
+			cmdOption: cmdOption
 		};
 	}
 }
