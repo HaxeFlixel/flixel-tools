@@ -1,0 +1,25 @@
+name: CI
+
+on: [push, pull_request, repository_dispatch]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        haxe-version: ["3.4.7", stable, nightly]
+        target: [html5, hl, neko, flash]
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: lix-pm/setup-lix@master
+    - uses: HaxeFlixel/setup-flixel@master
+      with:
+        haxe-version: ${{matrix.haxe-version}}
+        flixel-versions: dev
+        target: ${{matrix.target}}
+    - run: |
+        haxe build.hxml
+        haxelib run flixel-tools tpl -n "default"
+        cd default
+        haxelib run lime build ${{matrix.target}}
