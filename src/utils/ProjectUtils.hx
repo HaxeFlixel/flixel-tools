@@ -140,7 +140,7 @@ class ProjectUtils
 		return replacements;
 	}
 
-	public static function resolveIDEChoice(console:Console):IDE
+	public static function resolveIDEChoice(console:Console, autoContinue=false):IDE
 	{
 		var options = [
 			"subl" => IDE.SUBLIME_TEXT,
@@ -157,6 +157,23 @@ class ProjectUtils
 		var ideOption = console.getOption("ide");
 		if (ideOption != null)
 			ide = options[ideOption];
+
+		if (ide == null)
+		{
+			Sys.println('Warning: $ideOption is not a recognized option.');
+
+			var answer = Answer.No;
+
+			if (!autoContinue)
+			{
+				answer = CommandUtils.askYN("Abort? (Will not use any ide if continue)");
+			}
+			if (answer == Answer.Yes)
+			{
+				Sys.exit(1);
+			}
+			ide = IDE.NONE;
+		}
 
 		return ide;
 	}
