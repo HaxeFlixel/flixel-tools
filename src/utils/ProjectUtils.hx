@@ -140,7 +140,7 @@ class ProjectUtils
 		return replacements;
 	}
 
-	public static function resolveIDEChoice(console:Console, autoContinue=false):IDE
+	public static function resolveIDEChoice(console:Console, autoContinue = false):IDE
 	{
 		var options = [
 			"subl" => IDE.SUBLIME_TEXT,
