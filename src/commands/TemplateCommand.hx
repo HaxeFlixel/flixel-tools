@@ -30,7 +30,7 @@ class TemplateCommand extends Command
 		if (console.getOption("-y") != null)
 			autoContinue = true;
 
-		ideOption = ProjectUtils.resolveIDEChoice(console);
+		ideOption = ProjectUtils.resolveIDEChoice(console, autoContinue);
 
 		if (console.getOption("-n") != null)
 			targetPath = console.getOption("-n");
