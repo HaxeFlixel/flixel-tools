@@ -1,3 +1,7 @@
+1.5.1 (April 17, 2021)
+------------------------------
+* fixed project and template creation on Windows when Haxelib repository path uses forward slashes
+
 1.5.0 (April 17, 2021)
 ------------------------------
 * fixed crashes on unknown IDE choices (#74)

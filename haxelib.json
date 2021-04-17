@@ -4,8 +4,8 @@
     "license": "MIT",
     "tags": ["game", "openfl", "flash", "neko", "cpp", "android", "ios"],
     "description": "Command-Line tools for the HaxeFlixel game engine",
-    "version": "1.5.0",
-    "releasenote": "Potentially fixed an issue with copying projects, handle unknown IDE choices and removed `convert`.",
+    "version": "1.5.1",
+    "releasenote": "Fixed project and template creation on Windows when Haxelib repository path uses forward slashes.",
     "contributors": ["haxeflixel", "Gama11"],
     "dependencies": {}
 }
