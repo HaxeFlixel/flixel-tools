@@ -8,7 +8,7 @@ class Create extends Command
 {
 	override public function execute()
 	{
-		if (console.args.length > 3)
+		if (console.args.length > 2)
 			error("You have given too many arguments for the create command.");
 
 		final projects:Array<LimeProject> = getProjects();
