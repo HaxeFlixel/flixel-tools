@@ -27,7 +27,6 @@ class FlxTools extends CommandLineRunner
 		mapCommand(Setup, "setup", ["st"], "configure the tools and download the flixel libs");
 		mapCommand(Download, "download", ["dw"], "download the flixel libs");
 		mapCommand(Template, "template", ["tpl"], "create a project from a template", TemplateUtil.getTemplate("template"));
-		mapCommand(Convert, "convert", ["cn"], "convert an old (2.x) project", TemplateUtil.getTemplate("convert"));
 		mapCommand(BuildProjects, "buildprojects", ["bp"], "builds all demos for the specified target", TemplateUtil.getTemplate("buildprojects"));
 		mapCommand(Configure, "configure", ["conf"], "adds IDE template files to one or multiple projects", TemplateUtil.getTemplate("configure"));
 

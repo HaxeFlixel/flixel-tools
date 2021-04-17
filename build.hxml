@@ -5,6 +5,5 @@
 
 -resource info/create.txt@create
 -resource info/template.txt@template
--resource info/convert.txt@convert
 -resource info/buildprojects.txt@buildprojects
 -resource info/configure.txt@configure

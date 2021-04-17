@@ -1,3 +1,8 @@
+1.5.0 (???)
+------------------------------
+* fix crashes on unknown IDE choices (#74)
+* removed the `convert` command (not useful for modern flixel versions)
+
 1.4.4 (April 2, 2019)
 ------------------------------
 * `template` command:
