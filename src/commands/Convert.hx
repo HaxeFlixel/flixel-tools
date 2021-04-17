@@ -11,7 +11,7 @@ import utils.FileSysUtils;
 
 using StringTools;
 
-class ConvertCommand extends Command
+class Convert extends Command
 {
 	var autoContinue:Bool = false;
 

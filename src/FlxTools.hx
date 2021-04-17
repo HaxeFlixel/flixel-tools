@@ -1,12 +1,6 @@
 package;
 
-import commands.BuildProjectsCommand;
-import commands.ConvertCommand;
-import commands.CreateCommand;
-import commands.DownloadCommand;
-import commands.SetupCommand;
-import commands.TemplateCommand;
-import commands.ConfigureCommand;
+import commands.*;
 import massive.haxe.util.TemplateUtil;
 import massive.sys.cmd.CommandLineRunner;
 import utils.ColorUtils;
@@ -29,13 +23,13 @@ class FlxTools extends CommandLineRunner
 		settings = CommandUtils.loadToolSettings();
 		CommandUtils.loadIDESettings();
 
-		mapCommand(CreateCommand, "create", ["c"], "create a copy of a demo project", TemplateUtil.getTemplate("create"));
-		mapCommand(SetupCommand, "setup", ["st"], "configure the tools and download the flixel libs");
-		mapCommand(DownloadCommand, "download", ["dw"], "download the flixel libs");
-		mapCommand(TemplateCommand, "template", ["tpl"], "create a project from a template", TemplateUtil.getTemplate("template"));
-		mapCommand(ConvertCommand, "convert", ["cn"], "convert an old (2.x) project", TemplateUtil.getTemplate("convert"));
-		mapCommand(BuildProjectsCommand, "buildprojects", ["bp"], "builds all demos for the specified target", TemplateUtil.getTemplate("buildprojects"));
-		mapCommand(ConfigureCommand, "configure", ["conf"], "adds IDE template files to one or multiple projects", TemplateUtil.getTemplate("configure"));
+		mapCommand(Create, "create", ["c"], "create a copy of a demo project", TemplateUtil.getTemplate("create"));
+		mapCommand(Setup, "setup", ["st"], "configure the tools and download the flixel libs");
+		mapCommand(Download, "download", ["dw"], "download the flixel libs");
+		mapCommand(Template, "template", ["tpl"], "create a project from a template", TemplateUtil.getTemplate("template"));
+		mapCommand(Convert, "convert", ["cn"], "convert an old (2.x) project", TemplateUtil.getTemplate("convert"));
+		mapCommand(BuildProjects, "buildprojects", ["bp"], "builds all demos for the specified target", TemplateUtil.getTemplate("buildprojects"));
+		mapCommand(Configure, "configure", ["conf"], "adds IDE template files to one or multiple projects", TemplateUtil.getTemplate("configure"));
 
 		run();
 	}

@@ -8,7 +8,7 @@ import utils.CommandUtils;
 
 using StringTools;
 
-class BuildProjectsCommand extends Command
+class BuildProjects extends Command
 {
 	var directory:String;
 

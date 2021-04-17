@@ -9,7 +9,7 @@ import FlxTools.IDE;
 
 using StringTools;
 
-class TemplateCommand extends Command
+class Template extends Command
 {
 	var autoContinue:Bool = false;
 	var ideOption:IDE = IDE.NONE;

@@ -3,7 +3,7 @@ package commands;
 import massive.sys.cmd.Command;
 import utils.CommandUtils;
 
-class DownloadCommand extends Command
+class Download extends Command
 {
 	override public function execute():Void
 	{

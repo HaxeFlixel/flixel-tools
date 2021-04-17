@@ -4,7 +4,7 @@ import massive.sys.cmd.Command;
 import utils.CommandUtils;
 import utils.ProjectUtils;
 
-class CreateCommand extends Command
+class Create extends Command
 {
 	override public function execute():Void
 	{

@@ -8,7 +8,7 @@ import sys.FileSystem;
 import sys.io.File;
 import FlxTools.IDE;
 
-class SetupCommand extends Command
+class Setup extends Command
 {
 	var autoContinue:Bool = false;
 	var isAliasSetUp = false;

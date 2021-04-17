@@ -10,7 +10,7 @@ import haxe.io.Path;
 import haxe.Json;
 import FlxTools.IDE;
 
-class ConfigureCommand extends Command
+class Configure extends Command
 {
 	override public function execute():Void
 	{
