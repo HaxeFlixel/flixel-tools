@@ -1,10 +1,10 @@
 package utils;
 
+import FlxTools.IDE;
 import haxe.Json;
 import massive.sys.io.FileSys;
 import sys.FileSystem;
 import sys.io.FileOutput;
-import FlxTools.IDE;
 
 using StringTools;
 

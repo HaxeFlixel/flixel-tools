@@ -1,11 +1,11 @@
 package commands;
 
+import FlxTools.IDE;
 import massive.sys.cmd.Command;
 import sys.FileSystem;
 import utils.CommandUtils;
 import utils.ProjectUtils;
 import utils.TemplateUtils;
-import FlxTools.IDE;
 
 using StringTools;
 

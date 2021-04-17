@@ -1,12 +1,11 @@
 package commands;
 
+import FlxTools.IDE;
 import massive.sys.cmd.Command;
 import massive.sys.io.FileSys;
-import utils.CommandUtils;
-import utils.CommandUtils.FlxToolSettings;
 import sys.FileSystem;
 import sys.io.File;
-import FlxTools.IDE;
+import utils.CommandUtils;
 
 class Setup extends Command
 {

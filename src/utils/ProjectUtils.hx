@@ -1,21 +1,16 @@
 package utils;
 
-import haxe.io.Path;
-import sys.io.File;
-import massive.sys.io.FileSys;
-import utils.CommandUtils;
-import utils.CommandUtils.runCommand;
-import utils.TemplateUtils;
-import massive.sys.cmd.Console;
 import FlxTools.IDE;
+import haxe.io.Path;
+import haxe.xml.Access;
+import massive.sys.cmd.Console;
+import massive.sys.io.FileSys;
+import sys.io.File;
+import utils.CommandUtils.runCommand;
+import utils.CommandUtils;
+import utils.TemplateUtils;
 
 using StringTools;
-
-#if haxe4
-import haxe.xml.Access;
-#else
-import haxe.xml.Fast as Access;
-#end
 
 class ProjectUtils
 {

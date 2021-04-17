@@ -1,14 +1,14 @@
 package commands;
 
+import FlxTools.IDE;
+import haxe.Json;
+import haxe.io.Path;
 import massive.sys.cmd.Command;
-import utils.ProjectUtils;
-import utils.TemplateUtils;
-import utils.FileSysUtils;
 import sys.FileSystem;
 import sys.io.File;
-import haxe.io.Path;
-import haxe.Json;
-import FlxTools.IDE;
+import utils.FileSysUtils;
+import utils.ProjectUtils;
+import utils.TemplateUtils;
 
 class Configure extends Command
 {

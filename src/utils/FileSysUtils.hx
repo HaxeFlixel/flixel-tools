@@ -1,7 +1,7 @@
 package utils;
 
-import sys.io.File;
 import haxe.io.Path;
+import sys.io.File;
 
 /**
  * Utilities for FileSys Commands
@@ -15,7 +15,7 @@ class FileSysUtils
 	{
 		try
 		{
-			return sys.io.File.getContent(filePath);
+			return File.getContent(filePath);
 		}
 		catch (e:Dynamic)
 		{
