@@ -2,6 +2,7 @@ package utils;
 
 import FlxTools.IDE;
 import haxe.Json;
+import massive.sys.io.File as MassiveFile;
 import massive.sys.io.FileSys;
 import sys.FileSystem;
 import sys.io.File;
@@ -21,14 +22,12 @@ class CommandUtils
 	 */
 	public static function copyRecursively(source:String, destination:String, overwrite:Bool = true, ?filter:EReg, exclude:Bool = false):Bool
 	{
-		final current = massive.sys.io.File.current.resolveDirectory("temp");
+		final source = MassiveFile.create(source);
+		final destination = MassiveFile.create(destination, true);
 
-		final dir1:massive.sys.io.File = current.resolvePath(source, true);
-		final dir2:massive.sys.io.File = current.resolvePath(destination, true);
+		source.copyTo(destination, overwrite, filter, exclude);
 
-		dir1.copyTo(dir2, overwrite, filter, exclude);
-
-		return FileSys.exists(destination);
+		return destination.exists;
 	}
 
 	public static function deleteRecursively(path:String)

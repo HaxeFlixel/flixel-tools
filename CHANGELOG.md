@@ -1,6 +1,7 @@
 1.5.0 (???)
 ------------------------------
-* fix crashes on unknown IDE choices (#74)
+* fixed crashes on unknown IDE choices (#74)
+* (potentially) fixed an issue with an invalid `temp` file path when creating projects and templates
 * removed the `convert` command (not useful for modern flixel versions)
 
 1.4.4 (April 2, 2019)
