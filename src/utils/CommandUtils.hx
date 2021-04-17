@@ -22,6 +22,14 @@ class CommandUtils
 	 */
 	public static function copyRecursively(source:String, destination:String, overwrite:Bool = true, ?filter:EReg, exclude:Bool = false):Bool
 	{
+		// Windows can deal with forward slashes, but mlib thinks it can't be an absolute path
+		// if there are no backslashes (see https://github.com/massiveinteractive/mlib/issues/13)
+		if (Sys.systemName() == "Windows")
+		{
+			source = source.replace("/", "\\");
+			destination = destination.replace("/", "\\");
+		}
+
 		final source = MassiveFile.create(source);
 		final destination = MassiveFile.create(destination, true);
 
