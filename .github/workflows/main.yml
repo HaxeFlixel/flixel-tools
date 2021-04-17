@@ -25,6 +25,7 @@ jobs:
     - run: |
         cd ${{env.HAXELIB_REPO}}/flixel-tools/git
         npm install
+        cd ..
         haxelib run flixel-tools tpl -n "default"
         cd default
         haxelib run lime build ${{matrix.target}}
