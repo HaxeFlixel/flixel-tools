@@ -24,7 +24,7 @@ class ProjectUtils
 	 */
 	public static function duplicateProject(project:LimeProject, destination:String, ide:IDE):Bool
 	{
-		var result = CommandUtils.copyRecursively(project.path, destination, ~/export/, true);
+		final result = CommandUtils.copyRecursively(project.path, destination, ~/export/, true);
 		if (result)
 		{
 			var replacements = new Array<TemplateReplacement>();
@@ -48,7 +48,7 @@ class ProjectUtils
 		if (!FileSys.exists(directory))
 			return projects;
 
-		var projectPath = findProjectXml(directory);
+		final projectPath = findProjectXml(directory);
 		if (projectPath != null)
 		{
 			projects.push({
@@ -61,7 +61,7 @@ class ProjectUtils
 
 		for (name in FileSys.readDirectory(directory))
 		{
-			var folderPath:String = CommandUtils.combine(directory, name);
+			final folderPath:String = CommandUtils.combine(directory, name);
 			if (FileSys.isDirectory(folderPath) && !name.startsWith("."))
 				projects = projects.concat(findLimeProjects(folderPath));
 		}
@@ -71,7 +71,7 @@ class ProjectUtils
 
 	public static function getApplicationFile(projectXmlPath:String):String
 	{
-		var fast = new Access(Xml.parse(File.getContent(projectXmlPath)));
+		final fast = new Access(Xml.parse(File.getContent(projectXmlPath)));
 		return fast.node.project.node.app.att.file;
 	}
 
@@ -96,7 +96,7 @@ class ProjectUtils
 		if (replacements == null)
 			replacements = [];
 
-		var templateSource:String = FlxTools.templateSourcePaths[ide];
+		final templateSource:String = FlxTools.templateSourcePaths[ide];
 		if (templateSource == null)
 			return replacements;
 
@@ -107,7 +107,7 @@ class ProjectUtils
 			Sys.exit(1);
 		}
 
-		var settings = FlxTools.settings;
+		final settings = FlxTools.settings;
 		function addOption(name:String, defaultValue:Dynamic)
 			replacements.push(TemplateUtils.addOption(name, "", defaultValue));
 
@@ -116,7 +116,7 @@ class ProjectUtils
 		switch (ide)
 		{
 			case IDE.SUBLIME_TEXT:
-				var escape = function(path:String) return path.replace('\\', '\\\\');
+				final escape = function(path:String) return path.replace('\\', '\\\\');
 				addOption("PROJECT_PATH", escape(targetPath));
 				addOption("HAXE_STD_PATH", escape(CommandUtils.combine(CommandUtils.getHaxePath(), "std")));
 				addOption("FLIXEL_PATH", escape(CommandUtils.getHaxelibPath('flixel')));
@@ -142,7 +142,7 @@ class ProjectUtils
 
 	public static function resolveIDEChoice(console:Console, autoContinue = false):IDE
 	{
-		var options = [
+		final options = [
 			"subl" => IDE.SUBLIME_TEXT,
 			"fd" => IDE.FLASH_DEVELOP,
 			"idea" => IDE.INTELLIJ_IDEA,
@@ -154,7 +154,7 @@ class ProjectUtils
 		if (FlxTools.settings != null)
 			ide = FlxTools.settings.DefaultEditor;
 
-		var ideOption = console.getOption("ide");
+		final ideOption = console.getOption("ide");
 		if (ideOption != null)
 			ide = options[ideOption];
 
@@ -166,7 +166,7 @@ class ProjectUtils
 
 			if (!autoContinue)
 			{
-				answer = CommandUtils.askYN("Abort? (Will not use any ide if continue)");
+				answer = CommandUtils.askYN("Abort? (will not use any IDE if continue)");
 			}
 			if (answer == Answer.Yes)
 			{
@@ -180,7 +180,7 @@ class ProjectUtils
 
 	public static function openWithIDE(projectPath:String, projectName:String, ide:IDE):Bool
 	{
-		var ideHandlers:Map<String, String->String->Bool> = [
+		final ideHandlers:Map<String, (String, String) -> Bool> = [
 			IDE.FLASH_DEVELOP => openWithFlashDevelop,
 			IDE.SUBLIME_TEXT => openWithSublimeText,
 			IDE.INTELLIJ_IDEA => openWithIntelliJIDEA,
@@ -188,7 +188,7 @@ class ProjectUtils
 		];
 
 		var result = false;
-		var handler = ideHandlers[ide];
+		final handler = ideHandlers[ide];
 		if (handler != null)
 		{
 			Sys.println('Opening the project with $ide (can be changed with "flixel setup")...');
@@ -214,7 +214,7 @@ class ProjectUtils
 
 	public static function openWithSublimeText(projectPath:String, projectName:String):Bool
 	{
-		var projectFile = CommandUtils.combine(projectPath, projectName + ".sublime-project");
+		final projectFile = CommandUtils.combine(projectPath, projectName + ".sublime-project");
 
 		if (FileSys.exists(projectFile))
 		{
@@ -230,7 +230,7 @@ class ProjectUtils
 
 	public static function openWithIntelliJIDEA(projectPath:String, projectName:String):Bool
 	{
-		var projectFile = CommandUtils.combine(projectPath, ".idea");
+		final projectFile = CommandUtils.combine(projectPath, ".idea");
 
 		if (FileSys.exists(projectFile))
 		{
@@ -261,8 +261,8 @@ class ProjectUtils
 
 typedef LimeProject =
 {
-	var name:String;
-	var path:String;
-	var projectXmlPath:String;
-	var targets:String;
+	final name:String;
+	final path:String;
+	final projectXmlPath:String;
+	final targets:String;
 }

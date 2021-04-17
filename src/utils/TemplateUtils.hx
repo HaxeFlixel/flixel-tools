@@ -10,7 +10,7 @@ using StringTools;
 
 class TemplateUtils
 {
-	public static var templateFilter:EReg = new EReg("\\btemplate.json\\b", "");
+	public static final templateFilter:EReg = new EReg("\\btemplate.json\\b", "");
 
 	public static function verifyTemplatesLoaded()
 	{
@@ -46,11 +46,11 @@ class TemplateUtils
 		if (!FileSys.exists(templatesPath))
 			return null;
 
-		var templates = [];
+		final templates = [];
 
 		for (name in FileSys.readDirectory(templatesPath))
 		{
-			var folderPath = CommandUtils.combine(templatesPath, name);
+			final folderPath = CommandUtils.combine(templatesPath, name);
 
 			if (FileSys.exists(folderPath) && FileSys.isDirectory(folderPath) && name != '.git')
 			{
@@ -60,9 +60,9 @@ class TemplateUtils
 				// Make sure we don't get a crash if the file doesn't exist
 				if (FileSystem.exists(filePath))
 				{
-					var file = FileSysUtils.getContent(filePath);
-					var FileData:TemplateFile = Json.parse(file);
-					var project:TemplateProject = {
+					final file = FileSysUtils.getContent(filePath);
+					final FileData:TemplateFile = Json.parse(file);
+					final project:TemplateProject = {
 						name: name,
 						path: templatesPath + name,
 						template: FileData
@@ -92,7 +92,7 @@ class TemplateUtils
 		};
 	}
 
-	public static function modifyTemplateProject(templatePath:String, template:TemplateProject, ide:IDE):Void
+	public static function modifyTemplateProject(templatePath:String, template:TemplateProject, ide:IDE)
 	{
 		modifyTemplate(templatePath, template.template.replacements);
 	}
@@ -102,7 +102,7 @@ class TemplateUtils
 	 *
 	 * @param   TemplatePath	Template path to modify
 	 */
-	public static function modifyTemplate(templatePath:String, templates:Array<TemplateReplacement>):Void
+	public static function modifyTemplate(templatePath:String, templates:Array<TemplateReplacement>)
 	{
 		for (fileName in FileSys.readDirectory(templatePath))
 		{
@@ -115,9 +115,9 @@ class TemplateUtils
 				var text:String = FileSysUtils.getContent(templatePath + "/" + fileName);
 				text = projectTemplateReplacements(text, templates);
 
-				var newFileName:String = projectTemplateReplacements(fileName.substr(0, -4), templates);
+				final newFileName:String = projectTemplateReplacements(fileName.substr(0, -4), templates);
 
-				var o:FileOutput = sys.io.File.write(templatePath + "/" + newFileName, true);
+				final o:FileOutput = sys.io.File.write(templatePath + "/" + newFileName, true);
 				o.writeString(text);
 				o.close();
 

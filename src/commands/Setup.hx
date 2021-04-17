@@ -13,7 +13,7 @@ class Setup extends Command
 	var autoContinue:Bool = false;
 	var isAliasSetUp = false;
 
-	override public function execute():Void
+	override public function execute()
 	{
 		setupFlixel();
 
@@ -35,13 +35,13 @@ class Setup extends Command
 		exit();
 	}
 
-	function setupFlixel():Void
+	function setupFlixel()
 	{
-		var flixel = CommandUtils.getHaxelibPath("flixel");
+		final flixel = CommandUtils.getHaxelibPath("flixel");
 
 		if (flixel == "" && !autoContinue)
 		{
-			var answer = CommandUtils.askYN("Would you now like this tool to install flixel for you?");
+			final answer = CommandUtils.askYN("Would you now like this tool to install flixel for you?");
 
 			if (answer == Answer.Yes)
 			{
@@ -50,16 +50,16 @@ class Setup extends Command
 		}
 	}
 
-	function setupFlixelLibs():Void
+	function setupFlixelLibs()
 	{
-		var templatesHaxelib = CommandUtils.getHaxelibPath("flixel-templates");
-		var demosHaxelib = CommandUtils.getHaxelibPath("flixel-demos");
+		final templatesHaxelib = CommandUtils.getHaxelibPath("flixel-templates");
+		final demosHaxelib = CommandUtils.getHaxelibPath("flixel-demos");
 
 		if (templatesHaxelib == "" || demosHaxelib == "")
 		{
 			if (!autoContinue)
 			{
-				var download = CommandUtils.askYN("Would you now like this tool to download the flixel-demos and flixel-templates?");
+				final download = CommandUtils.askYN("Would you now like this tool to download the flixel-demos and flixel-templates?");
 
 				if (download == Answer.Yes)
 					runDownloadCommand();
@@ -69,18 +69,18 @@ class Setup extends Command
 		}
 	}
 
-	function runDownloadCommand():Void
+	function runDownloadCommand()
 	{
 		Sys.command("haxelib", ["run", "flixel-tools", "download"]);
 	}
 
-	function setupCommandAlias():Void
+	function setupCommandAlias()
 	{
 		var answer = Answer.No;
 
 		var message = "Do you want to setup the flixel command alias?";
 
-		var binPath = if (FileSys.isMac) "/usr/local/bin" else "/usr/bin";
+		final binPath = if (FileSys.isMac) "/usr/local/bin" else "/usr/bin";
 
 		if (FileSys.isLinux || FileSys.isMac)
 			message = "Do you want to set up the command alias 'flixel' to 'haxelib run flixel-tools'?"
@@ -100,9 +100,9 @@ class Setup extends Command
 				if (haxePath == null || haxePath == "")
 					haxePath = "C:\\HaxeToolkit\\haxe\\";
 
-				var flixelAliasScript = haxePath + "\\flixel.bat";
+				final flixelAliasScript = haxePath + "\\flixel.bat";
 				var scriptSourcePath = CommandUtils.getHaxelibPath("flixel-tools");
-				var scriptFile = "flixel.bat";
+				final scriptFile = "flixel.bat";
 				scriptSourcePath = CommandUtils.combine(scriptSourcePath, "bin");
 				scriptSourcePath = CommandUtils.combine(scriptSourcePath, scriptFile);
 
@@ -117,7 +117,7 @@ class Setup extends Command
 			}
 			else
 			{
-				var flixelAliasScript = CommandUtils.getHaxelibPath("flixel-tools") + "bin/flixel.sh";
+				final flixelAliasScript = CommandUtils.getHaxelibPath("flixel-tools") + "bin/flixel.sh";
 
 				if (FileSystem.exists(flixelAliasScript))
 				{
@@ -134,7 +134,7 @@ class Setup extends Command
 
 	function promptForSettings():FlxToolSettings
 	{
-		var ides:Array<String> = [
+		final ides = [
 			IDE.SUBLIME_TEXT,
 			IDE.FLASH_DEVELOP,
 			IDE.INTELLIJ_IDEA,
@@ -158,26 +158,26 @@ class Setup extends Command
 
 		if (ide == IDE.INTELLIJ_IDEA)
 		{
-			var answer = CommandUtils.askString("Enter the name of your default FlexSDK, just ENTER for default of " + ideaFlexSDKName);
+			final answer = CommandUtils.askString("Enter the name of your default FlexSDK, just ENTER for default of " + ideaFlexSDKName);
 			if (answer != "")
 				ideaFlexSDKName = answer;
 
-			var answer = CommandUtils.askString("Enter the name of your default flixel Library, just ENTER for default of " + ideaFlixelEngine);
+			final answer = CommandUtils.askString("Enter the name of your default flixel Library, just ENTER for default of " + ideaFlixelEngine);
 			if (answer != "")
 				ideaFlixelEngine = answer;
 
-			var answer = CommandUtils.askString("Enter the name of your default flixel-addons Library, just ENTER for default of " + ideaFlixelAddons);
+			final answer = CommandUtils.askString("Enter the name of your default flixel-addons Library, just ENTER for default of " + ideaFlixelAddons);
 			if (answer != "")
 				ideaFlixelAddons = answer;
 
-			var answer = CommandUtils.askString("Enter the path to your IntelliJ IDEA installation, default is " + ideaPath);
+			final answer = CommandUtils.askString("Enter the path to your IntelliJ IDEA installation, default is " + ideaPath);
 			if (answer != "")
 				ideaPath = answer;
 		}
 
 		if (ide != IDE.NONE)
 		{
-			var answer = CommandUtils.askYN("Do you want to automatically open the created templates and demos with " + ide + "?");
+			final answer = CommandUtils.askYN("Do you want to automatically open the created templates and demos with " + ide + "?");
 			if (answer == Answer.Yes)
 				IDEAutoOpen = true;
 		}
@@ -188,7 +188,7 @@ class Setup extends Command
 				+ "system as in http://www.sublimetext.com/docs/2/osx_command_line.html.");
 
 			var answer = Answer.No;
-			var sublSetupArgs = [
+			final sublSetupArgs = [
 				"-s",
 				"/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl",
 				"~/bin/subl"
@@ -204,7 +204,7 @@ class Setup extends Command
 				Sys.command("ln", sublSetupArgs);
 		}
 
-		var settingsFile:FlxToolSettings = {
+		final settingsFile:FlxToolSettings = {
 			DefaultEditor: ide,
 			AuthorName: AuthorName,
 			IDEAutoOpen: IDEAutoOpen,

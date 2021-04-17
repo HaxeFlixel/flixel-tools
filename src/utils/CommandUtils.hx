@@ -23,17 +23,17 @@ class CommandUtils
 	 */
 	public static function copyRecursively(source:String, destination:String, overwrite:Bool = true, ?filter:EReg, exclude:Bool = false):Bool
 	{
-		var current = massive.sys.io.File.current.resolveDirectory("temp");
+		final current = massive.sys.io.File.current.resolveDirectory("temp");
 
-		var dir1:massive.sys.io.File = current.resolvePath(source, true);
-		var dir2:massive.sys.io.File = current.resolvePath(destination, true);
+		final dir1:massive.sys.io.File = current.resolvePath(source, true);
+		final dir2:massive.sys.io.File = current.resolvePath(destination, true);
 
 		dir1.copyTo(dir2, overwrite, filter, exclude);
 
 		return FileSys.exists(destination);
 	}
 
-	public static function deleteRecursively(path:String):Void
+	public static function deleteRecursively(path:String)
 	{
 		if (FileSys.exists(path))
 		{
@@ -137,7 +137,7 @@ class CommandUtils
 				Sys.println("  [" + i + "] " + answers[i]);
 			Sys.println("");
 
-			var userResponse = readLine();
+			final userResponse = readLine();
 			var validAnswer = "";
 
 			for (i in 0...answers.length)
@@ -183,17 +183,17 @@ class CommandUtils
 	 */
 	public static function getHaxelibJsonData(haxelibName:String):HaxelibJSON
 	{
-		var haxleibJsonPath = getHaxelibPath(haxelibName);
+		final haxleibJsonPath = getHaxelibPath(haxelibName);
 		if (haxleibJsonPath == "")
 			return null;
 
-		var jsonContent = FileSysUtils.getContent(haxleibJsonPath + "haxelib.json");
+		final jsonContent = FileSysUtils.getContent(haxleibJsonPath + "haxelib.json");
 		return Json.parse(jsonContent);
 	}
 
 	public static function strmatch(needle:String, haystack:String):Bool
 	{
-		var search = new EReg("\\b" + needle + "\\b", "");
+		final search = new EReg("\\b" + needle + "\\b", "");
 		return search.match(haystack);
 	}
 
@@ -214,15 +214,15 @@ class CommandUtils
 	 */
 	public static function getHaxelibPath(name:String):String
 	{
-		var proc:Process = new Process("haxelib", ["path", name]);
-		var result:String = "";
+		final proc = new Process("haxelib", ["path", name]);
+		var result = "";
 
 		try
 		{
-			var previous:String = "";
+			var previous = "";
 			while (true)
 			{
-				var line:String = proc.stdout.readLine();
+				final line:String = proc.stdout.readLine();
 				if (line.startsWith('-D $name'))
 				{
 					result = previous;
@@ -260,8 +260,8 @@ class CommandUtils
 				return secondPath;
 			}
 
-			var firstSlash:Bool = (firstPath.substr(-1) == "/" || firstPath.substr(-1) == "\\");
-			var secondSlash:Bool = (secondPath.substr(0, 1) == "/" || secondPath.substr(0, 1) == "\\");
+			final firstSlash:Bool = (firstPath.substr(-1) == "/" || firstPath.substr(-1) == "\\");
+			final secondSlash:Bool = (secondPath.substr(0, 1) == "/" || secondPath.substr(0, 1) == "\\");
 
 			if (firstSlash && secondSlash)
 			{
@@ -282,8 +282,6 @@ class CommandUtils
 
 	/**
 	 * Shortcut to strip a relative path
-	 * @param  path String to strip
-	 * @return	  Stripped string
 	 */
 	public static function stripPath(path:String):String
 	{
@@ -296,7 +294,7 @@ class CommandUtils
 		return path;
 	}
 
-	public static function loadIDESettings():Void
+	public static function loadIDESettings()
 	{
 		var ideDataPath = getHaxelibPath("flixel-templates");
 		if (ideDataPath == "")
@@ -315,14 +313,14 @@ class CommandUtils
 
 	public static function loadToolSettings():FlxToolSettings
 	{
-		var toolPath = getHaxelibPath("flixel-tools");
+		final toolPath = getHaxelibPath("flixel-tools");
 		if (toolPath == "")
 		{
 			Sys.println("Error reading your settings, please run 'flixel setup'.");
 			return null;
 		}
 
-		var settingsPath = toolPath + "settings.json";
+		final settingsPath = toolPath + "settings.json";
 
 		if (!FileSystem.exists(settingsPath))
 		{
@@ -330,8 +328,8 @@ class CommandUtils
 			return null;
 		}
 
-		var jsonContent:String = FileSysUtils.getContent(toolPath + "settings.json");
-		var settings:FlxToolSettings = Json.parse(jsonContent);
+		final jsonContent:String = FileSysUtils.getContent(toolPath + "settings.json");
+		final settings:FlxToolSettings = Json.parse(jsonContent);
 
 		// backwards compatibility with settings from versions <= 1.0.5
 		if (settings.DefaultEditor == "Flash Develop")
@@ -342,16 +340,16 @@ class CommandUtils
 		return settings;
 	}
 
-	public static function saveToolSettings(settings:FlxToolSettings):Void
+	public static function saveToolSettings(settings:FlxToolSettings)
 	{
-		var toolPath = getHaxelibPath("flixel-tools");
+		final toolPath = getHaxelibPath("flixel-tools");
 		if (toolPath == "")
 		{
 			Sys.println("Error detecting path of your haxelib flixel-tools.");
 			return;
 		}
 
-		var settingsPath = toolPath + "settings.json";
+		final settingsPath = toolPath + "settings.json";
 
 		File.saveContent(settingsPath, Json.stringify(settings));
 
@@ -360,7 +358,7 @@ class CommandUtils
 
 	public static function haxelibCommand(lib:String, autoContinue:Bool, ?message:String):Bool
 	{
-		var libStatus = getHaxelibPath(lib);
+		final libStatus = getHaxelibPath(lib);
 		if (libStatus == "")
 		{
 			if (message == null)
@@ -368,7 +366,7 @@ class CommandUtils
 
 			if (!autoContinue)
 			{
-				var answer = askYN(message);
+				final answer = askYN(message);
 				if (answer == Answer.No)
 					return false;
 			}

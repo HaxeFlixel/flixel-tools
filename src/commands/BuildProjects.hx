@@ -12,7 +12,7 @@ class BuildProjects extends Command
 {
 	var directory:String;
 
-	override public function execute():Void
+	override public function execute()
 	{
 		var target:String = console.getNextArg();
 		if (target == null)
@@ -20,7 +20,7 @@ class BuildProjects extends Command
 		else
 			target = target.toLowerCase();
 
-		var projectNames:Array<String> = console.args.slice(2);
+		final projectNames:Array<String> = console.args.slice(2);
 
 		directory = console.getOption("dir");
 		if (directory == null)
@@ -36,18 +36,18 @@ class BuildProjects extends Command
 
 		if (projects.length > 0)
 		{
-			var specifier = (projectNames.length > 0) ? "specified" : "all";
+			final specifier = (projectNames.length > 0) ? "specified" : "all";
 			Sys.println('Building $specifier projects - $target \n');
 
-			var log = console.getOption("log") == "true";
-			var verbose = console.getOption("verbose") == "true";
+			final log = console.getOption("log") == "true";
+			final verbose = console.getOption("verbose") == "true";
 			buildProjects(projects, target, log, verbose, getDefines(), getAdditionArguments());
 		}
 	}
 
 	function getDefines():Array<String>
 	{
-		var defines = [];
+		final defines = [];
 		for (option in console.options.keys())
 			if (option.startsWith("D"))
 				defines.push("-" + option);
@@ -56,12 +56,12 @@ class BuildProjects extends Command
 
 	function getAdditionArguments():Array<String>
 	{
-		var additionalArguments = [];
+		final additionalArguments = [];
 		var doubleDash = false;
-		var args = Sys.args();
+		final args = Sys.args();
 		for (i in 0...args.length)
 		{
-			var arg = args[i];
+			final arg = args[i];
 			if (i == args.length - 1)
 				continue;
 
@@ -75,10 +75,10 @@ class BuildProjects extends Command
 
 	function filterProjects(projects:Array<LimeProject>, projectNames:Array<String>):Array<LimeProject>
 	{
-		var filteredProjects = [];
+		final filteredProjects = [];
 		for (projectName in projectNames)
 		{
-			var matching = projects.filter(function(p) return p.name == projectName);
+			final matching = projects.filter(function(p) return p.name == projectName);
 			if (matching.length == 0)
 				Sys.println('Could not find a project named \'$projectName\'');
 			else
@@ -87,13 +87,13 @@ class BuildProjects extends Command
 		return filteredProjects;
 	}
 
-	function buildProjects(projects:Array<LimeProject>, target:String, log:Bool, verbose:Bool, defines:Array<String>, additionalArguments:Array<String>):Void
+	function buildProjects(projects:Array<LimeProject>, target:String, log:Bool, verbose:Bool, defines:Array<String>, additionalArguments:Array<String>)
 	{
-		var results = new Array<BuildResult>();
+		final results = new Array<BuildResult>();
 
 		for (project in projects)
 		{
-			var targets = (target == "all") ? ["flash", "html5", "neko", "cpp"] : [target];
+			final targets = (target == "all") ? ["flash", "html5", "neko", "cpp"] : [target];
 			for (target in targets)
 				results.push(buildProject(project, target, verbose, defines, additionalArguments));
 		}
@@ -122,11 +122,11 @@ class BuildProjects extends Command
 
 	function buildProject(project:LimeProject, target:String, verbose:Bool, defines:Array<String>, additionalArguments:Array<String>):BuildResult
 	{
-		var buildArgs = ["run", "openfl", "build", project.path, target].concat(defines).concat(additionalArguments);
+		final buildArgs = ["run", "openfl", "build", project.path, target].concat(defines).concat(additionalArguments);
 		if (verbose)
 			Sys.println("haxelib " + buildArgs.join(" "));
 
-		var result:Result = Sys.command("haxelib", buildArgs);
+		final result:Result = Sys.command("haxelib", buildArgs);
 
 		ColorUtils.println(result + " - " + project.name + ' ($target)', result);
 
@@ -137,9 +137,9 @@ class BuildProjects extends Command
 		};
 	}
 
-	function writeResultsToFile(FilePath:String, Results:Array<BuildResult>):Void
+	function writeResultsToFile(FilePath:String, Results:Array<BuildResult>)
 	{
-		var file = File.write(FilePath, false);
+		final file = File.write(FilePath, false);
 
 		file.writeString("flixel-tools buildprojects log\n");
 		file.writeString('Directory: $directory \n');
@@ -161,16 +161,16 @@ class BuildProjects extends Command
 
 typedef BuildResult =
 {
-	var target:String;
-	var result:Result;
-	var project:LimeProject;
+	final target:String;
+	final result:Result;
+	final project:LimeProject;
 }
 
 @:enum
 abstract Result(String)
 {
-	var SUCCESS = "SUCCESS";
-	var FAILURE = "FAILURE";
+	final SUCCESS = "SUCCESS";
+	final FAILURE = "FAILURE";
 
 	@:from
 	static function fromInt(i:Int):Result

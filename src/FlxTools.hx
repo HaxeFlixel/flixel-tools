@@ -8,15 +8,15 @@ import utils.CommandUtils;
 
 class FlxTools extends CommandLineRunner
 {
-	public static inline var ALIAS = "flixel";
-	public static inline var VERSION = "1.4.4";
+	public static inline final ALIAS = "flixel";
+	public static inline final VERSION = "1.4.4";
 
 	public static var settings:FlxToolSettings;
 
 	public static var templateSourcePaths = new Map<IDE, String>();
-	public static var templatesLoaded:Bool = false;
+	public static var templatesLoaded = false;
 
-	public function new():Void
+	public function new()
 	{
 		super();
 
@@ -34,13 +34,13 @@ class FlxTools extends CommandLineRunner
 		run();
 	}
 
-	override public function printHeader():Void
+	override public function printHeader()
 	{
 		if (console.args.length == 0 || console.args[0] == "help")
 			displayInfo();
 	}
 
-	static function displayInfo():Void
+	static function displayInfo()
 	{
 		displayLogo();
 		Sys.println("");
@@ -62,14 +62,14 @@ class FlxTools extends CommandLineRunner
 		Sys.println("");
 	}
 
-	static function displayLogo():Void
+	static function displayLogo()
 	{
-		var y = ColorUtils.print.bind(_, Color.Yellow);
-		var r = ColorUtils.print.bind(_, Color.Red);
-		var g = ColorUtils.print.bind(_, Color.Green);
-		var b = ColorUtils.print.bind(_, Color.Blue);
-		var c = ColorUtils.print.bind(_, Color.Cyan);
-		var nl = Sys.println.bind("");
+		final y = ColorUtils.print.bind(_, Color.Yellow);
+		final r = ColorUtils.print.bind(_, Color.Red);
+		final g = ColorUtils.print.bind(_, Color.Green);
+		final b = ColorUtils.print.bind(_, Color.Blue);
+		final c = ColorUtils.print.bind(_, Color.Cyan);
+		final nl = Sys.println.bind("");
 
 		// @formatter:off
 		y(" _   _ "); r("      "); g("      ");   b("  ");    c("______");  y(" _ "); r("_");   g("      ");   b("   ");   c(" _ "); nl();
@@ -83,7 +83,7 @@ class FlxTools extends CommandLineRunner
 
 	public static function getFlixelVersion():String
 	{
-		var flixelHaxelib:HaxelibJSON = CommandUtils.getHaxelibJsonData("flixel");
+		final flixelHaxelib:HaxelibJSON = CommandUtils.getHaxelibJsonData("flixel");
 		if (flixelHaxelib != null)
 			return flixelHaxelib.version;
 
@@ -96,12 +96,11 @@ class FlxTools extends CommandLineRunner
 	}
 }
 
-@:enum
-abstract IDE(String) from String to String
+enum abstract IDE(String) from String to String
 {
-	var SUBLIME_TEXT = "Sublime Text";
-	var FLASH_DEVELOP = "FlashDevelop";
-	var INTELLIJ_IDEA = "IntelliJ IDEA";
-	var VISUAL_STUDIO_CODE = "Visual Studio Code";
-	var NONE = "None";
+	final SUBLIME_TEXT = "Sublime Text";
+	final FLASH_DEVELOP = "FlashDevelop";
+	final INTELLIJ_IDEA = "IntelliJ IDEA";
+	final VISUAL_STUDIO_CODE = "Visual Studio Code";
+	final NONE = "None";
 }

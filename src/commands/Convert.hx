@@ -15,7 +15,7 @@ class Convert extends Command
 {
 	var autoContinue:Bool = false;
 
-	override public function execute():Void
+	override public function execute()
 	{
 		if (console.args.length > 2)
 			this.error("You have not provided the correct arguments.");
@@ -38,7 +38,7 @@ class Convert extends Command
 	/**
 	 * Convert an old HaxeFlixel project
 	 */
-	function convertProject(convertPath:String = "", makeBackup:Bool = true):Void
+	function convertProject(convertPath:String = "", makeBackup:Bool = true)
 	{
 		if (convertPath == "")
 		{
@@ -51,7 +51,7 @@ class Convert extends Command
 
 		if (!autoContinue)
 		{
-			var continueConvert = CommandUtils.askYN("Do you want to convert " + convertPath);
+			final continueConvert = CommandUtils.askYN("Do you want to convert " + convertPath);
 
 			if (continueConvert == Answer.Yes)
 			{
@@ -71,7 +71,7 @@ class Convert extends Command
 		}
 	}
 
-	function convert(convertPath:String, makeBackup:Bool):Void
+	function convert(convertPath:String, makeBackup:Bool)
 	{
 		if (FileSys.exists(convertPath))
 		{
@@ -80,11 +80,11 @@ class Convert extends Command
 
 			if (makeBackup)
 			{
-				var backupFolder = convertPath + "_backup";
+				final backupFolder = convertPath + "_backup";
 
 				if (!FileSys.exists(backupFolder))
 				{
-					var backup = CommandUtils.copyRecursively(convertPath, backupFolder);
+					final backup = CommandUtils.copyRecursively(convertPath, backupFolder);
 					if (backup)
 					{
 						Sys.println("Backup copied to " + backupFolder);
@@ -98,7 +98,7 @@ class Convert extends Command
 				{
 					if (!autoContinue)
 					{
-						var overwrite = CommandUtils.askYN("There is already a backup at " + backupFolder + ", do you want to overwrite it?");
+						final overwrite = CommandUtils.askYN("There is already a backup at " + backupFolder + ", do you want to overwrite it?");
 
 						if (overwrite == Answer.Yes)
 						{
@@ -119,12 +119,12 @@ class Convert extends Command
 
 			if (FileSys.exists(convertPath))
 			{
-				var warnings:Array<WarningResult> = convertProjectFolder(convertPath, true);
+				final warnings:Array<WarningResult> = convertProjectFolder(convertPath, true);
 
 				if (warnings.length > 0)
 				{
-					var logFileName = "convert.log";
-					var filePath = CommandUtils.combine(convertPath, logFileName);
+					final logFileName = "convert.log";
+					final filePath = CommandUtils.combine(convertPath, logFileName);
 
 					writeWarningsToFile(filePath, warnings, convertPath);
 
@@ -142,8 +142,8 @@ class Convert extends Command
 
 					if (!autoContinue)
 					{
-						var question = "The old HaxeFlixel data assets was detected, do you want to delete it and its contents?";
-						var warning = "\nPlease make sure you are not storing your own assets in:" + oldAssets;
+						final question = "The old HaxeFlixel data assets was detected, do you want to delete it and its contents?";
+						final warning = "\nPlease make sure you are not storing your own assets in:" + oldAssets;
 						answer = CommandUtils.askYN(question + warning);
 					}
 
@@ -176,7 +176,7 @@ class Convert extends Command
 		exit();
 	}
 
-	inline function displayWarnings(warnings:Array<WarningResult>):Void
+	inline function displayWarnings(warnings:Array<WarningResult>)
 	{
 		Sys.println("");
 		Sys.println(warnings.length + " Warnings");
@@ -197,9 +197,9 @@ class Convert extends Command
 		Sys.println("");
 	}
 
-	inline function createBackup(convertPath:String, backupFolder:String):Void
+	inline function createBackup(convertPath:String, backupFolder:String)
 	{
-		var backup = CommandUtils.copyRecursively(convertPath, backupFolder);
+		final backup = CommandUtils.copyRecursively(convertPath, backupFolder);
 		if (backup)
 		{
 			Sys.println("Backup copied to " + backupFolder);
@@ -217,7 +217,7 @@ class Convert extends Command
 	 */
 	inline function convertProjectFolder(projectPath:String, display:Bool = false):Array<WarningResult>
 	{
-		var warnings:Array<WarningResult> = new Array<WarningResult>();
+		final warnings:Array<WarningResult> = new Array<WarningResult>();
 
 		if (FileSys.exists(projectPath))
 		{
@@ -225,7 +225,7 @@ class Convert extends Command
 			{
 				if (FileSys.isDirectory(CommandUtils.combine(projectPath, fileName)) && fileName != "_backup")
 				{
-					var recursiveWarnings:Array<WarningResult> = convertProjectFolder(CommandUtils.combine(projectPath, fileName), false);
+					final recursiveWarnings:Array<WarningResult> = convertProjectFolder(CommandUtils.combine(projectPath, fileName), false);
 
 					if (recursiveWarnings != null)
 					{
@@ -237,19 +237,19 @@ class Convert extends Command
 				}
 				else if (fileName.endsWith(".hx"))
 				{
-					var filePath:String = CommandUtils.combine(projectPath, fileName);
+					final filePath:String = CommandUtils.combine(projectPath, fileName);
 					var sourceText:String = FileSysUtils.getContent(filePath);
-					var originalText:String = Reflect.copy(sourceText);
-					var replacements:Array<FindAndReplaceObject> = FindAndReplace.init();
+					final originalText:String = Reflect.copy(sourceText);
+					final replacements:Array<FindAndReplaceObject> = FindAndReplace.init();
 
 					for (replacement in replacements)
 					{
-						var obj:FindAndReplaceObject = replacement;
+						final obj:FindAndReplaceObject = replacement;
 						sourceText = sourceText.replace(obj.find, obj.replacement);
 
 						if (obj.importValidate != null && CommandUtils.strmatch(obj.find, originalText))
 						{
-							var newText = addImportToFileString(sourceText, obj.importValidate);
+							final newText = addImportToFileString(sourceText, obj.importValidate);
 							if (newText != null)
 							{
 								sourceText = newText;
@@ -259,13 +259,13 @@ class Convert extends Command
 						if (originalText != sourceText)
 						{
 							FileSys.deleteFile(filePath);
-							var o:FileOutput = sys.io.File.write(filePath, true);
+							final o:FileOutput = sys.io.File.write(filePath, true);
 							o.writeString(sourceText);
 							o.close();
 						}
 					}
 
-					var warningsCurrent = scanFileForWarnings(filePath);
+					final warningsCurrent = scanFileForWarnings(filePath);
 
 					if (warningsCurrent != null)
 					{
@@ -287,9 +287,9 @@ class Convert extends Command
 	 * @param  Warnings<WarningResult>  Array containing all the WarningResults
 	 * @param  ConvertProjectPath	   The path that the convert command was performed on
 	 */
-	public static function writeWarningsToFile(filePath:String, warnings:Array<WarningResult>, convertProjectPath:String):Void
+	public static function writeWarningsToFile(filePath:String, warnings:Array<WarningResult>, convertProjectPath:String)
 	{
-		var fileObject = File.write(filePath, false);
+		final fileObject = File.write(filePath, false);
 
 		fileObject.writeString("flixel-tools convert warning log" + "\n");
 		fileObject.writeString("Converted Path " + convertProjectPath + "\n");
@@ -318,29 +318,29 @@ class Convert extends Command
 	 */
 	public static function scanFileForWarnings(filePath:String):Array<WarningResult>
 	{
-		var results = new Array<WarningResult>();
+		final results = new Array<WarningResult>();
 
 		// open and read file line by line
-		var fin = File.read(filePath, false);
+		final fin = File.read(filePath, false);
 
 		try
 		{
 			var lineNum = 0;
 			while (true)
 			{
-				var str = fin.readLine();
+				final str = fin.readLine();
 				lineNum++;
-				var warnings = Warnings.warningList;
+				final warnings = Warnings.warningList;
 
 				for (warning in warnings.keys())
 				{
-					var fix = warnings.get(warning);
-					var search = new EReg("\\b" + warning + "\\b", "");
-					var match = search.match(str);
+					final fix = warnings.get(warning);
+					final search = new EReg("\\b" + warning + "\\b", "");
+					final match = search.match(str);
 
 					if (match)
 					{
-						var result:WarningResult = {
+						final result:WarningResult = {
 							oldCode: warning,
 							newCode: fix,
 							lineNumber: Std.string(lineNum),
@@ -366,22 +366,22 @@ class Convert extends Command
 	 */
 	public static function addImportToFileString(fileString:String, importString:String):String
 	{
-		var str:String = fileString;
-		var match = CommandUtils.strmatch(importString, str);
+		final str:String = fileString;
+		final match = CommandUtils.strmatch(importString, str);
 
 		if (!match)
 		{
-			var newLine = "\n";
-			var r = ~/import+/;
+			final newLine = "\n";
+			final r = ~/import+/;
 			var newString = Reflect.copy(str);
 			r.match(str);
 
 			try
 			{
-				var matchPos = r.matchedPos();
-				var beggining = str.substr(0, matchPos.pos);
-				var end = str.substr(matchPos.pos, str.length);
-				newString = beggining + importString + ";" + newLine + end;
+				final matchPos = r.matchedPos();
+				final beginning = str.substr(0, matchPos.pos);
+				final end = str.substr(matchPos.pos, str.length);
+				newString = beginning + importString + ";" + newLine + end;
 			}
 			catch (e:Dynamic) {}
 
@@ -398,8 +398,8 @@ class Convert extends Command
  */
 typedef WarningResult =
 {
-	var oldCode:String;
-	var newCode:String;
-	var lineNumber:String;
-	var filePath:String;
+	final oldCode:String;
+	final newCode:String;
+	final lineNumber:String;
+	final filePath:String;
 }

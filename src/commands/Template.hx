@@ -12,9 +12,9 @@ using StringTools;
 class Template extends Command
 {
 	var autoContinue:Bool = false;
-	var ideOption:IDE = IDE.NONE;
+	var ideOption = IDE.NONE;
 
-	override public function execute():Void
+	override public function execute()
 	{
 		TemplateUtils.verifyTemplatesLoaded();
 
@@ -46,7 +46,7 @@ class Template extends Command
 		processTemplate(templateName, targetPath);
 	}
 
-	public function processTemplate(templateName:String, targetPath:String):Void
+	public function processTemplate(templateName:String, targetPath:String)
 	{
 		var template:TemplateProject = TemplateUtils.get(templateName);
 
@@ -105,7 +105,7 @@ class Template extends Command
 
 		CommandUtils.copyRecursively(template.path, targetPath, TemplateUtils.templateFilter, true);
 
-		var projectName = TemplateUtils.getReplacementValue(template.template.replacements, "${PROJECT_NAME}");
+		final projectName = TemplateUtils.getReplacementValue(template.template.replacements, "${PROJECT_NAME}");
 		template.template.replacements.push(TemplateUtils.addOption("APPLICATION_FILE", "", projectName));
 		TemplateUtils.modifyTemplateProject(targetPath, template, ideOption);
 
@@ -121,11 +121,11 @@ class Template extends Command
 
 	function addOptionReplacement(template:TemplateProject):TemplateProject
 	{
-		var replacements = template.template.replacements;
+		final replacements = template.template.replacements;
 
 		for (o in replacements)
 		{
-			var replace = addOptions(o.pattern, o.cmdOption, o.replacement);
+			final replace = addOptions(o.pattern, o.cmdOption, o.replacement);
 			if (replace.replacement != o.replacement)
 				o.replacement = replace.replacement;
 		}
@@ -135,7 +135,7 @@ class Template extends Command
 
 	function addOptions(pattern:String, cmdOption:String, defaultValue:Dynamic):TemplateReplacement
 	{
-		var option = console.getOption(cmdOption);
+		final option = console.getOption(cmdOption);
 
 		if (option != null && option != 'true' && option != 'false')
 			defaultValue = option;

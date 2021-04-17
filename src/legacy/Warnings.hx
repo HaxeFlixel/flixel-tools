@@ -14,7 +14,7 @@ class Warnings
 
 	static function get_warningList():Map<String, String>
 	{
-		var warningList = new Map<String, String>();
+		final warningList = new Map<String, String>();
 
 		// Eg;
 		// _btnStart.setOnOverCallback(onStartOver);

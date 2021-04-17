@@ -10,15 +10,13 @@ class FindAndReplace
 	 * Key being the String to search for
 	 * Value being the String to replace it with
 	 */
-	public static var replacements:Array<FindAndReplaceObject>;
+	public static var replacements = new Array<FindAndReplaceObject>();
 
 	/**
 	 * Init the replacements map
 	 */
 	public static function init():Array<FindAndReplaceObject>
 	{
-		replacements = new Array<FindAndReplaceObject>();
-
 		/**
 		 * Removal of the org package
 		 */
@@ -454,12 +452,12 @@ class FindAndReplace
 	 * @param   replacement	 String to replace the string found with
 	 * @param   importValidate  Make sure this import exists
 	 */
-	public static function add(find:String, replacement:String, ?importValidate:String):Void
+	public static function add(find:String, replacement:String, ?importValidate:String)
 	{
 		if (importValidate != null)
 			importValidate = "import flixel." + importValidate;
 
-		var object:FindAndReplaceObject = {
+		final object:FindAndReplaceObject = {
 			find: find,
 			replacement: replacement,
 			importValidate: importValidate,
@@ -475,7 +473,7 @@ class FindAndReplace
 	 * @param	replacement	 String to replace the string found with
 	 * @param	importValidate  Make sure this import exists
 	 */
-	public static inline function addImport(find:String, replacement:String, ?importValidate:String):Void
+	public static inline function addImport(find:String, replacement:String, ?importValidate:String)
 	{
 		find = "import flixel." + find;
 		replacement = "import flixel." + replacement;
@@ -490,7 +488,7 @@ class FindAndReplace
 	 * @param	replacement	 String to replace the string found with
 	 * @param	importValidate  Make sure this import exists
 	 */
-	public static inline function addFunction(find:String, replacement:String, ?importValidate:String):Void
+	public static inline function addFunction(find:String, replacement:String, ?importValidate:String)
 	{
 		// find = find + "(";
 		// replacement = replacement + "(";
@@ -501,7 +499,7 @@ class FindAndReplace
 
 typedef FindAndReplaceObject =
 {
-	var find:String;
-	var replacement:String;
-	var importValidate:String;
+	final find:String;
+	final replacement:String;
+	final importValidate:String;
 }

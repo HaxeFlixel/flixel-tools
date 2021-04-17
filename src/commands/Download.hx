@@ -5,7 +5,7 @@ import utils.CommandUtils;
 
 class Download extends Command
 {
-	override public function execute():Void
+	override public function execute()
 	{
 		CommandUtils.haxelibCommand("flixel-addons", true);
 		CommandUtils.haxelibCommand("flixel-demos", true);

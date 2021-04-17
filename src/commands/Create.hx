@@ -6,19 +6,19 @@ import utils.ProjectUtils;
 
 class Create extends Command
 {
-	override public function execute():Void
+	override public function execute()
 	{
 		if (console.args.length > 3)
 			error("You have given too many arguments for the create command.");
 
-		var projects:Array<LimeProject> = getProjects();
-		var project = getProject(projects);
+		final projects:Array<LimeProject> = getProjects();
+		final project = getProject(projects);
 
 		Sys.println("Copying demo '" + project.name + "'...");
 
-		var ide = ProjectUtils.resolveIDEChoice(console);
-		var destination = CommandUtils.combine(Sys.getCwd(), project.name);
-		var copied = ProjectUtils.duplicateProject(project, destination, ide);
+		final ide = ProjectUtils.resolveIDEChoice(console);
+		final destination = CommandUtils.combine(Sys.getCwd(), project.name);
+		final copied = ProjectUtils.duplicateProject(project, destination, ide);
 
 		if (copied)
 		{
@@ -44,7 +44,7 @@ class Create extends Command
 		if (directory == null)
 			directory = CommandUtils.getHaxelibPath("flixel-demos");
 
-		var projects:Array<LimeProject> = ProjectUtils.findLimeProjects(directory);
+		final projects:Array<LimeProject> = ProjectUtils.findLimeProjects(directory);
 
 		if (projects.length == 0)
 		{
@@ -89,7 +89,7 @@ class Create extends Command
 	{
 		Sys.println("Listing all available demos...\n");
 
-		var lines = columnsFromList(projects, 3, function(project)
+		final lines = columnsFromList(projects, 3, function(project)
 		{
 			if (project.name.length <= 20)
 				return project.name;
@@ -105,8 +105,8 @@ class Create extends Command
 
 	function columnsFromList<T>(list:Array<T>, columns:Int, stringifier:T->String):Array<String>
 	{
-		var splitAmount = Math.ceil(list.length / columns);
-		var lines = [for (i in 0...splitAmount) ""];
+		final splitAmount = Math.ceil(list.length / columns);
+		final lines = [for (_ in 0...splitAmount) ""];
 		var maxLineLength = 0;
 
 		for (i in 0...list.length)
@@ -115,7 +115,7 @@ class Create extends Command
 			if (number.length < 2)
 				number = "0" + number;
 
-			var output = '[$number] ${stringifier(list[i])}';
+			final output = '[$number] ${stringifier(list[i])}';
 
 			if (i % splitAmount == 0)
 			{
@@ -124,8 +124,8 @@ class Create extends Command
 						maxLineLength = line.length;
 			}
 
-			var j = i % splitAmount;
-			var numSpaces = (maxLineLength - lines[j].length) + 2;
+			final j = i % splitAmount;
+			final numSpaces = (maxLineLength - lines[j].length) + 2;
 			lines[j] += [for (i in 0...numSpaces) " "].join("");
 			lines[j] += output;
 		}
@@ -140,14 +140,14 @@ class Create extends Command
 
 		while (true)
 		{
-			var userResponse = CommandUtils.readLine();
+			final userResponse = CommandUtils.readLine();
 			if (userResponse == "c")
 			{
 				Sys.println("Cancelled");
 				exit();
 			}
 
-			var project = resolveProject(projects, userResponse);
+			final project = resolveProject(projects, userResponse);
 			if (project != null)
 				return project;
 			else
@@ -159,7 +159,7 @@ class Create extends Command
 
 	function resolveProject(projects:Array<LimeProject>, nameOrIndex:String):LimeProject
 	{
-		var index = Std.parseInt(nameOrIndex);
+		final index = Std.parseInt(nameOrIndex);
 		if (index != null)
 			return projects[index - 1];
 
