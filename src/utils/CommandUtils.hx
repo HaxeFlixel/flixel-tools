@@ -7,8 +7,6 @@ import sys.FileSystem;
 import sys.io.File;
 import sys.io.Process;
 
-using StringTools;
-
 /**
  * Utilities for command line tools
  */

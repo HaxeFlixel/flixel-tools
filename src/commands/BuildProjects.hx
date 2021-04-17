@@ -6,8 +6,6 @@ import utils.ColorUtils;
 import utils.CommandUtils;
 import utils.ProjectUtils;
 
-using StringTools;
-
 class BuildProjects extends Command
 {
 	var directory:String;

@@ -6,11 +6,9 @@ import massive.sys.io.FileSys;
 import sys.FileSystem;
 import sys.io.FileOutput;
 
-using StringTools;
-
 class TemplateUtils
 {
-	public static final templateFilter:EReg = new EReg("\\btemplate.json\\b", "");
+	public static final templateFilter = ~/\btemplate.json\b/;
 
 	public static function verifyTemplatesLoaded()
 	{

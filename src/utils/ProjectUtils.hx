@@ -10,8 +10,6 @@ import utils.CommandUtils.runCommand;
 import utils.CommandUtils;
 import utils.TemplateUtils;
 
-using StringTools;
-
 class ProjectUtils
 {
 	/**

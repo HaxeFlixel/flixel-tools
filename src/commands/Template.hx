@@ -7,8 +7,6 @@ import utils.CommandUtils;
 import utils.ProjectUtils;
 import utils.TemplateUtils;
 
-using StringTools;
-
 class Template extends Command
 {
 	var autoContinue:Bool = false;
