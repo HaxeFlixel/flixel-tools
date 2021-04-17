@@ -1,4 +1,4 @@
-1.5.0 (???)
+1.5.0 (April 17, 2021)
 ------------------------------
 * fixed crashes on unknown IDE choices (#74)
 * (potentially) fixed an issue with an invalid `temp` file path when creating projects and templates

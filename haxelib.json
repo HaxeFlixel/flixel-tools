@@ -4,8 +4,8 @@
     "license": "MIT",
     "tags": ["game", "openfl", "flash", "neko", "cpp", "android", "ios"],
     "description": "Command-Line tools for the HaxeFlixel game engine",
-    "version": "1.4.4",
-    "releasenote": "Updated the template command for Lime 7.3.0.",
+    "version": "1.5.0",
+    "releasenote": "Potentially fixed an issue with copying projects, handle unknown IDE choices and removed `convert`.",
     "contributors": ["haxeflixel", "Gama11"],
     "dependencies": {}
 }
