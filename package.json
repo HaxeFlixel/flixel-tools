@@ -1,0 +1,8 @@
+{
+	"devDependencies": {
+		"lix": "^15.10.1"
+	},
+	"scripts": {
+		"postinstall": "lix download && haxe build.hxml"
+	}
+}
