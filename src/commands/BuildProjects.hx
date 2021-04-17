@@ -166,26 +166,22 @@ typedef BuildResult =
 	final project:LimeProject;
 }
 
-@:enum
-abstract Result(String)
+enum abstract Result(String)
 {
 	final SUCCESS = "SUCCESS";
 	final FAILURE = "FAILURE";
 
-	@:from
-	static function fromInt(i:Int):Result
+	@:from static function fromInt(i:Int):Result
 	{
 		return (i == 0) ? SUCCESS : FAILURE;
 	}
 
-	@:to
-	function toInt():Int
+	@:to function toInt():Int
 	{
 		return (this == "SUCCESS") ? 0 : 1;
 	}
 
-	@:to
-	function toColor():Color
+	@:to function toColor():Color
 	{
 		return (this == "SUCCESS") ? Color.Green : Color.Red;
 	}

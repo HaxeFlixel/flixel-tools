@@ -2,8 +2,7 @@ package utils;
 
 // http://stackoverflow.com/a/28938235/2631715
 
-@:enum
-abstract Color(Int)
+enum abstract Color(Int)
 {
 	final None = 0;
 	final Black = 30;
@@ -16,8 +15,7 @@ abstract Color(Int)
 	final White = 37;
 }
 
-@:enum
-abstract Style(Int)
+enum abstract Style(Int)
 {
 	final Normal = 0;
 	final Bold = 1;
