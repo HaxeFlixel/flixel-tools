@@ -96,9 +96,9 @@ class FlxTools extends CommandLineRunner
 		return null;
 	}
 
-	public static function main():FlxTools
+	public static function main()
 	{
-		return new FlxTools();
+		new FlxTools();
 	}
 }
 
