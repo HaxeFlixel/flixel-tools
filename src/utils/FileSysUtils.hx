@@ -19,7 +19,7 @@ class FileSysUtils
 		}
 		catch (e:Dynamic)
 		{
-			throw "Error loading file::" + filePath + " \n check you dont have it open and you have permissions to modify it.";
+			throw "Error loading file::" + filePath + " \n Check the file exists or you dont have it open and you have permissions to modify it.";
 		}
 	}
 
@@ -44,5 +44,10 @@ class FileSysUtils
 		final segments = path.split(cwd);
 		segments.shift();
 		return segments.join(cwd);
+	}
+
+	public static function isDirectoryPath(str:String):Bool
+	{
+		return new Path(str).dir != null;
 	}
 }

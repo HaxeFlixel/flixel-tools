@@ -1,6 +1,6 @@
  Usage : template <name> <path> <options>
-  <name>    : The name for the template to generate, the "default"
-              template will be created when none is specified.
+  <name>    : The name or the path for the template to generate. 
+              The "default" template will be created when none is specified.
   <path>    : The name for the path to create the template in, default
               is the name of the template itself.
   <options> : The options available will depend on the specific
@@ -8,3 +8,18 @@
               such as -n for project name and -w -h for width and height.
               Eg. flixel tpl -n "Name" -w 680 -h 480
   -ide <subl|fd|idea|vscode|none> : The IDE to use (overrides the configuration).
+ 
+ Examples :
+
+  flixel tpl -n "Hello World"
+              Creates a project with name "Hello World" 
+              from the "default" template,
+              inside "./Hello World" directory.
+  flixel tpl ./my-game -n MyGame
+              Creates a project with name "MyGame"
+              from the "default" template,
+              inside "./my-game" directory.
+  flixel tpl ../platformer-template . -n "Marevo"
+              Creates a project with name "Marevo"
+              from the template found in "../platformer-template" directory,
+              inside current directory.
