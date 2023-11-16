@@ -1,8 +1,10 @@
- Usage : template <name> <path> <options>
-  <name>    : The name or the path for the template to generate. 
+ Usage : template <tpl-name | tpl-path> <target-path> <options>
+  <tpl-name | tpl-path> :
+              The name or the path of the template to generate.
               The "default" template will be created when none is specified.
-  <path>    : The name for the path to create the template in, default
-              is the name of the template itself.
+  <target-path> :
+              The path to create the template in, default is the name
+              of the template itself.
   <options> : The options available will depend on the specific
               template's template.json. The default template has options
               such as -n for project name and -w -h for width and height.
