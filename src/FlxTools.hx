@@ -39,6 +39,12 @@ class FlxTools extends CommandLineRunner
 			displayInfo();
 	}
 
+	override public function createConsole()
+	{
+		final isHaxelibRun = Sys.getEnv('HAXELIB_RUN') != null;
+		return new massive.sys.cmd.Console(isHaxelibRun);
+	}
+
 	static function displayInfo()
 	{
 		displayLogo();
