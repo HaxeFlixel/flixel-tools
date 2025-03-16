@@ -98,7 +98,6 @@ class FlxTools extends CommandLineRunner
 enum abstract IDE(String) from String to String
 {
 	final SUBLIME_TEXT = "Sublime Text";
-	final FLASH_DEVELOP = "FlashDevelop";
 	final INTELLIJ_IDEA = "IntelliJ IDEA";
 	final VISUAL_STUDIO_CODE = "Visual Studio Code";
 	final NONE = "None";

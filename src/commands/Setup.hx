@@ -133,13 +133,7 @@ class Setup extends Command
 
 	function promptForSettings():FlxToolSettings
 	{
-		final ides = [
-			IDE.SUBLIME_TEXT,
-			IDE.FLASH_DEVELOP,
-			IDE.INTELLIJ_IDEA,
-			IDE.VISUAL_STUDIO_CODE,
-			IDE.NONE
-		];
+		final ides = [IDE.SUBLIME_TEXT, IDE.INTELLIJ_IDEA, IDE.VISUAL_STUDIO_CODE, IDE.NONE];
 		var ide = IDE.NONE;
 		var AuthorName = "";
 		var IDEAutoOpen = false;

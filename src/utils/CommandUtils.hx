@@ -308,7 +308,6 @@ class CommandUtils
 		ideDataPath = combine(ideDataPath, "ide-data");
 
 		FlxTools.templateSourcePaths = [
-			IDE.FLASH_DEVELOP => combine(ideDataPath, "flash-develop"),
 			IDE.INTELLIJ_IDEA => combine(ideDataPath, "intellij-idea"),
 			IDE.SUBLIME_TEXT => combine(ideDataPath, "sublime-text"),
 			IDE.VISUAL_STUDIO_CODE => combine(ideDataPath, "visual-studio-code")
@@ -337,9 +336,7 @@ class CommandUtils
 		final settings:FlxToolSettings = Json.parse(jsonContent);
 
 		// backwards compatibility with settings from versions <= 1.0.5
-		if (settings.DefaultEditor == "Flash Develop")
-			settings.DefaultEditor = IDE.FLASH_DEVELOP;
-		else if (settings.DefaultEditor == "Intellij Idea")
+		if (settings.DefaultEditor == "Intellij Idea")
 			settings.DefaultEditor = IDE.INTELLIJ_IDEA;
 
 		return settings;
