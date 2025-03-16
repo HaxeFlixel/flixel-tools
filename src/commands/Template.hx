@@ -1,9 +1,11 @@
 package commands;
 
 import FlxTools.IDE;
+import haxe.io.Path;
 import massive.sys.cmd.Command;
 import sys.FileSystem;
 import utils.CommandUtils;
+import utils.FileSysUtils;
 import utils.ProjectUtils;
 import utils.TemplateUtils;
 
@@ -14,6 +16,32 @@ class Template extends Command
 
 	override public function execute()
 	{
+		/*
+			Ways to use `template` command
+			NOTE: literaly no one on github used "flixel tpl ./<new_dir>
+
+			- tpl 
+						creates "FlxProject" from "default" tpl inside "%cwd/default" dir
+			- tpl -n MyGame
+						creates "MyGame" from "default" tpl inside "%cwd/MyGame" dir
+			- tpl demo
+						creates "FlxProject" from "demo" tpl inside "%cwd/demo" dir
+			- tpl demo -n MyGame
+						creates "MyGame" from "demo" tpl inside "%cwd/MyGame" dir
+			- tpl ./my-game
+						creates "FlxProject" from "default" tpl inside "%cwd/my-game" dir
+			- tpl ./my-game -n MyGame
+						creates "MyGame" from "default" tpl inside "%cwd/my-game" dir
+			- tpl demo my-game
+						creates "FlxProject" from "demo" tpl inside "%cwd/my-game" dir
+			- tpl demo my-game -n MyGame
+						creates "MyGame" from "demo" tpl inside "%cwd/MyGame" dir
+			- tpl ./demo ./../my-game
+						creates "FlxProject" from "./demo" tpl inside "%cwd/../my-game" dir
+			- tpl ../demo ./../my-game -n MyGame
+						creates "MyGame" from "./demo" tpl inside "%cwd/../my-game" dir
+		 */
+
 		TemplateUtils.verifyTemplatesLoaded();
 
 		var targetPath = "";
@@ -30,12 +58,9 @@ class Template extends Command
 
 		ideOption = ProjectUtils.resolveIDEChoice(console, autoContinue);
 
-		if (console.getOption("-n") != null)
-			targetPath = console.getOption("-n");
-
 		// support a path as an arg without name for default
-		// flixel t ./<new_directory> <options>
-		if (templateName.startsWith("./"))
+		// flixel tpl ./<new_directory> <options>
+		if (FileSysUtils.isDirectoryPath(templateName) && targetPath == "")
 		{
 			targetPath = templateName;
 			templateName = "";
@@ -48,11 +73,30 @@ class Template extends Command
 	{
 		var template:TemplateProject = TemplateUtils.get(templateName);
 
+		// to fake existence of non-existed templates,
+		// will be deleted before merge
 		if (template == null)
 		{
-			error("Error getting the template with the name of "
-				+ templateName
-				+ " make sure you have installed flixel-templates ('haxelib install flixel-templates')");
+			trace('template was faked');
+			template = {
+				name: templateName,
+				path: 'some/path/to/${templateName}',
+				template: {
+					replacements: [
+						{
+							replacement: "FlxProject",
+							cmdOption: "-n",
+							pattern: "${PROJECT_NAME}"
+						}
+					]
+				}
+			}
+		}
+
+		if (template == null)
+		{
+			error('Error getting the template with the name of "${templateName}"'
+				+ "\nMake sure you have installed flixel-templates ('haxelib install flixel-templates')");
 		}
 		else
 		{
@@ -62,14 +106,26 @@ class Template extends Command
 		// override the template defaults form the command arguments
 		template = addOptionReplacement(template);
 
+		// try to use project name as target path
+		if (targetPath == "" && console.getOption('-n') != null)
+			targetPath = console.getOption('-n');
+
 		if (targetPath == "")
 		{
-			targetPath = Sys.getCwd() + templateName;
+			targetPath = Path.join([Sys.getCwd(), templateName]);
 		}
-		else if (!targetPath.startsWith("/"))
+		else if (!Path.isAbsolute(targetPath))
 		{
-			targetPath = CommandUtils.combine(Sys.getCwd(), CommandUtils.stripPath(targetPath));
+			targetPath = Path.join([Sys.getCwd(), targetPath]);
 		}
+
+		// used for tests, will be deleted before merge
+		Sys.print('\n---------
+template name: ${template.name}
+template path: ${template.path}
+target path: $targetPath
+project name: ${console.getOption("-n") != null ? console.getOption("-n") : "FlxProject"}
+---------\n');
 
 		if (FileSystem.exists(targetPath))
 		{
@@ -79,7 +135,7 @@ class Template extends Command
 
 			if (!autoContinue)
 			{
-				answer = CommandUtils.askYN("Directory exists - do you want to delete it first?");
+				answer = CommandUtils.askYN("Directory exists - do you want to delete it first? Type . to abort.");
 			}
 
 			if (answer == Answer.Yes)
@@ -93,6 +149,11 @@ class Template extends Command
 					Sys.println("Error while trying to delete the directory. Is it in use?");
 					exit();
 				}
+			}
+			else if (answer == null)
+			{
+				Sys.println("Aborted by user");
+				exit();
 			}
 		}
 

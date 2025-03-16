@@ -76,7 +76,7 @@ class CommandUtils
 	}
 
 	/**
-	 * Prompt user with a y/n/a
+	 * Prompt user with a y/n
 	 *
 	 * @param   question	String with the prompt to display
 	 * @return  User choice in an Answer enum or null if an invalid answer given

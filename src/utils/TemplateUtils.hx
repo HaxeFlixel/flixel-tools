@@ -2,6 +2,7 @@ package utils;
 
 import FlxTools.IDE;
 import haxe.Json;
+import haxe.io.Path;
 import massive.sys.io.FileSys;
 import sys.FileSystem;
 import sys.io.FileOutput;
@@ -24,6 +25,9 @@ class TemplateUtils
 		if (templateName == "")
 			templateName = 'default';
 
+		if (FileSysUtils.isDirectoryPath(templateName))
+			return findTemplate(templateName);
+
 		for (template in findTemplates())
 		{
 			if (template.name == templateName)
@@ -32,17 +36,33 @@ class TemplateUtils
 		return null;
 	}
 
+	public static function findTemplate(path:String):TemplateProject
+	{
+		if (!FileSys.exists(path))
+			return null;
+
+		// NOTE: isDirectory() throws an error if path does not exist
+		if (!FileSys.isDirectory(path))
+			return null;
+
+		path = FileSystem.fullPath(Path.normalize(path));
+		var dirName = Path.withoutDirectory(Path.removeTrailingSlashes(path));
+		var template = readTemplateJson(path, dirName);
+
+		return template;
+	}
+
 	public static function findTemplates(?templatesPath:String):Array<TemplateProject>
 	{
 		if (templatesPath == null)
 		{
 			templatesPath = CommandUtils.getHaxelibPath("flixel-templates");
 			if (templatesPath == "")
-				return null;
+				return [];
 		}
 
 		if (!FileSys.exists(templatesPath))
-			return null;
+			return [];
 
 		final templates = [];
 
@@ -52,25 +72,32 @@ class TemplateUtils
 
 			if (FileSys.exists(folderPath) && FileSys.isDirectory(folderPath) && name != '.git')
 			{
-				var filePath = CommandUtils.combine(templatesPath, name);
-				filePath = CommandUtils.combine(filePath, "template.json");
+				var templatePath = CommandUtils.combine(templatesPath, name);
+				var templateJsonPath = CommandUtils.combine(templatePath, "template.json");
 
 				// Make sure we don't get a crash if the file doesn't exist
-				if (FileSystem.exists(filePath))
+				if (FileSystem.exists(templateJsonPath))
 				{
-					final file = FileSysUtils.getContent(filePath);
-					final FileData:TemplateFile = Json.parse(file);
-					final project:TemplateProject = {
-						name: name,
-						path: templatesPath + name,
-						template: FileData
-					};
-					templates.push(project);
+					templates.push(readTemplateJson(templatePath, name, templateJsonPath));
 				}
 			}
 		}
 
 		return templates;
+	}
+
+	static function readTemplateJson(templatePath:String, teamplateName:String, ?templateJsonPath:String):TemplateProject
+	{
+		if (templateJsonPath == null)
+			templateJsonPath = Path.join([templatePath, "template.json"]);
+
+		final fileContent = FileSysUtils.getContent(templateJsonPath);
+
+		return {
+			name: teamplateName,
+			path: templatePath,
+			template: Json.parse(fileContent)
+		};
 	}
 
 	public static function getReplacementValue(replacements:Array<TemplateReplacement>, pattern:String):String
