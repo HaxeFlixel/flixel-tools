@@ -45,7 +45,7 @@ class FlxTools extends CommandLineRunner
 		Sys.println("");
 
 		Sys.println("Powered by the Haxe Toolkit and OpenFL");
-		Sys.println("Visit www.haxeflixel.com for community support and resources!");
+		Sys.println("Visit https://haxeflixel.com for community support and resources!");
 		Sys.println("");
 		Sys.println("HaxeFlixel command-line tools (" + VERSION + ")");
 
