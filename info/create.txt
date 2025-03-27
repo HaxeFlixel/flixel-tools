@@ -4,4 +4,4 @@
                   or a number representing the number of the demo to create.
   -dir <dir>    : The directory in which to (recursively) look for projects.
                   Optional, defaults to the flixel-demos haxelib.
-  -ide <subl|fd|idea|vscode|none> : The IDE to use (overrides the configuration).
+  -ide <subl|idea|vscode|none> : The IDE to use (overrides the configuration).

@@ -120,11 +120,7 @@ class ProjectUtils
 				addOption("IDEA_Flixel_Engine_Library", settings.IDEA_Flixel_Engine_Library);
 				addOption("IDEA_Flixel_Addons_Library", settings.IDEA_Flixel_Addons_Library);
 
-			case IDE.FLASH_DEVELOP:
-				addOption("WIDTH", 640);
-				addOption("HEIGHT", 480);
-
-			case _: // TODO: IDE.FLASH_DEVELOP_FDZ
+			case _:
 		}
 
 		if (templateSource != null)
@@ -137,7 +133,6 @@ class ProjectUtils
 	{
 		final options = [
 			"subl" => IDE.SUBLIME_TEXT,
-			"fd" => IDE.FLASH_DEVELOP,
 			"idea" => IDE.INTELLIJ_IDEA,
 			"vscode" => IDE.VISUAL_STUDIO_CODE,
 			"none" => IDE.NONE
@@ -174,7 +169,6 @@ class ProjectUtils
 	public static function openWithIDE(projectPath:String, projectName:String, ide:IDE):Bool
 	{
 		final ideHandlers:Map<String, (String, String) -> Bool> = [
-			IDE.FLASH_DEVELOP => openWithFlashDevelop,
 			IDE.SUBLIME_TEXT => openWithSublimeText,
 			IDE.INTELLIJ_IDEA => openWithIntelliJIDEA,
 			IDE.VISUAL_STUDIO_CODE => openWithVisualStudioCode
@@ -190,19 +184,6 @@ class ProjectUtils
 				Sys.println('Could not open the project with $ide');
 		}
 		return result;
-	}
-
-	public static function openWithFlashDevelop(projectPath:String, projectName:String):Bool
-	{
-		var projectFile = CommandUtils.combine(projectPath, projectName + ".hxproj");
-		projectFile = projectFile.replace("/", "\\");
-
-		if (FileSys.exists(projectFile))
-		{
-			runCommand("explorer", [projectFile]);
-			return true;
-		}
-		return false;
 	}
 
 	public static function openWithSublimeText(projectPath:String, projectName:String):Bool
